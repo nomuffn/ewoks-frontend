@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="darken" vs-theme="dark">
     <Nuxt />
   </div>
 </template>
