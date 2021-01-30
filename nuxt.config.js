@@ -23,19 +23,25 @@ export default {
   plugins: ['@/plugins/vuesax'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: true,
+  components: false,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
     // https://go.nuxtjs.dev/eslint
-    '@nuxtjs/eslint-module',
+    //'@nuxtjs/eslint-module',
   ],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/axios
-    '@nuxtjs/axios'
+    '@nuxtjs/axios',
+    '@nuxtjs/proxy',
   ],
+
+
+  proxy: {
+    '/api': '/static/api/index.php',
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
   axios: {
@@ -46,9 +52,16 @@ export default {
   build: {},
 
   serverMiddleware: [
-    { 
-      path: "/server-middleware", 
-      handler: "~/server-middleware/index.js" 
+    {
+      path: "/server-middleware",
+      handler: "~/server-middleware/index.js"
     },
   ],
+
+  watchers: {
+    webpack: {
+      aggregateTimeout: 300,
+      poll: 1000
+    }
+  },
 }

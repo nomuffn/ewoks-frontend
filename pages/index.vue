@@ -1,23 +1,17 @@
 <template>
   <div class="container">
     <div>
-      <h1 class="title">Ewoks</h1>
+      <h1 class="title">aaa</h1>
 
-    
+
 
     </div>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
-import VuesaxLogo from '~/components/VuesaxLogo.vue'
 
 export default {
-  components: {
-    Logo,
-    VuesaxLogo,
-  },
 }
 </script>
 
