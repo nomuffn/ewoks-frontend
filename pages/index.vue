@@ -1,45 +1,41 @@
 <template>
   <div class="container">
-	<vs-row>
-		<vs-col class="sidebar" vs-type="flex" vs-justify="center" vs-align="center" w="3">
 
-			<h1 class="title">Ewoks</h1>
+	<vs-navbar square center-collapsed v-model="active">
+        <template #left>
+			<h2 class="title">Ewoks</h2>
+        </template>
+        <vs-navbar-item :active="active == 'home'" id="home">
+          Home
+        </vs-navbar-item>
+        <vs-navbar-item :active="active == 'categorized'" id="categorized">
+          Categorized Maps
+        </vs-navbar-item>
+      </vs-navbar>
 
-			<vs-alert color="success">
-				<template #title>
-					Updates
-				</template>
-				- Qualified maps updated to 7 days
-			</vs-alert>
+	<div class="content">
 
-		</vs-col>
-		<vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" w="3">
+		<Home v-show="active == 'home'" />
+		<CategorizedMaps v-show="active == 'categorized'" />
 
-			<h2 class="title">Qualified Maps</h2>
-
-			<vs-button href="https://scoresaber.com/ranking/requests" blank>
-				Rank Requests
-			</vs-button>
-
-			<vs-alert color="primary">
-				If a map disappears from the queue it will be seen as a new qualified map for now
-			</vs-alert>
-
-			<List url="http://localhost/api.php?qualifiedMaps" />
-
-		</vs-col>
-	</vs-row>
+	</div>
   </div>
 </template>
 
 <script>
 
-import List from "@/components/List.vue";
+import Home from "@/components/tabs/Home.vue";
+import CategorizedMaps from "@/components/tabs/CategorizedMaps.vue";
 
 export default {
 
+	data : () => ({
+		active: "home"
+	}),
+
 	components: {
-		List
+		Home,
+    CategorizedMaps
 	}
 
 }
@@ -47,45 +43,14 @@ export default {
 
 <style>
 
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
 :root {
 	--vs-background: #fff !important;
-}
-
-.vs-alert {
-	margin: 10px 0;
-}
-
-.sidebar {
-	height: 100%;
-}
-
-.sidebar .vs-alert {
-	width: 85%;
-	margin-top: 100%;
-}
-
-.title {
-  display: block;
-  font-weight: 400;
-  font-size: 40px;
-  color: #fff;
-  letter-spacing: 1px;
-  text-transform: capitalize;
-  padding: 25px 0 15px 0;
-  /* background-color: #141417; */
-}
-
-.text {
-	color:#fff;
-	margin: 20px 10px;
-}
-
-h1 {
-	text-align: center;
-}
-
-h1, h2, h3 {
-	color: #fff;
+  --vs-primary:  156, 39, 176;
 }
 
 .container {
@@ -95,6 +60,11 @@ h1, h2, h3 {
   justify-content: left;
   text-align: left;
   background-color: #18191c;
+  padding-top: 80px;
+}
+
+.content {
+  width: 100%;
 }
 
 </style>

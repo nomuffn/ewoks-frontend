@@ -4,7 +4,7 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'ewoks',
+    title: 'Ewoks',
     htmlAttrs: {
       lang: 'en',
     },
@@ -19,13 +19,15 @@ export default {
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: [
     "vuesax/dist/vuesax.css",
-    "~layouts/global.css"],
+    "~layouts/global.css",
+    'boxicons/css/boxicons.min.css',
+  ],
 
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: ['@/plugins/vuesax'],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
-  components: false,
+  components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
@@ -60,10 +62,4 @@ export default {
     },
   ],
 
-  watchers: {
-    webpack: {
-      aggregateTimeout: 300,
-      poll: 1000
-    }
-  },
 }

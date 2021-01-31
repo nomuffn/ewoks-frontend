@@ -16,14 +16,13 @@
 
 <script>
 export default {
-    props: ['url'],
     data() {
         return {
             qualifiedMaps: []
         }
     },
     async fetch() {
-        this.qualifiedMaps = await fetch(this.url).then(res => res.json())
+        this.qualifiedMaps = await fetch("http://localhost/api.php?qualifiedMaps").then(res => res.json())
     },
     methods : {
         openUrl: function (id) {
@@ -33,43 +32,8 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
-h3 {
-    font-size: 16px;
-}
 
-.vs-card {
-    max-width: 40%;
-    widows: 40%;
-}
-
-.card-container {
-
-}
-
-.vs-card {
-    max-width: 100%;
-}
-
-.vs-card-content {
-    margin-bottom: 20px;
-}
-
-.vs-card__title {
-    padding: 10px 0px;
-    width: 80%;
-}
-
-.vs-card__text {
-    display: flex;
-    align-items: center;
-    padding: 5px 18px;
-}
-
-.vs-card__text>p {
-    text-align: right;
-    font-weight: bold;
-}
 
 </style>
