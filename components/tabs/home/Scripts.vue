@@ -58,39 +58,6 @@ export default {
 
 <style>
 
-.main {
-	margin-left: 300px;
-    width: 100%;
-}
 
-.vs-col {
-    margin-right: 35px;
-}
-
-.vs-sidebar-content {
-	margin-top: 80px;
-}
-
-.vs-alert {
-    height: auto !important;
-}
-.vs-alert__content {
-    min-height: auto !important;
-}
-
-.title {
-	display: block;
-    font-weight: 400;
-    font-size: 30px;
-    color: #fff;
-    letter-spacing: 1px;
-    text-transform: capitalize;
-    margin: 20px 10px;
-}
-
-.text {
-	color:#fff;
-	margin: 20px 10px;
-}
 
 </style>

@@ -36,9 +36,9 @@
 
 <script>
 
-import QualifiedMapsList from "@/components/tabs/home/rankingqueue/QualifiedMapsList.vue";
-import RecentlyRanked from "@/components/tabs/home/rankingqueue/RecentlyRanked.vue";
-import VotesFeed from "@/components/tabs/home/rankingqueue/VotesFeed.vue";
+import QualifiedMapsList from "@/components/tabs/home/components/QualifiedMapsList.vue";
+import RecentlyRanked from "@/components/tabs/home/components/RecentlyRanked.vue";
+import VotesFeed from "@/components/tabs/home/components/VotesFeed.vue";
 
 export default {
 	components: {
@@ -49,85 +49,35 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
 
-.main {
-	margin-left: 300px;
-    width: 100%;
-}
-
-.vs-col {
-    margin-right: 35px;
-}
-
-.vs-sidebar-content {
-	margin-top: 80px;
-}
-
-.vs-alert {
-    height: auto !important;
-}
-.vs-alert__content {
-    min-height: auto !important;
-}
-
-.title {
-	display: block;
-    font-weight: 400;
-    font-size: 30px;
-    color: #fff;
-    letter-spacing: 1px;
-    text-transform: capitalize;
-    margin: 20px 10px;
-}
-
-.text {
-	color:#fff;
-	margin: 20px 10px;
-}
-
-
-
-h3 {
-    font-size: 16px;
-}
-
-.card-container {
-
-}
-
-.vs-button {
-    position: absolute;
-    top: 24px;
-    right: 10px;
-}
-
-.vs-card {
+/deep/ .vs-card {
     max-width: 100%;
     padding: 10px 0;
 }
 
-.vs-card-content {
+/deep/ .vs-card-content {
     margin-bottom: 20px;
 }
 
-.vs-card__title {
+/deep/ .vs-card__title {
     padding: 0px 10px;
     width: 80%;
 }
 
-.vs-card__text {
+/deep/ .vs-card__text {
     display: flex;
     align-items: center;
     padding: 5px 18px;
     flex-wrap: wrap;
 }
 
-.vs-card__text>p {
+/deep/ .vs-card__text>p {
     text-align: right;
     font-weight: bold;
     white-space: nowrap;
     width: 20%;
 }
+
 
 </style>

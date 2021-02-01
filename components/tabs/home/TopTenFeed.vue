@@ -1,46 +1,15 @@
 <template>
     <div class="main">
         <vs-row>
-            <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" w="3">
+            <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" w="12">
 
-                <h2 class="title">Qualified Maps</h2>
-
-                <vs-button href="https://scoresaber.com/ranking/requests" blank>
-                    Rank Requests
-                </vs-button>
+                <h2 class="title">Top Ten Scores Feed for Top 150 Ranked Songs</h2>
 
                 <vs-alert color="primary">
-                    If a map disappears from the queue it will be seen as a new qualified map for now
+                    Updates every hour
                 </vs-alert>
 
-
-            </vs-col>
-             <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" w="3">
-
-                <h2 class="title">Qualified Maps</h2>
-
-                <vs-button href="https://scoresaber.com/ranking/requests" blank>
-                    Rank Requests
-                </vs-button>
-
-                <vs-alert color="primary">
-                    If a map disappears from the queue it will be seen as a new qualified map for now
-                </vs-alert>
-
-
-            </vs-col>
-             <vs-col vs-type="flex" vs-justify="flex-start" vs-align="flex-start" w="3">
-
-                <h2 class="title">Qualified Maps</h2>
-
-                <vs-button href="https://scoresaber.com/ranking/requests" blank>
-                    Rank Requests
-                </vs-button>
-
-                <vs-alert color="primary">
-                    If a map disappears from the queue it will be seen as a new qualified map for now
-                </vs-alert>
-
+                <TopTenFeedList/>
 
             </vs-col>
         </vs-row>
@@ -49,47 +18,16 @@
 
 <script>
 
+import TopTenFeedList from "@/components/tabs/home/components/TopTenFeedList.vue";
+
 export default {
 	components: {
+        TopTenFeedList
 	}
 }
 </script>
 
-<style>
+<style scoped>
 
-.main {
-	margin-left: 300px;
-    width: 100%;
-}
-
-.vs-col {
-    margin-right: 35px;
-}
-
-.vs-sidebar-content {
-	margin-top: 80px;
-}
-
-.vs-alert {
-    height: auto !important;
-}
-.vs-alert__content {
-    min-height: auto !important;
-}
-
-.title {
-	display: block;
-    font-weight: 400;
-    font-size: 30px;
-    color: #fff;
-    letter-spacing: 1px;
-    text-transform: capitalize;
-    margin: 20px 10px;
-}
-
-.text {
-	color:#fff;
-	margin: 20px 10px;
-}
 
 </style>
