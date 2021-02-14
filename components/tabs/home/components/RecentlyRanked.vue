@@ -17,24 +17,18 @@
 
     </vs-alert>
 
-    <div class="card-container" >
-        <vs-card :key="map.scoresaberId" v-for="map of maps"
-                v-on:click="openUrl(map.scoresaberId)">
-            <template #title>
-            <h3>{{ map.name }}</h3>
-            </template>
-            <template #text>
-            <p>
-                ~{{ map.hourdiff }}h ago
-            </p>
-            </template>
-        </vs-card>
-    </div>
+    <TimeMapsList :maps="maps" />
     </div>
 </template>
 
 <script>
+
+import TimeMapsList from "@/components/tabs/home/components/TimeMapsList.vue";
+
 export default {
+    components: {
+        TimeMapsList
+    },
     data() {
         return {
             maps: [],

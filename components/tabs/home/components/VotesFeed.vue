@@ -16,19 +16,20 @@
 
         <div class="card-container" >
             <vs-card :key="vote.id" v-for="vote of votes" v-on:click="openUrl(vote.requestId)">
-                <template #title>
-                <h3>{{ vote.name }} by {{ vote.mapper }}</h3>
-                </template>
                 <template #text>
 
-                <p>
-                    {{ vote.time_voted_string }}
-                </p>
+                <h3>{{ vote.name }} by {{ vote.mapper }}</h3>
 
+                <div class="spans">
                 <span v-for="string of vote.strings">
                     <span v-bind:class="{ red : string.string_first == 'QAT' }">{{ string["string_first"] }}</span>
                     {{ string["string_second"] }}
                 </span>
+                </div>
+
+                <p class="time">
+                    {{ vote.time_voted_string }}
+                </p>
                 </template>
             </vs-card>
         </div>
@@ -79,9 +80,14 @@ export default {
 
 <style scoped>
 
-/deep/ span {
-    width: 100%;
-    padding: 0 10px;
+/deep/ .spans {
+    width: 50%;
+    display: flex;
+    flex-flow: column;
+}
+
+/deep/ p {
+    width: 50% !important;
 }
 
 /deep/ span span {
@@ -91,7 +97,30 @@ export default {
 }
 
 /deep/ .red {
-    color: #d50000;
+    color: #b71c1c;
+}
+
+/deep/ .vs-card-content {
+    width: 100%;
+    flex: 100% !important;
+}
+
+/deep/ .vs-card {
+    max-width: 100%;
+}
+
+/deep/ .vs-card__text {
+    flex-wrap: wrap;
+    flex-direction: row !important;
+}
+
+/deep/ .vs-card__text h3 {
+    width: 100%;
+    margin-bottom: 5px;
+}
+
+/deep/ .time {
+    align-self: center;
 }
 
 </style>

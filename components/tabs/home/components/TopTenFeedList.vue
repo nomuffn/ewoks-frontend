@@ -1,16 +1,20 @@
 <template>
     <div class="cards">
-        <vs-card type="3" v-for="score of scores" :key="score.id" v-on:click="openUrl(score.leaderboard_id)">
-            <template #title>
-                <h3>{{ score.player_name }}</h3>
-            </template>
+        <vs-card v-for="score of scores" :key="score.id" v-on:click="openUrl(score.leaderboard_id)">
             <template #text>
-                <p class="leaderboard" >{{ score.leaderboard_name }}</p>
+                <p class="leaderboard" >
+                    <span style="font-weight: bold;"><span class="colored">#{{ score.rank }}</span> {{ score.player_name }}</span>
+                    <br>
+                    {{ score.leaderboard_name }}
+                    <br>
+                    <span class="time">~{{ score.date }}h ago</span>
+                </p>
                 <div class="score" >
-                    <p>{{ score.pp }}pp</p>
-                    <p>{{ score.percentage }}</p>
+                    <p>
+                        {{ score.pp }}<span class="pp">pp</span>
+                        <br>
+                        {{ score.percentage }}</p>
                 </div>
-                <p class="hours" >~{{ score.date }}h ago</p>
             </template>
         </vs-card>
     </div>
@@ -36,31 +40,30 @@ export default {
 
 <style scoped>
 
-.cards {
-    display: flex;
-    flex-wrap: wrap;
-}
-
-/deep/ .vs-card {
-    height: 100%;
-}
-
 /deep/ .vs-card-content {
-    margin: 0px 15px 15px 0px;
-    width: 31%;
-}
-
-/deep/ .vs-card__title {
-    padding-top: 0;
-}
-
-/deep/ .vs-card__text {
     width: 100%;
 }
 
+/deep/ .vs-card {
+    max-width: 100%;
+}
+
+/deep/ .vs-card__text {
+    flex-direction: row !important;
+    text-align: left;
+}
+
 /deep/ .leaderboard {
-    height: 35px;
-    margin-top: 15px;
+    width: 75%;
+    padding-right: 10px;
+}
+
+/deep/ .score {
+    width: 25%;
+    text-align: right;
+    align-self: center;
+    text-align: right;
+    font-weight: bold;
 }
 
 /deep/ .hours {
@@ -68,10 +71,9 @@ export default {
     font-weight: bold;
 }
 
-/deep/ .score {
-    position: absolute;
-    top: 13px;
-    right: 18px;
+/deep/ .pp {
+    color: rgb(var(--vs-color));
+    font-weight: bold;
 }
 
 </style>

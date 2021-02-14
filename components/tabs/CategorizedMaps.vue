@@ -1,9 +1,11 @@
 <template>
-	<div>
+	<div style="text-align: center;">
 
         <vs-alert color="warn">
-            A
+            soon
         </vs-alert>
+
+        <img style="width: 50%;" src="pain.png"/>
 
 	</div>
 </template>

@@ -1,137 +1,173 @@
 <template>
 
-	<div>
-		<vs-sidebar notShadow absolute v-model="active" open>
+	<div class="home">
+		<vs-sidebar square v-model="active" open>
 
 			<vs-sidebar-item id="rankingqueue">
-			<template #icon>
-				<i class='bx bx-list-ul'></i>
-			</template>
-			Ranking Queue
-			</vs-sidebar-item>
-
-			<vs-sidebar-item id="toptenfeed">
-			<template #icon>
-				<i class='bx bx-line-chart-down'></i>
-			</template>
-			Top Ten Feed
+				<template #icon>
+					<i class='bx bx-list-ul'></i>
+				</template>
+				Ranking Queue
 			</vs-sidebar-item>
 
 			<vs-sidebar-item id="tools">
-			<template #icon>
-				<i class='bx bxs-category'></i>
-			</template>
-			Tools
-			</vs-sidebar-item>
-
-			<vs-sidebar-item id="scripts">
-			<template #icon>
-				<i class='bx bx-code-alt'></i>
-			</template>
-			Scripts
+				<template #icon>
+					<i class='bx bxs-category'></i>
+				</template>
+				Tools & Scripts
 			</vs-sidebar-item>
 
 			<vs-sidebar-item id="stats">
-			<template #icon>
-				<i class='bx bx-stats' ></i>
-			</template>
-			Ranked Stats
+				<template #icon>
+					<i class='bx bx-stats'></i>
+				</template>
+				Ranked Stats
+			</vs-sidebar-item>
+
+			<vs-sidebar-item id="miscellaneous">
+				<template #icon>
+					<i class='bx bx-stats'></i>
+				</template>
+				Miscellaneous
 			</vs-sidebar-item>
 		</vs-sidebar>
 
-		<RankingQueue v-show="active == 'rankingqueue'" />
-		<TopTenFeed v-show="active == 'toptenfeed'" />
-		<Tools v-show="active == 'tools'" />
-		<Scripts v-show="active == 'scripts'" />
-		<RankedStats v-show="active == 'stats'" />
-
+		<div class="main">
+			<RankingQueue v-show="active == 'rankingqueue'" />
+			<Tools v-show="active == 'tools'" />
+			<RankedStats v-show="active == 'stats'" />
+			<Miscellaneous v-show="active == 'miscellaneous'" />
+		</div>
 	</div>
 </template>
 
 <script>
+	import RankingQueue from "@/components/tabs/home/RankingQueue.vue";
+	import Tools from "@/components/tabs/home/Tools.vue";
+	import RankedStats from "@/components/tabs/home/RankedStats.vue";
+	import Miscellaneous from "@/components/tabs/home/Miscellaneous.vue";
 
-import RankingQueue from "@/components/tabs/home/RankingQueue.vue";
-import TopTenFeed from "@/components/tabs/home/TopTenFeed.vue";
-import Tools from "@/components/tabs/home/Tools.vue";
-import Scripts from "@/components/tabs/home/Scripts.vue";
-import RankedStats from "@/components/tabs/home/RankedStats.vue";
+	export default {
 
-export default {
+		data: () => ({
+			active: "rankingqueue"
+		}),
 
-	data:()=>({
-		active: "rankingqueue"
-	}),
-
-	components: {
-		RankingQueue,
-		TopTenFeed,
-		Tools,
-		Scripts,
-		RankedStats
+		components: {
+			RankingQueue,
+			Tools,
+			RankedStats,
+			Miscellaneous
+		}
 	}
-}
 </script>
 
 <style>
-.main {
-	padding-left: 300px;
-    width: 100%;
-}
+	.main {
+		margin: 0 auto;
+		max-width: 90%;
+		margin-top: 10px;
+		margin-bottom: 100px;
+	}
 
-.vs-col {
-    margin-right: 35px;
-}
+	.main_content {
+		display: flex;
+        flex-wrap: wrap;
+		min-width: 100%;
+		max-width: 100%;
+		min-height: 100%;
+		max-height: 100%;
+	}
 
-.vs-sidebar-content {
-	margin-top: 80px;
-}
+	.vs-navbar__left {
+		height: 80px;
+		position: relative;
+	}
 
-.vs-alert {
-    height: auto !important;
-}
-.vs-alert__content {
-    min-height: auto !important;
-}
+	.vs-navbar__left .title {
+		position: absolute;
+	}
 
-.title {
-	display: block;
-    font-weight: 400;
-    font-size: 30px;
-    color: #fff;
-    letter-spacing: 1px;
-    text-transform: capitalize;
-    margin: 20px 10px;
-}
+	.vs-sidebar-content {
+		width: 100%;
+		height: auto !important;
+		max-width: 100%;
+		position: relative;
+	}
 
-.text {
-	color:#fff;
-	margin: 20px 10px;
-}
+	.vs-sidebar {
+		flex-direction: row !important;
+		justify-content: center !important;
+		flex-wrap: wrap;
+		padding: 0px 20px;
+	}
 
-h3 {
-    font-size: 16px;
-}
+	.vs-sidebar__item {
+		width: auto;
+		margin: 0px 10px;
+	}
 
-.vs-button {
-    position: absolute;
-    top: 24px;
-    right: 10px;
-}
+	.vs-sidebar__item::after {
+		display: none;
+	}
 
-.vs-sidebar-content {
-	margin-top: 80px;
-}
+	.vs-alert {
+		height: auto !important;
+	}
 
-.vs-alert {
-	margin: 10px 0;
-}
+	.vs-alert__content {
+		min-height: auto !important;
+	}
 
-.sidebar {
-	height: 100%;
-}
+	.title {
+		font-weight: 400;
+		font-size: 30px;
+		color: #fff;
+		letter-spacing: 1px;
+		text-transform: capitalize;
+		margin-right: 15px;
+	}
 
-.sidebar .vs-alert {
-	width: 85%;
-	margin-top: 100%;
-}
+	.text {
+		color: #fff;
+		margin: 20px 10px;
+	}
+
+	h3 {
+		font-size: 16px;
+	}
+
+	.title_container {
+		display: flex;
+		min-height: 80px;
+		align-items: center;
+	}
+
+	.col {
+		flex: 1;
+		min-width: 330px;
+		margin: 0px 10px;
+	}
+
+	.vs-alert {
+		margin: 10px 0;
+	}
+
+	.sidebar {
+		height: 100%;
+	}
+
+	.sidebar .vs-alert {
+		width: 85%;
+		margin-top: 100%;
+	}
+
+	.colored {
+		color: rgb(var(--vs-color)) !important;
+		font-weight: bold;
+	}
+
+	.vs-card {
+		border-radius: 15px;
+	}
 </style>
