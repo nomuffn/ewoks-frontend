@@ -36,7 +36,7 @@ export default {
         }
     },
     async fetch() {
-        let result = await fetch("http://localhost/api.php?recentlyRanked").then(res => res.json())
+        let result = await fetch("https://ewoks.de/api.php?recentlyRanked").then(res => res.json())
         this.maps = result.maps;
         this.stats = result.stats;
     },

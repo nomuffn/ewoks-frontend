@@ -46,7 +46,7 @@ export default {
         }
     },
     async fetch() {
-        let result = await fetch("http://localhost/api.php?votesFeed").then(res => res.json())
+        let result = await fetch("https://ewoks.de/api.php?votesFeed").then(res => res.json())
         this.lastWeek = result.lastWeek;
         this.allTime = result.alltime;
         this.votes = result.votes;

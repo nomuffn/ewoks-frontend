@@ -30,6 +30,9 @@
                 Very rough amount of mappers: 315
                 <br>
                 Unfortunately some mapper names are still scuffed from 2018
+                <br>
+                <br>
+                Stats from beatsaver are gonna be put offhold for now<br>until I find the motivation and solution for their api restrictions.
             </vs-alert>
         </div>
 
@@ -80,7 +83,7 @@
             }
         },
         async fetch() {
-            this.data = await fetch("http://localhost/api.php?rankedStats").then(res => res.json())
+            this.data = await fetch("https://ewoks.de/api.php?rankedStats").then(res => res.json())
         },
         methods : {
             openUrl: function (mapper) {
