@@ -88,3 +88,10 @@ sw.*
 
 # Vim swap files
 *.swp
+
+
+
+
+#own stuff
+static/scripts
+static/playlists
