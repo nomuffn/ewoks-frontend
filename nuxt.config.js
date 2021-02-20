@@ -28,6 +28,10 @@ export default {
         }],
     },
 
+    generate: {
+        fallback: true
+    },
+
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: [
         "vuesax/dist/vuesax.css",
@@ -52,6 +56,7 @@ export default {
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
         '@nuxtjs/proxy',
+        ['nuxt-matomo', { matomoUrl: '//matomo.ewoks.de/', siteId: 1 }],
     ],
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios

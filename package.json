@@ -16,6 +16,7 @@
     "boxicons": "^2.0.7",
     "core-js": "^3.8.2",
     "nuxt": "^2.14.12",
+    "nuxt-matomo": "^1.2.4",
     "vuesax": "^4.0.1-alpha.25"
   },
   "devDependencies": {}
