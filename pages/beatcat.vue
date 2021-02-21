@@ -5,7 +5,7 @@
             soon
         </vs-alert>
 
-        <img style="width: 50%;" src="pain.png"/>
+        <img style="width: 50%; height: 80vh;" src="pain.png"/>
 
 	</div>
 </template>
