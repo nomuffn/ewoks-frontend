@@ -25,22 +25,23 @@
                 > 50pp:  {{ data.above50 }}
                 <br>
                 > 0pp:  {{ data.above0 }}
-                <br>
-                <br>
+            </vs-alert>
+            <vs-alert color="primary">
                 Very rough amount of mappers: 315
                 <br>
                 Unfortunately some mapper names are still scuffed from 2018
                 <br>
                 <br>
-                Stats from beatsaver are gonna be put offhold for now<br>until I find the motivation and solution for their api restrictions.
+                Stats from beatsaver are gonna be put offhold for now until I find the motivation and solution for their api restrictions.
             </vs-alert>
         </div>
 
         <div class="col">
             <div class="title_container">
-                <h2 class="title">Distribution in mappers</h2>
+                <h2 class="title">Mapset Count by Mappers</h2>
             </div>
 
+            <Loading v-if="loading" />
             <div class="card-container" >
                 <vs-card :key="mapper" v-for="(value, mapper, index) in data.mappers"
                         v-on:click="openUrl(mapper)">
@@ -51,12 +52,31 @@
             </div>
 
         </div>
+
+        <div class="col">
+            <div class="title_container">
+                <h2 class="title">Difficulty Count by Mappers</h2>
+            </div>
+
+            <Loading v-if="loading" />
+            <div class="card-container" >
+                <vs-card :key="mapper" v-for="(value, mapper, index) in data.mappersDiffs"
+                        v-on:click="openUrl(mapper)">
+                    <template #text>
+                    <h3><span class="colored">#{{ index + 1 }}</span> {{ mapper }}: {{ value }}</h3>
+                    </template>
+                </vs-card>
+            </div>
+
+        </div>
+
         <div class="col">
 
             <div class="title_container">
                 <h2 class="title">Distribution in song artists</h2>
             </div>
 
+            <Loading v-if="loading" />
             <div class="card-container" >
                 <vs-card :key="artist" v-for="(value, artist, index) in data.artists"
                         v-on:click="openUrl(artist)">
@@ -67,30 +87,33 @@
             </div>
 
         </div>
+
     </div>
 </template>
 
 <script>
 
-
-    export default {
-        components: {
-
-        },
-        data() {
-            return {
-                data: {}
-            }
-        },
-        async fetch() {
-            this.data = await fetch("https://api.ewoks.de?rankedStats").then(res => res.json())
-        },
-        methods : {
-            openUrl: function (mapper) {
-                window.open("https://scoresaber.com/?search=" + mapper, "_blank");
-            }
+import Loading from "@/components/LoadingSpinner.vue"
+export default {
+    data() {
+        return {
+            data: {},
+            loading: true
+        }
+    },
+    components: {
+        Loading
+    },
+    async fetch() {
+        this.data = await this.$axios.$get("?rankedStats")
+        this.loading = false;
+    },
+    methods : {
+        openUrl: function (mapper) {
+            window.open("https://scoresaber.com/?search=" + mapper, "_blank");
         }
     }
+}
 </script>
 
 <style scoped>
@@ -99,8 +122,22 @@
     justify-content: center;
 }
 
+/deep/ .card-container .vs-card-content:first-child .vs-card .colored {
+    color: #FFCA28 !important;
+}
+
+/deep/ .card-container .vs-card-content:nth-child(2) .vs-card .colored {
+    color: #BDBDBD !important;
+}
+
+/deep/ .card-container .vs-card-content:nth-child(3) .vs-card .colored {
+    color: #FFA726 !important;
+}
+
+
 /deep/ .col {
     flex: inherit;
+    max-width: 300px;
 }
 
 /deep/ h3 {

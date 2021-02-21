@@ -14,6 +14,7 @@
 
         </vs-alert>
 
+        <Loading v-if="loading" />
         <div class="card-container" >
             <vs-card :key="vote.id" v-for="vote of votes" v-on:click="openUrl(vote.requestId)">
                 <template #text>
@@ -37,16 +38,24 @@
 </template>
 
 <script>
+
+import Loading from "@/components/LoadingSpinner.vue"
 export default {
     data() {
         return {
             lastWeek: [],
             allTime: [],
-            votes: []
+            votes: [],
+            loading: true
         }
     },
+    components: {
+        Loading
+    },
     async fetch() {
-        let result = await fetch("https://api.ewoks.de?votesFeed").then(res => res.json())
+        let result = await this.$axios.$get("?votesFeed")
+        this.loading = false;
+
         this.lastWeek = result.lastWeek;
         this.allTime = result.alltime;
         this.votes = result.votes;

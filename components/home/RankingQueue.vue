@@ -22,6 +22,8 @@
                 <vs-alert color="warn">
                     Will soon be changed up since the current way is not quite reliable with reuploads and stuff.
                 </vs-alert>
+
+                <Loading v-if="loading" />
                 <TimeMapsList :maps="maps" />
             </div>
             <div>
@@ -50,26 +52,32 @@
 </template>
 
 <script>
-    import TimeMapsList from "@/components/tabs/home/components/TimeMapsList.vue";
-    import RecentlyRanked from "@/components/tabs/home/components/RecentlyRanked.vue";
-    import VotesFeed from "@/components/tabs/home/components/VotesFeed.vue";
-    import TopTenFeedList from "@/components/tabs/home/components/TopTenFeedList.vue";
+    import TimeMapsList from "@/components/home/components/TimeMapsList.vue";
+    import RecentlyRanked from "@/components/home/components/RecentlyRanked.vue";
+    import VotesFeed from "@/components/home/components/VotesFeed.vue";
+    import TopTenFeedList from "@/components/home/components/TopTenFeedList.vue";
+
+    import Loading from "@/components/LoadingSpinner.vue"
 
     export default {
         components: {
             TimeMapsList,
             RecentlyRanked,
             VotesFeed,
-            TopTenFeedList
+            TopTenFeedList,
+            Loading
         },
         data() {
             return {
                 maps: [],
+                loading: true
             }
         },
         async fetch() {
-            this.maps = await fetch("https://api.ewoks.de?qualifiedMaps").then(res => res.json())
+            this.maps = await this.$axios.$get("?qualifiedMaps")
+            this.loading = false;
         },
+
     }
 </script>
 
@@ -137,49 +145,4 @@
     /deep/ .vs-alert {
         /* max-width: fit-content; */
     }
-
-    /*
-/deep/ .col {
-    margin-right: 20px;
-    width: calc(100% / 3);
-    position: relative;
-}
-
-/deep/ .vs-card {
-    max-width: 100%;
-    padding: 10px 0;
-}
-
-/deep/ .vs-card-content {
-    margin-bottom: 20px;
-}
-
-/deep/ .vs-card__title {
-    padding: 0px 10px;
-    width: 75%;
-}
-
-/deep/ .vs-card__text {
-    display: flex;
-    align-items: center;
-    padding: 5px 18px;
-    flex-wrap: wrap;
-}
-
-/deep/ .vs-card__text>p {
-    text-align: right;
-    font-weight: bold;
-    white-space: nowrap;
-    width: 25%;
-}
-
-/deep/ .vs-button {
-    height: 30px;
-}
-
-/deep/ .title_container {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-} */
 </style>

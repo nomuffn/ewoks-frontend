@@ -1,9 +1,0 @@
-@font-face {
-    font-family: "Poppins";
-    src: local("Poppins"),
-     url(~assets/poppins-v15-latin-regular.ttf) format("truetype");
-}
-
-html {
-    font-family: 'Poppins';
-}
