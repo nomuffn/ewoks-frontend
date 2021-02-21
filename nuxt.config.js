@@ -35,7 +35,7 @@ export default {
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: [
         "vuesax/dist/vuesax.css",
-        "~layouts/global.css",
+        "~assets/default.css",
         'boxicons/css/boxicons.min.css',
     ],
 
@@ -56,12 +56,15 @@ export default {
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
         '@nuxtjs/proxy',
-        ['nuxt-matomo', { matomoUrl: '//matomo.ewoks.de/', siteId: 1 }],
+        ['nuxt-matomo', {
+            matomoUrl: '//matomo.ewoks.de/',
+            siteId: 1
+        }],
     ],
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
-        baseURL: '/',
+        browserBaseURL: 'https://api.ewoks.de'
     },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build

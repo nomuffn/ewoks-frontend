@@ -1,151 +1,175 @@
 <template>
-	<div class="container">
+	<div class="home">
+        <vs-sidebar square v-model="active" open>
 
-		<vs-navbar square center-collapsed v-model="active">
-			<template #left>
-				<h2 class="title">Ewoks</h2>
-			</template>
-			<vs-navbar-item :active="active == 'home'" id="home">
-				Scoresaber stuff
-			</vs-navbar-item>
-			<vs-navbar-item :active="active == 'categorized'" id="categorized">
-				Categorized Maps (WIP)
-			</vs-navbar-item>
-		</vs-navbar>
+            <vs-sidebar-item id="rankingqueue">
+                <template #icon>
+                    <i class='bx bx-list-ul'></i>
+                </template>
+                Ranking Queue
+            </vs-sidebar-item>
 
-		<div class="content">
+            <vs-sidebar-item id="tools">
+                <template #icon>
+                    <i class='bx bxs-category'></i>
+                </template>
+                Tools & Scripts
+            </vs-sidebar-item>
 
-			<Home v-show="active == 'home'" />
-			<CategorizedMaps v-show="active == 'categorized'" />
+            <vs-sidebar-item id="stats">
+                <template #icon>
+                    <i class='bx bx-stats'></i>
+                </template>
+                Ranked Stats
+            </vs-sidebar-item>
 
+            <vs-sidebar-item id="miscellaneous">
+                <template #icon>
+                    <i class='bx bx-stats'></i>
+                </template>
+                Miscellaneous
+            </vs-sidebar-item>
+        </vs-sidebar>
+
+        <div class="main">
+            <keep-alive>
+                <RankingQueue v-if="active == 'rankingqueue'" />
+                <Tools v-if="active == 'tools'" />
+                <RankedStats v-if="active == 'stats'" />
+                <Miscellaneous v-if="active == 'miscellaneous'" />
+            </keep-alive>
 		</div>
 
-		<vs-button class="discord" primary gradient>
-			<i class='bx bxl-discord bx-sm'></i>muffn#2345
-		</vs-button>
-	</div>
+    </div>
 </template>
 
+
 <script>
-	import Home from "@/components/tabs/Home.vue";
-	import CategorizedMaps from "@/components/tabs/CategorizedMaps.vue";
+    const RankingQueue = () => import("@/components/home/RankingQueue.vue");
+    const Tools = () => import("@/components/home/Tools.vue");
+    const RankedStats = () => import("@/components/home/RankedStats.vue");
+    const Miscellaneous = () => import("@/components/home/Miscellaneous.vue");
 
-	export default {
-		methods: {
-			checkLuma: function(c) {
-				var c = c.substring(1);      // strip #
-				var rgb = parseInt(c, 16);   // convert rrggbb to decimal
-				var r = (rgb >> 16) & 0xff;  // extract red
-				var g = (rgb >>  8) & 0xff;  // extract green
-				var b = (rgb >>  0) & 0xff;  // extract blue
+    export default {
+        data: () => ({
+            active: "rankingqueue"
+        }),
 
-				var luma = 0.2126 * r + 0.7152 * g + 0.0722 * b; // per ITU-R BT.709
-
-				if ( luma > 30 && luma < 170) {
-					return true;
-				} else {
-					return false;
-				}
-			}
-		},
-		data: () => ({
-			active: "home"
-		}),
-		created() {
-			let Colors = ['#F44336', '#FFEBEE', '#FFCDD2', '#EF9A9A', '#E57373', '#EF5350', '#E53935', '#D32F2F',
-				'#C62828', '#B71C1C', '#FF8A80', '#FF5252', '#FF1744', '#D50000', '#FCE4EC', '#F8BBD0', '#F48FB1',
-				'#F06292', '#EC407A', '#E91E63', '#D81B60', '#C2185B', '#AD1457', '#880E4F', '#FF80AB', '#FF4081',
-				'#F50057', '#C51162', '#F3E5F5', '#E1BEE7', '#CE93D8', '#BA68C8', '#AB47BC', '#9C27B0', '#8E24AA',
-				'#7B1FA2', '#6A1B9A', '#4A148C', '#EA80FC', '#E040FB', '#D500F9', '#AA00FF', '#EDE7F6', '#D1C4E9',
-				'#B39DDB', '#9575CD', '#7E57C2', '#673AB7', '#5E35B1', '#512DA8', '#4527A0', '#311B92', '#B388FF',
-				'#7C4DFF', '#651FFF', '#6200EA', '#E8EAF6', '#C5CAE9', '#9FA8DA', '#7986CB', '#5C6BC0', '#3F51B5',
-				'#3949AB', '#303F9F', '#283593', '#1A237E', '#8C9EFF', '#536DFE', '#3D5AFE', '#304FFE', '#E3F2FD',
-				'#BBDEFB', '#90CAF9', '#64B5F6', '#42A5F5', '#2196F3', '#1E88E5', '#1976D2', '#1565C0', '#0D47A1',
-				'#82B1FF', '#448AFF', '#2979FF', '#2962FF', '#E1F5FE', '#B3E5FC', '#81D4FA', '#4FC3F7', '#29B6F6',
-				'#03A9F4', '#039BE5', '#0288D1', '#0277BD', '#01579B', '#80D8FF', '#40C4FF', '#00B0FF', '#0091EA',
-				'#E0F7FA', '#B2EBF2', '#80DEEA', '#4DD0E1', '#26C6DA', '#00BCD4', '#00ACC1', '#0097A7', '#00838F',
-				'#006064', '#84FFFF', '#18FFFF', '#00E5FF', '#00B8D4', '#E0F2F1', '#B2DFDB', '#80CBC4', '#4DB6AC',
-				'#26A69A', '#009688', '#00897B', '#00796B', '#00695C', '#004D40', '#A7FFEB', '#64FFDA', '#1DE9B6',
-				'#00BFA5', '#E8F5E9', '#C8E6C9', '#A5D6A7', '#81C784', '#66BB6A', '#4CAF50', '#43A047', '#388E3C',
-				'#2E7D32', '#1B5E20', '#B9F6CA', '#69F0AE', '#00E676', '#00C853', '#F1F8E9', '#DCEDC8', '#C5E1A5',
-				'#AED581', '#9CCC65', '#8BC34A', '#7CB342', '#689F38', '#558B2F', '#33691E', '#CCFF90', '#B2FF59',
-				'#76FF03', '#64DD17', '#F9FBE7', '#F0F4C3', '#E6EE9C', '#DCE775', '#D4E157', '#CDDC39', '#C0CA33',
-				'#AFB42B', '#9E9D24', '#827717', '#F4FF81', '#EEFF41', '#C6FF00', '#AEEA00', '#FFFDE7', '#FFF9C4',
-				'#FFF59D', '#FFF176', '#FFEE58', '#FFEB3B', '#FDD835', '#FBC02D', '#F9A825', '#F57F17', '#FFFF8D',
-				'#FFFF00', '#FFEA00', '#FFD600', '#FFF8E1', '#FFECB3', '#FFE082', '#FFD54F', '#FFCA28', '#FFC107',
-				'#FFB300', '#FFA000', '#FF8F00', '#FF6F00', '#FFE57F', '#FFD740', '#FFC400', '#FFAB00', '#FFF3E0',
-				'#FFE0B2', '#FFCC80', '#FFB74D', '#FFA726', '#FF9800', '#FB8C00', '#F57C00', '#EF6C00', '#E65100',
-				'#FFD180', '#FFAB40', '#FF9100', '#FF6D00', '#FBE9E7', '#FFCCBC', '#FFAB91', '#FF8A65', '#FF7043',
-				'#FF5722', '#F4511E', '#E64A19', '#D84315', '#BF360C', '#FF9E80', '#FF6E40', '#FF3D00', '#DD2C00',
-				'#EFEBE9', '#D7CCC8', '#BCAAA4', '#A1887F', '#8D6E63', '#795548', '#6D4C41', '#5D4037', '#4E342E',
-				'#3E2723', '#FAFAFA', '#F5F5F5', '#EEEEEE', '#E0E0E0', '#BDBDBD', '#9E9E9E', '#ECEFF1', '#CFD8DC',
-				'#B0BEC5', '#90A4AE', '#78909C', '#607D8B', '#000000',
-			];
-			let color = Colors[Math.floor(Math.random() * (Colors.length - 0 + 1) + 0)];
-			while (!this.checkLuma(color) ) {
-				color = Colors[Math.floor(Math.random() * (Colors.length - 0 + 1) + 0)];
-			}
-			this.$vs.setColor('primary', color);
-		},
-		components: {
-			Home,
-			CategorizedMaps
-		}
-
-	}
+        components: {
+            RankingQueue,
+            Tools,
+            RankedStats,
+            Miscellaneous
+        },
+    }
 </script>
 
 <style>
-	html,
-	body {
-		max-width: 100%;
-		overflow-x: hidden;
-		background-color: #18191c;
-	}
+    .main {
+        margin: 0 auto;
+        max-width: 90%;
+        margin-top: 10px;
+        margin-bottom: 100px;
+    }
 
-	html {
-		overflow: scroll;
-		overflow-x: hidden;
-	}
+    .main_content {
+        display: flex;
+        flex-wrap: wrap;
+        min-width: 100%;
+        max-width: 100%;
+        min-height: 100%;
+        max-height: 100%;
+    }
 
-	::-webkit-scrollbar {
-		width: 10px;
-		height: 5px;
-		display: block;
-		background: transparent;
-	}
+    .vs-navbar__left {
+        height: 80px;
+        position: relative;
+    }
 
-	::-webkit-scrollbar-thumb {
-		background: #fff;
-		border-radius: 5px;
-	}
+    .vs-navbar__left .title {
+        position: absolute;
+    }
 
-	.container {
-		min-height: 100vh;
-		display: flex;
-		justify-content: left;
-		text-align: left;
-		padding-top: 80px;
-	}
+    .vs-sidebar-content {
+        width: 100%;
+        height: auto !important;
+        max-width: 100%;
+        position: relative;
+    }
 
-	.content {
-		width: 100%;
-	}
+    .vs-sidebar {
+        flex-direction: row !important;
+        justify-content: center !important;
+        flex-wrap: wrap;
+        padding: 0px 20px;
+    }
 
-	.vs-navbar h2 {
-		margin: 20px 10px;
-	}
+    .vs-sidebar__item {
+        width: auto;
+        margin: 0px 10px;
+    }
 
-	.discord {
-		position: fixed;
-		bottom: 30px;
-		right: 10px;
-		pointer-events: none;
-		font-size: 15px;
-	}
+    .vs-sidebar__item::after {
+        display: none;
+    }
 
-	/* .discord div {
-		color: rgba(var(--vs-color), 1);
-    	mix-blend-mode: difference;
-	} */
+    .vs-alert {
+        height: auto !important;
+    }
+
+    .vs-alert__content {
+        min-height: auto !important;
+    }
+
+    .title {
+        font-weight: 400;
+        font-size: 30px;
+        color: #fff;
+        letter-spacing: 1px;
+        text-transform: capitalize;
+        margin-right: 15px;
+    }
+
+    .text {
+        color: #fff;
+        margin: 20px 10px;
+    }
+
+    h3 {
+        font-size: 16px;
+    }
+
+    .title_container {
+        display: flex;
+        min-height: 90px;
+        align-items: center;
+    }
+
+    .col {
+        flex: 1;
+        min-width: 330px;
+        margin: 0px 10px;
+    }
+
+    .vs-alert {
+        margin: 10px 0;
+    }
+
+    .sidebar {
+        height: 100%;
+    }
+
+    .sidebar .vs-alert {
+        width: 85%;
+        margin-top: 100%;
+    }
+
+    .colored {
+        color: rgb(var(--vs-color)) !important;
+        font-weight: bold;
+    }
+
+    .vs-card {
+        border-radius: 15px;
+    }
 </style>

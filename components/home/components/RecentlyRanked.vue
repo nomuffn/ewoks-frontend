@@ -17,26 +17,31 @@
 
     </vs-alert>
 
+    <Loading v-if="loading" />
     <TimeMapsList :maps="maps" />
     </div>
 </template>
 
 <script>
 
-import TimeMapsList from "@/components/tabs/home/components/TimeMapsList.vue";
+import TimeMapsList from "@/components/home/components/TimeMapsList.vue";
+import Loading from "@/components/LoadingSpinner.vue"
 
 export default {
     components: {
-        TimeMapsList
+        TimeMapsList,
+        Loading
     },
     data() {
         return {
             maps: [],
-            stats: []
+            stats: [],
+            loading: true
         }
     },
     async fetch() {
-        let result = await fetch("https://api.ewoks.de?recentlyRanked").then(res => res.json())
+        let result = await this.$axios.$get("?recentlyRanked")
+        this.loading = false;
         this.maps = result.maps;
         this.stats = result.stats;
     },

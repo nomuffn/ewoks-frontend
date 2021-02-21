@@ -1,5 +1,6 @@
 <template>
     <div class="cards">
+        <Loading v-if="loading" />
         <vs-card v-for="score of scores" :key="score.id" v-on:click="openUrl(score.leaderboard_id)">
             <template #text>
                 <p class="leaderboard" >
@@ -21,14 +22,21 @@
 </template>
 
 <script>
+
+import Loading from "@/components/LoadingSpinner.vue"
 export default {
     data() {
         return {
-            scores: []
+            scores: [],
+            loading: true
         }
     },
+    components: {
+        Loading
+    },
     async fetch() {
-        this.scores = await fetch("https://api.ewoks.de?topTenFeed").then(res => res.json())
+        this.scores = await this.$axios.$get("?topTenFeed")
+        this.loading = false;
     },
     methods : {
         openUrl: function (id) {
