@@ -73,7 +73,7 @@
         <div class="col">
 
             <div class="title_container">
-                <h2 class="title">Distribution in song artists</h2>
+                <h2 class="title">Difficulty Count by Song Artists</h2>
             </div>
 
             <Loading v-if="loading" />
