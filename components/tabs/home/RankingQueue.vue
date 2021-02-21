@@ -68,7 +68,7 @@
             }
         },
         async fetch() {
-            this.maps = await fetch("https://ewoks.de/api.php?qualifiedMaps").then(res => res.json())
+            this.maps = await fetch("https://api.ewoks.de?qualifiedMaps").then(res => res.json())
         },
     }
 </script>

@@ -83,7 +83,7 @@
             }
         },
         async fetch() {
-            this.data = await fetch("https://ewoks.de/api.php?rankedStats").then(res => res.json())
+            this.data = await fetch("https://api.ewoks.de?rankedStats").then(res => res.json())
         },
         methods : {
             openUrl: function (mapper) {

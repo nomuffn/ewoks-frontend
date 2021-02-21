@@ -28,7 +28,7 @@ export default {
         }
     },
     async fetch() {
-        this.scores = await fetch("https://ewoks.de/api.php?topTenFeed").then(res => res.json())
+        this.scores = await fetch("https://api.ewoks.de?topTenFeed").then(res => res.json())
     },
     methods : {
         openUrl: function (id) {
