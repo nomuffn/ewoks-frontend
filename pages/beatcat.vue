@@ -13,7 +13,9 @@
 <script>
 
 export default {
-
+    async fetch() {
+        await this.$auth.logout()
+    },
 }
 </script>
 

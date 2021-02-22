@@ -60,7 +60,24 @@ export default {
             matomoUrl: '//matomo.ewoks.de/',
             siteId: 1
         }],
+        '@nuxtjs/auth-next'
     ],
+    auth: {
+        strategies: {
+            auth0: {
+                domain: 'ewoks.eu.auth0.com',
+                clientId: 'A1NixQ6799IkehoYRuwN6xe8iQimFNCw',
+                audience: 'https://django-beatcat-api',
+                logoutRedirectUri: 'localhost:3000',
+            }
+        },
+        redirect: {
+            login: '/',
+            logout: '/',
+            callback: '/',
+            home: '/'
+          }
+    },
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
