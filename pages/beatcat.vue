@@ -1,9 +1,13 @@
 <template>
-	<div style="text-align: center;">
+	<div class="beatcat" style="text-align: center;">
 
-        <button v-on:click="login" >asdfasdfdfasd</button>
+        <button v-on:click="login" >login</button>
 
         <button v-on:click="refresh" >refresh</button>
+
+        <p>user: {{ this.$auth.user }}</p>
+        <p>store user: {{ this.$store.state.auth.user }}</p>
+        <p>logged in: {{ this.$store.state.auth.loggedIn }}</p>
 
         <vs-alert color="warn">
             soon
@@ -19,7 +23,7 @@
 export default {
     methods: {
         login: function() {
-            this.$auth.loginWith('social').then(() => console.log("logged in!"));
+            this.$auth.loginWith('discord').then(() => console.log("logged in!"));
         },
         refresh: function() {
             // Access using $auth
@@ -33,5 +37,13 @@ export default {
 </script>
 
 <style>
+
+.beatcat {
+}
+
+.beatcat p {
+    color: #fff;
+    text-align: left;
+}
 
 </style>

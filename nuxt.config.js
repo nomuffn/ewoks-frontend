@@ -64,7 +64,7 @@ export default {
     ],
     auth: {
         strategies: {
-            social: {
+            discord: {
                 scheme: 'oauth2',
                 endpoints: {
                     authorization: 'https://discord.com/api/oauth2/authorize',
@@ -74,7 +74,7 @@ export default {
                 scope: ['identify', 'email'],
                 clientId: '813212218476462081',
                 clientSecret: 'm3ej6lPYUDDkR-QkjFCmoT7tR1Au0EMV',
-                redirectUri: "http://localhost:3000/beatcat",
+                redirectUri: "http://localhost:3000/login",
                 grantType: 'authorization_code',
                 responseType: 'token',
                 token: {
