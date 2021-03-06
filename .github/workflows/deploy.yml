@@ -1,6 +1,9 @@
 name: Deploy
 
-on: [push]
+on:
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -13,7 +16,7 @@ jobs:
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-        
+
     - name: Cache dependencies
       uses: actions/cache@v1
       with:
@@ -21,11 +24,11 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-          
+
     - run: npm ci
-    
+
     - run: npm run build
-      
+
     - name: Deploy to Server
       uses: easingthemes/ssh-deploy@v2.1.5
       env:
@@ -35,15 +38,15 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
-          
+
+
+
+
+
+
+
+
+
+
+
+
