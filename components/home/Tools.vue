@@ -297,7 +297,9 @@
             },
             fixWalls(input) {
 
-                if (isNaN(this.bpm) || this.bpm == "") {
+                var bpm = this.bpm;
+
+                if (isNaN(bpm) || bpm == "") {
                     alert("BPM must be a number >:(");
                     return false;
                 }
@@ -316,11 +318,10 @@
                                 for (var i = 0; i < obj._obstacles.length; i++) {
                                     var wall = obj._obstacles[i];
 
-                                    if (wall._duration * (60 / this.bpm) + 1e-9 <
-                                        0.015 &&
+                                    if (wall._duration * (60 / bpm) + 1e-9 < 0.015 &&
                                         (wall._width >= 2 || (wall._lineIndex == 1 || wall._lineIndex == 2))) {
 
-                                        wall._duration = (0.015 - 1e-9) / (60 / this.bpm)
+                                        wall._duration = (0.015 - 1e-9) / (60 / bpm);
                                     }
                                 }
 
@@ -350,7 +351,6 @@
 </script>
 
 <style scoped>
-
     /deep/ h2 {
         margin: 20px 0px;
     }
