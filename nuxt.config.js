@@ -64,19 +64,38 @@ export default {
     ],
     auth: {
         strategies: {
-            auth0: {
-                domain: 'ewoks.eu.auth0.com',
-                clientId: 'A1NixQ6799IkehoYRuwN6xe8iQimFNCw',
-                audience: 'https://django-beatcat-api',
-                logoutRedirectUri: 'localhost:3000',
+            social: {
+                scheme: 'oauth2',
+                endpoints: {
+                    authorization: 'https://discord.com/api/oauth2/authorize',
+                    token: 'https://discord.com/api/oauth2/token',
+                    userInfo: 'https://discord.com/api/users/@me'
+                },
+                scope: ['identify', 'email'],
+                clientId: '813212218476462081',
+                clientSecret: 'm3ej6lPYUDDkR-QkjFCmoT7tR1Au0EMV',
+                redirectUri: "http://localhost:3000/beatcat",
+                grantType: 'authorization_code',
+                responseType: 'token',
+                token: {
+                    property: 'access_token',
+                    type: 'Bearer',
+                    maxAge: 1800
+                },
+                refreshToken: {
+                    property: 'refresh_token',
+                    maxAge: 60 * 60 * 24 * 30
+                },
+
+                // accessType: undefined,
+                // logoutRedirectUri: undefined,
+                // state: 'UNIQUE_AND_NON_GUESSABLE',
+                // codeChallengeMethod: '',
+                // responseMode: '',
+                // acrValues: '',
+                // autoLogout: false
             }
-        },
-        redirect: {
-            login: '/',
-            logout: '/',
-            callback: '/',
-            home: '/'
-          }
+        }
     },
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
