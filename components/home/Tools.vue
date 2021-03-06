@@ -134,7 +134,7 @@
                         <div class="buttons">
                             <div style="flex: 1;"></div>
                             <vs-button border style="min-width: 60px" primary animation-type="scale" blank
-                                href="scripts/CustomLevelsToPlaylist Converter_V01.py">
+                                href="scripts/CustomLevelsToPlaylist Converter.py">
                                 <i class='bx bx-code-alt'></i>
                                 <template #animate>
                                     Source
@@ -142,7 +142,7 @@
                             </vs-button>
 
                             <vs-button border style="min-width: 80px" primary animation-type="scale" blank
-                                href="scripts/CustomLevelsToPlaylist Converter_V01.exe">
+                                href="scripts/CustomLevelsToPlaylist Converter.exe">
                                 <i class='bx bxs-download'></i>
                                 <template #animate>
                                     Download
@@ -167,7 +167,7 @@
                         <div class="buttons">
                             <div style="flex: 1;"></div>
                             <vs-button border style="min-width: 60px" primary animation-type="scale" blank
-                                href="scripts/BlueOrRedRemoverYesYEs_V01.py">
+                                href="scripts/BlueOrRedRemoverYesYEs.py">
                                 <i class='bx bx-code-alt'></i>
                                 <template #animate>
                                     Source
@@ -175,7 +175,7 @@
                             </vs-button>
 
                             <vs-button border style="min-width: 80px" primary animation-type="scale" blank
-                                href="scripts/BlueOrRedRemoverYesYEs_V01.exe">
+                                href="scripts/BlueOrRedRemoverYesYEs.exe">
                                 <i class='bx bxs-download'></i>
                                 <template #animate>
                                     Download
@@ -200,7 +200,7 @@
                         <div class="buttons">
                             <div style="flex: 1;"></div>
                             <vs-button border style="min-width: 60px" primary animation-type="scale" blank
-                                href="scripts/bookmarks2Text_V01.py">
+                                href="scripts/bookmarks2Text.py">
                                 <i class='bx bx-code-alt'></i>
                                 <template #animate>
                                     Source
@@ -208,7 +208,7 @@
                             </vs-button>
 
                             <vs-button border style="min-width: 80px" primary animation-type="scale" blank
-                                href="scripts/bookmarks2Text_V01.exe">
+                                href="scripts/bookmarks2Text.exe">
                                 <i class='bx bxs-download'></i>
                                 <template #animate>
                                     Download
