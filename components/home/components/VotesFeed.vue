@@ -2,35 +2,47 @@
     <div>
         <vs-alert color="primary">
             Updates every hour
-            <br>
-            Might be slightly off :)<br>
-            Votes in the last 7 days:<br>
-            RT Up-/Downvotes: <b>{{ lastWeek[0] }}</b> / <b>{{ lastWeek[1] }}</b><br>
-            QAT Up-/Downvotes: <b>{{ lastWeek[2] }}</b> / <b>{{ lastWeek[3] }}</b><br>
-            <br>
-            Votes since 8th August 2020:<br>
-            RT Up-/Downvotes: <b>{{ allTime[0] }}</b> / <b>{{ allTime[1] }}</b><br>
-            QAT Up-/Downvotes: <b>{{ allTime[2] }}</b> / <b>{{ allTime[3] }}</b><br>
-
+            <br />
+            Might be slightly off :)<br />
+            Votes in the last 7 days:<br />
+            RT Up-/Downvotes: <b>{{ lastWeek[0] }}</b> / <b>{{ lastWeek[1] }}</b
+            ><br />
+            QAT Up-/Downvotes: <b>{{ lastWeek[2] }}</b> /
+            <b>{{ lastWeek[3] }}</b
+            ><br />
+            <br />
+            Votes since 8th August 2020:<br />
+            RT Up-/Downvotes: <b>{{ allTime[0] }}</b> / <b>{{ allTime[1] }}</b
+            ><br />
+            QAT Up-/Downvotes: <b>{{ allTime[2] }}</b> / <b>{{ allTime[3] }}</b
+            ><br />
         </vs-alert>
 
         <Loading v-if="loading" />
-        <div class="card-container" >
-            <vs-card :key="vote.id" v-for="vote of votes" v-on:click="openUrl(vote.requestId)">
+        <div class="card-container">
+            <vs-card
+                :key="vote.id"
+                v-for="vote of votes"
+                v-on:click="openUrl(vote.requestId)"
+            >
                 <template #text>
+                    <h3>{{ vote.name }} by {{ vote.mapper }}</h3>
 
-                <h3>{{ vote.name }} by {{ vote.mapper }}</h3>
+                    <div class="spans">
+                        <span v-for="string of vote.strings">
+                            <span
+                                v-bind:class="{
+                                    red: string.string_first == 'QAT',
+                                }"
+                                >{{ string["string_first"] }}</span
+                            >
+                            {{ string["string_second"] }}
+                        </span>
+                    </div>
 
-                <div class="spans">
-                <span v-for="string of vote.strings">
-                    <span v-bind:class="{ red : string.string_first == 'QAT' }">{{ string["string_first"] }}</span>
-                    {{ string["string_second"] }}
-                </span>
-                </div>
-
-                <p class="time">
-                    {{ vote.time_voted_string }}
-                </p>
+                    <p class="time">
+                        {{ vote.time_voted_string }}
+                    </p>
                 </template>
             </vs-card>
         </div>
@@ -38,22 +50,21 @@
 </template>
 
 <script>
-
-import Loading from "@/components/LoadingSpinner.vue"
+import Loading from "@/components/LoadingSpinner.vue";
 export default {
     data() {
         return {
             lastWeek: [],
             allTime: [],
             votes: [],
-            loading: true
-        }
+            loading: true,
+        };
     },
     components: {
-        Loading
+        Loading,
     },
     async fetch() {
-        let result = await this.$axios.$get("?votesFeed")
+        let result = await this.$axios.$get("?votesFeed");
         this.loading = false;
 
         this.lastWeek = result.lastWeek;
@@ -63,32 +74,39 @@ export default {
         for (let index = 0; index < this.votes.length; index++) {
             let element = this.votes[index];
 
-            if ( element.time_voted > 24 ) {
-                this.votes[index].time_voted_string = "~"
-                + Math.round(element.time_voted / 24) + " days";
+            if (element.time_voted > 24) {
+                this.votes[index].time_voted_string =
+                    "~" + Math.round(element.time_voted / 24) + " days";
             } else {
-                this.votes[index].time_voted_string = "~" + element.time_voted + " hours";
+                this.votes[index].time_voted_string =
+                    "~" + element.time_voted + " hours";
             }
 
             for (let ii = 0; ii < this.votes[index].strings.length; ii++) {
                 let string = this.votes[index].strings[ii];
 
-                this.votes[index].strings[ii] = {string};
-                this.votes[index].strings[ii].string_first = string.substr(0,string.indexOf(' '));
-                this.votes[index].strings[ii].string_second = " " + string.substr(string.indexOf(' ')+1)
+                this.votes[index].strings[ii] = { string };
+                this.votes[index].strings[ii].string_first = string.substr(
+                    0,
+                    string.indexOf(" ")
+                );
+                this.votes[index].strings[ii].string_second =
+                    " " + string.substr(string.indexOf(" ") + 1);
             }
         }
     },
-    methods : {
+    methods: {
         openUrl: function (id) {
-            window.open("https://new.scoresaber.com/ranking/request/" + id, "_blank");
-        }
-    }
-}
+            window.open(
+                "https://new.scoresaber.com/ranking/request/" + id,
+                "_blank"
+            );
+        },
+    },
+};
 </script>
 
 <style scoped>
-
 /deep/ .spans {
     width: 50%;
     display: flex;
@@ -131,5 +149,4 @@ export default {
 /deep/ .time {
     align-self: center;
 }
-
 </style>
