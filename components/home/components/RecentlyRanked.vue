@@ -1,60 +1,54 @@
 <template>
     <div>
-    <vs-alert color="primary">
-        Mapsets ranked in the last: (with a few exceptions)
-        <br>
-        <br>
+        <vs-alert color="primary">
+            Mapsets ranked in the last: (with a few exceptions)
+            <br />
+            <br />
 
-        - week: <b>{{ stats[0] }}</b>
-        <br>
-        - 2 weeks: <b>{{ stats[1] }}</b>
-        <br>
-        - month: <b>{{ stats[2] }}</b>
-        <br>
-        - 3 months: <b>{{ stats[3] }}</b>
-        <br>
-        - 6 months: <b>{{ stats[4] }}</b>
+            - week: <b>{{ stats[0] }}</b>
+            <br />
+            - 2 weeks: <b>{{ stats[1] }}</b>
+            <br />
+            - month: <b>{{ stats[2] }}</b>
+            <br />
+            - 3 months: <b>{{ stats[3] }}</b>
+            <br />
+            - 6 months: <b>{{ stats[4] }}</b>
+        </vs-alert>
 
-    </vs-alert>
-
-    <Loading v-if="loading" />
-    <TimeMapsList :maps="maps" />
+        <Loading v-if="loading" />
+        <TimeMapsList :maps="maps" />
     </div>
 </template>
 
 <script>
-
 import TimeMapsList from "@/components/home/components/TimeMapsList.vue";
-import Loading from "@/components/LoadingSpinner.vue"
+import Loading from "@/components/LoadingSpinner.vue";
 
 export default {
     components: {
         TimeMapsList,
-        Loading
+        Loading,
     },
     data() {
         return {
             maps: [],
             stats: [],
-            loading: true
-        }
+            loading: true,
+        };
     },
     async fetch() {
-        let result = await this.$axios.$get("?recentlyRanked")
+        let result = await this.$axios.$get("?recentlyRanked");
         this.loading = false;
         this.maps = result.maps;
         this.stats = result.stats;
     },
-    methods : {
+    methods: {
         openUrl: function (id) {
             window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
-        }
-    }
-}
+        },
+    },
+};
 </script>
 
-<style scoped>
-
-
-
-</style>
+<style scoped></style>
