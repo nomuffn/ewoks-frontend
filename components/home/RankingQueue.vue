@@ -1,12 +1,7 @@
 <template>
   <div class="main_content">
     <vs-alert color="primary">
-      Ay, I finally managed to rewrite this site. Now it will be a lot easier to
-      make changes and add more stuff in the future.
-      <br />
-      If you have any feature or design related suggestions, since I've been
-      struggling to figure something out for all of this, feel free to hit me up
-      on discord
+      If you have any feature/design suggestions feel free to hit me up on discord
       <img
         style="position: absolute; margin-left: 5px"
         src="eastandardsmile.png"
@@ -87,77 +82,12 @@ export default {
     return {
       maps: [],
       loading: true,
-      unrankMaps: [
-        {
-          name: "Ov Sacrament and Sincest (feat. Storm Strope)",
-          mapper: "Rogdude",
-          hourdiff: 168,
-        },
-        {
-          name: "BANGER A.F., BROOOO!!!",
-          mapper: "abcbadq",
-          hourdiff: 168,
-        },
-        {
-          name: "toromi hearts 2 - goreshit",
-          mapper: "Souk & fraies",
-          hourdiff: 168,
-        },
-        {
-          name: "INSECTICIDE (Extended)",
-          mapper: "Foxy Boi & fraies",
-          hourdiff: 168,
-        },
-        {
-          name: "Ragnarok",
-          mapper: "Rune & Oddloop",
-          hourdiff: 168,
-        },
-        {
-          name: "Rude Buster (Camellia Remix)",
-          mapper: "Xhera, Samuel & Rune",
-          hourdiff: 168,
-        },
-        {
-          name: "Xronier ('geneXe' Long ver.)",
-          mapper: "Soba`s",
-          hourdiff: 168,
-        },
-        {
-          name: "Happppy song SOOOO",
-          mapper: "hexagonial",
-          hourdiff: 168,
-        },
-        {
-          name: "Melancholia",
-          mapper: "Astrella",
-          hourdiff: 168,
-        },
-        {
-          name: "Villain Virus [feat. Camellia]",
-          mapper: "fraies & Oddloop",
-          hourdiff: 168,
-        },
-        {
-          name: "Affiliate Requiem",
-          mapper: "Vilawes & Skeelie",
-          hourdiff: 168,
-        },
-        {
-          name: "Affiliate Requiem",
-          mapper: "Vilawes & Skeelie",
-          hourdiff: 168,
-        },
-        {
-          name: "Blastix Riotz ('Fullblast' Long ver.)",
-          mapper: "cerret",
-          hourdiff: 168,
-        },
-      ],
+      unrankMaps: [],
     };
   },
   async fetch() {
     this.maps = await this.$axios.$get("?qualifiedMaps");
+    this.unrankMaps = await this.$axios.$get("?unrankMaps");
     this.loading = false;
   },
 };
