@@ -18,7 +18,7 @@ export default {
     props: ['maps'],
     methods : {
         openUrl: function (id) {
-            window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
+            if ( id != null ) window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
         }
     }
 }
