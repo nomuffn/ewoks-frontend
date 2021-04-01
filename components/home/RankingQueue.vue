@@ -1,25 +1,27 @@
 <template>
   <div class="main_content">
     <vs-alert color="primary">
-      If you have any feature/design suggestions feel free to hit me up on discord
+      If you have any feature/design suggestions feel free to hit me up on
+      discord
       <img
         style="position: absolute; margin-left: 5px"
         src="eastandardsmile.png"
       />
     </vs-alert>
 
-    <div class="col first">
-      <div>
-        <div class="title_container">
-          <h2 class="title">Unrank timer</h2>
-        </div>
-        <vs-alert color="primary">
-          It was finally agreed on to unrank maps
-        </vs-alert>
-
-        <Loading v-if="loading" />
-        <TimeMapsList :maps="unrankMaps" />
+    <div class="first">
+      <div class="title_container">
+        <h2 class="title">Unrank timer</h2>
       </div>
+      <vs-alert color="primary">
+        It was finally agreed on to unrank maps
+      </vs-alert>
+
+      <Loading v-if="loading" />
+      <TimeMapsList :maps="unrankMaps" />
+    </div>
+
+    <div class="col first">
       <div>
         <div class="title_container">
           <h2 class="title">Qualified Maps</h2>
