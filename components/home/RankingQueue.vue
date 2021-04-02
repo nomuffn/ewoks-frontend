@@ -9,18 +9,6 @@
             />
         </vs-alert>
 
-        <div class="first">
-            <div class="title_container">
-                <h2 class="title">Unrank timer</h2>
-            </div>
-            <vs-alert color="primary">
-                It was finally agreed on to unrank maps
-            </vs-alert>
-
-            <Loading v-if="loading" />
-            <TimeMapsList :maps="unrankMaps" />
-        </div>
-
         <div class="col first">
             <div>
                 <div class="title_container">
@@ -86,12 +74,10 @@ export default {
         return {
             maps: [],
             loading: true,
-            unrankMaps: [],
         };
     },
     async fetch() {
         this.maps = await this.$axios.$get("?qualifiedMaps");
-        this.unrankMaps = await this.$axios.$get("?unrankMaps");
         this.loading = false;
     },
 };
