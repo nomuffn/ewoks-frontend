@@ -6,31 +6,30 @@
         <vs-navbar-item to="/" id="home" :active="active == 'home'">
             Scoresaber stuff
         </vs-navbar-item>
-        <vs-navbar-item to="/beatcat" id="beatcat" :active="active == 'beatcat'">
+        <!-- <vs-navbar-item to="/beatcat" id="beatcat" :active="active == 'beatcat'">
             BeatCat (WIP)
-        </vs-navbar-item>
+        </vs-navbar-item> -->
     </vs-navbar>
 </template>
 
 <script>
-	export default {
-  props: {
-  },
-        data:()=>({
-            active: "home"
-        }),
-	}
+export default {
+    props: {},
+    data: () => ({
+        active: "home",
+    }),
+};
 </script>
 
 <style>
-	.vs-navbar h2 {
-		margin: 20px 10px;
-	}
-    .vs-navbar__item a {
-        color: inherit;
-        text-decoration: inherit;
-    }
-    .vs-navbar-content {
-        position: relative;
-    }
+.vs-navbar h2 {
+    margin: 20px 10px;
+}
+.vs-navbar__item a {
+    color: inherit;
+    text-decoration: inherit;
+}
+.vs-navbar-content {
+    position: relative;
+}
 </style>

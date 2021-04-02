@@ -1,20 +1,28 @@
 <template>
     <div class="cards">
         <Loading v-if="loading" />
-        <vs-card v-for="score of scores" :key="score.id" v-on:click="openUrl(score.leaderboard_id)">
+        <vs-card
+            v-for="score of scores"
+            :key="score.id"
+            v-on:click="openUrl(score.leaderboard_id)"
+        >
             <template #text>
-                <p class="leaderboard" >
-                    <span style="font-weight: bold;"><span class="colored">#{{ score.rank }}</span> {{ score.player_name }}</span>
-                    <br>
+                <p class="leaderboard">
+                    <span style="font-weight: bold"
+                        ><span class="colored">#{{ score.rank }}</span>
+                        {{ score.player_name }}</span
+                    >
+                    <br />
                     {{ score.leaderboard_name }}
-                    <br>
+                    <br />
                     <span class="time">~{{ score.date }}h ago</span>
                 </p>
-                <div class="score" >
+                <div class="score">
                     <p>
                         {{ score.pp }}<span class="pp">pp</span>
-                        <br>
-                        {{ score.percentage }}</p>
+                        <br />
+                        {{ score.percentage }}
+                    </p>
                 </div>
             </template>
         </vs-card>
@@ -22,32 +30,30 @@
 </template>
 
 <script>
-
-import Loading from "@/components/LoadingSpinner.vue"
+import Loading from "@/components/LoadingSpinner.vue";
 export default {
     data() {
         return {
             scores: [],
-            loading: true
-        }
+            loading: true,
+        };
     },
     components: {
-        Loading
+        Loading,
     },
     async fetch() {
-        this.scores = await this.$axios.$get("?topTenFeed")
+        this.scores = await this.$axios.$get("?topTenFeed");
         this.loading = false;
     },
-    methods : {
+    methods: {
         openUrl: function (id) {
             window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
-        }
-    }
-}
+        },
+    },
+};
 </script>
 
 <style scoped>
-
 /deep/ .vs-card-content {
     width: 100%;
 }
@@ -83,5 +89,4 @@ export default {
     color: rgb(var(--vs-color));
     font-weight: bold;
 }
-
 </style>
