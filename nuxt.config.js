@@ -53,7 +53,6 @@ export default {
 
     router: {
         middleware: 'defaultroute',
-        trailingSlash: false,
     },
 
     // Modules: https://go.nuxtjs.dev/config-modules
