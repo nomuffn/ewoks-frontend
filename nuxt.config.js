@@ -51,6 +51,10 @@ export default {
         //'@nuxtjs/eslint-module',
     ],
 
+    router: {
+        middleware: 'defaultroute'
+    },
+
     // Modules: https://go.nuxtjs.dev/config-modules
     modules: [
         // https://go.nuxtjs.dev/axios

@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import TimeMapsList from "@/components/home/components/TimeMapsList.vue";
+import TimeMapsList from "@/components/TimeMapsList.vue";
 import Loading from "@/components/LoadingSpinner.vue";
 
 export default {
