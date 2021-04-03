@@ -1,4 +1,4 @@
-exports.setColor = (vue) => {
+exports.setColor = () => {
     let Colors = [
         "#F44336",
         "#E57373",
@@ -101,7 +101,7 @@ exports.setColor = (vue) => {
         "#78909C",
         "#607D8B",
     ];
-    vue.$vs.setColor(
+    $nuxt.$vs.setColor(
         "primary",
         Colors[Math.floor(Math.random() * (Colors.length - 1))]
     );
