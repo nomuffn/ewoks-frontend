@@ -55,10 +55,10 @@
 </template>
 
 <script>
-import TimeMapsList from "@/components/home/components/TimeMapsList.vue";
-import RecentlyRanked from "@/components/home/components/RecentlyRanked.vue";
-import VotesFeed from "@/components/home/components/VotesFeed.vue";
-import TopTenFeedList from "@/components/home/components/TopTenFeedList.vue";
+import TimeMapsList from "@/components/TimeMapsList.vue";
+import RecentlyRanked from "@/components/RecentlyRanked.vue";
+import VotesFeed from "@/components/VotesFeed.vue";
+import TopTenFeedList from "@/components/TopTenFeedList.vue";
 
 import Loading from "@/components/LoadingSpinner.vue";
 

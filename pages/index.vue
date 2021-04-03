@@ -1,28 +1,28 @@
 <template>
     <div class="home">
         <vs-sidebar square v-model="active" open>
-            <vs-sidebar-item id="rankingqueue">
+            <vs-sidebar-item to="RankingQueue" id="/RankingQueue">
                 <template #icon>
                     <i class="bx bx-list-ul"></i>
                 </template>
                 Ranking Queue
             </vs-sidebar-item>
 
-            <vs-sidebar-item id="tools">
+            <vs-sidebar-item to="Tools" id="/Tools">
                 <template #icon>
                     <i class="bx bxs-category"></i>
                 </template>
                 Tools & Scripts
             </vs-sidebar-item>
 
-            <vs-sidebar-item id="stats">
+            <vs-sidebar-item to="RankedStats" id="/RankedStats">
                 <template #icon>
                     <i class="bx bx-stats"></i>
                 </template>
                 Ranked Stats
             </vs-sidebar-item>
 
-            <vs-sidebar-item id="miscellaneous">
+            <vs-sidebar-item to="Miscellaneous" id="/Miscellaneous">
                 <template #icon>
                     <i class="bx bx-stats"></i>
                 </template>
@@ -31,32 +31,20 @@
         </vs-sidebar>
 
         <div class="main">
-            <keep-alive>
-                <RankingQueue v-if="active == 'rankingqueue'" />
-                <Tools v-if="active == 'tools'" />
-                <RankedStats v-if="active == 'stats'" />
-                <Miscellaneous v-if="active == 'miscellaneous'" />
-            </keep-alive>
+            <NuxtChild keep-alive />
         </div>
     </div>
 </template>
 
 <script>
-const RankingQueue = () => import("@/components/home/RankingQueue.vue");
-const Tools = () => import("@/components/home/Tools.vue");
-const RankedStats = () => import("@/components/home/RankedStats.vue");
-const Miscellaneous = () => import("@/components/home/Miscellaneous.vue");
-
 export default {
-    data: () => ({
-        active: "rankingqueue",
-    }),
-
-    components: {
-        RankingQueue,
-        Tools,
-        RankedStats,
-        Miscellaneous,
+    created() {
+        this.active = this.$route.path;
+    },
+    data() {
+        return {
+            active: "",
+        };
     },
 };
 </script>
