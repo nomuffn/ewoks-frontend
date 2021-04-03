@@ -29,17 +29,15 @@
                 Miscellaneous
             </vs-sidebar-item>
 
-            <!-- <vs-sidebar-item to="BeatCat" id="/BeatCat">
+            <vs-sidebar-item to="BeatCat" id="/BeatCat">
                 <template #icon>
                     <i class="bx bxs-tag-alt"></i>
                 </template>
                 BeatCat WIP
-            </vs-sidebar-item> -->
+            </vs-sidebar-item>
         </vs-sidebar>
 
-        <div class="main">
-            <NuxtChild keep-alive />
-        </div>
+        <NuxtChild keep-alive />
     </div>
 </template>
 
@@ -57,20 +55,14 @@ export default {
 </script>
 
 <style>
-.main {
+.main_content {
+    display: flex;
+    flex-wrap: wrap;
+
     margin: 0 auto;
     max-width: 90%;
     margin-top: 10px;
     margin-bottom: 100px;
-}
-
-.main_content {
-    display: flex;
-    flex-wrap: wrap;
-    min-width: 100%;
-    max-width: 100%;
-    min-height: 100%;
-    max-height: 100%;
 }
 
 .vs-navbar__left {
