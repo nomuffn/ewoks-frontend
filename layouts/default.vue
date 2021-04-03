@@ -17,9 +17,6 @@ export default {
     components: {
         NavBar,
     },
-    data: () => ({
-        active: "home",
-    }),
     created() {
         ColorHandler.setColor(this);
     },
