@@ -1,33 +1,40 @@
 <template>
     <div class="home">
         <vs-sidebar square v-model="active" open>
-            <vs-sidebar-item to="RankingQueue" id="/RankingQueue">
+            <vs-sidebar-item to="/RankingQueue" id="/RankingQueue">
                 <template #icon>
                     <i class="bx bx-list-ul"></i>
                 </template>
                 Ranking Queue
             </vs-sidebar-item>
 
-            <vs-sidebar-item to="Tools" id="/Tools">
+            <vs-sidebar-item to="/Tools" id="/Tools">
                 <template #icon>
                     <i class="bx bxs-category"></i>
                 </template>
                 Tools & Scripts
             </vs-sidebar-item>
 
-            <vs-sidebar-item to="RankedStats" id="/RankedStats">
+            <vs-sidebar-item to="/RankedStats" id="/RankedStats">
                 <template #icon>
                     <i class="bx bx-stats"></i>
                 </template>
                 Ranked Stats
             </vs-sidebar-item>
 
-            <vs-sidebar-item to="Miscellaneous" id="/Miscellaneous">
+            <vs-sidebar-item to="/Miscellaneous" id="/Miscellaneous">
                 <template #icon>
-                    <i class="bx bx-stats"></i>
+                    <i class="bx bx-library"></i>
                 </template>
                 Miscellaneous
             </vs-sidebar-item>
+
+            <!-- <vs-sidebar-item to="BeatCat" id="/BeatCat">
+                <template #icon>
+                    <i class="bx bxs-tag-alt"></i>
+                </template>
+                BeatCat WIP
+            </vs-sidebar-item> -->
         </vs-sidebar>
 
         <div class="main">
@@ -112,7 +119,7 @@ export default {
     color: #fff;
     letter-spacing: 1px;
     text-transform: capitalize;
-    margin-right: 15px;
+    padding: 20px;
 }
 
 .text {

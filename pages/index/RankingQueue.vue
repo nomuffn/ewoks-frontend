@@ -5,7 +5,7 @@
             discord
             <img
                 style="position: absolute; margin-left: 5px"
-                src="eastandardsmile.png"
+                src="/eastandardsmile.png"
             />
         </vs-alert>
 
