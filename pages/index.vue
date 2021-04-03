@@ -1,28 +1,28 @@
 <template>
     <div class="home">
         <vs-sidebar square v-model="active" open>
-            <vs-sidebar-item to="RankingQueue" id="/RankingQueue">
+            <vs-sidebar-item to="/RankingQueue" id="/RankingQueue">
                 <template #icon>
                     <i class="bx bx-list-ul"></i>
                 </template>
                 Ranking Queue
             </vs-sidebar-item>
 
-            <vs-sidebar-item to="Tools" id="/Tools">
+            <vs-sidebar-item to="/Tools" id="/Tools">
                 <template #icon>
                     <i class="bx bxs-category"></i>
                 </template>
                 Tools & Scripts
             </vs-sidebar-item>
 
-            <vs-sidebar-item to="RankedStats" id="/RankedStats">
+            <vs-sidebar-item to="/RankedStats" id="/RankedStats">
                 <template #icon>
                     <i class="bx bx-stats"></i>
                 </template>
                 Ranked Stats
             </vs-sidebar-item>
 
-            <vs-sidebar-item to="Miscellaneous" id="/Miscellaneous">
+            <vs-sidebar-item to="/Miscellaneous" id="/Miscellaneous">
                 <template #icon>
                     <i class="bx bx-library"></i>
                 </template>
