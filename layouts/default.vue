@@ -16,7 +16,7 @@
 var ColorHandler = require("@/assets/ColorHandler.js");
 export default {
     created() {
-        ColorHandler.setColor(this);
+        ColorHandler.setColor();
     },
 };
 </script>
