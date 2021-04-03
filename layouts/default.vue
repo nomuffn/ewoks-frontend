@@ -1,7 +1,10 @@
 <template>
     <div class="darken" vs-theme="dark">
-        <NavBar />
-        <Nuxt />
+        <div class="navbar">
+            <h2 class="title">Ewoks</h2>
+        </div>
+
+        <Nuxt keep-alive />
 
         <vs-button class="discord" primary gradient>
             <i class="bx bxl-discord bx-sm"></i>muffn#2345
@@ -10,13 +13,8 @@
 </template>
 
 <script>
-import NavBar from "@/components/NavBar.vue";
-
 var ColorHandler = require("@/assets/ColorHandler.js");
 export default {
-    components: {
-        NavBar,
-    },
     created() {
         ColorHandler.setColor(this);
     },
@@ -25,4 +23,10 @@ export default {
 
 <style>
 @import "@/assets/default.css";
+
+.navbar {
+    --vs-color: var(--vs-background);
+    background: rgba(var(--vs-color), 1);
+    text-align: center;
+}
 </style>

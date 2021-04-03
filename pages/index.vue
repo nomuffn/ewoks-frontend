@@ -24,10 +24,17 @@
 
             <vs-sidebar-item to="Miscellaneous" id="/Miscellaneous">
                 <template #icon>
-                    <i class="bx bx-stats"></i>
+                    <i class="bx bx-library"></i>
                 </template>
                 Miscellaneous
             </vs-sidebar-item>
+
+            <!-- <vs-sidebar-item to="BeatCat" id="/BeatCat">
+                <template #icon>
+                    <i class="bx bxs-tag-alt"></i>
+                </template>
+                BeatCat WIP
+            </vs-sidebar-item> -->
         </vs-sidebar>
 
         <div class="main">
@@ -112,7 +119,7 @@ export default {
     color: #fff;
     letter-spacing: 1px;
     text-transform: capitalize;
-    margin-right: 15px;
+    padding: 20px;
 }
 
 .text {
