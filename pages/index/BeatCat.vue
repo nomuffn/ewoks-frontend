@@ -4,8 +4,8 @@
             <h2 class="title">BeatCat - Categorized Beatmaps</h2>
 
             <vs-button class="disc" :href="discordHref" icon color="discord">
-                <i class="bx bxl-discord"></i>
                 {{ discordStatus }}
+                <i class="bx bxl-discord"></i>
             </vs-button>
         </div>
 
@@ -14,17 +14,12 @@
                 <div class="title_container">
                     <h2 class="title">Tags</h2>
 
-                    <vs-button icon border>
+                    <vs-button icon transparent>
+                        Suggest tag
                         <i class="bx bxs-message-square-add"></i>
                     </vs-button>
                 </div>
-                <vs-switch
-                    v-for="tag of tags"
-                    @input="toggleTag(tag)"
-                    v-model="tag.enabled"
-                    :key="tag.id"
-                    :id="tag.id"
-                >
+                <vs-switch v-for="tag of tags" @input="toggleTag(tag)" v-model="tag.enabled" :key="tag.id" :id="tag.id">
                     {{ tag.name }}
                 </vs-switch>
             </div>
@@ -33,17 +28,64 @@
                 <div class="title_container">
                     <h2 class="title">Maps</h2>
 
-                    <vs-button icon border>
+                    <vs-button icon transparent>
+                        Suggest map
                         <i class="bx bxs-message-square-add"></i>
                     </vs-button>
                 </div>
-                <vs-card :key="map.id" v-for="map of maps">
-                    <template #text>
-                        <h3>{{ map.name }}</h3>
-                    </template>
-                </vs-card>
+
+                <div class="cards">
+                    <vs-card :key="map.id" v-for="map of maps">
+                        <template #title>
+                            <h3>{{ map.name }}</h3>
+                        </template>
+                        <template #img>
+                            <img :src="map.cover" alt="" />
+                        </template>
+                        <template #text>
+                            <p>{{ map.artist }}</p>
+                            <p>{{ map.mapper }}</p>
+
+                            <div class="map-tags">
+                                <vs-button border v-for="tag of map.tags" class="tag" :key="tag">{{ getTagNameById(tag) }}</vs-button>
+                            </div>
+                        </template>
+
+                        <template #interactions>
+                            <!-- Download zip -->
+                            <vs-button shadow>
+                                <i class="bx bxs-download"></i>
+                            </vs-button>
+
+                            <!-- OneClick Download -->
+                            <vs-button shadow>
+                                <i class="bx bxs-hand-up"></i>
+                            </vs-button>
+
+                            <!-- Scoresaber -->
+                            <vs-button color="#F9A825"> S </vs-button>
+
+                            <!-- Options dialog -->
+                            <vs-button class="options" shadow primary @click="activeDialog['map-options'] = true">
+                                <i class="bx bx-dots-horizontal-rounded"></i>
+                            </vs-button>
+                        </template>
+                    </vs-card>
+                </div>
             </div>
         </div>
+
+        <vs-dialog auto-width not-center dark v-model="activeDialog['map-options']">
+            <template #header>
+                <h4 class="not-margin"><b>Options</b></h4>
+            </template>
+
+            <div class="con-content">
+                <vs-button color="#7d33ff"> Suggest a tag to this map <i class="bx bxs-message-square-add"></i> </vs-button>
+                <vs-button color="#00695C"> Suggest a newer upload of this map <i class="bx bxs-paper-plane"></i> </vs-button>
+                <vs-button color="#B71C1C"> Suggest a removal of a tag <i class="bx bxs-paper-plane"></i> </vs-button>
+            </div>
+        </vs-dialog>
     </div>
 </template>
 
@@ -61,12 +103,11 @@ export default {
             maps: [],
             discordStatus: "Login ",
             discordHref: "http://192.168.2.116:8000/discord/login",
+            activeDialog: { "map-options": false },
         };
     },
     async fetch() {
-        this.tags = await fetch(
-            "http://192.168.2.116:8000/api/tags"
-        ).then((res) => res.json());
+        this.tags = await fetch("http://192.168.2.116:8000/api/tags").then((res) => res.json());
 
         let first = 0;
         this.tags.forEach((tag) => {
@@ -113,21 +154,31 @@ export default {
             else return false;
         },
         async loadMapsForTag(tag) {
-            let result = await fetch(
-                `http://192.168.2.116:8000/api/maps/${tag.id}`
-            ).then((res) => res.json());
+            let result = await fetch(`http://192.168.2.116:8000/api/maps/${tag.id}`).then((res) => res.json());
 
             result.forEach((map) => {
                 if (this.containsMap(map) == false) this.maps.push(map);
             });
         },
         containsMap(newMap) {
-            console.log(newMap.id);
             for (let index = 0; index < this.maps.length; index++) {
                 const map = this.maps[index];
                 if (map.id == newMap.id) return true;
             }
             return false;
+        },
+        openUrl: function (id) {
+            window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
+        },
+        getTagNameById(id) {
+            let tag = null;
+            /*
+             * Future reference; foreach goes into a function so simple return wouldnt work in there :/
+             */
+            this.tags.forEach((element) => {
+                if (element.id == id) tag = element;
+            });
+            return tag.name;
         },
     },
 };
@@ -142,6 +193,10 @@ export default {
 
     .title_container {
         justify-content: space-between;
+
+        i {
+            margin-left: 5px;
+        }
     }
 
     > .title_container {
@@ -160,10 +215,56 @@ export default {
         .tags {
             min-width: 300px;
             margin-right: 100px;
+
+            .vs-switch {
+                margin-bottom: 20px;
+            }
         }
 
         .maps {
             flex: 1;
+
+            .cards {
+                display: flex;
+                flex-wrap: wrap;
+
+                .vs-card-content {
+                    margin: 0px 15px 15px 0px;
+                    text-align: left;
+                    max-width: 250px;
+                }
+            }
+
+            .map-tags {
+                display: flex;
+                flex-wrap: wrap;
+                margin-top: 10px;
+
+                .tag {
+                    padding: 0px 10px;
+                    margin: 5px 10px 5px 0px;
+                    border-radius: 20px;
+                }
+            }
+            .options {
+                background-color: rgb(var(--vs-primary));
+            }
+        }
+    }
+}
+
+.vs-dialog {
+    h4 {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .vs-button {
+        margin-bottom: 20px;
+        width: 300px;
+
+        i {
+            margin-left: 5px;
         }
     }
 }

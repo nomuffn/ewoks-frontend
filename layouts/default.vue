@@ -1,5 +1,5 @@
 <template>
-    <div class="darken" vs-theme="dark">
+    <div>
         <div class="navbar">
             <h2 class="title">Ewoks</h2>
         </div>
