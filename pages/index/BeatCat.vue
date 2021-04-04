@@ -19,6 +19,7 @@
                         <i class="bx bxs-message-square-add"></i>
                     </vs-button>
                 </div>
+
                 <vs-switch v-for="tag of tags" @input="toggleTag(tag)" v-model="tag.enabled" :key="tag.id" :id="tag.id">
                     {{ tag.name }}
                 </vs-switch>
@@ -35,47 +36,12 @@
                 </div>
 
                 <div class="cards">
-                    <vs-card :key="map.id" v-for="map of maps">
-                        <template #title>
-                            <h3>{{ map.name }}</h3>
-                        </template>
-                        <template #img>
-                            <img :src="map.cover" alt="" />
-                        </template>
-                        <template #text>
-                            <p>{{ map.artist }}</p>
-                            <p>{{ map.mapper }}</p>
-
-                            <div class="map-tags">
-                                <vs-button border v-for="tag of map.tags" class="tag" :key="tag">{{ getTagNameById(tag) }}</vs-button>
-                            </div>
-                        </template>
-
-                        <template #interactions>
-                            <!-- Download zip -->
-                            <vs-button shadow>
-                                <i class="bx bxs-download"></i>
-                            </vs-button>
-
-                            <!-- OneClick Download -->
-                            <vs-button shadow>
-                                <i class="bx bxs-hand-up"></i>
-                            </vs-button>
-
-                            <!-- Scoresaber -->
-                            <vs-button color="#F9A825"> S </vs-button>
-
-                            <!-- Options dialog -->
-                            <vs-button class="options" shadow primary @click="activeDialog['map-options'] = true">
-                                <i class="bx bx-dots-horizontal-rounded"></i>
-                            </vs-button>
-                        </template>
-                    </vs-card>
+                    <MapCard v-for="map of maps" :key="map.id" :map="map" :tags="tags" @openOptions="openOptionsDialog" />
                 </div>
             </div>
         </div>
 
-        <vs-dialog auto-width not-center dark v-model="activeDialog['map-options']">
+        <vs-dialog auto-width not-center dark v-model="optionsDialog">
             <template #header>
                 <h4 class="not-margin"><b>Options</b></h4>
             </template>
@@ -90,7 +56,12 @@
 </template>
 
 <script>
+import MapCard from "@/components/beatcat/MapCard.vue";
+
 export default {
+    components: {
+        MapCard,
+    },
     created() {
         if (this.doesHttpOnlyCookieExist("sessionid")) {
             this.discordStatus = "Logout ";
@@ -103,7 +74,7 @@ export default {
             maps: [],
             discordStatus: "Login ",
             discordHref: "http://192.168.2.116:8000/discord/login",
-            activeDialog: { "map-options": false },
+            optionsDialog: false,
         };
     },
     async fetch() {
@@ -179,6 +150,9 @@ export default {
                 if (element.id == id) tag = element;
             });
             return tag.name;
+        },
+        openOptionsDialog(map) {
+            this.optionsDialog = true;
         },
     },
 };
