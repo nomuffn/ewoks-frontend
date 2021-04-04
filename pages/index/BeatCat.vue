@@ -3,8 +3,8 @@
         <div class="title_container">
             <h2 class="title">BeatCat - Categorized Beatmaps</h2>
 
-            <vs-button class="disc" :href="discordHref" icon color="discord">
-                {{ discordStatus }}
+            <vs-button class="disc" :href="discord['href']" icon color="discord">
+                {{ discord["status"] }}
                 <i class="bx bxl-discord"></i>
             </vs-button>
         </div>
@@ -41,17 +41,7 @@
             </div>
         </div>
 
-        <vs-dialog auto-width not-center dark v-model="optionsDialog">
-            <template #header>
-                <h4 class="not-margin"><b>Options</b></h4>
-            </template>
-
-            <div class="con-content">
-                <vs-button color="#7d33ff"> Suggest a tag to this map <i class="bx bxs-message-square-add"></i> </vs-button>
-                <vs-button color="#00695C"> Suggest a newer upload of this map <i class="bx bxs-paper-plane"></i> </vs-button>
-                <vs-button color="#B71C1C"> Suggest a removal of a tag <i class="bx bxs-paper-plane"></i> </vs-button>
-            </div>
-        </vs-dialog>
+        <OptionsDialog v-if="optionsDialog['map'] != null" v-model="optionsDialog" :tags="tags" />
     </div>
 </template>
 
@@ -61,21 +51,21 @@ import MapCard from "@/components/beatcat/MapCard.vue";
 export default {
     components: {
         MapCard,
+        OptionsDialog: () => import("@/components/dialogs/OptionsDialog.vue"),
     },
     created() {
         if (this.doesHttpOnlyCookieExist("sessionid")) {
-            this.discordStatus = "Logout ";
-            this.discordHref = "http://192.168.2.116:8000/logout";
+            this.discord["status"] = "Logout ";
+            this.discord["href"] = "http://192.168.2.116:8000/logout";
         }
     },
     data() {
         return {
+            activeTags: [],
             tags: [],
             maps: [],
-            discordStatus: "Login ",
-            discordHref: "http://192.168.2.116:8000/discord/login",
-            optionsDialog: false,
-            activeTags: [],
+            discord: { status: "Login ", href: "http://192.168.2.116:8000/discord/login" },
+            optionsDialog: { show: false, map: null },
         };
     },
     async fetch() {
@@ -147,8 +137,10 @@ export default {
             });
             return ta.name;
         },
+
         openOptionsDialog(map) {
-            this.optionsDialog = true;
+            this.optionsDialog["map"] = map;
+            this.optionsDialog["show"] = true;
         },
     },
 };
@@ -219,22 +211,6 @@ export default {
             .options {
                 background-color: rgb(var(--vs-primary));
             }
-        }
-    }
-}
-
-.vs-dialog {
-    h4 {
-        text-align: center;
-        margin-top: 10px;
-    }
-
-    .vs-button {
-        margin-bottom: 20px;
-        width: 300px;
-
-        i {
-            margin-left: 5px;
         }
     }
 }
