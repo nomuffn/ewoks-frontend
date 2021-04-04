@@ -20,7 +20,7 @@
                     </vs-button>
                 </div>
 
-                <vs-switch v-for="tag of tags" @input="toggleTag(tag)" v-model="tag.enabled" :key="tag.id" :id="tag.id">
+                <vs-switch v-for="tag of tags" @input="toggleTag(tag)" v-model="activeTags" :val="tag.id" :key="tag.id">
                     {{ tag.name }}
                 </vs-switch>
             </div>
@@ -75,27 +75,23 @@ export default {
             discordStatus: "Login ",
             discordHref: "http://192.168.2.116:8000/discord/login",
             optionsDialog: false,
+            activeTags: [],
         };
     },
     async fetch() {
+        console.log("fetch");
         this.tags = await fetch("http://192.168.2.116:8000/api/tags").then((res) => res.json());
 
-        let first = 0;
-        this.tags.forEach((tag) => {
-            if (first++ == 0) tag.enabled = true;
-            else tag.enabled = false;
-        });
-
+        this.activeTags.push(this.tags[0].id);
         this.loadMapsForTag(this.tags[0]);
     },
     methods: {
         toggleTag(tag) {
-            //remove all maps with only that tag
-            if (tag.enabled) {
+            if (this.activeTags.includes(tag.id)) {
                 // just got enabled, load new maps
                 this.loadMapsForTag(tag);
             } else {
-                //got disabled, remove maps
+                //remove all maps with only that tag
                 for (let index = 0; index < this.maps.length; index++) {
                     const map = this.maps[index];
                     if (!this.anyTagsSelected(map.tags)) {
@@ -110,7 +106,7 @@ export default {
             for (let index = 0; index < tags.length; index++) {
                 for (let ind = 0; ind < this.tags.length; ind++) {
                     const tag = this.tags[ind];
-                    if (tag.enabled && tag.id == tags[index]) return true;
+                    if (this.activeTags.includes(tag.id) && tag.id == tags[index]) return true;
                 }
             }
             return false;
@@ -142,14 +138,14 @@ export default {
             window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
         },
         getTagNameById(id) {
-            let tag = null;
+            let ta = null;
             /*
              * Future reference; foreach goes into a function so simple return wouldnt work in there :/
              */
             this.tags.forEach((element) => {
-                if (element.id == id) tag = element;
+                if (element.id == id) ta = element;
             });
-            return tag.name;
+            return ta.name;
         },
         openOptionsDialog(map) {
             this.optionsDialog = true;
