@@ -11,7 +11,9 @@
             <p>{{ map.mapper }}</p>
 
             <div class="map-tags">
-                <vs-button border v-for="tag of map.tags" class="tag" :key="tag">{{ getTagNameById(tag) }}</vs-button>
+                <vs-button border v-for="tag of map.tags" clickable="false" class="tag" disabled :key="tag">{{
+                    getTagNameById(tag)
+                }}</vs-button>
             </div>
         </template>
 
@@ -83,6 +85,7 @@ export default {
             padding: 0px 10px;
             margin: 5px 10px 5px 0px;
             border-radius: 20px;
+            opacity: 1;
         }
     }
     .options {

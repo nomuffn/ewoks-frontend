@@ -1,5 +1,5 @@
 <template>
-    <vs-dialog not-padding auto-width not-center dark v-model="value['show']">
+    <vs-dialog not-padding auto-width not-center dark v-model="value['show']" v-on:close="close">
         <template #header>
             <img :src="value['map'].cover" alt="" />
             <p>{{ value["map"].artist }}</p>
@@ -11,8 +11,8 @@
             <vs-button color="#7d33ff" relief @click="option = 1" :active="option == 1">
                 Suggest a tag for this map <i class="bx bxs-message-square-add"></i>
             </vs-button>
-            <div class="option">
-                <vs-select placeholder="Select tag" v-model="selection">
+            <div class="option" v-if="option == 1">
+                <vs-select placeholder="Select tag" v-model="tagSelectionInput">
                     <vs-option v-for="tag of tags" :key="tag.id" :value="tag.id" :label="tag.name"> {{ tag.name }} </vs-option>
                 </vs-select>
 
@@ -22,15 +22,32 @@
                 </vs-button>
             </div>
 
-            <div class="option">
-                <vs-button color="#00695C" relief @click="option = 2" :active="option == 2">
-                    Suggest a newer upload for this map <i class="bx bxs-paper-plane"></i>
+            <vs-button color="#00695C" relief @click="option = 2" :active="option == 2">
+                Suggest a newer upload for this map <i class="bx bxs-paper-plane"></i>
+            </vs-button>
+            <div class="option" v-if="option == 2">
+                <vs-input v-model="newUploadInput" placeholder="Scoresaber Leaderboard Link" />
+                <p class="leaderboardHint">Any difficulty of a mapset</p>
+
+                <vs-button style="max-width: 60px" animation-type="scale">
+                    <i class="noMargin bx bxs-paper-plane"></i>
+                    <template #animate> submit </template>
                 </vs-button>
             </div>
 
-            <div class="option">
-                <vs-button color="#B71C1C" relief @click="option = 3" :active="option == 3">
-                    Suggest a removal of a tag on this map <i class="bx bxs-paper-plane"></i>
+            <vs-button color="#B71C1C" relief @click="option = 3" :active="option == 3">
+                Suggest a removal of a tag on this map <i class="bx bxs-paper-plane"></i>
+            </vs-button>
+            <div class="option" v-if="option == 3">
+                <vs-select placeholder="Select tag" v-model="removeTagInput">
+                    <vs-option v-for="tag of value.map.tags" :key="tag" :value="tag" :label="getTagNameById(tag, tags)">
+                        {{ getTagNameById(tag, tags) }}
+                    </vs-option>
+                </vs-select>
+
+                <vs-button style="max-width: 60px" animation-type="scale">
+                    <i class="noMargin bx bxs-paper-plane"></i>
+                    <template #animate> submit </template>
                 </vs-button>
             </div>
         </div>
@@ -50,12 +67,30 @@ export default {
     },
     data() {
         return {
-            selection: "",
             option: 0,
+            tagSelectionInput: "",
+            removeTagInput: "",
+            newUploadInput: "",
         };
     },
     methods: {
         dialogButton(option) {},
+        getTagNameById(id, tags) {
+            let ta = null;
+            /*
+             * Future reference; foreach goes into a function so simple return wouldnt work in there :/
+             */
+            tags.forEach((element) => {
+                if (element.id == id) ta = element;
+            });
+            return ta.name;
+        },
+        close() {
+            this.option = 0;
+            this.tagSelectionInput = "";
+            this.removeTagInput = "";
+            this.newUploadInput = "";
+        },
     },
 };
 </script>
@@ -84,6 +119,15 @@ export default {
 
         div {
             margin: 10px 0px;
+        }
+
+        .leaderboardHint {
+            font-size: 10pt;
+            margin: -5px 0px 5px 0px;
+        }
+
+        .vs-input {
+            width: 250px;
         }
     }
 

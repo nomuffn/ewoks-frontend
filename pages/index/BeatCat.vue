@@ -1,7 +1,12 @@
 <template>
     <div class="beatcat" style="text-align: center">
         <div class="title_container">
-            <h2 class="title">BeatCat - Categorized Beatmaps</h2>
+            <div class="left">
+                <h2 class="title">BeatCat - Categorized Beatmaps</h2>
+                <vs-button icon transparent>
+                    <i class="noMargin bx bx-info-circle"></i>
+                </vs-button>
+            </div>
 
             <vs-button class="disc" :href="discord['href']" icon color="discord">
                 {{ discord["status"] }}
@@ -158,6 +163,21 @@ export default {
 
         i {
             margin-left: 5px;
+
+            &.noMargin {
+                margin-left: 0px;
+            }
+        }
+
+        .left {
+            display: flex;
+            .title {
+                padding: 0px;
+
+                i {
+                    margin-top: 5px;
+                }
+            }
         }
     }
 
