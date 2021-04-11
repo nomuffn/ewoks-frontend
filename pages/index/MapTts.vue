@@ -38,7 +38,7 @@
             <div class="title_container">
                 <h2 class="title">Latest Scores</h2>
 
-                <vs-button icon>
+                <vs-button icon @click="dialog['show'] = true">
                     Suggest Player
                     <i class="bx bxs-message-square-add"></i>
                 </vs-button>
@@ -55,6 +55,8 @@
                 <Score v-for="score of scores" :key="score.id" :score="score" />
             </div>
         </div>
+
+        <SuggestPlayerDialog v-model="dialog" />
     </div>
 </template>
 
@@ -64,11 +66,13 @@ import Score from "@/components/maptts/Score.vue";
 export default {
     components: {
         Score,
+        SuggestPlayerDialog: () =>
+            import("@/components/maptts/SuggestPlayerDialog.vue"),
     },
     created() {
         if (this.doesHttpOnlyCookieExist("sessionid")) {
             this.discord["status"] = "Logout ";
-            this.discord["href"] = "http://192.168.2.116:8000/logout";
+            this.discord["href"] = "http://192.168.2.116:8000/backend/logout";
         }
     },
     data() {
@@ -76,9 +80,10 @@ export default {
             scores: [],
             offset: 0,
             search: "",
+            dialog: { show: false },
             discord: {
                 status: "Login ",
-                href: "http://192.168.2.116:8000/discord/login",
+                href: "http://192.168.2.116:8000/backend/discord/login",
             },
         };
     },
@@ -165,6 +170,10 @@ export default {
                 padding: 20px 0px 30px 0px;
                 text-align: left;
                 max-width: 1000px;
+
+                p {
+                    opacity: 0.5;
+                }
             }
             > button {
                 height: max-content;

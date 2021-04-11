@@ -26,6 +26,10 @@ export default {
             type: 'image/x-icon',
             href: '/favicon.ico'
         }],
+        bodyAttrs: {
+            class: 'hidden darken',
+            'vs-theme': "dark"
+        },
     },
 
     generate: {
