@@ -69,7 +69,7 @@ export default {
 
             this.response = (
                 await this.$axios.post(
-                    `http://192.168.2.116:8000/backend/api/maptts/players/`,
+                    `https://ewoks.de/backend/api/maptts/players/`,
                     {
                         twitchName: this.twitch,
                         scoresaberId: this.scoresaber,
