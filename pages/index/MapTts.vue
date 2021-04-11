@@ -9,7 +9,9 @@
                         You can suggest a link of a streamer and their
                         scoresaber profile, which will have to be approved by
                         the Approval Team until their scores & vods will be
-                        checked
+                        checked.
+                        <br />
+                        Updates every hour.
                     </p>
                 </div>
                 <!-- <vs-button icon transparent>
