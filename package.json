@@ -15,9 +15,13 @@
     "@nuxtjs/axios": "^5.12.5",
     "boxicons": "^2.0.7",
     "core-js": "^3.8.2",
+    "js-cookie": "^2.2.1",
     "nuxt": "^2.14.12",
     "nuxt-matomo": "^1.2.4",
     "vuesax": "^4.0.1-alpha.25"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "node-sass": "^5.0.0",
+    "sass-loader": "^10.1.1"
+  }
 }
