@@ -3,7 +3,9 @@
         <div class="title_container">
             <div class="left">
                 <div class="aaa">
-                    <h2 class="title">MapTts - Twitch Timestamps for Maps</h2>
+                    <h2 class="title">
+                        (Experimental) MapTts - Twitch Timestamps for Maps
+                    </h2>
                     <p>
                         Shows timestamps for maps that streamers have played.
                         You can suggest a link of a streamer and their
@@ -74,7 +76,7 @@ export default {
     created() {
         if (this.doesHttpOnlyCookieExist("sessionid")) {
             this.discord["status"] = "Logout ";
-            this.discord["href"] = "http://192.168.2.116:8000/backend/logout";
+            this.discord["href"] = "https://ewoks.de/backend/logout";
         }
     },
     data() {
@@ -85,7 +87,7 @@ export default {
             dialog: { show: false },
             discord: {
                 status: "Login ",
-                href: "http://192.168.2.116:8000/backend/discord/login",
+                href: "https://ewoks.de/backend/discord/login",
             },
         };
     },
@@ -108,7 +110,7 @@ export default {
         },
         async loadScores() {
             this.scores = await fetch(
-                `http://192.168.2.116:8000/backend/api/maptts/scores/${this.offset}/${this.search}`
+                `https://ewoks.de/backend/api/maptts/scores/${this.offset}/${this.search}`
             ).then((res) => res.json());
         },
     },
