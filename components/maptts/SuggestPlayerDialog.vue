@@ -13,7 +13,13 @@
         <div class="con-content">
             <vs-input v-model="twitch" label-placeholder="Twitch Name" />
             <vs-input v-model="scoresaber" label-placeholder="Scoresaber ID" />
-            <p class="hint">Any difficulty of a mapset</p>
+            <p class="hint">
+                After suggesting a player it will
+                <br />
+                have to be approved until their scores
+                <br />
+                will be checked by the script
+            </p>
 
             <vs-button
                 style="max-width: 60px"
@@ -48,6 +54,11 @@ export default {
     },
     methods: {
         async submit() {
+            if (this.twitch == "" || this.scoresaber == "") {
+                this.response = "Fields can't be empty :(";
+                return;
+            }
+
             this.loading = true;
 
             var CSRF_TOKEN = Cookies.get("csrftoken");
@@ -89,7 +100,6 @@ export default {
     .hint {
         font-size: 10pt;
         opacity: 0.7;
-        text-align: left;
         margin-left: 5px;
     }
 
