@@ -11,7 +11,7 @@
                         the Approval Team until their scores & vods will be
                         checked.
                         <br />
-                        Updates every hour.
+                        Updates every two hours.
                     </p>
                 </div>
                 <!-- <vs-button icon transparent>
