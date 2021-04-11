@@ -41,6 +41,7 @@
 <script>
 import Cookies from "js-cookie";
 export default {
+    watch: {},
     props: {
         value: Object,
     },
@@ -60,6 +61,7 @@ export default {
             }
 
             this.loading = true;
+            this.response = "";
 
             var CSRF_TOKEN = Cookies.get("csrftoken");
             let headers = {
