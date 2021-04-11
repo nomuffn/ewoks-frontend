@@ -8,6 +8,13 @@
                 Ranking Queue
             </vs-sidebar-item>
 
+            <vs-sidebar-item to="/MapTts" id="/MapTts">
+                <template #icon>
+                    <i class="bx bx-tv"></i>
+                </template>
+                Map Twitch
+            </vs-sidebar-item>
+
             <vs-sidebar-item to="/Tools" id="/Tools">
                 <template #icon>
                     <i class="bx bxs-category"></i>
@@ -37,9 +44,7 @@
             </vs-sidebar-item> -->
         </vs-sidebar>
 
-        <div class="main">
-            <NuxtChild keep-alive />
-        </div>
+        <NuxtChild keep-alive />
     </div>
 </template>
 
@@ -67,10 +72,10 @@ export default {
 .main_content {
     display: flex;
     flex-wrap: wrap;
-    min-width: 100%;
-    max-width: 100%;
-    min-height: 100%;
-    max-height: 100%;
+    margin: 0 auto;
+    max-width: 90%;
+    margin-top: 10px;
+    margin-bottom: 100px;
 }
 
 .vs-navbar__left {
@@ -163,5 +168,13 @@ h3 {
 
 .vs-card {
     border-radius: 15px;
+}
+.scorecard .vs-card {
+    /* didnt work in maptts/Score.vue??? */
+    max-width: 800px;
+}
+.vs-input__label {
+    /* didnt work in maptts/Score.vue????????????????????????????? */
+    color: #fff;
 }
 </style>
