@@ -4,11 +4,13 @@
             <div class="wrapper">
                 <div class="left">
                     <h3>{{ score.player.twitchName }}</h3>
-                    <p>
-                        {{
+                    <a
+                        target="_blank"
+                        :href="`https://scoresaber.com/leaderboard/${score.leaderboardId}`"
+                        >{{
                             `${score.leaderboardSongAuthor} - ${score.leaderboardName}`
-                        }}
-                    </p>
+                        }}</a
+                    >
                     <p>by {{ score.mapper }}</p>
                     <p>~{{ getAgo(score.timeSet) }} ago</p>
                 </div>
@@ -67,6 +69,28 @@ export default {
             margin-left: 20px;
             min-width: 350px;
             flex: 1;
+
+            a {
+                color: inherit;
+                text-decoration: none;
+                position: relative;
+                &:after {
+                    background: none repeat scroll 0 0 transparent;
+                    bottom: 0;
+                    content: "";
+                    display: block;
+                    height: 2px;
+                    left: 50%;
+                    position: absolute;
+                    background: #fff;
+                    transition: width 0.3s ease 0s, left 0.3s ease 0s;
+                    width: 0;
+                }
+                &:hover:after {
+                    width: 100%;
+                    left: 0;
+                }
+            }
         }
         .right {
             max-width: 120px;
