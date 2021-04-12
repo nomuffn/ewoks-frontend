@@ -3,7 +3,7 @@
         auto-width
         not-center
         dark
-        v-model="value['show']"
+        v-model="value['suggest']"
         v-on:close="close"
     >
         <template #header>
