@@ -21,24 +21,18 @@
                 </vs-button> -->
             </div>
 
-            <!-- <vs-button
+            <vs-button
                 class="disc"
                 :href="discord['href']"
                 icon
                 color="discord"
-                disabled
             >
-                Nvm logins already broke
+                {{ discord["status"] }}
                 <i class="bx bxl-discord"></i>
-            </vs-button> -->
+            </vs-button>
         </div>
 
         <div class="main_content">
-            <vs-alert color="danger">
-                Suggesting & discord login already broke :')
-                <br />
-                just dm me peoples scoresaber and twitch on discord for now
-            </vs-alert>
             <vs-alert color="primary">
                 Currently can't get the song length so the timestamps are only:
                 <br />
@@ -48,10 +42,10 @@
             <div class="title_container">
                 <h2 class="title">Latest Scores</h2>
 
-                <!-- <vs-button icon @click="dialog['show'] = true">
+                <vs-button icon @click="dialog['show'] = true">
                     Suggest Player
                     <i class="bx bxs-message-square-add"></i>
-                </vs-button> -->
+                </vs-button>
             </div>
 
             <div class="search">
