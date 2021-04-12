@@ -31,6 +31,9 @@
         </div>
 
         <div class="main_content">
+            <vs-alert color="danger">
+                Logins might be scuffed but it still kinda works :)))
+            </vs-alert>
             <vs-alert color="primary">
                 Currently can't get the song length so the timestamps are only:
                 <br />
