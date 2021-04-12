@@ -72,7 +72,7 @@ export default {
 
     // Axios module configuration: https://go.nuxtjs.dev/config-axios
     axios: {
-        browserBaseURL: 'https://api.ewoks.de'
+        browserBaseURL: 'https://ewoks.de/api/'
     },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
