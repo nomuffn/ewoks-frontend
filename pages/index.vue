@@ -171,10 +171,16 @@ h3 {
 }
 .scorecard .vs-card {
     /* didnt work in maptts/Score.vue??? */
-    max-width: 800px;
+    max-width: none;
 }
 .vs-input__label {
     /* didnt work in maptts/Score.vue????????????????????????????? */
     color: #fff;
+}
+
+.players-dialog .vs-dialog .con-content {
+    overflow-y: scroll;
+    position: relative;
+    height: 600px;
 }
 </style>

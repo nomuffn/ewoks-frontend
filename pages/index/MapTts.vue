@@ -8,17 +8,15 @@
                     </h2>
                     <p>
                         Shows timestamps for maps that streamers have played.
-                        You can suggest a link of a streamer and their
-                        scoresaber profile, which will have to be approved by
-                        the Approval Team until their scores & vods will be
-                        checked.
+                        <br />
+                        The script will only check approved players.
                         <br />
                         Updates every two hours.
                     </p>
+                    <vs-button icon border @click="dialog['players'] = true">
+                        Approved Players
+                    </vs-button>
                 </div>
-                <!-- <vs-button icon transparent>
-                    <i class="noMargin bx bx-info-circle"></i>
-                </vs-button> -->
             </div>
 
             <vs-button
@@ -42,17 +40,26 @@
             <div class="title_container">
                 <h2 class="title">Latest Scores</h2>
 
-                <vs-button icon @click="dialog['show'] = true">
+                <vs-button icon @click="dialog['suggest'] = true">
                     Suggest Player
                     <i class="bx bxs-message-square-add"></i>
                 </vs-button>
             </div>
 
-            <div class="search">
-                <vs-input v-model="search" type="search" placeholder="Search" />
-                <vs-button icon transparent @click="loadScores">
-                    <i class="bx bx-search-alt"></i>
-                </vs-button>
+            <div class="row">
+                <div class="search">
+                    <vs-input
+                        v-model="search"
+                        type="search"
+                        placeholder="Search"
+                        v-on:keyup.enter="startSearch"
+                    />
+                    <vs-button icon transparent @click="startSearch">
+                        <i class="bx bx-search-alt"></i>
+                    </vs-button>
+                </div>
+
+                <vs-pagination v-model="page" :length="paginationLength" />
             </div>
 
             <div class="scores">
@@ -61,6 +68,7 @@
         </div>
 
         <SuggestPlayerDialog v-model="dialog" />
+        <PlayersDialog class="players-dialog" v-model="dialog" />
     </div>
 </template>
 
@@ -68,10 +76,18 @@
 import Score from "@/components/maptts/Score.vue";
 
 export default {
+    watch: {
+        page(newValue, oldValue) {
+            console.log(oldValue, newValue, this.paginationLength);
+            this.loadScores();
+            return null;
+        },
+    },
     components: {
         Score,
         SuggestPlayerDialog: () =>
             import("@/components/maptts/SuggestPlayerDialog.vue"),
+        PlayersDialog: () => import("@/components/maptts/PlayersDialog.vue"),
     },
     created() {
         if (this.doesHttpOnlyCookieExist("sessionid")) {
@@ -82,9 +98,13 @@ export default {
     data() {
         return {
             scores: [],
-            offset: 0,
             search: "",
-            dialog: { show: false },
+            page: 1,
+            paginationLength: 3,
+            dialog: {
+                suggest: false,
+                players: false,
+            },
             discord: {
                 status: "Login ",
                 href: "https://ewoks.de/backend/discord/login",
@@ -110,8 +130,23 @@ export default {
         },
         async loadScores() {
             this.scores = await fetch(
-                `https://ewoks.de/backend/api/maptts/scores/${this.offset}/${this.search}`
+                `https://ewoks.de/backend/api/maptts/scores/${this.page - 1}/${
+                    this.search
+                }`
             ).then((res) => res.json());
+
+            if (this.scores.length < 25) {
+                this.paginationLength = this.page;
+            } else {
+                if (this.paginationLength == this.page) {
+                    this.paginationLength++;
+                }
+            }
+        },
+        startSearch() {
+            this.page = 1;
+            this.paginationLength = 1;
+            this.loadScores();
         },
     },
 };
@@ -137,14 +172,20 @@ export default {
         min-width: 85px;
     }
 
-    .search {
-        margin-bottom: 30px;
-        align-self: center;
+    .row {
         display: flex;
+        margin-bottom: 30px;
+        place-content: space-between;
+        flex-wrap: wrap;
 
-        button {
-            margin-left: 20px;
+        .search {
+            display: flex;
         }
+    }
+
+    .scores {
+        max-width: 800px;
+        width: 100%;
     }
 
     .title_container {
@@ -177,6 +218,11 @@ export default {
 
                 p {
                     opacity: 0.5;
+                }
+
+                .vs-button {
+                    max-width: 120px;
+                    margin-top: 15px;
                 }
             }
             > button {
