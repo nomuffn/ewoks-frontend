@@ -1,5 +1,5 @@
 <template>
-    <div class="main_content">
+    <div class="main_content tools">
         <div class="col">
             <h2 class="title">Tools</h2>
 
