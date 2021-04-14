@@ -68,6 +68,8 @@
             <div class="scores">
                 <Score v-for="score of scores" :key="score.id" :score="score" />
             </div>
+
+            <vs-pagination v-model="page" :length="paginationLength" />
         </div>
 
         <SuggestPlayerDialog v-model="dialog" />
