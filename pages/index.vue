@@ -8,6 +8,13 @@
                 Ranking Queue
             </vs-sidebar-item>
 
+            <vs-sidebar-item to="/MapTts" id="/MapTts">
+                <template #icon>
+                    <i class="bx bx-tv"></i>
+                </template>
+                Map Twitch
+            </vs-sidebar-item>
+
             <vs-sidebar-item to="/Tools" id="/Tools">
                 <template #icon>
                     <i class="bx bxs-category"></i>
@@ -59,6 +66,15 @@ export default {
     display: flex;
     flex-wrap: wrap;
 
+    margin: 0 auto;
+    max-width: 90%;
+    margin-top: 10px;
+    margin-bottom: 100px;
+}
+
+.main_content {
+    display: flex;
+    flex-wrap: wrap;
     margin: 0 auto;
     max-width: 90%;
     margin-top: 10px;
@@ -155,5 +171,23 @@ h3 {
 
 .vs-card {
     border-radius: 15px;
+}
+.scorecard .vs-card {
+    /* didnt work in maptts/Score.vue??? */
+    max-width: none;
+}
+.scorecard .vs-card,
+.tools .vs-card {
+    cursor: auto;
+}
+.vs-input__label {
+    /* didnt work in maptts/Score.vue????????????????????????????? */
+    color: #fff;
+}
+
+.players-dialog .vs-dialog .con-content {
+    overflow-y: scroll;
+    position: relative;
+    height: 600px;
 }
 </style>
