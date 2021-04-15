@@ -40,7 +40,6 @@ export default {
         this.players = await fetch(
             `https://ewoks.de/backend/api/maptts/players`
         ).then((res) => res.json());
-        console.log(this.players);
     },
 };
 </script>
