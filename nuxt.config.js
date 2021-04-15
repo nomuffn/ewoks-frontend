@@ -4,47 +4,58 @@ export default {
 
     // Global page headers: https://go.nuxtjs.dev/config-head
     head: {
-        title: 'Ewoks',
+        title: "Ewoks",
         htmlAttrs: {
-            lang: 'en',
+            lang: "en",
         },
-        meta: [{
-                charset: 'utf-8'
+        meta: [
+            {
+                charset: "utf-8",
             },
             {
-                name: 'viewport',
-                content: 'width=device-width, initial-scale=1'
+                name: "viewport",
+                content: "width=device-width, initial-scale=1",
             },
             {
-                hid: 'description',
-                name: 'description',
-                content: ''
+                hid: "description",
+                name: "description",
+                content: "",
             },
         ],
-        link: [{
-            rel: 'icon',
-            type: 'image/x-icon',
-            href: '/favicon.ico'
-        }],
+        link: [
+            {
+                rel: "icon",
+                type: "image/x-icon",
+                href: "/favicon.ico",
+            },
+        ],
         bodyAttrs: {
-            class: 'hidden darken',
-            'vs-theme': "dark"
+            class: "hidden darken",
+            "vs-theme": "dark",
         },
     },
 
+    publicRuntimeConfig: {
+        baseURL: process.env.BASE_URL || "https://ewoks.de/",
+    },
+
     generate: {
-        fallback: true
+        fallback: true,
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: [
         "vuesax/dist/vuesax.css",
         "~assets/default.css",
-        'boxicons/css/boxicons.min.css',
+        "boxicons/css/boxicons.min.css",
     ],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-    plugins: ['@/plugins/vuesax'],
+    plugins: [
+        "@/plugins/vuesax",
+        "@/plugins/defaultApi",
+        "@/plugins/mapttsApi",
+    ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
     components: true,
@@ -56,19 +67,21 @@ export default {
     ],
 
     router: {
-        middleware: 'defaultroute',
+        middleware: "defaultroute",
     },
 
     // Modules: https://go.nuxtjs.dev/config-modules
     modules: [
         // https://go.nuxtjs.dev/axios
-        '@nuxtjs/axios',
-        '@nuxtjs/proxy',
-        ['nuxt-matomo', {
-            matomoUrl: '//matomo.ewoks.de/',
-            siteId: 1
-        }],
-        '@nuxtjs/auth-next'
+        "@nuxtjs/axios",
+        "@nuxtjs/proxy",
+        [
+            "nuxt-matomo",
+            {
+                matomoUrl: "//matomo.ewoks.de/",
+                siteId: 1,
+            },
+        ],
     ],
     auth: {
         strategies: {
@@ -106,14 +119,9 @@ export default {
         }
     },
 
-    // Axios module configuration: https://go.nuxtjs.dev/config-axios
-    axios: {
-        browserBaseURL: 'https://ewoks.de/api/'
-    },
-
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {},
-	server: {
-        host: "0.0.0.0"
-    }
-}
+    server: {
+        host: "0.0.0.0",
+    },
+};

@@ -36,10 +36,8 @@ export default {
             players: [],
         };
     },
-    async fetch() {
-        this.players = await fetch(
-            `https://ewoks.de/backend/api/maptts/players`
-        ).then((res) => res.json());
+    async created() {
+        this.players = await this.$mapttsApi.$get(`players/`);
     },
 };
 </script>

@@ -29,7 +29,10 @@
                     <h3>{{ vote.name }} by {{ vote.mapper }}</h3>
 
                     <div class="spans">
-                        <span v-for="string of vote.strings">
+                        <span
+                            v-for="(string, index) of vote.strings"
+                            :key="index"
+                        >
                             <span
                                 v-bind:class="{
                                     red: string.string_first == 'QAT',
@@ -63,8 +66,8 @@ export default {
     components: {
         Loading,
     },
-    async fetch() {
-        let result = await this.$axios.$get("?votesFeed");
+    async created() {
+        let result = await this.$defaultApi.$get("?votesFeed");
         this.loading = false;
 
         this.lastWeek = result.lastWeek;

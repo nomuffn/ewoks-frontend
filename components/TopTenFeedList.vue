@@ -41,8 +41,9 @@ export default {
     components: {
         Loading,
     },
-    async fetch() {
-        this.scores = await this.$axios.$get("?topTenFeed");
+
+    async created() {
+        this.scores = await this.$defaultApi.$get("?topTenFeed");
         this.loading = false;
     },
     methods: {

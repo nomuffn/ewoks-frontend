@@ -37,8 +37,8 @@ export default {
             loading: true,
         };
     },
-    async fetch() {
-        let result = await this.$axios.$get("?recentlyRanked");
+    async created() {
+        let result = await this.$defaultApi.$get("?recentlyRanked");
         this.loading = false;
         this.maps = result.maps;
         this.stats = result.stats;
