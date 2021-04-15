@@ -70,8 +70,8 @@ export default {
             };
 
             this.response = (
-                await this.$axios.post(
-                    `https://ewoks.de/backend/api/maptts/players/`,
+                await this.$mapttsApi.post(
+                    `players/`,
                     {
                         twitchName: this.twitch,
                         scoresaberId: this.scoresaber,

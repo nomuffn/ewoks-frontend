@@ -132,11 +132,9 @@ export default {
             window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
         },
         async loadScores() {
-            this.scores = await fetch(
-                `https://ewoks.de/backend/api/maptts/scores/${this.page - 1}/${
-                    this.search
-                }`
-            ).then((res) => res.json());
+            this.scores = await this.$mapttsApi.$get(
+                `scores/${this.page - 1}/${this.search}`
+            );
 
             if (this.scores.length < 25) {
                 this.paginationLength = this.page;

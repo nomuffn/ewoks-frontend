@@ -1,30 +1,17 @@
 <template>
     <div class="main_content">
         <vs-alert color="primary">
-            If you have any feature/design suggestions feel free to hit me up on
-            discord
-            <img
-                style="position: absolute; margin-left: 5px"
-                src="/eastandardsmile.png"
-            />
+            If you have any feature/design suggestions feel free to hit me up on discord
+            <img style="position: absolute; margin-left: 5px" src="/eastandardsmile.png" />
         </vs-alert>
 
         <div class="col first">
             <div>
                 <div class="title_container">
                     <h2 class="title">Qualified Maps</h2>
-                    <vs-button
-                        border
-                        href="https://scoresaber.com/ranking/requests"
-                        blank
-                    >
-                        Rank Requests
-                    </vs-button>
+                    <vs-button border href="https://scoresaber.com/ranking/requests" blank> Rank Requests </vs-button>
                 </div>
-                <vs-alert color="primary">
-                    If a map disappears from the queue it will be seen as a new
-                    qualified map.
-                </vs-alert>
+                <vs-alert color="primary"> If a map disappears from the queue it will be seen as a new qualified map. </vs-alert>
 
                 <Loading v-if="loading" />
                 <TimeMapsList :maps="maps" />
@@ -43,9 +30,7 @@
             </div>
             <div class="col">
                 <div class="title_container">
-                    <h2 class="title">
-                        Top Ten Scores Feed for Top 150 Ranked Songs
-                    </h2>
+                    <h2 class="title">Top Ten Scores Feed for Top 150 Ranked Songs</h2>
                 </div>
                 <vs-alert color="primary"> Updates every hour </vs-alert>
                 <TopTenFeedList />
@@ -76,8 +61,8 @@ export default {
             loading: true,
         };
     },
-    async fetch() {
-        this.maps = await this.$axios.$get("?qualifiedMaps");
+    async created() {
+        this.maps = await this.$defaultApi.$get("?qualifiedMaps");
         this.loading = false;
     },
 };
