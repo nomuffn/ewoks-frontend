@@ -8,7 +8,12 @@
                 </vs-button>
             </div>
 
-            <vs-button class="disc" :href="discord['href']" icon color="discord">
+            <vs-button
+                class="disc"
+                :href="discord['href']"
+                icon
+                color="discord"
+            >
                 {{ discord["status"] }}
                 <i class="bx bxl-discord"></i>
             </vs-button>
@@ -25,7 +30,13 @@
                     </vs-button>
                 </div>
 
-                <vs-switch v-for="tag of tags" @input="toggleTag(tag)" v-model="activeTags" :val="tag.id" :key="tag.id">
+                <vs-switch
+                    v-for="tag of tags"
+                    @input="toggleTag(tag)"
+                    v-model="activeTags"
+                    :val="tag.id"
+                    :key="tag.id"
+                >
                     {{ tag.name }}
                 </vs-switch>
             </div>
@@ -41,12 +52,22 @@
                 </div>
 
                 <div class="cards">
-                    <MapCard v-for="map of maps" :key="map.id" :map="map" :tags="tags" @openOptions="openOptionsDialog" />
+                    <MapCard
+                        v-for="map of maps"
+                        :key="map.id"
+                        :map="map"
+                        :tags="tags"
+                        @openOptions="openOptionsDialog"
+                    />
                 </div>
             </div>
         </div>
 
-        <OptionsDialog v-if="optionsDialog['map'] != null" v-model="optionsDialog" :tags="tags" />
+        <OptionsDialog
+            v-if="optionsDialog['map'] != null"
+            v-model="optionsDialog"
+            :tags="tags"
+        />
     </div>
 </template>
 
@@ -69,13 +90,16 @@ export default {
             activeTags: [],
             tags: [],
             maps: [],
-            discord: { status: "Login ", href: "http://192.168.2.116:8000/discord/login" },
+            discord: {
+                status: "Login ",
+                href: "http://192.168.2.116:8000/discord/login",
+            },
             optionsDialog: { show: false, map: null },
         };
     },
     async fetch() {
         console.log("fetch");
-        this.tags = await fetch("http://192.168.2.116:8000/api/tags").then((res) => res.json());
+        this.tags = await this.$beatcatApi.$get(`tags`);
 
         this.activeTags.push(this.tags[0].id);
         this.loadMapsForTag(this.tags[0]);
@@ -101,7 +125,11 @@ export default {
             for (let index = 0; index < tags.length; index++) {
                 for (let ind = 0; ind < this.tags.length; ind++) {
                     const tag = this.tags[ind];
-                    if (this.activeTags.includes(tag.id) && tag.id == tags[index]) return true;
+                    if (
+                        this.activeTags.includes(tag.id) &&
+                        tag.id == tags[index]
+                    )
+                        return true;
                 }
             }
             return false;
@@ -116,7 +144,7 @@ export default {
             else return false;
         },
         async loadMapsForTag(tag) {
-            let result = await fetch(`http://192.168.2.116:8000/api/maps/${tag.id}`).then((res) => res.json());
+            let result = await this.$beatcatApi.$get(`maps/${tag.id}`);
 
             result.forEach((map) => {
                 if (this.containsMap(map) == false) this.maps.push(map);
@@ -229,7 +257,7 @@ export default {
                 }
             }
             .options {
-                background-color: rgb(var(--vs-primary));
+                // background-color: rgb(var(--vs-primary));
             }
         }
     }

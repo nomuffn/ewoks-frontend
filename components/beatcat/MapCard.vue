@@ -11,9 +11,15 @@
             <p>{{ map.mapper }}</p>
 
             <div class="map-tags">
-                <vs-button border v-for="tag of map.tags" clickable="false" class="tag" disabled :key="tag">{{
-                    getTagNameById(tag)
-                }}</vs-button>
+                <vs-button
+                    border
+                    v-for="tag of map.tags"
+                    clickable="false"
+                    class="tag"
+                    disabled
+                    :key="tag"
+                    >{{ getTagNameById(tag) }}</vs-button
+                >
             </div>
         </template>
 
@@ -32,7 +38,12 @@
             <vs-button color="#F9A825"> S </vs-button>
 
             <!-- Options dialog -->
-            <vs-button class="options" shadow primary @click="$emit('openOptions', map)">
+            <vs-button
+                class="options"
+                shadow
+                primary
+                @click="$emit('openOptions', map)"
+            >
                 <i class="bx bx-dots-horizontal-rounded"></i>
             </vs-button>
         </template>
@@ -89,7 +100,7 @@ export default {
         }
     }
     .options {
-        background-color: rgb(var(--vs-primary));
+        // background-color: rgb(var(--vs-primary));
     }
 }
 

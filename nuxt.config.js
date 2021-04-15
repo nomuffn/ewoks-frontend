@@ -55,6 +55,7 @@ export default {
         "@/plugins/vuesax",
         "@/plugins/defaultApi",
         "@/plugins/mapttsApi",
+        "@/plugins/beatcatApi",
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -83,41 +84,6 @@ export default {
             },
         ],
     ],
-    auth: {
-        strategies: {
-            discord: {
-                scheme: 'oauth2',
-                endpoints: {
-                    authorization: 'https://discord.com/api/oauth2/authorize',
-                    token: 'https://discord.com/api/oauth2/token',
-                    userInfo: 'https://discord.com/api/users/@me'
-                },
-                scope: ['identify', 'email'],
-                clientId: '813212218476462081',
-                clientSecret: 'm3ej6lPYUDDkR-QkjFCmoT7tR1Au0EMV',
-                redirectUri: "http://localhost:3000/login",
-                grantType: 'authorization_code',
-                responseType: 'token',
-                token: {
-                    property: 'access_token',
-                    type: 'Bearer',
-                    maxAge: 1800
-                },
-                refreshToken: {
-                    property: 'refresh_token',
-                    maxAge: 60 * 60 * 24 * 30
-                },
-
-                // accessType: undefined,
-                // logoutRedirectUri: undefined,
-                // state: 'UNIQUE_AND_NON_GUESSABLE',
-                // codeChallengeMethod: '',
-                // responseMode: '',
-                // acrValues: '',
-                // autoLogout: false
-            }
-        }
-    },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {},
