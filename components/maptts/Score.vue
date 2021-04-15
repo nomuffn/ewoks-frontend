@@ -9,9 +9,13 @@
                         :href="`https://scoresaber.com/leaderboard/${score.leaderboardId}`"
                         >{{
                             `${score.leaderboardSongAuthor} - ${score.leaderboardName}`
-                        }}</a
+                        }}
+                        [{{ getDifficulty(score.difficultyRaw) }}]</a
                     >
-                    <p>by {{ score.mapper }}</p>
+                    <p>
+                        by
+                        <b>{{ score.mapper }}</b>
+                    </p>
                     <p>~{{ getAgo(score.timeSet) }} ago</p>
                 </div>
                 <div class="right">
@@ -48,6 +52,15 @@ export default {
                 timeAgo = timeAgo + "h";
             }
             return timeAgo;
+        },
+        getPosition(string, subString, index) {
+            return string.split(subString, index).join(subString).length;
+        },
+        getDifficulty(difficultyRaw) {
+            return difficultyRaw.substring(
+                1,
+                this.getPosition(difficultyRaw, "_", 2)
+            );
         },
     },
 };
