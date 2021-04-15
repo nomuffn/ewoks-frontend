@@ -83,7 +83,6 @@ import Score from "@/components/maptts/Score.vue";
 export default {
     watch: {
         page(newValue, oldValue) {
-            console.log(oldValue, newValue, this.paginationLength);
             this.loadScores();
             return null;
         },
@@ -117,7 +116,6 @@ export default {
         };
     },
     async fetch() {
-        console.log("fetch");
         this.loadScores();
     },
     methods: {
