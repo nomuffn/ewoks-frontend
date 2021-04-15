@@ -3,7 +3,13 @@
         <template #text>
             <div class="wrapper">
                 <div class="left">
-                    <h3>{{ score.player.twitchName }}</h3>
+                    <h3>
+                        <a
+                            target="_blank"
+                            :href="`https://scoresaber.com/u/${score.player.scoresaberId}`"
+                            >{{ score.player.twitchName }}</a
+                        >
+                    </h3>
                     <a
                         target="_blank"
                         :href="`https://scoresaber.com/leaderboard/${score.leaderboardId}`"
@@ -89,10 +95,10 @@ export default {
                 position: relative;
                 &:after {
                     background: none repeat scroll 0 0 transparent;
-                    bottom: 0;
+                    bottom: -1px;
                     content: "";
                     display: block;
-                    height: 2px;
+                    height: 1px;
                     left: 50%;
                     position: absolute;
                     background: #fff;
