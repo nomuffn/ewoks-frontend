@@ -116,8 +116,8 @@ export default {
     components: {
         Loading,
     },
-    async fetch() {
-        this.data = await this.$axios.$get("?rankedStats");
+    async created() {
+        this.data = await this.$defaultApi.$get("?rankedStats");
         this.loading = false;
     },
     methods: {
