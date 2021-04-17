@@ -6,7 +6,7 @@
             </div>
 
             <vs-alert color="primary">
-                Maps ranked: 1789
+                Maps ranked: {{ data.mapsRanked }}
                 <br />
                 <br />
                 > 600pp: {{ data.above600 }}
@@ -118,6 +118,7 @@ export default {
     },
     async created() {
         this.data = await this.$defaultApi.$get("?rankedStats");
+        console.log(this.data);
         this.loading = false;
     },
     methods: {
