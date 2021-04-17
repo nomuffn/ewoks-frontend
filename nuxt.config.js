@@ -37,6 +37,8 @@ export default {
 
     publicRuntimeConfig: {
         baseURL: process.env.BASE_URL || "https://ewoks.de/",
+        discordURL:
+            process.env.BASE_URL || "https://ewoks.de/" + "backend/discord/",
     },
 
     generate: {
