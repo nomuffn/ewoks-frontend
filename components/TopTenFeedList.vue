@@ -2,8 +2,8 @@
     <div class="cards">
         <Loading v-if="loading" />
         <vs-card
-            v-for="score of scores"
-            :key="score.id"
+            v-for="(score, index) of scores"
+            :key="index"
             v-on:click="openUrl(score.leaderboard_id)"
         >
             <template #text>
@@ -15,7 +15,7 @@
                     <br />
                     {{ score.leaderboard_name }}
                     <br />
-                    <span class="time">~{{ score.date }}h ago</span>
+                    <span class="time">~{{ score.hoursago }}h ago</span>
                 </p>
                 <div class="score">
                     <p>
@@ -43,7 +43,7 @@ export default {
     },
 
     async created() {
-        this.scores = await this.$defaultApi.$get("?topTenFeed");
+        this.scores = await this.$defaultApi.$get("toptenfeed");
         this.loading = false;
     },
     methods: {

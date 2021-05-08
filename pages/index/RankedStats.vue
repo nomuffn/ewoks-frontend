@@ -1,32 +1,30 @@
 <template>
     <div class="main_content">
-        <div class="col">
+        <div v-if="stats && mappers" class="col">
             <div class="title_container">
                 <h2 class="title">General</h2>
             </div>
 
             <vs-alert color="primary">
-                Maps ranked: {{ data.mapsRanked }}
+                Maps ranked: {{ stats["total"] }}
                 <br />
                 <br />
-                > 600pp: {{ data.above600 }}
+                > 600pp: {{ stats["600"] }}
                 <br />
-                > 500pp: {{ data.above500 }}
+                > 500pp: {{ stats["500"] }}
                 <br />
-                > 400pp: {{ data.above400 }}
+                > 400pp: {{ stats["400"] }}
                 <br />
-                > 300pp: {{ data.above300 }}
+                > 300pp: {{ stats["300"] }}
                 <br />
-                > 200pp: {{ data.above200 }}
+                > 200pp: {{ stats["200"] }}
                 <br />
-                > 100pp: {{ data.above100 }}
+                > 100pp: {{ stats["100"] }}
                 <br />
-                > 50pp: {{ data.above50 }}
-                <br />
-                > 0pp: {{ data.above0 }}
+                > 0pp: {{ stats["0"] }}
             </vs-alert>
             <vs-alert color="primary">
-                Very rough amount of mappers: 315
+                Very rough amount of mappers: {{ mappers.length }}
                 <br />
                 Unfortunately some mapper names are still scuffed from 2018
                 <br />
@@ -41,11 +39,10 @@
                 <h2 class="title">Mapset Count by Mappers</h2>
             </div>
 
-            <Loading v-if="loading" />
-            <div class="card-container">
+            <div v-if="mappers" class="card-container">
                 <vs-card
                     :key="mapper"
-                    v-for="(value, mapper, index) in data.mappers"
+                    v-for="(value, mapper, index) in mappers"
                     v-on:click="openUrl(mapper)"
                 >
                     <template #text>
@@ -63,11 +60,10 @@
                 <h2 class="title">Difficulty Count by Mappers</h2>
             </div>
 
-            <Loading v-if="loading" />
-            <div class="card-container">
+            <div v-if="mappersDiffs" class="card-container">
                 <vs-card
                     :key="mapper"
-                    v-for="(value, mapper, index) in data.mappersDiffs"
+                    v-for="(value, mapper, index) in mappersDiffs"
                     v-on:click="openUrl(mapper)"
                 >
                     <template #text>
@@ -85,11 +81,10 @@
                 <h2 class="title">Difficulty Count by Song Artists</h2>
             </div>
 
-            <Loading v-if="loading" />
-            <div class="card-container">
+            <div v-if="artists" class="card-container">
                 <vs-card
                     :key="artist"
-                    v-for="(value, artist, index) in data.artists"
+                    v-for="(value, artist, index) in artists"
                     v-on:click="openUrl(artist)"
                 >
                     <template #text>
@@ -105,21 +100,20 @@
 </template>
 
 <script>
-import Loading from "@/components/LoadingSpinner.vue";
 export default {
     data() {
         return {
-            data: {},
-            loading: true,
+            stats: null,
+            mappers: null,
+            mappersDiffs: null,
+            artists: null,
         };
     },
-    components: {
-        Loading,
-    },
     async created() {
-        this.data = await this.$defaultApi.$get("?rankedStats");
-        console.log(this.data);
-        this.loading = false;
+        this.stats = await this.$defaultApi.$get("ppdist");
+        this.mappers = await this.$defaultApi.$get("mapperdist");
+        this.mappersDiffs = await this.$defaultApi.$get("mapperdiffdist");
+        this.artists = await this.$defaultApi.$get("artistdist");
     },
     methods: {
         openUrl: function (mapper) {
