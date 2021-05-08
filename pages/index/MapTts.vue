@@ -19,21 +19,13 @@
                 </div>
             </div>
 
-            <vs-button
-                class="disc"
-                :href="discord['href']"
-                icon
-                color="discord"
-            >
+            <vs-button class="disc" :href="discord.login" icon color="discord">
                 {{ discord["status"] }}
                 <i class="bx bxl-discord"></i>
             </vs-button>
         </div>
 
         <div class="main_content">
-            <vs-alert color="danger">
-                Logins might be scuffed but it still kinda works :)))
-            </vs-alert>
             <vs-alert color="primary">
                 Currently can't get the song length so the timestamps are only:
                 <br />
@@ -96,10 +88,10 @@ export default {
     created() {
         if (this.doesHttpOnlyCookieExist("sessionid")) {
             this.discord["status"] = "Logout ";
-            this.discord["href"] = "https://ewoks.de/backend/logout";
+            this.discord["href"] = this.discord.logout;
         }
     },
-    data() {
+    data({ $config: { discordLogin, discordLogout } }) {
         return {
             scores: [],
             search: "",
@@ -111,7 +103,8 @@ export default {
             },
             discord: {
                 status: "Login ",
-                href: "https://ewoks.de/backend/discord/login",
+                login: discordLogin,
+                logout: discordLogout,
             },
         };
     },

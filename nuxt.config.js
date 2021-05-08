@@ -37,8 +37,14 @@ export default {
 
     publicRuntimeConfig: {
         baseURL: process.env.BASE_URL || "https://ewoks.de/",
-        discordURL:
-            process.env.BASE_URL || "https://ewoks.de/" + "backend/discord/",
+        discordLogin:
+            (process.env.BASE_URL || "https://ewoks.de/") +
+            "backend/oauth/login/discord/",
+
+        //TODO
+        discordLogout:
+            (process.env.BASE_URL || "https://ewoks.de/") +
+            "backend/oauth/login/discord/",
     },
 
     generate: {
