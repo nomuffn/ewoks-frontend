@@ -43,7 +43,7 @@
 
             <vs-alert color="warn">
                 Discord logins should work now, you will have to login again
-                though
+                though. They're needed to suggest players btw :)
             </vs-alert>
 
             <div class="title_container">
