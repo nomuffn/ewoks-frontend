@@ -93,7 +93,10 @@ export default {
 
             for (let [key, value] of Object.entries(this.votes[index].votes)) {
                 let str = key.split("_");
-                str[1] += ": " + (value > 0 ? "+" + value : value);
+                str[1] =
+                    this.capitalizeTheFirstLetterOfEachWord(str[1]) +
+                    ": " +
+                    (value > 0 ? "+" + value : value);
 
                 if (!this.votes[index].strings) this.votes[index].strings = [];
                 this.votes[index].strings.push(str);

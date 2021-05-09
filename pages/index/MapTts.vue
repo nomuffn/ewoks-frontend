@@ -9,9 +9,13 @@
                     <p>
                         Shows timestamps for maps that streamers have played.
                         <br />
-                        The script will only check approved players.
+                        You can suggest players for which you have to be logged
+                        in.
                         <br />
-                        Updates every two hours.
+                        After suggesting they will have to be approved by the
+                        Approval Team.
+                        <br />
+                        Updates every three hours.
                     </p>
                     <vs-button icon border @click="dialog['players'] = true">
                         Approved Players
@@ -37,10 +41,19 @@
                 time the score was set in the vod minus 2:20 minutes
             </vs-alert>
 
+            <vs-alert color="warn">
+                Discord logins should work now, everyone will have to login
+                again though
+            </vs-alert>
+
             <div class="title_container">
                 <h2 class="title">Latest Scores</h2>
 
-                <vs-button icon @click="dialog['suggest'] = true">
+                <vs-button
+                    v-if="isAuthenticated"
+                    icon
+                    @click="dialog['suggest'] = true"
+                >
                     Suggest Player
                     <i class="bx bxs-message-square-add"></i>
                 </vs-button>
@@ -94,8 +107,8 @@ export default {
         PlayersDialog: () => import("@/components/maptts/PlayersDialog.vue"),
         Loading,
     },
-    created() {
-        if (this.doesHttpOnlyCookieExist("sessionid")) {
+    async created() {
+        if ((this.isAuthenticated = await this.$isAuthenticated())) {
             this.discord["status"] = "Logout ";
             this.discord["href"] = this.$config.discordLogout;
         }
@@ -107,6 +120,7 @@ export default {
             page: 1,
             paginationLength: 3,
             loading: true,
+            isAuthenticated: false,
             dialog: {
                 suggest: false,
                 players: false,

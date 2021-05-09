@@ -8,6 +8,8 @@
             <vs-alert color="primary">
                 Maps ranked: {{ stats["total"] }}
                 <br />
+                Rough amount of mappers: {{ Object.keys(mappers).length }}
+                <br />
                 <br />
                 > 600pp: {{ stats["600"] }}
                 <br />
@@ -22,15 +24,8 @@
                 > 100pp: {{ stats["100"] }}
                 <br />
                 > 0pp: {{ stats["0"] }}
-            </vs-alert>
-            <vs-alert color="primary">
-                Very rough amount of mappers: {{ Object.keys(mappers).length }}
-                <br />
-                Unfortunately some mapper names are still scuffed from 2018
                 <br />
                 <br />
-                Stats from beatsaver are gonna be put offhold for now until I
-                find the motivation and solution for their api restrictions.
             </vs-alert>
         </div>
 
@@ -80,7 +75,7 @@
 
         <div class="col">
             <div class="title_container">
-                <h2 class="title">Difficulty Count by Song Artists</h2>
+                <h2 class="title">Mapset Count by Song Artists</h2>
             </div>
 
             <Loading v-if="loading['artistdist']" />

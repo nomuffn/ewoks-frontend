@@ -144,7 +144,7 @@ h3 {
 
 .col {
     flex: 1;
-    min-width: 330px;
+    min-width: 250px;
     margin: 0px 10px;
 }
 
