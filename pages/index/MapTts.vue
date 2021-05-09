@@ -42,8 +42,8 @@
             </vs-alert>
 
             <vs-alert color="warn">
-                Discord logins should work now, everyone will have to login
-                again though
+                Discord logins should work now, you will have to login again
+                though
             </vs-alert>
 
             <div class="title_container">
