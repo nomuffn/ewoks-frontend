@@ -24,7 +24,7 @@
                 > 0pp: {{ stats["0"] }}
             </vs-alert>
             <vs-alert color="primary">
-                Very rough amount of mappers: {{ mappers.length }}
+                Very rough amount of mappers: {{ Object.keys(mappers).length }}
                 <br />
                 Unfortunately some mapper names are still scuffed from 2018
                 <br />
@@ -39,6 +39,7 @@
                 <h2 class="title">Mapset Count by Mappers</h2>
             </div>
 
+            <Loading v-if="loading['mapperdist']" />
             <div v-if="mappers" class="card-container">
                 <vs-card
                     :key="mapper"
@@ -60,6 +61,7 @@
                 <h2 class="title">Difficulty Count by Mappers</h2>
             </div>
 
+            <Loading v-if="loading['mapperdiffdist']" />
             <div v-if="mappersDiffs" class="card-container">
                 <vs-card
                     :key="mapper"
@@ -81,6 +83,7 @@
                 <h2 class="title">Difficulty Count by Song Artists</h2>
             </div>
 
+            <Loading v-if="loading['artistdist']" />
             <div v-if="artists" class="card-container">
                 <vs-card
                     :key="artist"
@@ -100,6 +103,7 @@
 </template>
 
 <script>
+import Loading from "@/components/LoadingSpinner.vue";
 export default {
     data() {
         return {
@@ -107,13 +111,25 @@ export default {
             mappers: null,
             mappersDiffs: null,
             artists: null,
+            loading: {
+                ppdist: true,
+                mapperdist: true,
+                mapperdiffdist: true,
+                artistdist: true,
+            },
         };
+    },
+    components: {
+        Loading,
     },
     async created() {
         this.stats = await this.$defaultApi.$get("ppdist");
         this.mappers = await this.$defaultApi.$get("mapperdist");
+        this.loading["mapperdist"] = false;
         this.mappersDiffs = await this.$defaultApi.$get("mapperdiffdist");
+        this.loading["mapperdiffdist"] = false;
         this.artists = await this.$defaultApi.$get("artistdist");
+        this.loading["artistdist"] = false;
     },
     methods: {
         openUrl: function (mapper) {
