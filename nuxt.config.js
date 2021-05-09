@@ -39,12 +39,9 @@ export default {
         baseURL: process.env.BASE_URL || "https://ewoks.de/",
         discordLogin:
             (process.env.BASE_URL || "https://ewoks.de/") +
-            "backend/oauth/login/discord/",
-
-        //TODO
+            "backend/oauth/login/discord",
         discordLogout:
-            (process.env.BASE_URL || "https://ewoks.de/") +
-            "backend/oauth/login/discord/",
+            (process.env.BASE_URL || "https://ewoks.de/") + "backend/logout",
     },
 
     generate: {

@@ -1,10 +1,7 @@
 <template>
-    <div class="semipolar-spinner" style="spinnerStyle">
-        <div class="ring"></div>
-        <div class="ring"></div>
-        <div class="ring"></div>
-        <div class="ring"></div>
-        <div class="ring"></div>
+    <div class="half-circle-spinner">
+        <div class="circle circle-1"></div>
+        <div class="circle circle-2"></div>
     </div>
 </template>
 
@@ -13,74 +10,43 @@ export default {};
 </script>
 
 <style>
-.semipolar-spinner,
-.semipolar-spinner * {
+.half-circle-spinner,
+.half-circle-spinner * {
     box-sizing: border-box;
 }
 
-.semipolar-spinner {
-    height: 65px;
-    width: 65px;
+.half-circle-spinner {
+    width: 60px;
+    height: 60px;
+    border-radius: 100%;
     position: relative;
 }
 
-.semipolar-spinner .ring {
-    border-radius: 50%;
+.half-circle-spinner .circle {
+    content: "";
     position: absolute;
-    border: calc(65px * 0.05) solid transparent;
+    width: 100%;
+    height: 100%;
+    border-radius: 100%;
+    border: calc(60px / 10) solid transparent;
+}
+
+.half-circle-spinner .circle.circle-1 {
     border-top-color: rgb(var(--vs-primary));
-    border-left-color: rgb(var(--vs-primary));
-    animation: semipolar-spinner-animation 2s infinite;
+    animation: half-circle-spinner-animation 1s infinite;
 }
 
-.semipolar-spinner .ring:nth-child(1) {
-    height: calc(65px - 65px * 0.2 * 0);
-    width: calc(65px - 65px * 0.2 * 0);
-    top: calc(65px * 0.1 * 0);
-    left: calc(65px * 0.1 * 0);
-    animation-delay: calc(2000ms * 0.1 * 4);
-    z-index: 5;
+.half-circle-spinner .circle.circle-2 {
+    border-bottom-color: rgb(var(--vs-primary));
+    animation: half-circle-spinner-animation 1s infinite alternate;
 }
 
-.semipolar-spinner .ring:nth-child(2) {
-    height: calc(65px - 65px * 0.2 * 1);
-    width: calc(65px - 65px * 0.2 * 1);
-    top: calc(65px * 0.1 * 1);
-    left: calc(65px * 0.1 * 1);
-    animation-delay: calc(2000ms * 0.1 * 3);
-    z-index: 4;
-}
-
-.semipolar-spinner .ring:nth-child(3) {
-    height: calc(65px - 65px * 0.2 * 2);
-    width: calc(65px - 65px * 0.2 * 2);
-    top: calc(65px * 0.1 * 2);
-    left: calc(65px * 0.1 * 2);
-    animation-delay: calc(2000ms * 0.1 * 2);
-    z-index: 3;
-}
-
-.semipolar-spinner .ring:nth-child(4) {
-    height: calc(65px - 65px * 0.2 * 3);
-    width: calc(65px - 65px * 0.2 * 3);
-    top: calc(65px * 0.1 * 3);
-    left: calc(65px * 0.1 * 3);
-    animation-delay: calc(2000ms * 0.1 * 1);
-    z-index: 2;
-}
-
-.semipolar-spinner .ring:nth-child(5) {
-    height: calc(65px - 65px * 0.2 * 4);
-    width: calc(65px - 65px * 0.2 * 4);
-    top: calc(65px * 0.1 * 4);
-    left: calc(65px * 0.1 * 4);
-    animation-delay: calc(2000ms * 0.1 * 0);
-    z-index: 1;
-}
-
-@keyframes semipolar-spinner-animation {
-    50% {
-        transform: rotate(360deg) scale(0.7);
+@keyframes half-circle-spinner-animation {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
     }
 }
 </style>

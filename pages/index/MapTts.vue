@@ -19,7 +19,12 @@
                 </div>
             </div>
 
-            <vs-button class="disc" :href="discord.login" icon color="discord">
+            <vs-button
+                class="disc"
+                :href="discord['href']"
+                icon
+                color="discord"
+            >
                 {{ discord["status"] }}
                 <i class="bx bxl-discord"></i>
             </vs-button>
@@ -58,6 +63,7 @@
             </div>
 
             <div class="scores">
+                <Loading v-if="loading" />
                 <Score v-for="score of scores" :key="score.id" :score="score" />
             </div>
 
@@ -71,6 +77,7 @@
 
 <script>
 import Score from "@/components/maptts/Score.vue";
+import Loading from "@/components/LoadingSpinner.vue";
 
 export default {
     watch: {
@@ -84,27 +91,28 @@ export default {
         SuggestPlayerDialog: () =>
             import("@/components/maptts/SuggestPlayerDialog.vue"),
         PlayersDialog: () => import("@/components/maptts/PlayersDialog.vue"),
+        Loading,
     },
     created() {
         if (this.doesHttpOnlyCookieExist("sessionid")) {
             this.discord["status"] = "Logout ";
-            this.discord["href"] = this.discord.logout;
+            this.discord["href"] = this.$config.discordLogout;
         }
     },
-    data({ $config: { discordLogin, discordLogout } }) {
+    data({ $config: { discordLogin } }) {
         return {
             scores: [],
             search: "",
             page: 1,
             paginationLength: 3,
+            loading: true,
             dialog: {
                 suggest: false,
                 players: false,
             },
             discord: {
                 status: "Login ",
-                login: discordLogin,
-                logout: discordLogout,
+                href: discordLogin,
             },
         };
     },
@@ -125,6 +133,7 @@ export default {
             window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
         },
         async loadScores() {
+            this.loading = true;
             this.scores = await this.$mapttsApi.$get(
                 `scores/${this.page - 1}/${this.search}`
             );
@@ -136,6 +145,7 @@ export default {
                     this.paginationLength++;
                 }
             }
+            this.loading = false;
         },
         startSearch() {
             this.page = 1;
