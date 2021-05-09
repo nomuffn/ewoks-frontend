@@ -25,7 +25,6 @@
                 <br />
                 > 0pp: {{ stats["0"] }}
                 <br />
-                <br />
             </vs-alert>
         </div>
 
