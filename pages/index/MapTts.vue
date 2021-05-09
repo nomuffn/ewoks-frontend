@@ -80,6 +80,7 @@ import Score from "@/components/maptts/Score.vue";
 import Loading from "@/components/LoadingSpinner.vue";
 
 export default {
+    transition: "slide-bottom",
     watch: {
         page(newValue, oldValue) {
             this.loadScores();

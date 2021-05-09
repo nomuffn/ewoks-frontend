@@ -67,6 +67,7 @@ import TopTenFeedList from "@/components/TopTenFeedList.vue";
 import Loading from "@/components/LoadingSpinner.vue";
 
 export default {
+    transition: "slide-bottom",
     components: {
         TimeMapsList,
         RecentlyRanked,
