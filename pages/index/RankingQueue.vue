@@ -19,7 +19,6 @@
                     <br />
                     Mapsets ranked in the last: (with a few exceptions)
                     <br />
-                    <br />
 
                     <template v-if="stats">
                         - week: <b>{{ stats["168"] }}</b>

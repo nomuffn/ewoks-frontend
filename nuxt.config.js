@@ -60,6 +60,7 @@ export default {
         "@/plugins/vuesax",
         "@/plugins/defaultApi",
         "@/plugins/mapttsApi",
+        "@/plugins/auth",
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
