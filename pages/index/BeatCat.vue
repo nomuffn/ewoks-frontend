@@ -20,7 +20,7 @@
         </div>
 
         <div class="main_content">
-            <div class="tags">
+            <div class="tags" v-if="tags.length > 0">
                 <div class="title_container">
                     <h2 class="title">Tags</h2>
 
@@ -51,11 +51,11 @@
                     </vs-button>
                 </div>
 
-                <div class="cards">
+                <div class="cards" v-if="maps.length > 0">
                     <MapCard
                         v-for="map of maps"
-                        :key="map.id"
-                        :map="map"
+                        :key="map.mapId.hash"
+                        :map="map.mapId"
                         :tags="tags"
                         @openOptions="openOptionsDialog"
                     />
@@ -98,11 +98,13 @@ export default {
         };
     },
     async fetch() {
-        console.log("fetch");
         this.tags = await this.$beatcatApi.$get(`tags`);
+        console.log("fetch", this.tags);
 
-        this.activeTags.push(this.tags[0].id);
-        this.loadMapsForTag(this.tags[0]);
+        if (this.tags) {
+            this.activeTags.push(this.tags[0].id);
+            this.loadMapsForTag(this.tags[0]);
+        }
     },
     methods: {
         toggleTag(tag) {
@@ -113,26 +115,19 @@ export default {
                 //remove all maps with only that tag
                 for (let index = 0; index < this.maps.length; index++) {
                     const map = this.maps[index];
-                    if (!this.anyTagsSelected(map.tags)) {
-                        this.maps.splice(index, 1);
-                        index = -1;
+                    if (map.tags.includes(tag.id)) {
+                        if (map.tags.length <= 1) {
+                            this.maps.splice(index, 1);
+                            index = -1;
+                        } else {
+                            this.maps[index].tags.splice(
+                                map.tags.indexOf(tag.id),
+                                1
+                            );
+                        }
                     }
                 }
             }
-        },
-        anyTagsSelected(tags) {
-            //any tags currently selected?
-            for (let index = 0; index < tags.length; index++) {
-                for (let ind = 0; ind < this.tags.length; ind++) {
-                    const tag = this.tags[ind];
-                    if (
-                        this.activeTags.includes(tag.id) &&
-                        tag.id == tags[index]
-                    )
-                        return true;
-                }
-            }
-            return false;
         },
         doesHttpOnlyCookieExist(cookiename) {
             var d = new Date();
@@ -147,15 +142,21 @@ export default {
             let result = await this.$beatcatApi.$get(`maps/${tag.id}`);
 
             result.forEach((map) => {
-                if (this.containsMap(map) == false) this.maps.push(map);
+                const pos = this.getPosOfMap(map);
+                if (pos < 0) {
+                    map.tags = [tag.id];
+                    this.maps.push(map);
+                } else {
+                    this.maps[pos].tags.push(tag.id);
+                }
             });
+            console.log(this.maps[0]);
         },
-        containsMap(newMap) {
-            for (let index = 0; index < this.maps.length; index++) {
-                const map = this.maps[index];
-                if (map.id == newMap.id) return true;
-            }
-            return false;
+        getPosOfMap(newMap) {
+            for (let index = 0; index < this.maps.length; index++)
+                if (this.maps[index].mapId.hash == newMap.mapId.hash)
+                    return index;
+            return -1;
         },
         openUrl: function (id) {
             window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
