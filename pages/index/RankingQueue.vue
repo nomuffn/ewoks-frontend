@@ -1,24 +1,40 @@
 <template>
     <div class="main_content">
-        <vs-alert color="primary">
-            If you have any feature/design suggestions feel free to hit me up on discord
-            <img style="position: absolute; margin-left: 5px" src="/eastandardsmile.png" />
-        </vs-alert>
-
         <div class="col first">
             <div>
                 <div class="title_container">
                     <h2 class="title">Qualified Maps</h2>
-                    <vs-button border href="https://scoresaber.com/ranking/requests" blank> Rank Requests </vs-button>
+                    <vs-button
+                        border
+                        href="https://scoresaber.com/ranking/requests"
+                        blank
+                    >
+                        Rank Requests
+                    </vs-button>
                 </div>
-                <vs-alert color="primary"> If a map disappears from the queue it will be seen as a new qualified map. </vs-alert>
+                <vs-alert color="primary">
+                    If a map disappears from the queue it will be seen as a new
+                    qualified map.
+                    <br />
+                    <br />
+                    Mapsets ranked in the last: (with a few exceptions)
+                    <br />
+
+                    <template v-if="stats">
+                        - week: <b>{{ stats["168"] }}</b>
+                        <br />
+                        - 2 weeks: <b>{{ stats["336"] }}</b>
+                        <br />
+                        - month: <b>{{ stats["720"] }}</b>
+                        <br />
+                        - 3 months: <b>{{ stats["2160"] }}</b>
+                        <br />
+                        - 6 months: <b>{{ stats["4320"] }}</b>
+                    </template>
+                </vs-alert>
 
                 <Loading v-if="loading" />
                 <TimeMapsList :maps="maps" />
-            </div>
-            <div>
-                <h2 class="title">Recently Ranked</h2>
-                <RecentlyRanked />
             </div>
         </div>
         <div class="col" style="width: 50%; display: flex; flex-wrap: wrap">
@@ -30,7 +46,9 @@
             </div>
             <div class="col">
                 <div class="title_container">
-                    <h2 class="title">Top Ten Scores Feed for Top 150 Ranked Songs</h2>
+                    <h2 class="title">
+                        Top Ten Scores Feed for Top 150 Ranked Songs
+                    </h2>
                 </div>
                 <vs-alert color="primary"> Updates every hour </vs-alert>
                 <TopTenFeedList />
@@ -48,6 +66,7 @@ import TopTenFeedList from "@/components/TopTenFeedList.vue";
 import Loading from "@/components/LoadingSpinner.vue";
 
 export default {
+    transition: "slide-bottom",
     components: {
         TimeMapsList,
         RecentlyRanked,
@@ -57,13 +76,21 @@ export default {
     },
     data() {
         return {
-            maps: [],
+            maps: null,
+            stats: null,
             loading: true,
         };
     },
     async created() {
-        this.maps = await this.$defaultApi.$get("?qualifiedMaps");
+        this.maps = await this.$defaultApi.$get("qualified");
+        this.stats = await this.$defaultApi.$get("rankedspans");
         this.loading = false;
+    },
+    mounted() {
+        this.$nextTick(() => {
+            this.$nuxt.$loading.start();
+            setTimeout(() => this.$nuxt.$loading.finish(), 500);
+        });
     },
 };
 </script>

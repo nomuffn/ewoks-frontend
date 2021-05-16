@@ -1,28 +1,39 @@
 <template>
     <div>
-        <vs-alert color="primary">
+        <vs-alert v-if="stats" color="primary">
             Updates every hour
             <br />
             Might be slightly off :)<br />
-            Votes in the last 7 days:<br />
-            RT Up-/Downvotes: <b>{{ lastWeek[0] }}</b> / <b>{{ lastWeek[1] }}</b
-            ><br />
-            QAT Up-/Downvotes: <b>{{ lastWeek[2] }}</b> /
-            <b>{{ lastWeek[3] }}</b
-            ><br />
+            Votes in the last month:<br />
+            RT Up-/Downvotes:
+            <b>{{ stats.lastMonth.rtupvotes__sum }}</b>
+            /
+            <b>{{ stats.lastMonth.rtdownvotes__sum }}</b>
+            <br />
+            QAT Up-/Downvotes:
+            <b>{{ stats.lastMonth.qatupvotes__sum }}</b>
+            /
+            <b>{{ stats.lastMonth.qatdownvotes__sum }}</b>
+            <br />
             <br />
             Votes since 8th August 2020:<br />
-            RT Up-/Downvotes: <b>{{ allTime[0] }}</b> / <b>{{ allTime[1] }}</b
-            ><br />
-            QAT Up-/Downvotes: <b>{{ allTime[2] }}</b> / <b>{{ allTime[3] }}</b
-            ><br />
+            RT Up-/Downvotes:
+            <b>{{ stats.allTime.rtupvotes__sum }}</b>
+            /
+            <b>{{ stats.allTime.rtdownvotes__sum }}</b>
+            <br />
+            QAT Up-/Downvotes:
+            <b>{{ stats.allTime.qatupvotes__sum }}</b>
+            /
+            <b>{{ stats.allTime.qatdownvotes__sum }}</b>
+            <br />
         </vs-alert>
 
         <Loading v-if="loading" />
         <div class="card-container">
             <vs-card
-                :key="vote.id"
-                v-for="vote of votes"
+                v-for="(vote, index) of votes"
+                :key="index"
                 v-on:click="openUrl(vote.requestId)"
             >
                 <template #text>
@@ -35,16 +46,16 @@
                         >
                             <span
                                 v-bind:class="{
-                                    red: string.string_first == 'QAT',
+                                    red: string[0] == 'qat',
                                 }"
-                                >{{ string["string_first"] }}</span
+                                >{{ string[0].toUpperCase() }}</span
                             >
-                            {{ string["string_second"] }}
+                            {{ string[1] }}
                         </span>
                     </div>
 
                     <p class="time">
-                        {{ vote.time_voted_string }}
+                        {{ vote.hoursago }}
                     </p>
                 </template>
             </vs-card>
@@ -57,9 +68,8 @@ import Loading from "@/components/LoadingSpinner.vue";
 export default {
     data() {
         return {
-            lastWeek: [],
-            allTime: [],
-            votes: [],
+            stats: null,
+            votes: null,
             loading: true,
         };
     },
@@ -67,34 +77,29 @@ export default {
         Loading,
     },
     async created() {
-        let result = await this.$defaultApi.$get("?votesFeed");
+        this.stats = await this.$defaultApi.$get("rq/stats");
+        this.votes = await this.$defaultApi.$get("rq/feed");
         this.loading = false;
-
-        this.lastWeek = result.lastWeek;
-        this.allTime = result.alltime;
-        this.votes = result.votes;
 
         for (let index = 0; index < this.votes.length; index++) {
             let element = this.votes[index];
 
-            if (element.time_voted > 24) {
-                this.votes[index].time_voted_string =
-                    "~" + Math.round(element.time_voted / 24) + " days";
+            if (element.hoursleft > 24) {
+                this.votes[index].hoursago =
+                    "~" + Math.round(element.hoursago / 24) + " days";
             } else {
-                this.votes[index].time_voted_string =
-                    "~" + element.time_voted + " hours";
+                this.votes[index].hoursago = "~" + element.hoursago + " hours";
             }
 
-            for (let ii = 0; ii < this.votes[index].strings.length; ii++) {
-                let string = this.votes[index].strings[ii];
+            for (let [key, value] of Object.entries(this.votes[index].votes)) {
+                let str = key.split("_");
+                str[1] =
+                    this.capitalizeTheFirstLetterOfEachWord(str[1]) +
+                    ": " +
+                    (value > 0 ? "+" + value : value);
 
-                this.votes[index].strings[ii] = { string };
-                this.votes[index].strings[ii].string_first = string.substr(
-                    0,
-                    string.indexOf(" ")
-                );
-                this.votes[index].strings[ii].string_second =
-                    " " + string.substr(string.indexOf(" ") + 1);
+                if (!this.votes[index].strings) this.votes[index].strings = [];
+                this.votes[index].strings.push(str);
             }
         }
     },
@@ -104,6 +109,15 @@ export default {
                 "https://new.scoresaber.com/ranking/request/" + id,
                 "_blank"
             );
+        },
+        capitalizeTheFirstLetterOfEachWord(words) {
+            var separateWord = words.toLowerCase().split(" ");
+            for (var i = 0; i < separateWord.length; i++) {
+                separateWord[i] =
+                    separateWord[i].charAt(0).toUpperCase() +
+                    separateWord[i].substring(1);
+            }
+            return separateWord.join(" ");
         },
     },
 };

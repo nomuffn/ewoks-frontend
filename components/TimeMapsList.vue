@@ -1,14 +1,14 @@
 <template>
     <div class="card-container">
         <vs-card
-            :key="map.scoresaberId"
-            v-for="map of maps"
-            v-on:click="openUrl(map.scoresaberId)"
+            :key="index"
+            v-for="(map, index) of maps"
+            v-on:click="openUrl(map.scoresaberid)"
         >
             <template #text>
                 <h3>{{ map.name }}</h3>
                 <p>by {{ map.mapper }}</p>
-                <p class="time">~{{ map.hourdiff }} hours</p>
+                <p class="time">~{{ map.hoursleft }} hours</p>
             </template>
         </vs-card>
     </div>

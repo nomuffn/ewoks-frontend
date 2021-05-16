@@ -37,6 +37,11 @@ export default {
 
     publicRuntimeConfig: {
         baseURL: process.env.BASE_URL || "https://ewoks.de/",
+        discordLogin:
+            (process.env.BASE_URL || "https://ewoks.de/") +
+            "backend/oauth/login/discord",
+        discordLogout:
+            (process.env.BASE_URL || "https://ewoks.de/") + "backend/logout",
     },
 
     generate: {
@@ -56,6 +61,7 @@ export default {
         "@/plugins/defaultApi",
         "@/plugins/mapttsApi",
         "@/plugins/beatcatApi",
+        "@/plugins/auth",
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
