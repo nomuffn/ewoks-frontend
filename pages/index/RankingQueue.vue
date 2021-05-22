@@ -59,7 +59,6 @@
 
 <script>
 import TimeMapsList from "@/components/TimeMapsList.vue";
-import RecentlyRanked from "@/components/RecentlyRanked.vue";
 import VotesFeed from "@/components/VotesFeed.vue";
 import TopTenFeedList from "@/components/TopTenFeedList.vue";
 
@@ -69,7 +68,6 @@ export default {
     transition: "slide-bottom",
     components: {
         TimeMapsList,
-        RecentlyRanked,
         VotesFeed,
         TopTenFeedList,
         Loading,
