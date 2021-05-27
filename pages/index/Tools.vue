@@ -381,14 +381,12 @@ export default {
                                 var wall = obj._obstacles[i];
 
                                 if (
-                                    wall._duration * (60 / bpm) + 1e-9 <
-                                        0.015 &&
+                                    wall._duration * (60 / bpm) + 1e-9 < 0.02 &&
                                     (wall._width >= 2 ||
                                         wall._lineIndex == 1 ||
                                         wall._lineIndex == 2)
                                 ) {
-                                    wall._duration =
-                                        (0.015 - 1e-9) / (60 / bpm);
+                                    wall._duration = (0.02 - 1e-9) / (60 / bpm);
                                 }
                             }
 
