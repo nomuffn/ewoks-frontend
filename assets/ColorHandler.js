@@ -1,4 +1,4 @@
-exports.setColor = () => {
+exports.getColor = () => {
     let Colors = [
         "#F44336",
         "#E57373",
@@ -101,8 +101,5 @@ exports.setColor = () => {
         "#78909C",
         "#607D8B",
     ];
-    $nuxt.$vs.setColor(
-        "primary",
-        Colors[Math.floor(Math.random() * (Colors.length - 1))]
-    );
+    return Colors[Math.floor(Math.random() * (Colors.length - 1))];
 };

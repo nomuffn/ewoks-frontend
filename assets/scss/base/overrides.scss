@@ -1,0 +1,29 @@
+.vs-card {
+    border-radius: 15px;
+}
+
+.scorecard .vs-card {
+    max-width: none;
+}
+.scorecard .vs-card,
+.tools .vs-card {
+    cursor: auto;
+}
+.vs-input__label {
+    color: #fff;
+}
+
+.players-dialog .vs-dialog .con-content {
+    overflow-y: scroll;
+    position: relative;
+    height: 600px;
+}
+
+.vs-alert {
+    margin: 10px 0;
+    height: auto !important;
+
+    .vs-alert__content {
+        min-height: auto !important;
+    }
+}

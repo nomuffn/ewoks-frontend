@@ -1,13 +1,12 @@
-@font-face {
-    font-family: "Poppins";
-    src: local("Poppins"),
-     url(~assets/fonts/poppins-v15-latin-regular.ttf) format("truetype");
-}
-html {
-    font-family: 'Poppins';
+html,
+body {
+    max-width: 100%;
+    overflow-x: hidden;
+    background-color: #18191c;
 }
 
 html {
+    font-family: "Poppins";
     font-size: 16px;
     word-spacing: 1px;
     -ms-text-size-adjust: 100%;
@@ -15,6 +14,8 @@ html {
     -moz-osx-font-smoothing: grayscale;
     -webkit-font-smoothing: antialiased;
     box-sizing: border-box;
+    overflow: scroll;
+    overflow-x: hidden;
 }
 
 *,
@@ -24,6 +25,27 @@ html {
     margin: 0;
 }
 
+.navbar {
+    --vs-color: var(--vs-background);
+    background: rgba(var(--vs-color), 1);
+    text-align: center;
+}
+
+.title_container {
+    display: flex;
+    min-height: 90px;
+    align-items: center;
+}
+
+.title {
+    font-weight: 400;
+    font-size: 30px;
+    color: #fff;
+    letter-spacing: 1px;
+    text-transform: capitalize;
+    padding: 20px;
+}
+
 .button--green {
     display: inline-block;
     border-radius: 4px;
@@ -31,11 +53,10 @@ html {
     color: #3b8070;
     text-decoration: none;
     padding: 10px 30px;
-}
-
-.button--green:hover {
-    color: #fff;
-    background-color: #3b8070;
+    &:hover {
+        color: #fff;
+        background-color: #3b8070;
+    }
 }
 
 .button--grey {
@@ -46,24 +67,10 @@ html {
     text-decoration: none;
     padding: 10px 30px;
     margin-left: 15px;
-}
-
-.button--grey:hover {
-    color: #fff;
-    background-color: #35495e;
-}
-
-
-html,
-body {
-    max-width: 100%;
-    overflow-x: hidden;
-    background-color: #18191c;
-}
-
-html {
-    overflow: scroll;
-    overflow-x: hidden;
+    &:hover {
+        color: #fff;
+        background-color: #35495e;
+    }
 }
 
 ::-webkit-scrollbar {
@@ -78,18 +85,6 @@ html {
     border-radius: 5px;
 }
 
-.container {
-    min-height: 100vh;
-    display: flex;
-    justify-content: left;
-    text-align: left;
-    padding-top: 80px;
-}
-
-.content {
-    width: 100%;
-}
-
 .discord {
     position: fixed;
     bottom: 30px;
@@ -98,5 +93,16 @@ html {
     font-size: 15px;
 }
 
+.text {
+    color: #fff;
+    margin: 20px 10px;
+}
 
+h3 {
+    font-size: 16px;
+}
 
+.colored {
+    color: rgb(var(--vs-color)) !important;
+    font-weight: bold;
+}

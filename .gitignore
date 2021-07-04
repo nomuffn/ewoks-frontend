@@ -1,6 +1,8 @@
 #own stuff
 static/scripts
 static/playlists
+.vscode
+nuxt-dist
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template
@@ -92,7 +94,3 @@ sw.*
 
 # Vim swap files
 *.swp
-
-
-
-.vscode

@@ -1,6 +1,6 @@
 export default {
     // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
-    ssr: false,
+    //ssr: false,
 
     // Global page headers: https://go.nuxtjs.dev/config-head
     head: {
@@ -36,12 +36,12 @@ export default {
     },
 
     publicRuntimeConfig: {
-        baseURL: process.env.BASE_URL || "https://ewoks.de/",
+        baseURL: process.env.API_URL || "https://ewoks.de/",
         discordLogin:
-            (process.env.BASE_URL || "https://ewoks.de/") +
+            (process.env.API_URL || "https://ewoks.de/") +
             "backend/oauth/login/discord",
         discordLogout:
-            (process.env.BASE_URL || "https://ewoks.de/") + "backend/logout",
+            (process.env.API_URL || "https://ewoks.de/") + "backend/logout",
     },
 
     generate: {
@@ -51,16 +51,17 @@ export default {
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: [
         "vuesax/dist/vuesax.css",
-        "~assets/default.css",
         "boxicons/css/boxicons.min.css",
+        "~/assets/scss/global.scss",
     ],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
-        "@/plugins/vuesax",
+        { src: "@/plugins/vuesax", ssr: false },
         "@/plugins/defaultApi",
         "@/plugins/mapttsApi",
         "@/plugins/auth",
+        "@/plugins/nl2br",
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -70,6 +71,7 @@ export default {
     buildModules: [
         // https://go.nuxtjs.dev/eslint
         //'@nuxtjs/eslint-module',
+        "@nuxt/components",
     ],
 
     router: {
@@ -81,6 +83,7 @@ export default {
         // https://go.nuxtjs.dev/axios
         "@nuxtjs/axios",
         "@nuxtjs/proxy",
+        "@nuxtjs/strapi",
         [
             "nuxt-matomo",
             {
@@ -89,6 +92,11 @@ export default {
             },
         ],
     ],
+
+    strapi: {
+        entities: ["pages", "structure"],
+        url: process.env.STRAPI_URL || "https://ewoks.de/cms",
+    },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {},
