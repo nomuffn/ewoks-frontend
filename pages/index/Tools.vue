@@ -3,10 +3,6 @@
         <div class="col">
             <h2 class="title">Tools</h2>
 
-            <!-- <vs-alert color="primary">
-                Updates every hour
-            </vs-alert> -->
-
             <div class="cards">
                 <vs-card>
                     <template #title>
@@ -425,51 +421,53 @@ export default {
 };
 </script>
 
-<style scoped>
-/deep/ h2 {
-    margin: 20px 0px;
-}
+<style lang="scss">
+.tools {
+    h2 {
+        margin: 20px 0px;
+    }
 
-/deep/ .vs-input-parent {
-    margin: 15px;
-    width: 100%;
-}
+    .vs-input-parent {
+        margin: 15px;
+        width: 100%;
+    }
 
-/deep/ .cards {
-    display: flex;
-    flex-wrap: wrap;
-}
+    .cards {
+        display: flex;
+        flex-wrap: wrap;
+    }
 
-/deep/ .vs-card {
-    padding: 10px;
-}
+    .vs-card {
+        padding: 10px;
+    }
 
-/deep/ .vs-card__text {
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
+    .vs-card__text {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
 
-/deep/ p {
-    margin-bottom: 10px;
-    flex: 1;
-}
+    p {
+        margin-bottom: 10px;
+        flex: 1;
+    }
 
-/deep/ .buttons {
-    display: flex;
-}
+    .buttons {
+        display: flex;
+    }
 
-/deep/ .vs-card-content {
-    margin: 0px 20px 20px 0px;
-    flex: 1;
-}
+    .vs-card-content {
+        margin: 0px 20px 20px 0px;
+        flex: 1;
+    }
 
-/deep/ a {
-    text-decoration: none;
-}
+    a {
+        text-decoration: none;
+    }
 
-/* /deep/ .vs-card-content.type-1 .vs-card:hover {
+    /* .vs-card-content.type-1 .vs-card:hover {
         box-shadow: none;
         transform: none;
     } */
+}
 </style>

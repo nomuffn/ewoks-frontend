@@ -1,5 +1,5 @@
 <template>
-    <div class="main_content">
+    <div class="main_content miscellaneous">
         <vs-alert color="primary">
             If you have any additions for anything here let me know on discord.
         </vs-alert>
@@ -156,17 +156,19 @@ export default {
 };
 </script>
 
-<style scoped>
-/deep/ .col {
-    flex: inherit;
-}
+<style lang="scss">
+.miscellaneous {
+    .col {
+        flex: inherit;
+    }
 
-/deep/ li {
-    color: white;
-}
+    li {
+        color: white;
+    }
 
-/deep/ a {
-    color: rgb(var(--vs-primary));
-    font-weight: bold;
+    a {
+        color: rgb(var(--vs-primary));
+        font-weight: bold;
+    }
 }
 </style>

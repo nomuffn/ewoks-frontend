@@ -16,6 +16,9 @@
                         Approval Team.
                         <br />
                         Updates every three hours.
+                        <br />
+                        Recorded scores:
+                        {{ scoresCount.toLocaleString() }}
                     </p>
                     <vs-button icon border @click="dialog['players'] = true">
                         Approved Players
@@ -23,15 +26,18 @@
                 </div>
             </div>
 
-            <vs-button
-                class="disc"
-                :href="discord['href']"
-                icon
-                color="discord"
-            >
-                {{ discord["status"] }}
-                <i class="bx bxl-discord"></i>
-            </vs-button>
+            <div class="discordWrapper">
+                <vs-button
+                    class="disc"
+                    :href="discord['href']"
+                    icon
+                    color="discord"
+                >
+                    {{ discord["status"] }}
+                    <i class="bx bxl-discord"></i>
+                </vs-button>
+                <p>(Only needed to suggest players)</p>
+            </div>
         </div>
 
         <div class="main_content">
@@ -39,13 +45,6 @@
                 Currently can't get the song length so the timestamps are only:
                 <br />
                 time the score was set in the vod minus 2:20 minutes
-            </vs-alert>
-
-            <vs-alert color="warn">
-                Discord logins should work now, you will have to login again
-                though.
-                <br />
-                They're needed to suggest players btw :)
             </vs-alert>
 
             <div class="title_container">
@@ -78,22 +77,19 @@
             </div>
 
             <div class="scores">
-                <Loading v-if="loading" />
-                <Score v-for="score of scores" :key="score.id" :score="score" />
+                <loading-spinner v-if="loading" />
+                <score v-for="score of scores" :key="score.id" :score="score" />
             </div>
 
             <vs-pagination v-model="page" :length="paginationLength" />
         </div>
 
-        <SuggestPlayerDialog v-model="dialog" />
-        <PlayersDialog class="players-dialog" v-model="dialog" />
+        <suggest-player-dialog v-model="dialog" />
+        <players-dialog class="players-dialog" v-model="dialog" />
     </div>
 </template>
 
 <script>
-import Score from "@/components/maptts/Score.vue";
-import Loading from "@/components/LoadingSpinner.vue";
-
 export default {
     transition: "slide-bottom",
     watch: {
@@ -101,13 +97,6 @@ export default {
             this.loadScores();
             return null;
         },
-    },
-    components: {
-        Score,
-        SuggestPlayerDialog: () =>
-            import("@/components/maptts/SuggestPlayerDialog.vue"),
-        PlayersDialog: () => import("@/components/maptts/PlayersDialog.vue"),
-        Loading,
     },
     async created() {
         if ((this.isAuthenticated = await this.$isAuthenticated())) {
@@ -118,6 +107,7 @@ export default {
     data({ $config: { discordLogin } }) {
         return {
             scores: [],
+            scoresCount: 0,
             search: "",
             page: 1,
             paginationLength: 3,
@@ -154,6 +144,7 @@ export default {
             this.scores = await this.$mapttsApi.$get(
                 `scores/${this.page - 1}/${this.search}`
             );
+            this.scoresCount = await this.$mapttsApi.$get(`scores/count`);
 
             if (this.scores.length < 25) {
                 this.paginationLength = this.page;
@@ -189,8 +180,20 @@ export default {
         width: auto;
     }
 
-    .disc {
-        min-width: 85px;
+    .discordWrapper {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding-left: 30px;
+        .disc {
+            min-width: 85px;
+        }
+        p {
+            @media (max-width: 700px) {
+                display: none;
+            }
+            opacity: 0.5;
+        }
     }
 
     .row {

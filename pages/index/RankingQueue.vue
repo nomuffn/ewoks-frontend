@@ -1,5 +1,5 @@
 <template>
-    <div class="main_content">
+    <div class="main_content rankingQueue">
         <div class="col first">
             <div>
                 <div class="title_container">
@@ -33,8 +33,8 @@
                     </template>
                 </vs-alert>
 
-                <Loading v-if="loading" />
-                <TimeMapsList :maps="maps" />
+                <loading-spinner v-if="loading" />
+                <time-maps-list :maps="maps" />
             </div>
         </div>
         <div class="col" style="width: 50%; display: flex; flex-wrap: wrap">
@@ -42,7 +42,7 @@
                 <div class="title_container">
                     <h2 class="title">Latest RT/QAT Votes</h2>
                 </div>
-                <VotesFeed />
+                <votes-feed />
             </div>
             <div class="col">
                 <div class="title_container">
@@ -51,27 +51,15 @@
                     </h2>
                 </div>
                 <vs-alert color="primary"> Updates every hour </vs-alert>
-                <TopTenFeedList />
+                <top-ten-feed-list />
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import TimeMapsList from "@/components/TimeMapsList.vue";
-import VotesFeed from "@/components/VotesFeed.vue";
-import TopTenFeedList from "@/components/TopTenFeedList.vue";
-
-import Loading from "@/components/LoadingSpinner.vue";
-
 export default {
     transition: "slide-bottom",
-    components: {
-        TimeMapsList,
-        VotesFeed,
-        TopTenFeedList,
-        Loading,
-    },
     data() {
         return {
             maps: null,
@@ -93,68 +81,71 @@ export default {
 };
 </script>
 
-<style scoped>
-/deep/ .first .vs-card-content {
-    flex: 1;
-}
+<style lang="scss">
+.rankingQueue {
+    .first .vs-card-content {
+        flex: 1;
+    }
 
-/deep/ .vs-card {
-    height: 100%;
-    max-width: 100%;
-    display: flex;
-}
+    .vs-card {
+        height: 100%;
+        max-width: 100%;
+        display: flex;
+    }
 
-/deep/ .vs-card-content {
-    flex: 1;
-    min-width: 200px;
-    margin-bottom: 15px;
-}
+    .vs-card-content {
+        flex: 1;
+        min-width: 200px;
+        margin-bottom: 15px;
+    }
 
-/deep/ .first .vs-card-content {
-    margin: 0px 15px 15px 0px;
-}
+    .first .vs-card-content {
+        margin: 0px 15px 15px 0px;
+    }
 
-/deep/ .vs-card__text {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 100%;
-}
+    .vs-card__text {
+        padding: 20px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 100%;
+    }
 
-/deep/ .vs-card__text .time {
-    margin-top: 5px;
-    width: 100%;
-    text-align: right;
-}
+    .vs-card__text .time {
+        margin-top: 5px;
+        width: 100%;
+        text-align: right;
+    }
 
-/deep/ .time::first-letter {
-    color: rgb(var(--vs-color)) !important;
-    font-weight: bold;
-    font-size: 140%;
-    padding-top: 5px;
-    display: inline-block;
-}
+    .time::first-letter {
+        color: rgb(var(--vs-color)) !important;
+        font-weight: bold;
+        font-size: 140%;
+        padding-top: 5px;
+        display: inline-block;
+    }
 
-/deep/ .card-container {
-    display: flex;
-    flex-wrap: wrap;
-}
+    .card-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 
-/deep/ h3 {
-    font-size: 16px;
-    max-height: 45px;
-    overflow: hidden;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-}
+    h3 {
+        font-size: 16px;
+        max-height: 45px;
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+    }
 
-/deep/ .vs-button {
-    margin-top: 10px;
-}
+    .vs-button {
+        margin-top: 10px;
+    }
 
-/deep/ .vs-alert {
-    /* max-width: fit-content; */
+    .vs-alert {
+        /* max-width: fit-content; */
+    }
 }
 </style>

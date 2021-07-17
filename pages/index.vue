@@ -61,7 +61,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 .main {
     margin: 0 auto;
     max-width: 90%;
@@ -186,5 +186,9 @@ h3 {
     overflow-y: scroll;
     position: relative;
     height: 600px;
+}
+
+.showMore {
+    padding: 5px 10px;
 }
 </style>
