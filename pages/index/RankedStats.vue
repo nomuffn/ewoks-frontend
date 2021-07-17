@@ -1,5 +1,5 @@
 <template>
-    <div class="main_content">
+    <div class="main_content rankedstats">
         <div v-if="stats && mappers" class="col">
             <div class="title_container">
                 <h2 class="title">General</h2>
@@ -36,17 +36,25 @@
             <Loading v-if="loading['mapperdist']" />
             <div v-if="mappers" class="card-container">
                 <vs-card
-                    :key="mapper"
-                    v-for="(value, mapper, index) in mappers"
-                    v-on:click="openUrl(mapper)"
+                    :key="index"
+                    v-for="(mapper, index) in getMappers"
+                    v-on:click="openUrl(mapper[0])"
                 >
                     <template #text>
                         <h3>
                             <span class="colored">#{{ index + 1 }}</span>
-                            {{ mapper }}: {{ value }}
+                            {{ mapper[0] }}: {{ mapper[1] }}
                         </h3>
                     </template>
                 </vs-card>
+                <vs-button
+                    v-if="visibleMappers < Object.keys(mappers).length"
+                    class="showMore"
+                    icon
+                    @click="visibleMappers += 50"
+                >
+                    Show more
+                </vs-button>
             </div>
         </div>
 
@@ -58,17 +66,27 @@
             <Loading v-if="loading['mapperdiffdist']" />
             <div v-if="mappersDiffs" class="card-container">
                 <vs-card
-                    :key="mapper"
-                    v-for="(value, mapper, index) in mappersDiffs"
-                    v-on:click="openUrl(mapper)"
+                    :key="index"
+                    v-for="(mapper, index) in getMapperDiffs"
+                    v-on:click="openUrl(mapper[0])"
                 >
                     <template #text>
                         <h3>
                             <span class="colored">#{{ index + 1 }}</span>
-                            {{ mapper }}: {{ value }}
+                            {{ mapper[0] }}: {{ mapper[1] }}
                         </h3>
                     </template>
                 </vs-card>
+                <vs-button
+                    v-if="
+                        visibleMappersDiffs < Object.keys(mappersDiffs).length
+                    "
+                    class="showMore"
+                    icon
+                    @click="visibleMappersDiffs += 50"
+                >
+                    Show more
+                </vs-button>
             </div>
         </div>
 
@@ -80,23 +98,35 @@
             <Loading v-if="loading['artistdist']" />
             <div v-if="artists" class="card-container">
                 <vs-card
-                    :key="artist"
-                    v-for="(value, artist, index) in artists"
-                    v-on:click="openUrl(artist)"
+                    :key="index"
+                    v-for="(artist, index) in getArtists"
+                    v-on:click="openUrl(mapper[0])"
                 >
                     <template #text>
                         <h3>
                             <span class="colored">#{{ index + 1 }}</span>
-                            {{ artist }}: {{ value }}
+                            {{ artist[0] }}: {{ artist[1] }}
                         </h3>
                     </template>
                 </vs-card>
+                <vs-button
+                    v-if="visibleArtists < Object.keys(artists).length"
+                    class="showMore"
+                    icon
+                    @click="visibleArtists += 50"
+                >
+                    Show more
+                </vs-button>
             </div>
         </div>
     </div>
 </template>
 
 <script>
+/*
+ * TODO make code for lists nicer
+ */
+
 import Loading from "@/components/LoadingSpinner.vue";
 export default {
     transition: "slide-bottom",
@@ -106,6 +136,9 @@ export default {
             mappers: null,
             mappersDiffs: null,
             artists: null,
+            visibleMappers: 10,
+            visibleMappersDiffs: 10,
+            visibleArtists: 10,
             loading: {
                 ppdist: true,
                 mapperdist: true,
@@ -116,6 +149,20 @@ export default {
     },
     components: {
         Loading,
+    },
+    computed: {
+        getMappers() {
+            return Object.entries(this.mappers).slice(0, this.visibleMappers);
+        },
+        getMapperDiffs() {
+            return Object.entries(this.mappersDiffs).slice(
+                0,
+                this.visibleMappersDiffs
+            );
+        },
+        getArtists() {
+            return Object.entries(this.artists).slice(0, this.visibleArtists);
+        },
     },
     async created() {
         this.stats = await this.$defaultApi.$get("ppdist");
@@ -134,45 +181,51 @@ export default {
 };
 </script>
 
-<style scoped>
-.main_content {
+<style lang="scss" scoped>
+.rankedstats {
     justify-content: center;
-}
 
-/deep/ .card-container .vs-card-content:first-child .vs-card .colored {
-    color: #ffca28 !important;
-}
+    .card-container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
 
-/deep/ .card-container .vs-card-content:nth-child(2) .vs-card .colored {
-    color: #bdbdbd !important;
-}
+        .vs-card-content:first-child .vs-card .colored {
+            color: #ffca28 !important;
+        }
 
-/deep/ .card-container .vs-card-content:nth-child(3) .vs-card .colored {
-    color: #ffa726 !important;
-}
+        .vs-card-content:nth-child(2) .vs-card .colored {
+            color: #bdbdbd !important;
+        }
 
-/deep/ .col {
-    flex: inherit;
-    max-width: 300px;
-}
+        .vs-card-content:nth-child(3) .vs-card .colored {
+            color: #ffa726 !important;
+        }
+    }
 
-/deep/ h3 {
-    padding: 20px 10px 10px 10px;
-}
+    .col {
+        flex: inherit;
+        max-width: 300px;
+    }
 
-/deep/ .vs-card-content {
-    margin-bottom: 15px;
-}
+    h3 {
+        padding: 20px 10px 10px 10px;
+    }
 
-/deep/ .card-container {
-    margin-top: 10px;
-}
+    .vs-card-content {
+        margin-bottom: 15px;
+    }
 
-/deep/ .vs-card-content {
-    width: 100%;
-}
+    .card-container {
+        margin-top: 10px;
+    }
 
-/deep/ .vs-card {
-    max-width: 400px;
+    .vs-card-content {
+        width: 100%;
+    }
+
+    .vs-card {
+        max-width: 400px;
+    }
 }
 </style>

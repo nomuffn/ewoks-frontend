@@ -21,7 +21,7 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss">
 @import "@/assets/default.css";
 
 .navbar {

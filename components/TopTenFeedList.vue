@@ -1,8 +1,8 @@
 <template>
-    <div class="cards">
+    <div class="cards toptenfeed">
         <Loading v-if="loading" />
         <vs-card
-            v-for="(score, index) of scores"
+            v-for="(score, index) of getScores"
             :key="index"
             v-on:click="openUrl(score.leaderboard_id)"
         >
@@ -26,6 +26,14 @@
                 </div>
             </template>
         </vs-card>
+        <vs-button
+            v-if="visibleItems < 25"
+            class="showMore"
+            icon
+            @click="visibleItems += 10"
+        >
+            Show more
+        </vs-button>
     </div>
 </template>
 
@@ -36,6 +44,7 @@ export default {
         return {
             scores: [],
             loading: true,
+            visibleItems: 10,
         };
     },
     components: {
@@ -46,6 +55,11 @@ export default {
         this.scores = await this.$defaultApi.$get("toptenfeed");
         this.loading = false;
     },
+    computed: {
+        getScores() {
+            return this.scores?.slice(0, this.visibleItems);
+        },
+    },
     methods: {
         openUrl: function (id) {
             window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
@@ -54,40 +68,46 @@ export default {
 };
 </script>
 
-<style scoped>
-/deep/ .vs-card-content {
-    width: 100%;
-}
+<style lang="scss">
+.toptenfeed {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 
-/deep/ .vs-card {
-    max-width: 100%;
-}
+    .vs-card-content {
+        width: 100%;
+    }
 
-/deep/ .vs-card__text {
-    flex-direction: row !important;
-    text-align: left;
-}
+    .vs-card {
+        max-width: 100%;
+    }
 
-/deep/ .leaderboard {
-    width: 75%;
-    padding-right: 10px;
-}
+    .vs-card__text {
+        flex-direction: row !important;
+        text-align: left;
+    }
 
-/deep/ .score {
-    width: 25%;
-    text-align: right;
-    align-self: center;
-    text-align: right;
-    font-weight: bold;
-}
+    .leaderboard {
+        width: 75%;
+        padding-right: 10px;
+    }
 
-/deep/ .hours {
-    text-align: right;
-    font-weight: bold;
-}
+    .score {
+        width: 25%;
+        text-align: right;
+        align-self: center;
+        text-align: right;
+        font-weight: bold;
+    }
 
-/deep/ .pp {
-    color: rgb(var(--vs-color));
-    font-weight: bold;
+    .hours {
+        text-align: right;
+        font-weight: bold;
+    }
+
+    .pp {
+        color: rgb(var(--vs-color));
+        font-weight: bold;
+    }
 }
 </style>

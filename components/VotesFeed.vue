@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="votesFeed">
         <vs-alert v-if="stats" color="primary">
             Updates every hour
             <br />
@@ -32,7 +32,7 @@
         <Loading v-if="loading" />
         <div class="card-container">
             <vs-card
-                v-for="(vote, index) of votes"
+                v-for="(vote, index) of getVotes"
                 :key="index"
                 v-on:click="openUrl(vote.requestId)"
             >
@@ -59,6 +59,14 @@
                     </p>
                 </template>
             </vs-card>
+            <vs-button
+                v-if="visibleItems < 25"
+                class="showMore"
+                icon
+                @click="visibleItems += 10"
+            >
+                Show more
+            </vs-button>
         </div>
     </div>
 </template>
@@ -71,6 +79,7 @@ export default {
             stats: null,
             votes: null,
             loading: true,
+            visibleItems: 10,
         };
     },
     components: {
@@ -103,6 +112,11 @@ export default {
             }
         }
     },
+    computed: {
+        getVotes() {
+            return this.votes?.slice(0, this.visibleItems);
+        },
+    },
     methods: {
         openUrl: function (id) {
             window.open(
@@ -123,47 +137,49 @@ export default {
 };
 </script>
 
-<style scoped>
-/deep/ .spans {
-    width: 50%;
-    display: flex;
-    flex-flow: column;
-}
+<style lang="scss">
+.votesFeed {
+    .spans {
+        width: 50%;
+        display: flex;
+        flex-flow: column;
+    }
 
-/deep/ p {
-    width: 50% !important;
-}
+    p {
+        width: 50% !important;
+    }
 
-/deep/ span span {
-    color: green;
-    padding: 0;
-    font-weight: bold;
-}
+    span span {
+        color: green;
+        padding: 0;
+        font-weight: bold;
+    }
 
-/deep/ .red {
-    color: #b71c1c;
-}
+    .red {
+        color: #b71c1c;
+    }
 
-/deep/ .vs-card-content {
-    width: 100%;
-    flex: 100% !important;
-}
+    .vs-card-content {
+        width: 100%;
+        flex: 100% !important;
+    }
 
-/deep/ .vs-card {
-    max-width: 100%;
-}
+    .vs-card {
+        max-width: 100%;
+    }
 
-/deep/ .vs-card__text {
-    flex-wrap: wrap;
-    flex-direction: row !important;
-}
+    .vs-card__text {
+        flex-wrap: wrap;
+        flex-direction: row !important;
+    }
 
-/deep/ .vs-card__text h3 {
-    width: 100%;
-    margin-bottom: 5px;
-}
+    .vs-card__text h3 {
+        width: 100%;
+        margin-bottom: 5px;
+    }
 
-/deep/ .time {
-    align-self: center;
+    .time {
+        align-self: center;
+    }
 }
 </style>

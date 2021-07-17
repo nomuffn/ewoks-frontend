@@ -4,8 +4,8 @@
             <h3>Approved players the script checks</h3>
         </template>
 
-        <div class="con-content">
-            <div
+        <ul class="con-content">
+            <li
                 class="player"
                 v-for="player of players"
                 :key="player.scoresaberId"
@@ -13,15 +13,15 @@
                 <a
                     target="_blank"
                     :href="`https://www.twitch.tv/${player.twitchName}`"
-                    ><b>{{ `twitch.tv/${player.twitchName}` }}</b></a
+                    ><b>{{ `${player.twitchName}` }}</b></a
                 >
                 <a
                     target="_blank"
                     :href="`https://scoresaber.com/u/${player.scoresaberId}`"
-                    >> {{ `scoresaber.com/u/${player.scoresaberId}` }}</a
+                    >{{ `scoresaber.com/u/${player.scoresaberId}` }}</a
                 >
-            </div>
-        </div>
+            </li>
+        </ul>
     </vs-dialog>
 </template>
 
@@ -54,7 +54,7 @@ export default {
     .player {
         margin-bottom: 20px;
         text-align: left;
-        padding: 0px 50px;
+        padding: 0px 50px 0px 0px;
         display: flex;
         flex-direction: column;
 
@@ -80,6 +80,17 @@ export default {
             }
         }
     }
+
+    ul li::before {
+        content: "\2022";
+        color: white;
+        font-weight: bold;
+        display: inline-block;
+        width: 1em;
+        margin-left: -1em;
+        position: absolute;
+    }
+
     h3 {
         margin: 20px 0px;
     }
