@@ -6,13 +6,17 @@
                     <h3>
                         <a
                             target="_blank"
-                            :href="`https://scoresaber.com/u/${score.player.scoresaberId}`"
+                            :href="
+                                `https://scoresaber.com/u/${score.player.scoresaberId}`
+                            "
                             >{{ score.player.twitchName }}</a
                         >
                     </h3>
                     <a
                         target="_blank"
-                        :href="`https://scoresaber.com/leaderboard/${score.leaderboardId}`"
+                        :href="
+                            `https://scoresaber.com/leaderboard/${score.leaderboardId}`
+                        "
                         >{{
                             `${score.leaderboardSongAuthor} - ${score.leaderboardName}`
                         }}
@@ -43,10 +47,10 @@
 <script>
 export default {
     props: {
-        score: Object,
+        score: Object
     },
     methods: {
-        openUrl: function (id) {
+        openUrl: function(id) {
             window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
         },
         getAgo(timeSet) {
@@ -67,8 +71,8 @@ export default {
                 1,
                 this.getPosition(difficultyRaw, "_", 2)
             );
-        },
-    },
+        }
+    }
 };
 </script>
 
@@ -81,11 +85,10 @@ export default {
         flex-wrap: wrap;
         justify-content: space-between;
         align-items: center;
-        padding-top: 20px;
 
         .left {
             text-align: left;
-            margin-left: 20px;
+            margin-left: 10px;
             min-width: 350px;
             flex: 1;
 

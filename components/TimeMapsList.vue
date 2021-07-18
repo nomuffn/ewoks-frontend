@@ -1,5 +1,5 @@
 <template>
-    <div class="card-container">
+    <div class="cards">
         <vs-card
             :key="index"
             v-for="(map, index) of maps"
@@ -18,7 +18,7 @@
 export default {
     props: ["maps"],
     methods: {
-        openUrl: function (id) {
+        openUrl: function(id) {
             if (id != null)
                 window.open(
                     "https://scoresaber.com/leaderboard/" + id,
@@ -31,8 +31,8 @@ export default {
                 return `<p class="time">~${hoursleft} hours</p>`;
             else
                 return "<p style='color: green; text-align: right; font-weight: bold' >RANKED</p>";
-        },
-    },
+        }
+    }
 };
 </script>
 

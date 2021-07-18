@@ -6,33 +6,33 @@ export default {
     head: {
         title: "Ewoks",
         htmlAttrs: {
-            lang: "en",
+            lang: "en"
         },
         meta: [
             {
-                charset: "utf-8",
+                charset: "utf-8"
             },
             {
                 name: "viewport",
-                content: "width=device-width, initial-scale=1",
+                content: "width=device-width, initial-scale=1"
             },
             {
                 hid: "description",
                 name: "description",
-                content: "",
-            },
+                content: ""
+            }
         ],
         link: [
             {
                 rel: "icon",
                 type: "image/x-icon",
-                href: "/favicon.ico",
-            },
+                href: "/favicon.ico"
+            }
         ],
         bodyAttrs: {
             class: "hidden darken",
-            "vs-theme": "dark",
-        },
+            "vs-theme": "dark"
+        }
     },
 
     publicRuntimeConfig: {
@@ -41,18 +41,18 @@ export default {
             (process.env.API_URL || "https://ewoks.de/") +
             "backend/oauth/login/discord",
         discordLogout:
-            (process.env.API_URL || "https://ewoks.de/") + "backend/logout",
+            (process.env.API_URL || "https://ewoks.de/") + "backend/logout"
     },
 
     generate: {
-        fallback: true,
+        fallback: true
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: [
         "vuesax/dist/vuesax.css",
-        "~assets/default.css",
         "boxicons/css/boxicons.min.css",
+        "~/assets/scss/global.scss"
     ],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
@@ -60,7 +60,7 @@ export default {
         "@/plugins/vuesax",
         "@/plugins/defaultApi",
         "@/plugins/mapttsApi",
-        "@/plugins/auth",
+        "@/plugins/auth"
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -73,7 +73,7 @@ export default {
     ],
 
     router: {
-        middleware: "defaultroute",
+        middleware: "defaultroute"
     },
 
     // Modules: https://go.nuxtjs.dev/config-modules
@@ -85,14 +85,14 @@ export default {
             "nuxt-matomo",
             {
                 matomoUrl: "//matomo.ewoks.de/",
-                siteId: 1,
-            },
-        ],
+                siteId: 1
+            }
+        ]
     ],
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {},
     server: {
-        host: "0.0.0.0",
-    },
+        host: "0.0.0.0"
+    }
 };

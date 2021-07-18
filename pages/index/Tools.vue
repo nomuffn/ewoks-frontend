@@ -1,276 +1,273 @@
 <template>
-    <div class="main_content tools">
-        <div class="col">
-            <h2 class="title">Tools</h2>
+    <div class="tools">
+        <div class="content">
+            <div class="col">
+                <h2 class="title">Tools</h2>
 
-            <div class="cards">
-                <vs-card>
-                    <template #title>
-                        <h3>Interactive walls length fixer for rankability</h3>
-                    </template>
-                    <template #text>
-                        <p>
-                            Thanks Qwasyx for proper wall detection code since
-                            I'm lazy.
-                            <br />
-                            <br />
-                            Enter bpm and upload file. If it doesnt work try to
-                            refresh and try again.
-                            <br />
-                            If it still doesnt work message me on discord.
-                        </p>
+                <div class="cards">
+                    <vs-card>
+                        <template #text>
+                            <h3>
+                                Interactive walls length fixer for rankability
+                            </h3>
+                            <p>
+                                Thanks Qwasyx for proper wall detection code
+                                since I'm lazy.
+                                <br />
+                                <br />
+                                Enter bpm and upload file. If it doesnt work try
+                                to refresh and try again.
+                                <br />
+                                If it still doesnt work message me on discord.
+                            </p>
 
-                        <vs-input
-                            label-placeholder="BPM"
-                            primary
-                            v-model="bpm"
-                        />
-
-                        <div class="buttons" id="fileinputblaWalls">
-                            <div style="flex: 1"></div>
-
-                            <vs-button
-                                border
-                                style="min-width: 120px"
+                            <vs-input
+                                label-placeholder="BPM"
                                 primary
-                                animation-type="scale"
-                                @click="$refs.wallsInput.click()"
-                            >
-                                <i class="bx bx-upload"></i>
-                                <template #animate>
-                                    Upload difficulty
-                                </template>
-                            </vs-button>
-                            <input
-                                @change="fixWalls"
-                                style="display: None"
-                                type="file"
-                                ref="wallsInput"
-                                id="file"
-                                name="file"
-                                accept=".dat,.json"
+                                v-model="bpm"
                             />
-                        </div>
-                    </template>
-                </vs-card>
 
-                <vs-card>
-                    <template #title>
-                        <h3>Notes to just boring dots as timings converter</h3>
-                    </template>
-                    <template #text>
-                        <p>
-                            If it doesnt work try to refresh and try again. If
-                            it still doesnt work message me on discord.
-                        </p>
+                            <div class="buttons" id="fileinputblaWalls">
+                                <div style="flex: 1"></div>
 
-                        <div class="buttons" id="fileinputbla">
-                            <div style="flex: 1"></div>
-
-                            <vs-button
-                                border
-                                style="min-width: 120px"
-                                primary
-                                animation-type="scale"
-                                @click="$refs.dotsInput.click()"
-                            >
-                                <i class="bx bx-upload"></i>
-                                <template #animate>
-                                    Upload difficulty
-                                </template>
-                            </vs-button>
-                            <input
-                                @change="convertToDots"
-                                style="display: None"
-                                type="file"
-                                ref="dotsInput"
-                                id="file"
-                                name="file"
-                                accept=".dat,.json"
-                            />
-                        </div>
-                    </template>
-                </vs-card>
-
-                <vs-card>
-                    <template #title>
-                        <h3>Ranking Queue Playlist</h3>
-                    </template>
-                    <template #text>
-                        <p>
-                            Playlist will update every 3 hours.
-                            <br />
-                            Use Beatlist, Modassistant or the playlist
-                            downloader to the right to download playlists.
-                            <br />
-                        </p>
-
-                        <div class="buttons">
-                            <div style="flex: 1"></div>
-
-                            <a
-                                href="bsplaylist://playlist/https://ewoks.de/playlists/InRankingQueue.json"
-                                download
-                            >
                                 <vs-button
                                     border
                                     style="min-width: 120px"
                                     primary
                                     animation-type="scale"
+                                    @click="$refs.wallsInput.click()"
                                 >
-                                    <i class="bx bx-cloud-download"></i>
+                                    <i class="bx bx-upload"></i>
                                     <template #animate>
-                                        One-Click Install
+                                        Upload difficulty
                                     </template>
                                 </vs-button>
-                            </a>
+                                <input
+                                    @change="fixWalls"
+                                    style="display: None"
+                                    type="file"
+                                    ref="wallsInput"
+                                    id="file"
+                                    name="file"
+                                    accept=".dat,.json"
+                                />
+                            </div>
+                        </template>
+                    </vs-card>
 
-                            <a href="playlists/InRankingQueue.json" download>
+                    <vs-card>
+                        <template #text>
+                            <h3>
+                                Notes to just boring dots as timings converter
+                            </h3>
+                            <p>
+                                If it doesnt work try to refresh and try again.
+                                If it still doesnt work message me on discord.
+                            </p>
+
+                            <div class="buttons" id="fileinputbla">
+                                <div style="flex: 1"></div>
+
+                                <vs-button
+                                    border
+                                    style="min-width: 120px"
+                                    primary
+                                    animation-type="scale"
+                                    @click="$refs.dotsInput.click()"
+                                >
+                                    <i class="bx bx-upload"></i>
+                                    <template #animate>
+                                        Upload difficulty
+                                    </template>
+                                </vs-button>
+                                <input
+                                    @change="convertToDots"
+                                    style="display: None"
+                                    type="file"
+                                    ref="dotsInput"
+                                    id="file"
+                                    name="file"
+                                    accept=".dat,.json"
+                                />
+                            </div>
+                        </template>
+                    </vs-card>
+
+                    <vs-card>
+                        <template #text>
+                            <h3>Ranking Queue Playlist</h3>
+                            <p>
+                                Playlist will update every 3 hours.
+                                <br />
+                                Use Beatlist, Modassistant or the playlist
+                                downloader to the right to download playlists.
+                                <br />
+                            </p>
+
+                            <div class="buttons">
+                                <div style="flex: 1"></div>
+
+                                <a
+                                    href="bsplaylist://playlist/https://ewoks.de/playlists/InRankingQueue.json"
+                                    download
+                                >
+                                    <vs-button
+                                        border
+                                        style="min-width: 120px"
+                                        primary
+                                        animation-type="scale"
+                                    >
+                                        <i class="bx bx-cloud-download"></i>
+                                        <template #animate>
+                                            One-Click Install
+                                        </template>
+                                    </vs-button>
+                                </a>
+
+                                <a
+                                    href="playlists/InRankingQueue.json"
+                                    download
+                                >
+                                    <vs-button
+                                        border
+                                        style="min-width: 80px"
+                                        primary
+                                        animation-type="scale"
+                                    >
+                                        <i class="bx bx-download"></i>
+                                        <template #animate> Download </template>
+                                    </vs-button>
+                                </a>
+                            </div>
+                        </template>
+                    </vs-card>
+                </div>
+            </div>
+
+            <div class="col">
+                <h2 class="title">Scripts</h2>
+
+                <vs-alert color="primary">
+                    If you find or have other scripts that you'd like to get
+                    listed here let me know on discord.
+                </vs-alert>
+
+                <div class="cards">
+                    <vs-card>
+                        <template #text>
+                            <h3>CustomLevelsToPlaylist</h3>
+                            <p>
+                                Converts CustomLevels to a playlist :o
+                                <br />
+                                - Run in a CustomLevels folder
+                            </p>
+
+                            <div class="buttons">
+                                <div style="flex: 1"></div>
+                                <vs-button
+                                    border
+                                    style="min-width: 60px"
+                                    primary
+                                    animation-type="scale"
+                                    blank
+                                    href="scripts/CustomLevelsToPlaylist Converter.py"
+                                >
+                                    <i class="bx bx-code-alt"></i>
+                                    <template #animate> Source </template>
+                                </vs-button>
+
                                 <vs-button
                                     border
                                     style="min-width: 80px"
                                     primary
                                     animation-type="scale"
+                                    blank
+                                    href="scripts/CustomLevelsToPlaylist Converter.exe"
                                 >
-                                    <i class="bx bx-download"></i>
+                                    <i class="bx bxs-download"></i>
                                     <template #animate> Download </template>
                                 </vs-button>
-                            </a>
-                        </div>
-                    </template>
-                </vs-card>
-            </div>
-        </div>
+                            </div>
+                        </template>
+                    </vs-card>
 
-        <div class="col">
-            <h2 class="title">Scripts</h2>
+                    <vs-card>
+                        <template #text>
+                            <h3>BlueOrRedRemover</h3>
+                            <p>
+                                Removes either all blue or red notes.
+                                <br />
+                                - Just drag a difficulty on the file
+                            </p>
 
-            <vs-alert color="primary">
-                If you find or have other scripts that you'd like to get listed
-                here let me know on discord.
-            </vs-alert>
+                            <div class="buttons">
+                                <div style="flex: 1"></div>
+                                <vs-button
+                                    border
+                                    style="min-width: 60px"
+                                    primary
+                                    animation-type="scale"
+                                    blank
+                                    href="scripts/BlueOrRedRemoverYesYEs.py"
+                                >
+                                    <i class="bx bx-code-alt"></i>
+                                    <template #animate> Source </template>
+                                </vs-button>
 
-            <div class="cards">
-                <vs-card>
-                    <template #title>
-                        <h3>CustomLevelsToPlaylist</h3>
-                    </template>
-                    <template #text>
-                        <p>
-                            Converts CustomLevels to a playlist :o
-                            <br />
-                            - Run in a CustomLevels folder
-                        </p>
+                                <vs-button
+                                    border
+                                    style="min-width: 80px"
+                                    primary
+                                    animation-type="scale"
+                                    blank
+                                    href="scripts/BlueOrRedRemoverYesYEs.exe"
+                                >
+                                    <i class="bx bxs-download"></i>
+                                    <template #animate> Download </template>
+                                </vs-button>
+                            </div>
+                        </template>
+                    </vs-card>
 
-                        <div class="buttons">
-                            <div style="flex: 1"></div>
-                            <vs-button
-                                border
-                                style="min-width: 60px"
-                                primary
-                                animation-type="scale"
-                                blank
-                                href="scripts/CustomLevelsToPlaylist Converter.py"
-                            >
-                                <i class="bx bx-code-alt"></i>
-                                <template #animate> Source </template>
-                            </vs-button>
+                    <vs-card>
+                        <template #text>
+                            <h3>Bookmarks 2 Text</h3>
+                            <p>
+                                Converts bookmarks to pure text so you can
+                                rankability/playability mod in the editor.
+                                <br />
+                                - Run in a song folder
+                            </p>
 
-                            <vs-button
-                                border
-                                style="min-width: 80px"
-                                primary
-                                animation-type="scale"
-                                blank
-                                href="scripts/CustomLevelsToPlaylist Converter.exe"
-                            >
-                                <i class="bx bxs-download"></i>
-                                <template #animate> Download </template>
-                            </vs-button>
-                        </div>
-                    </template>
-                </vs-card>
+                            <div class="buttons">
+                                <div style="flex: 1"></div>
+                                <vs-button
+                                    border
+                                    style="min-width: 60px"
+                                    primary
+                                    animation-type="scale"
+                                    blank
+                                    href="scripts/bookmarks2Text.py"
+                                >
+                                    <i class="bx bx-code-alt"></i>
+                                    <template #animate> Source </template>
+                                </vs-button>
 
-                <vs-card>
-                    <template #title>
-                        <h3>BlueOrRedRemover</h3>
-                    </template>
-                    <template #text>
-                        <p>
-                            Removes either all blue or red notes.
-                            <br />
-                            - Just drag a difficulty on the file
-                        </p>
-
-                        <div class="buttons">
-                            <div style="flex: 1"></div>
-                            <vs-button
-                                border
-                                style="min-width: 60px"
-                                primary
-                                animation-type="scale"
-                                blank
-                                href="scripts/BlueOrRedRemoverYesYEs.py"
-                            >
-                                <i class="bx bx-code-alt"></i>
-                                <template #animate> Source </template>
-                            </vs-button>
-
-                            <vs-button
-                                border
-                                style="min-width: 80px"
-                                primary
-                                animation-type="scale"
-                                blank
-                                href="scripts/BlueOrRedRemoverYesYEs.exe"
-                            >
-                                <i class="bx bxs-download"></i>
-                                <template #animate> Download </template>
-                            </vs-button>
-                        </div>
-                    </template>
-                </vs-card>
-
-                <vs-card>
-                    <template #title>
-                        <h3>Bookmarks 2 Text</h3>
-                    </template>
-                    <template #text>
-                        <p>
-                            Converts bookmarks to pure text so you can
-                            rankability/playability mod in the editor.
-                            <br />
-                            - Run in a song folder
-                        </p>
-
-                        <div class="buttons">
-                            <div style="flex: 1"></div>
-                            <vs-button
-                                border
-                                style="min-width: 60px"
-                                primary
-                                animation-type="scale"
-                                blank
-                                href="scripts/bookmarks2Text.py"
-                            >
-                                <i class="bx bx-code-alt"></i>
-                                <template #animate> Source </template>
-                            </vs-button>
-
-                            <vs-button
-                                border
-                                style="min-width: 80px"
-                                primary
-                                animation-type="scale"
-                                blank
-                                href="scripts/bookmarks2Text.exe"
-                            >
-                                <i class="bx bxs-download"></i>
-                                <template #animate> Download </template>
-                            </vs-button>
-                        </div>
-                    </template>
-                </vs-card>
+                                <vs-button
+                                    border
+                                    style="min-width: 80px"
+                                    primary
+                                    animation-type="scale"
+                                    blank
+                                    href="scripts/bookmarks2Text.exe"
+                                >
+                                    <i class="bx bxs-download"></i>
+                                    <template #animate> Download </template>
+                                </vs-button>
+                            </div>
+                        </template>
+                    </vs-card>
+                </div>
             </div>
         </div>
     </div>
@@ -281,7 +278,7 @@ export default {
     transition: "slide-bottom",
     data() {
         return {
-            bpm: "",
+            bpm: ""
         };
     },
     methods: {
@@ -290,7 +287,7 @@ export default {
 
             if (f) {
                 var r = new FileReader();
-                r.onload = function (e) {
+                r.onload = function(e) {
                     var contents = e.target.result;
                     try {
                         var obj = JSON.parse(contents);
@@ -367,7 +364,7 @@ export default {
 
             if (f) {
                 var r = new FileReader();
-                r.onload = function (e) {
+                r.onload = function(e) {
                     var contents = e.target.result;
                     try {
                         var obj = JSON.parse(contents);
@@ -416,8 +413,8 @@ export default {
             } else {
                 alert("Failed to load file");
             }
-        },
-    },
+        }
+    }
 };
 </script>
 
@@ -435,10 +432,6 @@ export default {
     .cards {
         display: flex;
         flex-wrap: wrap;
-    }
-
-    .vs-card {
-        padding: 10px;
     }
 
     .vs-card__text {

@@ -1,57 +1,58 @@
 <template>
-    <div class="main_content rankingQueue">
-        <div class="col first">
-            <div>
-                <div class="title_container">
-                    <h2 class="title">Qualified Maps</h2>
-                    <vs-button
-                        border
-                        href="https://scoresaber.com/ranking/requests"
-                        blank
-                    >
-                        Rank Requests
-                    </vs-button>
-                </div>
-                <vs-alert color="primary">
-                    If a map disappears from the queue it will be seen as a new
-                    qualified map.
-                    <br />
-                    <br />
-                    Mapsets ranked in the last: (with a few exceptions)
-                    <br />
+    <div class="rankingQueue">
+        <div class="content">
+            <div class="col first">
+                <div>
+                    <div class="title_container">
+                        <h2 class="title">Qualified Maps</h2>
+                        <vs-button
+                            href="https://scoresaber.com/ranking/requests"
+                            blank
+                        >
+                            Rank Requests
+                        </vs-button>
+                    </div>
+                    <vs-alert color="primary">
+                        If a map disappears from the queue it will be seen as a
+                        new qualified map.
+                        <br />
+                        <br />
+                        Mapsets ranked in the last: (with a few exceptions)
+                        <br />
 
-                    <template v-if="stats">
-                        - week: <b>{{ stats["168"] }}</b>
-                        <br />
-                        - 2 weeks: <b>{{ stats["336"] }}</b>
-                        <br />
-                        - month: <b>{{ stats["720"] }}</b>
-                        <br />
-                        - 3 months: <b>{{ stats["2160"] }}</b>
-                        <br />
-                        - 6 months: <b>{{ stats["4320"] }}</b>
-                    </template>
-                </vs-alert>
+                        <template v-if="stats">
+                            - week: <b>{{ stats["168"] }}</b>
+                            <br />
+                            - 2 weeks: <b>{{ stats["336"] }}</b>
+                            <br />
+                            - month: <b>{{ stats["720"] }}</b>
+                            <br />
+                            - 3 months: <b>{{ stats["2160"] }}</b>
+                            <br />
+                            - 6 months: <b>{{ stats["4320"] }}</b>
+                        </template>
+                    </vs-alert>
 
-                <loading-spinner v-if="loading" />
-                <time-maps-list :maps="maps" />
-            </div>
-        </div>
-        <div class="col" style="width: 50%; display: flex; flex-wrap: wrap">
-            <div class="col">
-                <div class="title_container">
-                    <h2 class="title">Latest RT/QAT Votes</h2>
+                    <loading-spinner v-if="loading" />
+                    <time-maps-list :maps="maps" />
                 </div>
-                <votes-feed />
             </div>
-            <div class="col">
-                <div class="title_container">
-                    <h2 class="title">
-                        Top Ten Scores Feed for Top 150 Ranked Songs
-                    </h2>
+            <div class="col" style="width: 50%; display: flex; flex-wrap: wrap">
+                <div class="col">
+                    <div class="title_container">
+                        <h2 class="title">Latest RT/QAT Votes</h2>
+                    </div>
+                    <votes-feed />
                 </div>
-                <vs-alert color="primary"> Updates every hour </vs-alert>
-                <top-ten-feed-list />
+                <div class="col">
+                    <div class="title_container">
+                        <h2 class="title">
+                            Top Ten Scores Feed for Top 150 Ranked Songs
+                        </h2>
+                    </div>
+                    <vs-alert color="primary"> Updates every hour </vs-alert>
+                    <top-ten-feed-list />
+                </div>
             </div>
         </div>
     </div>
@@ -64,7 +65,7 @@ export default {
         return {
             maps: null,
             stats: null,
-            loading: true,
+            loading: true
         };
     },
     async created() {
@@ -77,7 +78,7 @@ export default {
             this.$nuxt.$loading.start();
             setTimeout(() => this.$nuxt.$loading.finish(), 500);
         });
-    },
+    }
 };
 </script>
 
@@ -96,15 +97,14 @@ export default {
     .vs-card-content {
         flex: 1;
         min-width: 200px;
-        margin-bottom: 15px;
+        margin-bottom: 14px;
     }
 
     .first .vs-card-content {
-        margin: 0px 15px 15px 0px;
+        margin: 0px 7px 14px 7px;
     }
 
     .vs-card__text {
-        padding: 20px;
         display: flex;
         flex-direction: column;
         justify-content: center;
@@ -125,7 +125,7 @@ export default {
         display: inline-block;
     }
 
-    .card-container {
+    .cards {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;

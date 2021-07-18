@@ -30,7 +30,7 @@
         </vs-alert>
 
         <Loading v-if="loading" />
-        <div class="card-container">
+        <div class="cards">
             <vs-card
                 v-for="(vote, index) of getVotes"
                 :key="index"
@@ -46,7 +46,7 @@
                         >
                             <span
                                 v-bind:class="{
-                                    red: string[0] == 'qat',
+                                    red: string[0] == 'qat'
                                 }"
                                 >{{ string[0].toUpperCase() }}</span
                             >
@@ -79,11 +79,11 @@ export default {
             stats: null,
             votes: null,
             loading: true,
-            visibleItems: 10,
+            visibleItems: 10
         };
     },
     components: {
-        Loading,
+        Loading
     },
     async created() {
         this.stats = await this.$defaultApi.$get("rq/stats");
@@ -115,10 +115,10 @@ export default {
     computed: {
         getVotes() {
             return this.votes?.slice(0, this.visibleItems);
-        },
+        }
     },
     methods: {
-        openUrl: function (id) {
+        openUrl: function(id) {
             window.open(
                 "https://new.scoresaber.com/ranking/request/" + id,
                 "_blank"
@@ -132,8 +132,8 @@ export default {
                     separateWord[i].substring(1);
             }
             return separateWord.join(" ");
-        },
-    },
+        }
+    }
 };
 </script>
 
