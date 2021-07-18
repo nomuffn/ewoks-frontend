@@ -1,0 +1,40 @@
+.vs-card {
+    border-radius: 7px;
+    padding: 20px;
+
+    @media (max-width: 800px) {
+        max-width: 100% !important;
+        width: 100%;
+    }
+}
+
+.scorecard .vs-card {
+    max-width: none;
+}
+.scorecard .vs-card,
+.tools .vs-card {
+    cursor: auto;
+}
+.vs-input__label {
+    color: #fff;
+}
+
+.players-dialog .vs-dialog .con-content {
+    overflow-y: scroll;
+    position: relative;
+    height: 600px;
+}
+
+.vs-alert {
+    margin: 10px 0;
+    height: auto !important;
+    border-radius: 0px 7px 7px 0px !important;
+
+    .vs-alert__content {
+        min-height: auto !important;
+    }
+}
+
+.vs-card__text {
+    padding: 0;
+}

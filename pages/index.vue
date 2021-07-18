@@ -1,194 +1,86 @@
 <template>
-    <div class="home">
-        <vs-sidebar square v-model="active" open>
-            <vs-sidebar-item to="/RankingQueue" id="/RankingQueue">
-                <template #icon>
-                    <i class="bx bx-list-ul"></i>
-                </template>
-                Ranking Queue
-            </vs-sidebar-item>
-
-            <vs-sidebar-item to="/MapTts" id="/MapTts">
-                <template #icon>
-                    <i class="bx bx-tv"></i>
-                </template>
-                Map Twitch
-            </vs-sidebar-item>
-
-            <vs-sidebar-item to="/Tools" id="/Tools">
-                <template #icon>
-                    <i class="bx bxs-category"></i>
-                </template>
-                Tools & Scripts
-            </vs-sidebar-item>
-
-            <vs-sidebar-item to="/RankedStats" id="/RankedStats">
-                <template #icon>
-                    <i class="bx bx-stats"></i>
-                </template>
-                Ranked Stats
-            </vs-sidebar-item>
-
-            <vs-sidebar-item to="/Miscellaneous" id="/Miscellaneous">
-                <template #icon>
-                    <i class="bx bx-library"></i>
-                </template>
-                Miscellaneous
-            </vs-sidebar-item>
-
-            <!-- <vs-sidebar-item to="BeatCat" id="/BeatCat">
-                <template #icon>
-                    <i class="bx bxs-tag-alt"></i>
-                </template>
-                BeatCat WIP
-            </vs-sidebar-item> -->
-        </vs-sidebar>
-
+    <div class="page">
         <NuxtChild keep-alive />
     </div>
 </template>
 
 <script>
-export default {
-    created() {
-        this.active = this.$route.path;
-    },
-    data() {
-        return {
-            active: "",
-        };
-    },
-};
+export default {};
 </script>
 
 <style lang="scss">
-.main {
-    margin: 0 auto;
-    max-width: 90%;
-    margin-top: 10px;
-    margin-bottom: 100px;
-}
+.page {
+    .content {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 auto;
+        max-width: 90%;
+        margin-top: 10px;
+        margin-bottom: 100px;
+    }
 
-.main_content {
-    display: flex;
-    flex-wrap: wrap;
-    margin: 0 auto;
-    max-width: 90%;
-    margin-top: 10px;
-    margin-bottom: 100px;
-}
+    .col {
+        flex: 1;
+        min-width: 250px;
+        margin: 0px 10px;
 
-.vs-navbar__left {
-    height: 80px;
-    position: relative;
-}
+        @media (max-width: 800px) {
+            max-width: 100% !important;
+            width: 100%;
+        }
+    }
 
-.vs-navbar__left .title {
-    position: absolute;
-}
+    // .vs-card {
+    //     height: 100%;
+    //     max-width: 100%;
+    //     display: flex;
+    // }
 
-.vs-sidebar-content {
-    width: 100%;
-    height: auto !important;
-    max-width: 100%;
-    position: relative;
-}
+    // .vs-card-content {
+    //     flex: 1;
+    //     min-width: 200px;
+    //     margin-bottom: 15px;
+    //     margin: 0px 5px 15px 5px;
+    // }
 
-.vs-sidebar {
-    flex-direction: row !important;
-    justify-content: center !important;
-    flex-wrap: wrap;
-    padding: 0px 20px;
-}
+    // .vs-card__text {
+    //     padding: 20px;
+    //     display: flex;
+    //     flex-direction: column;
+    //     justify-content: center;
+    //     width: 100%;
 
-.vs-sidebar__item {
-    width: auto;
-    margin: 0px 10px;
-}
+    //     .time {
+    //         margin-top: 5px;
+    //         width: 100%;
+    //         text-align: right;
 
-.vs-sidebar__item::after {
-    display: none;
-}
+    //         &::first-letter {
+    //             color: rgb(var(--vs-color)) !important;
+    //             font-weight: bold;
+    //             font-size: 140%;
+    //             padding-top: 5px;
+    //             display: inline-block;
+    //         }
+    //     }
+    // }
 
-.vs-alert {
-    height: auto !important;
-}
+    // .card-container {
+    //     display: flex;
+    //     flex-wrap: wrap;
+    // }
 
-.vs-alert__content {
-    min-height: auto !important;
-}
+    // .vs-button {
+    //     margin-top: 10px;
+    // }
 
-.title {
-    font-weight: 400;
-    font-size: 30px;
-    color: #fff;
-    letter-spacing: 1px;
-    text-transform: capitalize;
-    padding: 20px;
-}
-
-.text {
-    color: #fff;
-    margin: 20px 10px;
-}
-
-h3 {
-    font-size: 16px;
-}
-
-.title_container {
-    display: flex;
-    min-height: 90px;
-    align-items: center;
-}
-
-.col {
-    flex: 1;
-    min-width: 250px;
-    margin: 0px 10px;
-}
-
-.vs-alert {
-    margin: 10px 0;
-}
-
-.sidebar {
-    height: 100%;
-}
-
-.sidebar .vs-alert {
-    width: 85%;
-    margin-top: 100%;
-}
-
-.colored {
-    color: rgb(var(--vs-color)) !important;
-    font-weight: bold;
-}
-
-.vs-card {
-    border-radius: 15px;
-}
-.scorecard .vs-card {
-    /* didnt work in maptts/Score.vue??? */
-    max-width: none;
-}
-.scorecard .vs-card,
-.tools .vs-card {
-    cursor: auto;
-}
-.vs-input__label {
-    /* didnt work in maptts/Score.vue????????????????????????????? */
-    color: #fff;
-}
-
-.players-dialog .vs-dialog .con-content {
-    overflow-y: scroll;
-    position: relative;
-    height: 600px;
-}
-
-.showMore {
-    padding: 5px 10px;
+    // h3 {
+    //     font-size: 16px;
+    //     max-height: 45px;
+    //     overflow: hidden;
+    //     display: -webkit-box;
+    //     -webkit-line-clamp: 2;
+    //     -webkit-box-orient: vertical;
+    // }
 }
 </style>

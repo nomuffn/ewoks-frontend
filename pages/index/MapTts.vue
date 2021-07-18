@@ -1,6 +1,6 @@
 <template>
     <div class="maptts" style="text-align: center">
-        <div class="title_container">
+        <div class="header">
             <div class="left">
                 <div class="aaa">
                     <h2 class="title">
@@ -20,7 +20,7 @@
                         Recorded scores:
                         {{ scoresCount.toLocaleString() }}
                     </p>
-                    <vs-button icon border @click="dialog['players'] = true">
+                    <vs-button icon @click="dialog['players'] = true">
                         Approved Players
                     </vs-button>
                 </div>
@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <div class="main_content">
+        <div class="content">
             <vs-alert color="primary">
                 Currently can't get the song length so the timestamps are only:
                 <br />
@@ -78,14 +78,18 @@
 
             <div class="scores">
                 <loading-spinner v-if="loading" />
-                <score v-for="score of scores" :key="score.id" :score="score" />
+                <maptts-score
+                    v-for="score of scores"
+                    :key="score.id"
+                    :score="score"
+                />
             </div>
 
             <vs-pagination v-model="page" :length="paginationLength" />
         </div>
 
-        <suggest-player-dialog v-model="dialog" />
-        <players-dialog class="players-dialog" v-model="dialog" />
+        <maptts-suggest-player-dialog v-model="dialog" />
+        <maptts-players-dialog class="players-dialog" v-model="dialog" />
     </div>
 </template>
 
@@ -96,7 +100,7 @@ export default {
         page(newValue, oldValue) {
             this.loadScores();
             return null;
-        },
+        }
     },
     async created() {
         if ((this.isAuthenticated = await this.$isAuthenticated())) {
@@ -115,12 +119,12 @@ export default {
             isAuthenticated: false,
             dialog: {
                 suggest: false,
-                players: false,
+                players: false
             },
             discord: {
                 status: "Login ",
-                href: discordLogin,
-            },
+                href: discordLogin
+            }
         };
     },
     async fetch() {
@@ -136,7 +140,7 @@ export default {
             if (document.cookie.indexOf(cookiename + "=") == -1) return true;
             else return false;
         },
-        openUrl: function (id) {
+        openUrl: function(id) {
             window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
         },
         async loadScores() {
@@ -159,8 +163,8 @@ export default {
             this.page = 1;
             this.paginationLength = 1;
             this.loadScores();
-        },
-    },
+        }
+    }
 };
 </script>
 
@@ -171,7 +175,7 @@ export default {
         text-align: left;
     }
 
-    .main_content {
+    .content {
         flex-direction: column;
         align-content: center;
     }
@@ -210,56 +214,6 @@ export default {
     .scores {
         max-width: 800px;
         width: 100%;
-    }
-
-    .title_container {
-        justify-content: space-between;
-
-        i {
-            margin-left: 5px;
-
-            &.noMargin {
-                margin-left: 0px;
-            }
-        }
-
-        .left {
-            display: flex;
-            .title {
-                padding: 0px;
-
-                i {
-                    margin-top: 5px;
-                }
-            }
-
-            .aaa {
-                display: flex;
-                flex-direction: column;
-                padding: 20px 0px 30px 0px;
-                text-align: left;
-                max-width: 1000px;
-
-                p {
-                    opacity: 0.5;
-                }
-
-                .vs-button {
-                    max-width: 120px;
-                    margin-top: 15px;
-                }
-            }
-            > button {
-                height: max-content;
-                align-self: center;
-            }
-        }
-    }
-
-    > .title_container {
-        background: #141417;
-        border-radius: 0px 0px 20px 20px;
-        padding: 0px 5%;
     }
 
     .wrapper {
