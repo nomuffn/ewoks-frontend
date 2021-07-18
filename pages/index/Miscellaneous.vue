@@ -1,5 +1,5 @@
 <template>
-    <div class="main_content miscellaneous">
+    <div class="content miscellaneous">
         <vs-alert color="primary">
             If you have any additions for anything here let me know on discord.
         </vs-alert>
@@ -152,7 +152,7 @@
 
 <script>
 export default {
-    transition: "slide-bottom",
+    transition: "slide-bottom"
 };
 </script>
 
