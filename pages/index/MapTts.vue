@@ -42,9 +42,7 @@
 
         <div class="content">
             <vs-alert color="primary">
-                Currently can't get the song length so the timestamps are only:
-                <br />
-                time the score was set in the vod minus 2:20 minutes
+                Timestamp of recent scores will now be accurate, yay! 😀
             </vs-alert>
 
             <div class="title_container">
@@ -181,7 +179,7 @@ export default {
     }
 
     .vs-alert {
-        width: auto;
+        max-width: 800px;
     }
 
     .discordWrapper {
