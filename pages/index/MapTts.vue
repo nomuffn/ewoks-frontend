@@ -35,7 +35,7 @@
 
         <div class="content">
             <vs-alert color="primary">
-                Timestamp of recent scores will now be accurate, yay! 😀
+                Search is now put in link so you can f5 and bookmark it WOW! 😱
             </vs-alert>
 
             <div class="title_container">
@@ -84,6 +84,10 @@ export default {
         if ((this.isAuthenticated = await this.$isAuthenticated())) {
             this.discord["status"] = "Logout ";
             this.discord["href"] = this.$config.discordLogout;
+        }
+        if (this.$route.query.search) {
+            this.search = this.$route.query.search;
+            this.startSearch();
         }
     },
     data({ $config: { discordLogin } }) {
@@ -136,6 +140,7 @@ export default {
             this.loading = false;
         },
         startSearch() {
+            this.$router.push({ query: { search: this.search } });
             this.page = 1;
             this.paginationLength = 1;
             this.loadScores();
