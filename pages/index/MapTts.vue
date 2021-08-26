@@ -60,14 +60,14 @@
 
             <div class="scores">
                 <loading-spinner v-if="loading" />
-                <maptts-score v-for="score of scores" :key="score.id" :score="score" />
+                <score v-for="score of scores" :key="score.id" :score="score" />
             </div>
 
             <vs-pagination v-model="page" :length="paginationLength" />
         </div>
 
-        <maptts-suggest-player-dialog v-model="dialog" />
-        <maptts-players-dialog class="players-dialog" v-model="dialog" />
+        <dialogs-suggest-player-dialog v-model="dialog" />
+        <dialogs-players-dialog class="players-dialog" v-model="dialog" />
     </div>
 </template>
 

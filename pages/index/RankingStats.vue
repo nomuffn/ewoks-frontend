@@ -28,7 +28,7 @@
             </div>
         </div>
         <div class="content">
-            <vs-navbar color="#18191c" shadow text-white square center-collapsed v-model="activeList">
+            <vs-navbar color="#18191c" shadow text-white square v-model="activeList">
                 <vs-navbar-item v-for="(item, key) in lists" :key="key" :active="activeList == key" :id="key">
                     {{ item.title }}
                 </vs-navbar-item>
@@ -48,6 +48,7 @@
                                 <span class="colored">#{{ index + 1 }}</span>
                                 {{ item.name }}: {{ item.value }}
                             </h3>
+                            <vs-button v-if="item.maps" v-on:click.stop="mapsDialog = item" border>Maps</vs-button>
                         </template>
                     </vs-card>
                     <vs-button v-if="visibleItems < data.length" class="showMore" icon @click="visibleItems += 50">
@@ -55,6 +56,7 @@
                     </vs-button>
                 </div>
             </div>
+            <dialogs-maps-dialog v-model="mapsDialog" @close="mapsDialog = null" />
         </div>
     </div>
 </template>
@@ -69,6 +71,7 @@ export default {
             visibleItems: 10,
             loading: false,
             stats: null,
+            mapsDialog: null,
             lists: {
                 mapsetMappers: {
                     title: "Mapset Count By Mappers",
@@ -90,8 +93,10 @@ export default {
                 },
                 mapsetMappersQueue: {
                     title: "Mappers Count (Ranking Queue)",
-                    getData: () => {
-                        return this.loadFromApi("rq/mappers");
+                    getData: async () => {
+                        return (await this.loadFromApi("rq/mappers")).map(mapper => {
+                            return { ...mapper, value: mapper.value.length, maps: mapper.value };
+                        });
                     }
                 }
             }
@@ -109,8 +114,8 @@ export default {
     },
     watch: {
         async activeList() {
-            this.$router.push({ query: { list: this.activeList } });
             this.loading = true;
+            this.$router.push({ query: { list: this.activeList } });
             this.visibleItems = 10;
             this.data = await this.lists[this.activeList].getData();
             this.loading = false;
@@ -196,11 +201,21 @@ export default {
 
     .vs-card-content {
         margin-bottom: 15px;
-    }
+        .vs-card {
+            max-width: 400px;
+            width: 400px;
 
-    .vs-card {
-        max-width: 400px;
-        width: 400px;
+            .vs-card__text {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                button {
+                    padding: 0px 5px;
+                    margin: 0px;
+                }
+            }
+        }
     }
 }
 </style>
