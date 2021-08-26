@@ -9,9 +9,6 @@
                     <p v-if="stats" class="alerts">
                         Difficulties ranked: {{ stats["total"] }}
                         <br />
-                        <!-- Rough amount of mappers: {{ Object.keys(mappers).length }}
-                        <br /> -->
-                        <br />
                         > 600pp: {{ stats["600"] }}
                         <br />
                         > 500pp: {{ stats["500"] }}
@@ -44,6 +41,7 @@
 
                 <loading-spinner v-if="loading" style="margin-bottom: 500px;" />
                 <div v-else-if="!loading && data.length > 0" class="cards">
+                    <p>Amount: {{ data.length }}</p>
                     <vs-card v-for="(item, index) in getVisibleItems" v-on:click="openUrl(item.name)" :key="index">
                         <template #text>
                             <h3>
@@ -80,22 +78,22 @@ export default {
                 },
                 diffMappers: {
                     title: "Difficulty Count By Mappers",
-                    getData: key => {
+                    getData: () => {
                         return this.loadFromApi("mapperdiffdist");
                     }
                 },
                 mapsetArtists: {
                     title: "Mapset Count By Song Artists",
-                    getData: key => {
+                    getData: () => {
                         return this.loadFromApi("artistdist");
                     }
+                },
+                mapsetMappersQueue: {
+                    title: "Mapset Count By Mappers\n(Ranking Queue)",
+                    getData: () => {
+                        return this.loadFromApi("rq/mappers");
+                    }
                 }
-                // mapsetMappersQueue: {
-                //     title: "Mapset Count By Mappers\n(Ranking Queue)",
-                //     getData: key => {
-                //         return this.getQueueMapsetData();
-                //     }
-                // }
             }
         };
     },
@@ -107,10 +105,11 @@ export default {
 
     async created() {
         this.stats = await this.$defaultApi.$get("ppdist");
-        this.activeList = "mapsetMappers";
+        this.activeList = this.$route.query?.list || "mapsetMappers";
     },
     watch: {
         async activeList() {
+            this.$router.push({ query: { list: this.activeList } });
             this.loading = true;
             this.visibleItems = 10;
             this.data = await this.lists[this.activeList].getData();
@@ -125,8 +124,7 @@ export default {
             return Object.entries(await this.$defaultApi.$get(endpoint)).map(item => {
                 return { name: item[0], value: item[1] };
             });
-        },
-        getQueueMapsetData() {}
+        }
     }
 };
 </script>
@@ -148,6 +146,12 @@ export default {
             display: flex;
             flex-direction: column;
             align-items: center;
+
+            .title_container {
+                .title {
+                    padding-bottom: 0px;
+                }
+            }
         }
     }
 
@@ -155,27 +159,32 @@ export default {
         position: relative;
 
         button {
-            // white-space: pre-line;
+            white-space: pre-line;
             padding-top: 0px;
-            padding: 20px 10px;
+            padding: 0px 10px 15px 10px;
         }
     }
 
     .cards {
-        margin-top: 10px;
         display: flex;
         flex-direction: column;
         align-items: center;
 
-        .vs-card-content:first-child .vs-card .colored {
-            color: #ffca28 !important;
+        > p {
+            color: #fff;
+            opacity: 0.5;
+            margin-bottom: 20px;
         }
 
         .vs-card-content:nth-child(2) .vs-card .colored {
-            color: #bdbdbd !important;
+            color: #ffca28 !important;
         }
 
         .vs-card-content:nth-child(3) .vs-card .colored {
+            color: #bdbdbd !important;
+        }
+
+        .vs-card-content:nth-child(4) .vs-card .colored {
             color: #ffa726 !important;
         }
     }
