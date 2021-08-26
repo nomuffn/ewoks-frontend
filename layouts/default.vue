@@ -26,11 +26,11 @@
                 Tools & Scripts
             </vs-sidebar-item>
 
-            <vs-sidebar-item to="/RankedStats" id="/RankedStats">
+            <vs-sidebar-item to="/RankingStats" id="/RankingStats">
                 <template #icon>
                     <i class="bx bx-stats"></i>
                 </template>
-                Ranked Stats
+                Ranking Stats
             </vs-sidebar-item>
 
             <vs-sidebar-item to="/Miscellaneous" id="/Miscellaneous">
