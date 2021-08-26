@@ -89,7 +89,7 @@ export default {
                     }
                 },
                 mapsetMappersQueue: {
-                    title: "Mapset Count By Mappers\n(Ranking Queue)",
+                    title: "Mappers Count (Ranking Queue)",
                     getData: () => {
                         return this.loadFromApi("rq/mappers");
                     }
