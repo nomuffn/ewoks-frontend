@@ -35,7 +35,7 @@
 
         <div class="content">
             <vs-alert color="primary">
-                Search is now put in link so you can f5 and bookmark it WOW! 😱
+                Search is now put in link so you can F5 and bookmark it WOW! 😱
             </vs-alert>
 
             <div class="title_container">
