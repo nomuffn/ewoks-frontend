@@ -4,7 +4,7 @@
             <div class="left">
                 <div class="aaa">
                     <h2 class="title">
-                        (Experimental) MapTts - Twitch Timestamps for Maps
+                        MapTts - Twitch Timestamps for Maps
                     </h2>
                     <p>
                         Shows timestamps for maps that streamers have played.
