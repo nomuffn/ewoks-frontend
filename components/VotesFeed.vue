@@ -3,7 +3,7 @@
         <vs-alert v-if="stats" color="primary">
             Updates every hour
             <br />
-            Might be slightly off :)<br />
+            Will be slightly off :)<br />
             Votes in the last month:<br />
             RT Up-/Downvotes:
             <b>{{ stats.lastMonth.rtupvotes__sum }}</b>
@@ -31,19 +31,12 @@
 
         <Loading v-if="loading" />
         <div class="cards">
-            <vs-card
-                v-for="(vote, index) of getVotes"
-                :key="index"
-                v-on:click="openUrl(vote.requestId)"
-            >
+            <vs-card v-for="(vote, index) of getVotes" :key="index" v-on:click="openUrl(vote.requestId)">
                 <template #text>
                     <h3>{{ vote.name }} by {{ vote.mapper }}</h3>
 
                     <div class="spans">
-                        <span
-                            v-for="(string, index) of vote.strings"
-                            :key="index"
-                        >
+                        <span v-for="(string, index) of vote.strings" :key="index">
                             <span
                                 v-bind:class="{
                                     red: string[0] == 'qat'
@@ -59,12 +52,7 @@
                     </p>
                 </template>
             </vs-card>
-            <vs-button
-                v-if="visibleItems < 25"
-                class="showMore"
-                icon
-                @click="visibleItems += 10"
-            >
+            <vs-button v-if="visibleItems < 25" class="showMore" icon @click="visibleItems += 10">
                 Show more
             </vs-button>
         </div>
@@ -86,26 +74,22 @@ export default {
         Loading
     },
     async created() {
-        this.stats = await this.$defaultApi.$get("rq/stats");
-        this.votes = await this.$defaultApi.$get("rq/feed");
+        this.stats = await this.$defaultApi.$get("scoresaber/rq/stats");
+        this.votes = await this.$defaultApi.$get("scoresaber/rq/feed");
         this.loading = false;
 
         for (let index = 0; index < this.votes.length; index++) {
             let element = this.votes[index];
 
             if (element.hoursleft > 24) {
-                this.votes[index].hoursago =
-                    "~" + Math.round(element.hoursago / 24) + " days";
+                this.votes[index].hoursago = "~" + Math.round(element.hoursago / 24) + " days";
             } else {
                 this.votes[index].hoursago = "~" + element.hoursago + " hours";
             }
 
             for (let [key, value] of Object.entries(this.votes[index].votes)) {
                 let str = key.split("_");
-                str[1] =
-                    this.capitalizeTheFirstLetterOfEachWord(str[1]) +
-                    ": " +
-                    (value > 0 ? "+" + value : value);
+                str[1] = this.capitalizeTheFirstLetterOfEachWord(str[1]) + ": " + (value > 0 ? "+" + value : value);
 
                 if (!this.votes[index].strings) this.votes[index].strings = [];
                 this.votes[index].strings.push(str);
@@ -119,17 +103,12 @@ export default {
     },
     methods: {
         openUrl: function(id) {
-            window.open(
-                "https://new.scoresaber.com/ranking/request/" + id,
-                "_blank"
-            );
+            window.open("https://new.scoresaber.com/ranking/request/" + id, "_blank");
         },
         capitalizeTheFirstLetterOfEachWord(words) {
             var separateWord = words.toLowerCase().split(" ");
             for (var i = 0; i < separateWord.length; i++) {
-                separateWord[i] =
-                    separateWord[i].charAt(0).toUpperCase() +
-                    separateWord[i].substring(1);
+                separateWord[i] = separateWord[i].charAt(0).toUpperCase() + separateWord[i].substring(1);
             }
             return separateWord.join(" ");
         }

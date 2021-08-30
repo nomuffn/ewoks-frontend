@@ -1,7 +1,7 @@
-export default function ({ $axios, $config: { baseURL } }, inject) {
+export default function({ $axios, $config: { baseURL } }, inject) {
     // Create a custom axios instance
     const defaultApi = $axios.create({
-        baseURL: baseURL + "backend/api/scoresaber/",
+        baseURL: baseURL + "backend/api/"
     });
 
     // Inject to context as $api
