@@ -38,7 +38,7 @@
                                 <p class="name">{{ item["songName"] }}</p>
                             </div>
                             <div>
-                                <p>#{{ index }}</p>
+                                <p>#{{ index + 1 }}</p>
                             </div>
                         </div>
                         <div class="stats">
