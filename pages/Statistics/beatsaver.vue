@@ -180,7 +180,7 @@ export default {
                     flex-wrap: wrap-reverse;
                     > p {
                         white-space: nowrap;
-                        width: 150px;
+                        width: 200px;
                     }
                 }
             }
