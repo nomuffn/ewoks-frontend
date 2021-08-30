@@ -65,6 +65,7 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
 export default {
     transition: "slide-bottom",
     data() {
@@ -88,8 +89,13 @@ export default {
         async loadResults() {
             this.loading = true;
             this.results = [];
+
+            let headers = {
+                "content-type": "application/json",
+                "X-CSRFToken": Cookies.get("csrftoken")
+            };
             const data = { column: this.descending + this.column.toLowerCase(), stars: this.stars, bpm: this.bpm };
-            this.results = await this.$defaultApi.$post("beatsaver/stats/", data);
+            this.results = await this.$defaultApi.$post("beatsaver/stats/", data, { withCredentials: true, headers });
             this.visibleItems = 10;
             this.loading = false;
         },
@@ -170,8 +176,8 @@ export default {
                 }
                 .stats {
                     display: flex;
-                    flex-wrap: wrap;
-                    place-content: space-between;
+                    justify-content: space-between;
+                    flex-wrap: wrap-reverse;
                     > p {
                         white-space: nowrap;
                         width: 150px;
