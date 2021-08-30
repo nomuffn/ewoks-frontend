@@ -37,11 +37,8 @@ export default {
 
     publicRuntimeConfig: {
         baseURL: process.env.API_URL || "https://ewoks.de/",
-        discordLogin:
-            (process.env.API_URL || "https://ewoks.de/") +
-            "backend/oauth/login/discord",
-        discordLogout:
-            (process.env.API_URL || "https://ewoks.de/") + "backend/logout"
+        discordLogin: (process.env.API_URL || "https://ewoks.de/") + "backend/oauth/login/discord",
+        discordLogout: (process.env.API_URL || "https://ewoks.de/") + "backend/logout"
     },
 
     generate: {
@@ -49,19 +46,10 @@ export default {
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
-    css: [
-        "vuesax/dist/vuesax.css",
-        "boxicons/css/boxicons.min.css",
-        "~/assets/scss/global.scss"
-    ],
+    css: ["vuesax/dist/vuesax.css", "boxicons/css/boxicons.min.css", "~/assets/scss/global.scss"],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-    plugins: [
-        "@/plugins/vuesax",
-        "@/plugins/defaultApi",
-        "@/plugins/mapttsApi",
-        "@/plugins/auth"
-    ],
+    plugins: ["@/plugins/vuesax", "@/plugins/defaultApi", "@/plugins/mapttsApi", "@/plugins/auth"],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
     components: true,
@@ -81,6 +69,7 @@ export default {
         // https://go.nuxtjs.dev/axios
         "@nuxtjs/axios",
         "@nuxtjs/proxy",
+        "@nuxtjs/composition-api/module",
         [
             "nuxt-matomo",
             {

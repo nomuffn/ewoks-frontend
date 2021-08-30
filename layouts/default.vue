@@ -19,18 +19,18 @@
                 Map Twitch
             </vs-sidebar-item>
 
+            <vs-sidebar-item to="/Statistics/beatsaver" id="/Statistics">
+                <template #icon>
+                    <i class="bx bx-stats"></i>
+                </template>
+                Statistics
+            </vs-sidebar-item>
+
             <vs-sidebar-item to="/Tools" id="/Tools">
                 <template #icon>
                     <i class="bx bxs-category"></i>
                 </template>
                 Tools & Scripts
-            </vs-sidebar-item>
-
-            <vs-sidebar-item to="/RankingStats" id="/RankingStats">
-                <template #icon>
-                    <i class="bx bx-stats"></i>
-                </template>
-                Ranking Stats
             </vs-sidebar-item>
 
             <vs-sidebar-item to="/Miscellaneous" id="/Miscellaneous">
@@ -48,11 +48,9 @@
             </vs-sidebar-item> -->
         </vs-sidebar>
 
-        <Nuxt keep-alive />
+        <Nuxt class="page" keep-alive />
 
-        <vs-button class="discord" primary gradient>
-            <i class="bx bxl-discord bx-sm"></i>muffn#2345
-        </vs-button>
+        <vs-button class="discord" primary gradient> <i class="bx bxl-discord bx-sm"></i>muffn#2345 </vs-button>
     </div>
 </template>
 
@@ -71,4 +69,26 @@ export default {
 };
 </script>
 
-<style lang="scss"></style>
+<style lang="scss">
+.page {
+    .content {
+        display: flex;
+        flex-wrap: wrap;
+        margin: 0 auto;
+        max-width: 90%;
+        margin-top: 10px;
+        margin-bottom: 100px;
+    }
+
+    .col {
+        flex: 1;
+        min-width: 250px;
+        margin: 0px 10px;
+
+        @media (max-width: 800px) {
+            max-width: 100% !important;
+            width: 100%;
+        }
+    }
+}
+</style>

@@ -1,16 +1,11 @@
 <template>
     <div class="cards toptenfeed">
         <Loading v-if="loading" />
-        <vs-card
-            v-for="(score, index) of getScores"
-            :key="index"
-            v-on:click="openUrl(score.leaderboard_id)"
-        >
+        <vs-card v-for="(score, index) of getScores" :key="index" v-on:click="openUrl(score.leaderboard_id)">
             <template #text>
                 <p class="leaderboard">
                     <span style="font-weight: bold"
-                        ><span class="colored">#{{ score.rank }}</span>
-                        {{ score.player_name }}</span
+                        ><span class="colored">#{{ score.rank }}</span> {{ score.player_name }}</span
                     >
                     <br />
                     {{ score.leaderboard_name }}
@@ -26,12 +21,7 @@
                 </div>
             </template>
         </vs-card>
-        <vs-button
-            v-if="visibleItems < 25"
-            class="showMore"
-            icon
-            @click="visibleItems += 10"
-        >
+        <vs-button v-if="visibleItems < 25" class="showMore" icon @click="visibleItems += 10">
             Show more
         </vs-button>
     </div>
@@ -44,27 +34,27 @@ export default {
         return {
             scores: [],
             loading: true,
-            visibleItems: 10,
+            visibleItems: 10
         };
     },
     components: {
-        Loading,
+        Loading
     },
 
     async created() {
-        this.scores = await this.$defaultApi.$get("toptenfeed");
+        this.scores = await this.$defaultApi.$get("scoresaber/toptenfeed");
         this.loading = false;
     },
     computed: {
         getScores() {
             return this.scores?.slice(0, this.visibleItems);
-        },
+        }
     },
     methods: {
-        openUrl: function (id) {
+        openUrl: function(id) {
             window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
-        },
-    },
+        }
+    }
 };
 </script>
 
