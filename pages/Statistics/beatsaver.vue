@@ -89,7 +89,7 @@ export default {
             this.loading = true;
             this.results = [];
             const data = { column: this.descending + this.column.toLowerCase(), stars: this.stars, bpm: this.bpm };
-            this.results = await this.$defaultApi.$post("beatsaver/stats", data);
+            this.results = await this.$defaultApi.$post("beatsaver/stats/", data);
             this.visibleItems = 10;
             this.loading = false;
         },
