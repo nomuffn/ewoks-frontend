@@ -2,7 +2,7 @@
     <div class="beatsaver">
         <div class="filter-container">
             <div class="filter">
-                <h2>Filter</h2>
+                <h2>Filter for ranked songs</h2>
                 <div class="row">
                     <label>Filter by mapper</label>
                     <vs-input v-model="mapperName" type="search" placeholder="Mapper name" />
@@ -25,7 +25,7 @@
                 </div>
                 <div class="row">
                     <label>Uploaded since: {{ getFormattedMonths }}</label>
-                    <Slider v-model="months" :max="getMonthsDifference" :tooltips="false" />
+                    <Slider v-model="months" :min="0" :max="getMonthsDifference" :tooltips="false" />
                 </div>
                 <div class="row">
                     <div class="radios">
@@ -114,7 +114,8 @@ export default {
         getFormattedMonths() {
             const now = new Date(this.gameReleaseDate * 1000);
             const newDate = new Date(now.setMonth(now.getMonth() + this.months));
-            return `${(newDate.getMonth() > 9 ? "" : "0") + newDate.getMonth()}-${newDate.getFullYear()}`;
+            const month = newDate.getMonth() + 1;
+            return `${(month > 9 ? "" : "0") + month}-${newDate.getFullYear()}`;
         },
         getMonthsDifference() {
             var date1 = new Date(this.gameReleaseDate * 1000);
@@ -141,7 +142,7 @@ export default {
                 column: this.getDescending + this.column.toLowerCase(),
                 stars: this.stars,
                 bpm: this.bpm,
-                months: this.months - 1,
+                months: this.months,
                 mapper: this.mapperName
             };
             this.results = await this.$defaultApi.$post("beatsaver/stats/", data, headers);
