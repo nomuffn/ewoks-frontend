@@ -49,7 +49,13 @@ export default {
     css: ["vuesax/dist/vuesax.css", "boxicons/css/boxicons.min.css", "~/assets/scss/global.scss"],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
-    plugins: ["@/plugins/vuesax", "@/plugins/defaultApi", "@/plugins/mapttsApi", "@/plugins/auth"],
+    plugins: [
+        "@plugins/global-components",
+        "@/plugins/vuesax",
+        "@/plugins/defaultApi",
+        "@/plugins/mapttsApi",
+        "@/plugins/auth"
+    ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
     components: true,
@@ -58,6 +64,7 @@ export default {
     buildModules: [
         // https://go.nuxtjs.dev/eslint
         //'@nuxtjs/eslint-module',
+        "@nuxtjs/composition-api/module"
     ],
 
     router: {
@@ -69,7 +76,6 @@ export default {
         // https://go.nuxtjs.dev/axios
         "@nuxtjs/axios",
         "@nuxtjs/proxy",
-        "@nuxtjs/composition-api/module",
         [
             "nuxt-matomo",
             {
