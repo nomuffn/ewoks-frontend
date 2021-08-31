@@ -165,6 +165,7 @@ export default {
     h2 {
         color: #fff;
         font-weight: normal;
+        margin: 15px 0;
     }
 
     .placeholder {
@@ -227,10 +228,6 @@ export default {
         @media (max-width: 1000px) {
             flex: 1 1 100%;
             margin-left: 0px;
-        }
-
-        h2 {
-            margin: 20px 0px;
         }
 
         .results {
