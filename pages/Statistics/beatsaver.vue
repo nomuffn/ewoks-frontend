@@ -52,7 +52,7 @@
         <div class="results-container">
             <h2>Results</h2>
             <Loading v-if="loading" />
-            <p v-else-if="getVisibleItems.length == 0" class="grey">No results yet, click on the filter to load</p>
+            <p v-else-if="getVisibleItems.length == 0" class="grey">No results</p>
             <div v-else class="results">
                 <vs-card v-for="(item, index) in getVisibleItems" :key="item.key">
                     <template #text>
@@ -81,7 +81,7 @@
                 </vs-button>
             </div>
         </div>
-        <div style="flex: 1"></div>
+        <div class="placeholder"></div>
     </div>
 </template>
 
@@ -121,6 +121,9 @@ export default {
             var difference = date1.getTime() - new Date();
             return Math.abs(Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437)) - 1;
         }
+    },
+    created() {
+        this.loadResults();
     },
     methods: {
         async loadResults() {
@@ -164,15 +167,28 @@ export default {
         font-weight: normal;
     }
 
+    .placeholder {
+        flex: 1;
+        @media (max-width: 1500px) {
+            display: none;
+        }
+    }
+
     .filter-container {
         flex: 1;
         display: flex;
         justify-content: center;
+        min-width: 350px;
 
         .filter {
             max-width: 400px;
             display: flex;
             flex-direction: column;
+
+            @media (max-width: 1000px) {
+                max-width: 100%;
+                width: 100%;
+            }
 
             .row {
                 margin: 7px 0px;
@@ -205,7 +221,17 @@ export default {
     }
     .results-container {
         flex: 1;
-        min-width: 300px;
+        min-width: 400px;
+        margin-left: 50px;
+
+        @media (max-width: 1000px) {
+            flex: 1 1 100%;
+            margin-left: 0px;
+        }
+
+        h2 {
+            margin: 20px 0px;
+        }
 
         .results {
             display: flex;
@@ -213,11 +239,15 @@ export default {
             align-items: center;
         }
 
+        > p {
+            text-align: center;
+        }
+
         .vs-card-content {
             margin-bottom: 20px;
-
+            width: 100%;
             .vs-card {
-                max-width: inherit;
+                max-width: 100%;
 
                 .top {
                     margin-bottom: 10px;
