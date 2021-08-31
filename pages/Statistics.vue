@@ -29,10 +29,10 @@
         </div>
 
         <vs-navbar color="#18191c" shadow text-white square v-model="active">
-            <vs-navbar-item to="beatsaver" :active="active == 'beatsaver'" id="beatsaver">
+            <vs-navbar-item to="/Statistics/beatsaver" :active="active == 'beatsaver'" id="beatsaver">
                 Beatsaver
             </vs-navbar-item>
-            <vs-navbar-item to="scoresaber" :active="active == 'scoresaber'" id="scoresaber">
+            <vs-navbar-item to="/Statistics/scoresaber" :active="active == 'scoresaber'" id="scoresaber">
                 Scoresaber
             </vs-navbar-item>
         </vs-navbar>
