@@ -12,21 +12,21 @@
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
-    "@nuxt/components": "^2.1.8",
+    "@nuxt/components": "^2.2.1",
     "@nuxtjs/axios": "^5.13.6",
-    "@nuxtjs/composition-api": "^0.24.7",
     "@vueform/slider": "^2.0.4",
-    "boxicons": "^2.0.7",
-    "core-js": "^3.15.2",
+    "boxicons": "^2.0.9",
+    "core-js": "^3.16.4",
     "js-cookie": "^2.2.1",
-    "nuxt": "^2.15.7",
+    "nuxt": "^2.15.8",
     "nuxt-matomo": "^1.2.4",
     "vuesax": "^4.0.1-alpha.25"
   },
   "devDependencies": {
+    "@nuxtjs/composition-api": "^0.24.7",
     "fibers": "^5.0.0",
     "node-sass": "^5.0.0",
-    "sass": "^1.35.1",
+    "sass": "^1.38.2",
     "sass-loader": "^10.2.0"
   }
 }

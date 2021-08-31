@@ -77,7 +77,7 @@ export default {
         margin: 0 auto;
         max-width: 90%;
         margin-top: 10px;
-        margin-bottom: 100px;
+        margin-bottom: 500px;
     }
 
     .col {
