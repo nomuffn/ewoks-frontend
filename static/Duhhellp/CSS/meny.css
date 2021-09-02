@@ -1,0 +1,97 @@
+.innpakning {
+	width: 800px;
+	background-color: #404040;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+.topptekst {
+	height: 120px;
+	background-color: #909090;
+	padding: 5px;
+	margin: 5px;
+	width: 80%;
+	height: 120px;
+	background-color: #7e7e7e;
+	background-image: url('bilder/TITTEL.png');
+	background-repeat: no-repeat;
+	background-position: left bottom;
+}
+
+.meny {
+	background-color: #329632;
+	padding: 5px;
+	margin: 5px;
+}
+
+.innhold {
+	background-color: #909090;
+	padding: 5px;
+	margin: 5px;
+}	
+
+.under {
+	background-color: #840382;
+	flex-basis: 100%;
+	padding: 5px;
+	margin: 5px;
+}
+
+
+.ting {
+	width: 800px;
+	background-color: #404040;
+	margin: auto;
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+}
+
+.som {
+	flex-basis: 100%;
+	height: 300px;
+	padding: 5px;
+	margin: 5px;
+	order: 1;
+
+}
+
+.som {
+	width: 80%;
+	height: 150px;
+	background-color: #7e7e7e;
+	background-image: url('bilder/TITTEL.png');
+	background-repeat: no-repeat;
+	background-position: left bottom;
+}
+
+.er {
+	flex-basis: 25%;
+	background-color: #329632;
+	padding: 5px;
+	margin: 5px;
+	order: 2;
+}
+
+.tuft {
+	background-color: #909090;
+	flex-basis: 70%;
+	order: 3;
+	padding: 5px;
+	margin: 5px;
+}
+
+.underer {
+	background-color: #840382;
+	padding: 5px;
+	margin: 5px;
+	order: 4;
+	flex: 1;
+}
+
+
+
+
+
+
