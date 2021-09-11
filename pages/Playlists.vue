@@ -9,12 +9,18 @@
                     <p>
                         Filters by various conditions across all maps on beatsaver and puts them into a playlist
                     </p>
+                    <p>
+                        Database of all maps used for this only updates once a day
+                    </p>
                 </div>
             </div>
         </div>
         <div class="content">
             <div class="filter-container">
                 <div class="filter">
+                    <vs-alert color="primary">
+                        Will add more options in the future
+                    </vs-alert>
                     <div class="row search" style="padding-top: 10px">
                         <label>Enter mappers and press enter</label>
                         <p class="grey">Will include all occurences in mapper names</p>
