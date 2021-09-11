@@ -20,7 +20,6 @@
                         <label>Enter mappers and press enter</label>
                         <p class="grey">Will include all occurences in mapper names</p>
                         <p class="grey">You can also enter a comma separated list</p>
-                        <p class="grey">Case sensitive</p>
                         <vs-input
                             v-model="mapperInput"
                             type="search"
