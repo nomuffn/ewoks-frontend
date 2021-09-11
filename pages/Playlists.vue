@@ -7,7 +7,7 @@
                         Playlist maker thing
                     </h2>
                     <p>
-                        Filters by various conditions across all maps on beatsaver and puts it into a playlist
+                        Filters by various conditions across all maps on beatsaver and puts them into a playlist
                     </p>
                 </div>
             </div>
@@ -15,8 +15,7 @@
         <div class="content">
             <div class="filter-container">
                 <div class="filter">
-                    <h2>Settings</h2>
-                    <div class="row search">
+                    <div class="row search" style="padding-top: 10px">
                         <label>Enter mappers and press enter</label>
                         <p class="grey">Will include all occurences in mapper names</p>
                         <p class="grey">You can also enter a comma separated list</p>
@@ -114,7 +113,7 @@ export default {
                         const blob = new Blob([response], { type: "application/json" });
                         const link = document.createElement("a");
                         link.href = URL.createObjectURL(blob);
-                        link.download = "maps for " + this.mappers.join(",");
+                        link.download = "ewoks playlist of " + this.mappers.length + " mappers";
                         link.click();
                         URL.revokeObjectURL(link.href);
                     })
