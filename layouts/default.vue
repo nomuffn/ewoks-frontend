@@ -26,6 +26,13 @@
                 Statistics
             </vs-sidebar-item>
 
+            <vs-sidebar-item to="/Playlists" id="/Playlists">
+                <template #icon>
+                    <i class="bx bxs-playlist"></i>
+                </template>
+                Playlist maker
+            </vs-sidebar-item>
+
             <vs-sidebar-item to="/Tools" id="/Tools">
                 <template #icon>
                     <i class="bx bxs-category"></i>
