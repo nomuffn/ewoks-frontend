@@ -45,12 +45,23 @@
                         <Slider v-model="months" :min="0" :max="getMonthsDifference" :tooltips="false" />
                     </div>
                     <div class="row">
-                        <label>Minimum upvotes: {{ minUpvotes }}</label>
-                        <Slider v-model="minUpvotes" :max="10000" :tooltips="false" />
+                        <label>Minimum ratio: {{ ratio }}%</label>
+                        <p class="grey">
+                            Ratio calculation (not the same like on beatsaver): upvotes / (upvotes + downvotes) * 100
+                        </p>
+                        <p class="grey">
+                            To get an idea of it go to
+                            <nuxt-link style="color: grey" to="/Statistics/beatsaver">statistics/beatsaver</nuxt-link>
+                        </p>
+                        <Slider v-model="ratio" :max="100" :tooltips="false" />
                     </div>
                     <div class="row">
-                        <label>Minimum downvotes: {{ minDownvotes }}</label>
-                        <Slider v-model="minDownvotes" :max="10000" :tooltips="false" />
+                        <label>Minimum upvotes: {{ minUpvotes }}</label>
+                        <Slider v-model="minUpvotes" :max="1000" :tooltips="false" />
+                    </div>
+                    <div class="row">
+                        <label>Maximum downvotes: {{ getmaxDownvotes }}</label>
+                        <Slider v-model="maxDownvotes" :max="1000" :tooltips="false" />
                     </div>
 
                     <div class="row">
@@ -75,7 +86,8 @@ export default {
             mappers: [],
             loading: false,
             minUpvotes: 0,
-            minDownvotes: 0,
+            maxDownvotes: 0,
+            ratio: 0,
             uploadedAfter: 0,
             gameReleaseDate: 1525179660, //Tuesday, May 1, 2018
             months: 0
@@ -92,6 +104,9 @@ export default {
             var date1 = new Date(this.gameReleaseDate * 1000);
             var difference = date1.getTime() - new Date();
             return Math.abs(Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437)) - 1;
+        },
+        getmaxDownvotes() {
+            return this.maxDownvotes == 0 ? "-" : this.maxDownvotes;
         }
     },
     methods: {
@@ -109,8 +124,9 @@ export default {
                 const data = {
                     mappers: this.mappers,
                     uploadedAfter: this.months,
+                    ratio: this.ratio,
                     minUpvotes: this.minUpvotes,
-                    minDownvotes: this.minDownvotes
+                    maxDownvotes: this.maxDownvotes
                 };
 
                 this.$defaultApi
