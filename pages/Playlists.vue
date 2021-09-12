@@ -18,9 +18,6 @@
         <div class="content">
             <div class="filter-container">
                 <div class="filter">
-                    <vs-alert color="primary">
-                        Will add more options in the future
-                    </vs-alert>
                     <div class="row search" style="padding-top: 10px">
                         <label>Enter mappers and press enter</label>
                         <p class="grey">Will include all occurences in mapper names</p>
