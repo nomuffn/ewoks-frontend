@@ -74,12 +74,5 @@ export default {
             padding: 0px 10px 15px 10px;
         }
     }
-
-    .header .left .aaa {
-        padding: 20px 0px;
-        .title {
-            margin-bottom: 0;
-        }
-    }
 }
 </style>
