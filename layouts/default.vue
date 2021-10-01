@@ -35,7 +35,7 @@ export default {
                 {
                     rel: "icon",
                     type: "image/svg+xml",
-                    href: "favicons/" + this.getRandomFavicon()
+                    href: "/favicons/" + this.getRandomFavicon()
                 }
             ]
         };
