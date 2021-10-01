@@ -29,11 +29,36 @@ export default {
     created() {
         ColorHandler.setColor();
     },
+    head() {
+        return {
+            link: [
+                {
+                    rel: "icon",
+                    type: "image/svg+xml",
+                    href: "favicons/" + this.getRandomFavicon()
+                }
+            ]
+        };
+    },
     methods: {
         isActive(page) {
             if (this.$route.path.substring(1).split("/")[0] == page.path) {
                 return true;
             }
+        },
+        getRandomFavicon() {
+            const icons = [
+                "easmile.ico",
+                "gael.ico",
+                "monkaogre.ico",
+                "muffn.ico",
+                "muffncool.ico",
+                "muffnw.ico",
+                "waaa.ico",
+                "wicked.ico",
+                "lohl.ico"
+            ];
+            return icons[Math.floor(Math.random() * icons.length)];
         }
     },
     data() {
@@ -43,7 +68,7 @@ export default {
                 {
                     path: "",
                     icon: "bx-home",
-                    name: "Start"
+                    name: "Home"
                 },
                 {
                     path: "RankingQueue",
