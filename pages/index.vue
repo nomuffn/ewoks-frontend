@@ -4,7 +4,7 @@
             <div class="summary">
                 <h2>Ayo</h2>
                 <span>
-                    <p>i do stuff</p>
+                    <p>i do stuff for beatsaber</p>
                     <img style="margin-left: 10px" src="wicked.png" />
                 </span>
 
