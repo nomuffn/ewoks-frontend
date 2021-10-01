@@ -37,7 +37,7 @@
                                 href="https://twitter.com/AntiLink99"
                                 target="_blank"
                                 style="color: white;"
-                                >Anitlink</a
+                                >AntiLink</a
                             ></small
                         >
                     </footer>
