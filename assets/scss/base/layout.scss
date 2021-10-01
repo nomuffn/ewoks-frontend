@@ -47,7 +47,6 @@ h3 {
     font-size: 30px;
     color: #fff;
     letter-spacing: 1px;
-    text-transform: capitalize;
     padding: 20px;
 }
 
@@ -90,21 +89,13 @@ h3 {
     border-radius: 5px;
 }
 
-.discord {
-    position: fixed;
-    bottom: 30px;
-    right: 10px;
-    pointer-events: none;
-    font-size: 15px;
-}
-
 .text {
     color: #fff;
     margin: 20px 10px;
 }
 
 .colored {
-    color: rgb(var(--vs-color)) !important;
+    color: rgb(var(--vs-primary)) !important;
     font-weight: bold;
 }
 
@@ -115,4 +106,38 @@ h3 {
 .grey {
     opacity: 0.5;
     color: #fff;
+}
+
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+}
+a {
+    color: inherit;
+    text-decoration: none;
+    position: relative;
+    &:after {
+        background: none repeat scroll 0 0 transparent;
+        bottom: -1px;
+        content: "";
+        display: block;
+        height: 1px;
+        left: 50%;
+        position: absolute;
+        background: #fff;
+        transition: width 0.3s ease 0s, left 0.3s ease 0s;
+        width: 0;
+    }
+    &:hover:after {
+        width: 100%;
+        left: 0;
+    }
+}
+
+.github {
+    background-color: #333;
+    &:hover {
+        box-shadow: 0px 10px 20px -10px rgba(#333, 1);
+    }
 }

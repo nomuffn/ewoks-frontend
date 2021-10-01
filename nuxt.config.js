@@ -4,7 +4,7 @@ export default {
 
     // Global page headers: https://go.nuxtjs.dev/config-head
     head: {
-        title: "Ewoks",
+        title: "muffnlabs",
         htmlAttrs: {
             lang: "en"
         },
@@ -15,12 +15,12 @@ export default {
             {
                 name: "viewport",
                 content: "width=device-width, initial-scale=1"
-            },
-            {
-                hid: "description",
-                name: "description",
-                content: ""
             }
+            // {
+            //     hid: "description",
+            //     name: "description",
+            //     content: ""
+            // }
         ],
         link: [
             {
@@ -36,9 +36,9 @@ export default {
     },
 
     publicRuntimeConfig: {
-        baseURL: process.env.API_URL || "https://ewoks.de/",
-        discordLogin: (process.env.API_URL || "https://ewoks.de/") + "backend/oauth/login/discord",
-        discordLogout: (process.env.API_URL || "https://ewoks.de/") + "backend/logout"
+        baseURL: process.env.API_URL || "https://muffnlabs.de/",
+        discordLogin: (process.env.API_URL || "https://muffnlabs.de/") + "backend/oauth/login/discord",
+        discordLogout: (process.env.API_URL || "https://muffnlabs.de/") + "backend/logout"
     },
 
     generate: {
@@ -54,7 +54,8 @@ export default {
         "@/plugins/vuesax",
         "@/plugins/defaultApi",
         "@/plugins/mapttsApi",
-        "@/plugins/auth"
+        "@/plugins/auth",
+        { src: "~~/node_modules/vue-rellax/lib/nuxt-plugin", ssr: false }
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -67,10 +68,6 @@ export default {
         "@nuxtjs/composition-api/module"
     ],
 
-    router: {
-        middleware: "defaultroute"
-    },
-
     // Modules: https://go.nuxtjs.dev/config-modules
     modules: [
         // https://go.nuxtjs.dev/axios
@@ -79,7 +76,7 @@ export default {
         [
             "nuxt-matomo",
             {
-                matomoUrl: "//matomo.ewoks.de/",
+                matomoUrl: "//matomo.muffnlabs.de/",
                 siteId: 1
             }
         ]

@@ -58,7 +58,7 @@
                 <vs-pagination v-model="page" :length="paginationLength" />
             </div>
 
-            <div class="scores">
+            <div class="scores cards vertical">
                 <loading-spinner v-if="loading" />
                 <score v-for="score of scores" :key="score.id" :score="score" />
             </div>

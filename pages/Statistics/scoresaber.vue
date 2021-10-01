@@ -13,17 +13,20 @@
                 </div>
 
                 <loading-spinner v-if="loading" style="margin-bottom: 500px;" />
-                <div v-else-if="!loading && data.length > 0" class="cards">
+                <div v-else-if="!loading && data.length > 0" class="cards vertical">
                     <p>Amount: {{ data.length }}</p>
-                    <vs-card v-for="(item, index) in getVisibleItems" v-on:click="openUrl(item.name)" :key="index">
-                        <template #text>
-                            <h3>
-                                <span class="colored">#{{ index + 1 }}</span>
-                                {{ item.name }}: {{ item.value }}
-                            </h3>
-                            <vs-button v-if="item.maps" v-on:click.stop="mapsDialog = item" border>Maps</vs-button>
-                        </template>
-                    </vs-card>
+                    <div
+                        class="card"
+                        v-for="(item, index) in getVisibleItems"
+                        v-on:click="openUrl(item.name)"
+                        :key="index"
+                    >
+                        <h3>
+                            <span class="colored">#{{ index + 1 }}</span>
+                            {{ item.name }}: {{ item.value }}
+                        </h3>
+                        <vs-button v-if="item.maps" v-on:click.stop="mapsDialog = item" border>Maps</vs-button>
+                    </div>
                     <vs-button v-if="visibleItems < data.length" class="showMore" icon @click="visibleItems += 50">
                         Show more
                     </vs-button>
@@ -167,15 +170,15 @@ export default {
             margin-bottom: 20px;
         }
 
-        .vs-card-content:nth-child(2) .vs-card .colored {
+        .card:nth-child(2) .colored {
             color: #ffca28 !important;
         }
 
-        .vs-card-content:nth-child(3) .vs-card .colored {
+        .card:nth-child(3) .colored {
             color: #bdbdbd !important;
         }
 
-        .vs-card-content:nth-child(4) .vs-card .colored {
+        .card:nth-child(4) .colored {
             color: #ffa726 !important;
         }
     }
@@ -185,22 +188,21 @@ export default {
         max-width: 300px;
     }
 
-    .vs-card-content {
-        margin-bottom: 15px;
-        .vs-card {
-            max-width: 400px;
-            width: 400px;
+    .card {
+        max-width: 400px;
+        width: 400px;
 
-            .vs-card__text {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
 
-                button {
-                    padding: 0px 5px;
-                    margin: 0px;
-                }
-            }
+        .colored {
+            font-size: 1rem;
+        }
+
+        button {
+            padding: 0px 5px;
+            margin: 0px;
         }
     }
 }
