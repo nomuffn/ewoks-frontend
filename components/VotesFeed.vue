@@ -1,57 +1,26 @@
 <template>
     <div class="votesFeed">
-        <vs-alert v-if="stats" color="primary">
-            Updates every hour
-            <br />
-            Will be slightly off :)<br />
-            Votes in the last month:<br />
-            RT Up-/Downvotes:
-            <b>{{ stats.lastMonth.rtupvotes__sum }}</b>
-            /
-            <b>{{ stats.lastMonth.rtdownvotes__sum }}</b>
-            <br />
-            QAT Up-/Downvotes:
-            <b>{{ stats.lastMonth.qatupvotes__sum }}</b>
-            /
-            <b>{{ stats.lastMonth.qatdownvotes__sum }}</b>
-            <br />
-            <br />
-            Votes since 8th August 2020:<br />
-            RT Up-/Downvotes:
-            <b>{{ stats.allTime.rtupvotes__sum }}</b>
-            /
-            <b>{{ stats.allTime.rtdownvotes__sum }}</b>
-            <br />
-            QAT Up-/Downvotes:
-            <b>{{ stats.allTime.qatupvotes__sum }}</b>
-            /
-            <b>{{ stats.allTime.qatdownvotes__sum }}</b>
-            <br />
-        </vs-alert>
-
         <Loading v-if="loading" />
-        <div class="cards">
-            <vs-card v-for="(vote, index) of getVotes" :key="index" v-on:click="openUrl(vote.requestId)">
-                <template #text>
-                    <h3>{{ vote.name }} by {{ vote.mapper }}</h3>
+        <div class="cards vertical">
+            <div class="card" v-for="(vote, index) of getVotes" :key="index" v-on:click="openUrl(vote.requestId)">
+                <h3>{{ vote.name }} by {{ vote.mapper }}</h3>
 
-                    <div class="spans">
-                        <span v-for="(string, index) of vote.strings" :key="index">
-                            <span
-                                v-bind:class="{
-                                    red: string[0] == 'qat'
-                                }"
-                                >{{ string[0].toUpperCase() }}</span
-                            >
-                            {{ string[1] }}
-                        </span>
-                    </div>
+                <div class="spans">
+                    <span v-for="(string, index) of vote.strings" :key="index">
+                        <span
+                            v-bind:class="{
+                                red: string[0] == 'qat'
+                            }"
+                            >{{ string[0].toUpperCase() }}</span
+                        >
+                        {{ string[1] }}
+                    </span>
+                </div>
 
-                    <p class="time">
-                        {{ vote.hoursago }}
-                    </p>
-                </template>
-            </vs-card>
+                <p class="time">
+                    {{ vote.hoursago }}
+                </p>
+            </div>
             <vs-button v-if="visibleItems < 25" class="showMore" icon @click="visibleItems += 10">
                 Show more
             </vs-button>
@@ -60,21 +29,15 @@
 </template>
 
 <script>
-import Loading from "@/components/LoadingSpinner.vue";
 export default {
     data() {
         return {
-            stats: null,
             votes: null,
             loading: true,
             visibleItems: 10
         };
     },
-    components: {
-        Loading
-    },
     async created() {
-        this.stats = await this.$defaultApi.$get("scoresaber/rq/stats");
         this.votes = await this.$defaultApi.$get("scoresaber/rq/feed");
         this.loading = false;
 
@@ -138,23 +101,9 @@ export default {
         color: #b71c1c;
     }
 
-    .vs-card-content {
-        width: 100%;
-        flex: 100% !important;
-    }
-
-    .vs-card {
-        max-width: 100%;
-    }
-
-    .vs-card__text {
+    .card {
         flex-wrap: wrap;
-        flex-direction: row !important;
-    }
-
-    .vs-card__text h3 {
-        width: 100%;
-        margin-bottom: 5px;
+        flex-direction: row;
     }
 
     .time {

@@ -3,11 +3,11 @@
         <div class="filter-container">
             <div class="filter">
                 <h2>Filter for ranked songs</h2>
-                <div class="row">
+                <div class="myrow">
                     <label>Filter by mapper</label>
                     <vs-input v-model="mapperName" type="search" placeholder="Mapper name" />
                 </div>
-                <div class="row">
+                <div class="myrow">
                     <label>Order by</label>
                     <vs-select placeholder="Order by" v-model="column">
                         <vs-option v-for="col in allColumns" :key="col" :label="col" :value="col">
@@ -15,19 +15,19 @@
                         </vs-option>
                     </vs-select>
                 </div>
-                <div class="row">
+                <div class="myrow">
                     <label>Minimum stars: {{ stars }}</label>
                     <Slider v-model="stars" :max="14" :tooltips="false" />
                 </div>
-                <div class="row">
+                <div class="myrow">
                     <label>Minimum bpm: {{ bpm }}</label>
                     <Slider v-model="bpm" :max="350" :tooltips="false" />
                 </div>
-                <div class="row">
+                <div class="myrow">
                     <label>Uploaded since: {{ getFormattedMonths }}</label>
                     <Slider v-model="months" :min="0" :max="getMonthsDifference" :tooltips="false" />
                 </div>
-                <div class="row">
+                <div class="myrow">
                     <div class="radios">
                         <vs-radio v-model="descending" val="-">
                             Descending
@@ -37,45 +37,43 @@
                         </vs-radio>
                     </div>
                 </div>
-                <div class="row">
+                <div class="myrow">
                     <vs-button :loading="loading" @click="loadResults">
                         Filter
                     </vs-button>
                 </div>
-                <div class="row">
+                <div class="myrow">
                     <vs-alert color="primary">
                         Beatsaver doesn't give downloads properly anymore :(
                     </vs-alert>
                 </div>
             </div>
         </div>
-        <div class="results-container">
+        <div class="cards-container">
             <h2>Results</h2>
             <Loading v-if="loading" />
             <p v-else-if="getVisibleItems.length == 0" class="grey">No results</p>
-            <div v-else class="results">
-                <vs-card v-for="(item, index) in getVisibleItems" :key="item.key">
-                    <template #text>
-                        <div class="top">
-                            <div>
-                                <p class="mapper">{{ item["levelAuthorName"] }}</p>
-                                <h3 class="name">{{ item["songName"] }}</h3>
-                            </div>
-                            <div>
-                                <p>#{{ index + 1 }}</p>
-                            </div>
+            <div v-else class="cards vertical">
+                <div class="card" v-for="(item, index) in getVisibleItems" :key="item.key">
+                    <div class="top">
+                        <div>
+                            <p class="mapper">{{ item["levelAuthorName"] }}</p>
+                            <h3 class="name">{{ item["songName"] }}</h3>
                         </div>
-                        <div class="stats">
-                            <p :class="{ colored: isActive('downloads') }">Downloads: {{ item["downloads"] }}</p>
-                            <p :class="{ colored: isActive('ratio') }">Ratio: {{ item["ratio"] }}</p>
-                            <p :class="{ colored: isActive('upvotes') }">Upvotes: {{ item["upvotes"] }}</p>
-                            <p>Star: {{ item["highestStar"] }}</p>
-                            <p :class="{ colored: isActive('downvotes') }">Downvotes: {{ item["downvotes"] }}</p>
-                            <p>Bpm: {{ item["bpm"] }}</p>
-                            <p style="flex: 1 1 100%">Uploaded: {{ getFormattedUploaded(item["uploaded"]) }}</p>
+                        <div>
+                            <p>#{{ index + 1 }}</p>
                         </div>
-                    </template>
-                </vs-card>
+                    </div>
+                    <div class="stats">
+                        <p :class="{ colored: isActive('downloads') }">Downloads: {{ item["downloads"] }}</p>
+                        <p :class="{ colored: isActive('ratio') }">Ratio: {{ item["ratio"] }}</p>
+                        <p :class="{ colored: isActive('upvotes') }">Upvotes: {{ item["upvotes"] }}</p>
+                        <p>Star: {{ item["highestStar"] }}</p>
+                        <p :class="{ colored: isActive('downvotes') }">Downvotes: {{ item["downvotes"] }}</p>
+                        <p>Bpm: {{ item["bpm"] }}</p>
+                        <p style="flex: 1 1 100%">Uploaded: {{ getFormattedUploaded(item["uploaded"]) }}</p>
+                    </div>
+                </div>
                 <vs-button v-if="visibleItems < results.length" class="showMore" icon @click="visibleItems += 50">
                     Show more
                 </vs-button>
@@ -192,7 +190,7 @@ export default {
                 width: 100%;
             }
 
-            .row {
+            .myrow {
                 margin: 7px 0px;
 
                 > label {
@@ -221,58 +219,48 @@ export default {
             }
         }
     }
-    .results-container {
+    .cards-container {
         flex: 1;
         min-width: 400px;
         margin-left: 50px;
 
         @media (max-width: 1000px) {
+            min-width: inherit;
             flex: 1 1 100%;
             margin-left: 0px;
-        }
-
-        .results {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
         }
 
         > p {
             text-align: center;
         }
 
-        .vs-card-content {
-            margin-bottom: 20px;
-            width: 100%;
-            .vs-card {
-                max-width: 100%;
+        .card {
+            max-width: 100%;
 
-                .top {
-                    margin-bottom: 10px;
-                    display: flex;
-                    width: 100%;
-                    place-content: space-between;
-                    .mapper {
-                    }
-                    .name {
-                    }
+            .top {
+                display: flex;
+                width: 100%;
+                place-content: space-between;
+                .mapper {
                 }
-                .stats {
-                    display: flex;
-                    flex-wrap: wrap;
-                    > p {
-                        white-space: nowrap;
-                        flex: 1 1 50%;
-                        text-align: left;
-                    }
-                    p:nth-child(2),
-                    p:nth-child(4),
-                    p:nth-child(6) {
-                        text-align: right;
-                    }
-                    p:last-child {
-                        text-align: center;
-                    }
+                .name {
+                }
+            }
+            .stats {
+                display: flex;
+                flex-wrap: wrap;
+                > p {
+                    white-space: nowrap;
+                    flex: 1 1 50%;
+                    text-align: left;
+                }
+                p:nth-child(2),
+                p:nth-child(4),
+                p:nth-child(6) {
+                    text-align: right;
+                }
+                p:last-child {
+                    text-align: center;
                 }
             }
         }

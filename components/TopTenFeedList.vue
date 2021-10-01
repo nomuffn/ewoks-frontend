@@ -1,26 +1,24 @@
 <template>
-    <div class="cards toptenfeed">
+    <div class="cards toptenfeed vertical">
         <Loading v-if="loading" />
-        <vs-card v-for="(score, index) of getScores" :key="index" v-on:click="openUrl(score.leaderboard_id)">
-            <template #text>
-                <p class="leaderboard">
-                    <span style="font-weight: bold"
-                        ><span class="colored">#{{ score.rank }}</span> {{ score.player_name }}</span
-                    >
+        <div class="card" v-for="(score, index) of getScores" :key="index" v-on:click="openUrl(score.leaderboard_id)">
+            <p class="leaderboard">
+                <span style="font-weight: bold"
+                    ><span class="colored">#{{ score.rank }}</span> {{ score.player_name }}</span
+                >
+                <br />
+                {{ score.leaderboard_name }}
+                <br />
+                <span class="time">~{{ score.hoursago }}h ago</span>
+            </p>
+            <div class="score">
+                <p>
+                    {{ score.pp }}<span class="pp">pp</span>
                     <br />
-                    {{ score.leaderboard_name }}
-                    <br />
-                    <span class="time">~{{ score.hoursago }}h ago</span>
+                    {{ score.percentage }}
                 </p>
-                <div class="score">
-                    <p>
-                        {{ score.pp }}<span class="pp">pp</span>
-                        <br />
-                        {{ score.percentage }}
-                    </p>
-                </div>
-            </template>
-        </vs-card>
+            </div>
+        </div>
         <vs-button v-if="visibleItems < 25" class="showMore" icon @click="visibleItems += 10">
             Show more
         </vs-button>
@@ -28,7 +26,6 @@
 </template>
 
 <script>
-import Loading from "@/components/LoadingSpinner.vue";
 export default {
     data() {
         return {
@@ -37,10 +34,6 @@ export default {
             visibleItems: 10
         };
     },
-    components: {
-        Loading
-    },
-
     async created() {
         this.scores = await this.$defaultApi.$get("scoresaber/toptenfeed");
         this.loading = false;
@@ -64,15 +57,7 @@ export default {
     flex-direction: column;
     align-items: center;
 
-    .vs-card-content {
-        width: 100%;
-    }
-
-    .vs-card {
-        max-width: 100%;
-    }
-
-    .vs-card__text {
+    .card {
         flex-direction: row !important;
         text-align: left;
     }
@@ -96,7 +81,7 @@ export default {
     }
 
     .pp {
-        color: rgb(var(--vs-color));
+        color: rgb(var(--vs-primary));
         font-weight: bold;
     }
 }

@@ -1,47 +1,31 @@
 <template>
-    <vs-card class="scorecard">
-        <template #text>
-            <div class="wrapper">
-                <div class="left">
-                    <h3>
-                        <a
-                            target="_blank"
-                            :href="
-                                `https://scoresaber.com/u/${score.player.scoresaberId}`
-                            "
-                            >{{ score.player.twitchName }}</a
-                        >
-                    </h3>
-                    <a
-                        target="_blank"
-                        :href="
-                            `https://scoresaber.com/leaderboard/${score.leaderboardId}`
-                        "
-                        >{{
-                            `${score.leaderboardSongAuthor} - ${score.leaderboardName}`
-                        }}
-                        [{{ getDifficulty(score.difficultyRaw) }}]</a
-                    >
-                    <p>
-                        by
-                        <b>{{ score.mapper }}</b>
-                    </p>
-                    <p>~{{ getAgo(score.timeSet) }} ago</p>
-                </div>
-                <div class="right">
-                    <vs-button
-                        icon
-                        color="twitch"
-                        :href="score.twitchUrl"
-                        blank
-                    >
-                        Open VOD
-                        <i class="bx bx-window-open"></i>
-                    </vs-button>
-                </div>
+    <div class="card scorecard">
+        <div class="wrapper">
+            <div class="left">
+                <h3>
+                    <a target="_blank" :href="`https://scoresaber.com/u/${score.player.scoresaberId}`">{{
+                        score.player.twitchName
+                    }}</a>
+                </h3>
+                <a target="_blank" :href="`https://scoresaber.com/leaderboard/${score.leaderboardId}`"
+                    >{{ `${score.leaderboardSongAuthor} - ${score.leaderboardName}` }} [{{
+                        getDifficulty(score.difficultyRaw)
+                    }}]</a
+                >
+                <p class="grey">
+                    by
+                    <b>{{ score.mapper }}</b>
+                </p>
+                <p class="grey">~{{ getAgo(score.timeSet) }} ago</p>
             </div>
-        </template>
-    </vs-card>
+            <div class="right">
+                <vs-button icon color="twitch" :href="score.twitchUrl" blank>
+                    Open VOD
+                    <i class="bx bx-window-open"></i>
+                </vs-button>
+            </div>
+        </div>
+    </div>
 </template>
 
 <script>
@@ -67,10 +51,7 @@ export default {
             return string.split(subString, index).join(subString).length;
         },
         getDifficulty(difficultyRaw) {
-            return difficultyRaw.substring(
-                1,
-                this.getPosition(difficultyRaw, "_", 2)
-            );
+            return difficultyRaw.substring(1, this.getPosition(difficultyRaw, "_", 2));
         }
     }
 };
@@ -79,7 +60,11 @@ export default {
 <style lang="scss" scoped>
 .scorecard {
     margin-bottom: 20px;
-    // styling doesnt work here for vs-card?
+
+    h3 {
+        margin: 0;
+    }
+
     .wrapper {
         display: flex;
         flex-wrap: wrap;
@@ -91,28 +76,6 @@ export default {
             margin-left: 10px;
             min-width: 350px;
             flex: 1;
-
-            a {
-                color: inherit;
-                text-decoration: none;
-                position: relative;
-                &:after {
-                    background: none repeat scroll 0 0 transparent;
-                    bottom: -1px;
-                    content: "";
-                    display: block;
-                    height: 1px;
-                    left: 50%;
-                    position: absolute;
-                    background: #fff;
-                    transition: width 0.3s ease 0s, left 0.3s ease 0s;
-                    width: 0;
-                }
-                &:hover:after {
-                    width: 100%;
-                    left: 0;
-                }
-            }
         }
         .right {
             max-width: 120px;

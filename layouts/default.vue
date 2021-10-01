@@ -1,63 +1,25 @@
 <template>
     <div>
         <div class="navbar">
-            <h2 class="title">Ewoks</h2>
+            <h2 class="title">muffnlabs</h2>
         </div>
 
-        <vs-sidebar square v-model="active" open>
-            <vs-sidebar-item to="/RankingQueue" id="/RankingQueue">
+        <vs-sidebar square open>
+            <vs-sidebar-item
+                v-for="page in pages"
+                :key="page.path"
+                :to="'/' + page.path"
+                :id="page.path"
+                :class="{ active: isActive(page) }"
+            >
                 <template #icon>
-                    <i class="bx bx-list-ul"></i>
+                    <i :class="`bx ${page.icon}`"></i>
                 </template>
-                Ranking Queue
+                {{ page.name }}
             </vs-sidebar-item>
-
-            <vs-sidebar-item to="/MapTts" id="/MapTts">
-                <template #icon>
-                    <i class="bx bx-tv"></i>
-                </template>
-                Map Twitch
-            </vs-sidebar-item>
-
-            <vs-sidebar-item to="/Statistics/beatsaver" id="/Statistics">
-                <template #icon>
-                    <i class="bx bx-stats"></i>
-                </template>
-                Statistics
-            </vs-sidebar-item>
-
-            <vs-sidebar-item to="/Playlists" id="/Playlists">
-                <template #icon>
-                    <i class="bx bxs-playlist"></i>
-                </template>
-                Playlist maker
-            </vs-sidebar-item>
-
-            <vs-sidebar-item to="/Tools" id="/Tools">
-                <template #icon>
-                    <i class="bx bxs-category"></i>
-                </template>
-                Tools & Scripts
-            </vs-sidebar-item>
-
-            <vs-sidebar-item to="/Miscellaneous" id="/Miscellaneous">
-                <template #icon>
-                    <i class="bx bx-library"></i>
-                </template>
-                Miscellaneous
-            </vs-sidebar-item>
-
-            <!-- <vs-sidebar-item to="BeatCat" id="/BeatCat">
-                <template #icon>
-                    <i class="bx bxs-tag-alt"></i>
-                </template>
-                BeatCat WIP
-            </vs-sidebar-item> -->
         </vs-sidebar>
 
         <Nuxt class="page" keep-alive />
-
-        <vs-button class="discord" primary gradient> <i class="bx bxl-discord bx-sm"></i>muffn#2345 </vs-button>
     </div>
 </template>
 
@@ -66,11 +28,44 @@ var ColorHandler = require("@/assets/ColorHandler.js");
 export default {
     created() {
         ColorHandler.setColor();
-        this.active = this.$route.path;
+    },
+    methods: {
+        isActive(page) {
+            if (this.$route.path.substring(1).split("/")[0] == page.path) {
+                return true;
+            }
+        }
     },
     data() {
         return {
-            active: ""
+            active: "",
+            pages: [
+                {
+                    path: "",
+                    icon: "bx-home",
+                    name: "Start"
+                },
+                {
+                    path: "RankingQueue",
+                    icon: "bx-list-ul",
+                    name: "Ranking Queue"
+                },
+                {
+                    path: "MapTts",
+                    icon: "bx-tv",
+                    name: "MapTts"
+                },
+                {
+                    path: "Statistics",
+                    icon: "bx-stats",
+                    name: "Statistics"
+                },
+                {
+                    path: "Playlists",
+                    icon: "bxs-playlist",
+                    name: "Playlist maker"
+                }
+            ]
         };
     }
 };
@@ -78,6 +73,7 @@ export default {
 
 <style lang="scss">
 .page {
+    color: #fff;
     .content {
         display: flex;
         flex-wrap: wrap;
@@ -91,6 +87,10 @@ export default {
         flex: 1;
         min-width: 250px;
         margin: 0px 10px;
+
+        @media (max-width: 550px) {
+            margin: 0;
+        }
 
         @media (max-width: 800px) {
             max-width: 100% !important;

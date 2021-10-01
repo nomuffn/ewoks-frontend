@@ -18,7 +18,7 @@
         <div class="content">
             <div class="filter-container">
                 <div class="filter">
-                    <div class="row search" style="padding-top: 10px">
+                    <div class="myrow search" style="padding-top: 10px">
                         <label>Enter mappers and press enter</label>
                         <p class="grey">Will include all occurences in mapper names</p>
                         <p class="grey">You can also enter a comma separated list</p>
@@ -37,11 +37,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row">
+                    <div class="myrow">
                         <label>Uploaded after: {{ getFormattedMonths }}</label>
                         <Slider v-model="months" :min="0" :max="getMonthsDifference" :tooltips="false" />
                     </div>
-                    <div class="row">
+                    <div class="myrow">
                         <label>Minimum ratio: {{ ratio }}%</label>
                         <p class="grey">
                             Ratio calculation (not the same like on beatsaver): upvotes / (upvotes + downvotes) * 100
@@ -52,16 +52,16 @@
                         </p>
                         <Slider v-model="ratio" :max="100" :tooltips="false" />
                     </div>
-                    <div class="row">
+                    <div class="myrow">
                         <label>Minimum upvotes: {{ minUpvotes }}</label>
                         <Slider v-model="minUpvotes" :max="1000" :tooltips="false" />
                     </div>
-                    <div class="row">
+                    <div class="myrow">
                         <label>Maximum downvotes: {{ getmaxDownvotes }}</label>
                         <Slider v-model="maxDownvotes" :max="1000" :tooltips="false" />
                     </div>
 
-                    <div class="row">
+                    <div class="myrow">
                         <vs-button :loading="loading" @click="fetchPlaylist" :disabled="!mappers.length || loading">
                             Make da playlist
                         </vs-button>
@@ -132,7 +132,7 @@ export default {
                         const blob = new Blob([response], { type: "application/json" });
                         const link = document.createElement("a");
                         link.href = URL.createObjectURL(blob);
-                        link.download = "ewoks playlist of " + this.mappers.length + " mappers";
+                        link.download = "muffnlabs playlist of " + this.mappers.length + " mappers";
                         link.click();
                         URL.revokeObjectURL(link.href);
                     })
@@ -207,7 +207,7 @@ export default {
                 }
             }
 
-            .row {
+            .myrow {
                 margin: 7px 0px;
 
                 > label {
