@@ -9,11 +9,19 @@
                 </span>
 
                 <div class="buttons">
+                    <vs-button
+                        style="flex: 1 1 100%"
+                        href="https://scoresaber.com/?search=muffn"
+                        blank
+                        icon
+                        class="yellow"
+                    >
+                        My maps
+                    </vs-button>
                     <vs-button class="discord" icon border color="discord">
                         muffn#2345
                         <i class="bx bxl-discord"></i>
                     </vs-button>
-
                     <vs-button href="https://twitter.com/nomuffn" blank icon color="twitter">
                         @nomuffn
                         <i class="bx bxl-twitter"></i>
@@ -28,7 +36,7 @@
                     </vs-button>
                 </div>
                 <figure>
-                    <img src="muffnsuic.gif" />
+                    <img src="muffnsuic.webp" />
                     <footer>
                         <small
                             >Made by
