@@ -30,10 +30,10 @@
                     <p>{{ `QAT Votes: ${item.qatVotes.upvotes} / ${item.qatVotes.downvotes}` }}</p>
                     <p>{{ `Remaining mods: ${getRemainingModsText(item)}` }}</p>
                     <p class="lastComment" v-if="item.lastComment > 0">
-                        {{ `Last downvote ${getAgo(item.lastComment)}d ago` }}
+                        {{ `Last comment ${getAgo(item.lastComment)}d ago` }}
                     </p>
                     <p class="lastComment" v-else-if="item.lastComment == 0">
-                        {{ `last downvote not loaded` }}
+                        {{ `last comment not loaded` }}
                     </p>
                 </template>
             </vs-card>
