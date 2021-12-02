@@ -2,6 +2,19 @@
     <div>
         <div class="navbar">
             <h2 class="title">muffnlabs</h2>
+            <vs-alert class="alert" color="primary">
+                <p>
+                    Beastsaber Mapping Awards are happening - I appreciate anyone who considers or votes for any of my
+                    maps. Thanks in advance<img src="peepohappycry.png" />
+                </p>
+                <a class="bsaber" href="https://bsaber.com/introducing-the-beastsaber-mapping-awards" target="_blank"
+                    >https://bsaber.com/introducing-the-beastsaber-mapping-awards/</a
+                >
+                <p>
+                    Some maps: Kingslayer, Popular Monster, Trapped In The Past, Drifting, Obey, Clouds, CD 321,
+                    Architecture, Dabun Ningen, Duplication, Alone
+                </p>
+            </vs-alert>
         </div>
 
         <vs-sidebar square open>
@@ -24,10 +37,10 @@
 </template>
 
 <script>
-var ColorHandler = require("@/assets/ColorHandler.js");
+var ColorHandler = require("@/assets/ColorHandler.js")
 export default {
     created() {
-        ColorHandler.setColor();
+        ColorHandler.setColor()
     },
     head() {
         return {
@@ -38,12 +51,12 @@ export default {
                     href: "/favicons/" + this.getRandomFavicon()
                 }
             ]
-        };
+        }
     },
     methods: {
         isActive(page) {
             if (this.$route.path.substring(1).split("/")[0] == page.path) {
-                return true;
+                return true
             }
         },
         getRandomFavicon() {
@@ -57,8 +70,8 @@ export default {
                 "waaa.ico",
                 "wicked.ico",
                 "lohl.ico"
-            ];
-            return icons[Math.floor(Math.random() * icons.length)];
+            ]
+            return icons[Math.floor(Math.random() * icons.length)]
         }
     },
     data() {
@@ -91,9 +104,9 @@ export default {
                     name: "Playlist maker"
                 }
             ]
-        };
+        }
     }
-};
+}
 </script>
 
 <style lang="scss">
@@ -120,6 +133,46 @@ export default {
         @media (max-width: 800px) {
             max-width: 100% !important;
             width: 100%;
+        }
+    }
+}
+.navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .vs-alert__content__text {
+        padding: 10px 5px;
+    }
+
+    .alert {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 10px 30px;
+        width: fit-content;
+        margin-bottom: 15px;
+    }
+    .title {
+        padding-bottom: 0;
+    }
+    p {
+        color: white;
+    }
+    img {
+        width: 30px;
+        height: 30px;
+        margin-left: 10px;
+    }
+    .bsaber {
+        background: linear-gradient(to right, #ff03f1, #ad63ff, #00a1ff, #00c4ff, #ffffff);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        width: fit-content;
+        opacity: 0.9;
+
+        &:hover {
+            opacity: 1;
         }
     }
 }
