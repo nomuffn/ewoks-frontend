@@ -6,10 +6,10 @@
 export default {
     middleware: [
         function({ redirect }) {
-            redirect("/Statistics/Beatsaver");
+            redirect("/Statistics/beatsaver")
         }
     ]
-};
+}
 </script>
 
 <style lang="scss"></style>
