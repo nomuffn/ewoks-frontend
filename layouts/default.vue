@@ -16,7 +16,7 @@
                 >
                 <p>
                     Also make sure to consider voting for
-                    <a class="colored" href="https://beatsaver.com/profile/4284453" target="_blank">AnitLink</a> as
+                    <a class="colored" href="https://beatsaver.com/profile/4284453" target="_blank">AntiLink</a> as
                     Rookie Mapper of the Year, he makes sick maps 😁
                 </p>
             </vs-alert>
