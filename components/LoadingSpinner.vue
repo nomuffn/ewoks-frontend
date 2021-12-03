@@ -6,7 +6,7 @@
 </template>
 
 <script>
-export default {};
+export default {}
 </script>
 
 <style>
@@ -23,7 +23,7 @@ export default {};
 }
 
 .half-circle-spinner .circle {
-    content: "";
+    content: '';
     position: absolute;
     width: 100%;
     height: 100%;

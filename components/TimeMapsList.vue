@@ -10,18 +10,18 @@
 
 <script>
 export default {
-    props: ["maps"],
+    props: ['maps'],
     methods: {
         openUrl: function(id) {
-            if (id != null) window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
+            if (id != null) window.open('https://scoresaber.com/leaderboard/' + id, '_blank')
         },
         timeString(hoursleft) {
             // lazy :))
-            if (hoursleft >= 0) return `<p class="time">~${hoursleft} hours</p>`;
-            else return "<p style='color: green; text-align: right; font-weight: bold' >RANKED</p>";
-        }
-    }
-};
+            if (hoursleft >= 0) return `<p class="time">~${hoursleft} hours</p>`
+            else return "<p style='color: green; text-align: right; font-weight: bold' >RANKED</p>"
+        },
+    },
+}
 </script>
 
 <style scoped></style>

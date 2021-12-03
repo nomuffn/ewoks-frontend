@@ -73,13 +73,13 @@
 </template>
 
 <script>
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie'
 
 export default {
-    transition: "slide-bottom",
+    transition: 'slide-bottom',
     data() {
         return {
-            mapperInput: "",
+            mapperInput: '',
             mappers: [],
             loading: false,
             minUpvotes: 0,
@@ -87,83 +87,83 @@ export default {
             ratio: 0,
             uploadedAfter: 0,
             gameReleaseDate: 1525179660, //Tuesday, May 1, 2018
-            months: 0
-        };
+            months: 0,
+        }
     },
     computed: {
         getFormattedMonths() {
-            const now = new Date(this.gameReleaseDate * 1000);
-            const newDate = new Date(now.setMonth(now.getMonth() + this.months));
-            const month = newDate.getMonth() + 1;
-            return `${(month > 9 ? "" : "0") + month}-${newDate.getFullYear()}`;
+            const now = new Date(this.gameReleaseDate * 1000)
+            const newDate = new Date(now.setMonth(now.getMonth() + this.months))
+            const month = newDate.getMonth() + 1
+            return `${(month > 9 ? '' : '0') + month}-${newDate.getFullYear()}`
         },
         getMonthsDifference() {
-            var date1 = new Date(this.gameReleaseDate * 1000);
-            var difference = date1.getTime() - new Date();
-            return Math.abs(Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437)) - 1;
+            var date1 = new Date(this.gameReleaseDate * 1000)
+            var difference = date1.getTime() - new Date()
+            return Math.abs(Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437)) - 1
         },
         getmaxDownvotes() {
-            return this.maxDownvotes == 0 ? "-" : this.maxDownvotes;
-        }
+            return this.maxDownvotes == 0 ? '-' : this.maxDownvotes
+        },
     },
     methods: {
         async fetchPlaylist() {
-            this.loading = true;
+            this.loading = true
             try {
                 let headers = {
-                    withCredentials: process.env.NODE_ENV === "development" ? false : true,
-                    responseType: "blob",
+                    withCredentials: process.env.NODE_ENV === 'development' ? false : true,
+                    responseType: 'blob',
                     headers: {
-                        "content-type": "application/json",
-                        "X-CSRFToken": Cookies.get("csrftoken")
-                    }
-                };
+                        'content-type': 'application/json',
+                        'X-CSRFToken': Cookies.get('csrftoken'),
+                    },
+                }
                 const data = {
                     mappers: this.mappers,
                     uploadedAfter: this.months,
                     ratio: this.ratio,
                     minUpvotes: this.minUpvotes,
-                    maxDownvotes: this.maxDownvotes
-                };
+                    maxDownvotes: this.maxDownvotes,
+                }
 
                 this.$defaultApi
-                    .$post("beatsaver/playlists/", data, headers)
+                    .$post('beatsaver/playlists/', data, headers)
                     .then(response => {
-                        const blob = new Blob([response], { type: "application/json" });
-                        const link = document.createElement("a");
-                        link.href = URL.createObjectURL(blob);
-                        link.download = "muffnlabs playlist of " + this.mappers.length + " mappers";
-                        link.click();
-                        URL.revokeObjectURL(link.href);
+                        const blob = new Blob([response], { type: 'application/json' })
+                        const link = document.createElement('a')
+                        link.href = URL.createObjectURL(blob)
+                        link.download = 'muffnlabs playlist of ' + this.mappers.length + ' mappers'
+                        link.click()
+                        URL.revokeObjectURL(link.href)
                     })
                     .catch(e => {
-                        console.log(e);
-                        alert("No maps found");
-                    });
+                        console.log(e)
+                        alert('No maps found')
+                    })
             } catch (e) {
-                alert("Something went wrong");
+                alert('Something went wrong')
             } finally {
-                this.loading = false;
+                this.loading = false
             }
         },
         addMapper() {
             if (this.mapperInput) {
-                const mappers = this.mapperInput.split(",");
+                const mappers = this.mapperInput.split(',')
                 for (let mapper of mappers) {
-                    mapper = mapper.trim();
-                    if (mapper && !this.mappers.includes(mapper)) this.mappers.push(mapper);
+                    mapper = mapper.trim()
+                    if (mapper && !this.mappers.includes(mapper)) this.mappers.push(mapper)
                 }
-                this.mapperInput = "";
+                this.mapperInput = ''
             }
         },
         removeMapper(mapper) {
-            this.mappers = this.mappers.filter(m => m != mapper);
+            this.mappers = this.mappers.filter(m => m != mapper)
         },
         getFormattedUploaded(date) {
-            return date.split("T")[0];
-        }
-    }
-};
+            return date.split('T')[0]
+        },
+    },
+}
 </script>
 
 <style lang="scss">

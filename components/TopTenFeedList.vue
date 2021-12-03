@@ -31,24 +31,24 @@ export default {
         return {
             scores: [],
             loading: true,
-            visibleItems: 10
-        };
+            visibleItems: 10,
+        }
     },
     async created() {
-        this.scores = await this.$defaultApi.$get("scoresaber/toptenfeed");
-        this.loading = false;
+        this.scores = await this.$defaultApi.$get('scoresaber/toptenfeed')
+        this.loading = false
     },
     computed: {
         getScores() {
-            return this.scores?.slice(0, this.visibleItems);
-        }
+            return this.scores?.slice(0, this.visibleItems)
+        },
     },
     methods: {
         openUrl: function(id) {
-            window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
-        }
-    }
-};
+            window.open('https://scoresaber.com/leaderboard/' + id, '_blank')
+        },
+    },
+}
 </script>
 
 <style lang="scss">

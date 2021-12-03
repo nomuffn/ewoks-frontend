@@ -57,21 +57,21 @@
                 <div class="card" v-for="(item, index) in getVisibleItems" :key="item.key">
                     <div class="top">
                         <div>
-                            <p class="mapper">{{ item["levelAuthorName"] }}</p>
-                            <h3 class="name">{{ item["songName"] }}</h3>
+                            <p class="mapper">{{ item['levelAuthorName'] }}</p>
+                            <h3 class="name">{{ item['songName'] }}</h3>
                         </div>
                         <div>
                             <p>#{{ index + 1 }}</p>
                         </div>
                     </div>
                     <div class="stats">
-                        <p :class="{ colored: isActive('downloads') }">Downloads: {{ item["downloads"] }}</p>
-                        <p :class="{ colored: isActive('ratio') }">Ratio: {{ item["ratio"] }}</p>
-                        <p :class="{ colored: isActive('upvotes') }">Upvotes: {{ item["upvotes"] }}</p>
-                        <p>Star: {{ item["highestStar"] }}</p>
-                        <p :class="{ colored: isActive('downvotes') }">Downvotes: {{ item["downvotes"] }}</p>
-                        <p>Bpm: {{ item["bpm"] }}</p>
-                        <p style="flex: 1 1 100%">Uploaded: {{ getFormattedUploaded(item["uploaded"]) }}</p>
+                        <p :class="{ colored: isActive('downloads') }">Downloads: {{ item['downloads'] }}</p>
+                        <p :class="{ colored: isActive('ratio') }">Ratio: {{ item['ratio'] }}</p>
+                        <p :class="{ colored: isActive('upvotes') }">Upvotes: {{ item['upvotes'] }}</p>
+                        <p>Star: {{ item['highestStar'] }}</p>
+                        <p :class="{ colored: isActive('downvotes') }">Downvotes: {{ item['downvotes'] }}</p>
+                        <p>Bpm: {{ item['bpm'] }}</p>
+                        <p style="flex: 1 1 100%">Uploaded: {{ getFormattedUploaded(item['uploaded']) }}</p>
                     </div>
                 </div>
                 <vs-button v-if="visibleItems < results.length" class="showMore" icon @click="visibleItems += 50">
@@ -84,77 +84,77 @@
 </template>
 
 <script>
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie'
 export default {
-    transition: "slide-bottom",
+    transition: 'slide-bottom',
     data() {
         return {
             loading: false,
-            descending: "-",
+            descending: '-',
             stars: 0,
             bpm: 0,
             months: 0,
-            mapperName: "",
-            allColumns: ["Ratio", "Upvotes", "Downvotes"],
-            column: "Ratio",
+            mapperName: '',
+            allColumns: ['Ratio', 'Upvotes', 'Downvotes'],
+            column: 'Ratio',
             results: [],
             visibleItems: 10,
-            gameReleaseDate: 1525179660 //Tuesday, May 1, 2018
-        };
+            gameReleaseDate: 1525179660, //Tuesday, May 1, 2018
+        }
     },
     computed: {
         getVisibleItems() {
-            return this.results.slice(0, this.visibleItems);
+            return this.results.slice(0, this.visibleItems)
         },
         getDescending() {
-            return this.descending.replace("+", "");
+            return this.descending.replace('+', '')
         },
         getFormattedMonths() {
-            const now = new Date(this.gameReleaseDate * 1000);
-            const newDate = new Date(now.setMonth(now.getMonth() + this.months));
-            const month = newDate.getMonth() + 1;
-            return `${(month > 9 ? "" : "0") + month}-${newDate.getFullYear()}`;
+            const now = new Date(this.gameReleaseDate * 1000)
+            const newDate = new Date(now.setMonth(now.getMonth() + this.months))
+            const month = newDate.getMonth() + 1
+            return `${(month > 9 ? '' : '0') + month}-${newDate.getFullYear()}`
         },
         getMonthsDifference() {
-            var date1 = new Date(this.gameReleaseDate * 1000);
-            var difference = date1.getTime() - new Date();
-            return Math.abs(Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437)) - 1;
-        }
+            var date1 = new Date(this.gameReleaseDate * 1000)
+            var difference = date1.getTime() - new Date()
+            return Math.abs(Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437)) - 1
+        },
     },
     created() {
-        this.loadResults();
+        this.loadResults()
     },
     methods: {
         async loadResults() {
-            this.loading = true;
-            this.results = [];
+            this.loading = true
+            this.results = []
 
             let headers = {
-                withCredentials: process.env.NODE_ENV === "development" ? false : true,
+                withCredentials: process.env.NODE_ENV === 'development' ? false : true,
                 headers: {
-                    "content-type": "application/json",
-                    "X-CSRFToken": Cookies.get("csrftoken")
-                }
-            };
+                    'content-type': 'application/json',
+                    'X-CSRFToken': Cookies.get('csrftoken'),
+                },
+            }
             const data = {
                 column: this.getDescending + this.column.toLowerCase(),
                 stars: this.stars,
                 bpm: this.bpm,
                 months: this.months,
-                mapper: this.mapperName
-            };
-            this.results = await this.$defaultApi.$post("beatsaver/stats/", data, headers);
-            this.visibleItems = 10;
-            this.loading = false;
+                mapper: this.mapperName,
+            }
+            this.results = await this.$defaultApi.$post('beatsaver/stats/', data, headers)
+            this.visibleItems = 10
+            this.loading = false
         },
         isActive(string) {
-            return this.column.toLowerCase() == string;
+            return this.column.toLowerCase() == string
         },
         getFormattedUploaded(date) {
-            return date.split("T")[0];
-        }
-    }
-};
+            return date.split('T')[0]
+        },
+    },
+}
 </script>
 
 <style lang="scss">

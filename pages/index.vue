@@ -401,12 +401,12 @@
 </template>
 
 <script>
-import { fixWalls, convertToDots } from "@/assets/Helpers"
+import { fixWalls, convertToDots } from '@/assets/Helpers'
 
 export default {
     data() {
         return {
-            bpm: ""
+            bpm: '',
         }
     },
     methods: {
@@ -415,8 +415,8 @@ export default {
         },
         fixWalls(input) {
             fixWalls(input, this.bpm)
-        }
-    }
+        },
+    },
 }
 </script>
 

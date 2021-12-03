@@ -14,7 +14,7 @@
                 :key="index"
                 :class="{
                     hasDownvotes: hasDownvotes(item),
-                    qualified: !hasDownvotes(item) && remainingMods(item, true) == 0
+                    qualified: !hasDownvotes(item) && remainingMods(item, true) == 0,
                 }"
             >
                 <template #text>
@@ -43,11 +43,11 @@
 
 <script>
 export default {
-    transition: "slide-bottom",
+    transition: 'slide-bottom',
     data() {
         return {
             data: [],
-            loading: true
+            loading: true,
         }
     },
     methods: {
@@ -63,7 +63,7 @@ export default {
             return modsLeft
         },
         openUrl: function(item) {
-            window.open("https://new.scoresaber.com/ranking/request/" + item.request)
+            window.open('https://new.scoresaber.com/ranking/request/' + item.request)
         },
         getRemainingModsText(item) {
             const modsLeft = this.remainingMods(item)
@@ -74,13 +74,13 @@ export default {
             const diffTime = Math.abs(Date.now() - date)
             let timeAgo = Math.ceil(diffTime / (1000 * 60 * 60))
             return Math.round(timeAgo / 24)
-        }
+        },
     },
     async created() {
         const axios = this.$axios.create()
         //beautiful
-        this.data = (await axios.$get("https://new.scoresaber.com/api/ranking/requests/top")).requests.concat(
-            (await axios.$get("https://new.scoresaber.com/api/ranking/requests/belowTop")).requests
+        this.data = (await axios.$get('https://new.scoresaber.com/api/ranking/requests/top')).requests.concat(
+            (await axios.$get('https://new.scoresaber.com/api/ranking/requests/belowTop')).requests,
         )
 
         let i = 0
@@ -90,14 +90,14 @@ export default {
                     i++
 
                     let requestDetails = (
-                        await axios.$get("https://new.scoresaber.com/api/ranking/request/" + mapset.request)
+                        await axios.$get('https://new.scoresaber.com/api/ranking/request/' + mapset.request)
                     ).request
                     let allComments = requestDetails.info.rankComments
 
                     for (const diff of requestDetails.difficulties) {
                         if (diff.request != mapset.request) {
                             let diffDetails = await axios.$get(
-                                "https://new.scoresaber.com/api/ranking/request/" + diff.request
+                                'https://new.scoresaber.com/api/ranking/request/' + diff.request,
                             )
                             allComments = allComments.concat(diffDetails.request.info.rankComments)
                         }
@@ -117,7 +117,7 @@ export default {
             }
         }
         this.loading = false
-    }
+    },
 }
 </script>
 

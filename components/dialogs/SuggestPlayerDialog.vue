@@ -1,11 +1,5 @@
 <template>
-    <vs-dialog
-        auto-width
-        not-center
-        dark
-        v-model="value['suggest']"
-        v-on:close="close"
-    >
+    <vs-dialog auto-width not-center dark v-model="value['suggest']" v-on:close="close">
         <template #header>
             <h3>Suggest a player</h3>
         </template>
@@ -21,12 +15,7 @@
                 will be checked by the script
             </p>
 
-            <vs-button
-                style="max-width: 60px"
-                animation-type="scale"
-                @click="submit"
-                :loading="loading"
-            >
+            <vs-button style="max-width: 60px" animation-type="scale" @click="submit" :loading="loading">
                 <i class="noMargin bx bxs-paper-plane"></i>
                 <template #animate> submit </template>
             </vs-button>
@@ -39,7 +28,7 @@
 </template>
 
 <script>
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie'
 export default {
     watch: {},
     props: {
@@ -47,27 +36,27 @@ export default {
     },
     data() {
         return {
-            twitch: "",
-            scoresaber: "",
+            twitch: '',
+            scoresaber: '',
             loading: false,
-            response: "",
-        };
+            response: '',
+        }
     },
     methods: {
         async submit() {
-            if (this.twitch == "" || this.scoresaber == "") {
-                this.response = "Fields can't be empty :(";
-                return;
+            if (this.twitch == '' || this.scoresaber == '') {
+                this.response = "Fields can't be empty :("
+                return
             }
 
-            this.loading = true;
-            this.response = "";
+            this.loading = true
+            this.response = ''
 
-            var CSRF_TOKEN = Cookies.get("csrftoken");
+            var CSRF_TOKEN = Cookies.get('csrftoken')
             let headers = {
-                "content-type": "application/json",
-                "X-CSRFToken": CSRF_TOKEN,
-            };
+                'content-type': 'application/json',
+                'X-CSRFToken': CSRF_TOKEN,
+            }
 
             this.response = (
                 await this.$mapttsApi.post(
@@ -76,19 +65,19 @@ export default {
                         twitchName: this.twitch,
                         scoresaberId: this.scoresaber,
                     },
-                    { withCredentials: true, headers }
+                    { withCredentials: true, headers },
                 )
-            ).data;
+            ).data
 
-            this.loading = false;
+            this.loading = false
         },
         close() {
-            this.twitch = "";
-            this.scoresaber = "";
-            this.response = "";
+            this.twitch = ''
+            this.scoresaber = ''
+            this.response = ''
         },
     },
-};
+}
 </script>
 
 <style lang="scss" scoped>

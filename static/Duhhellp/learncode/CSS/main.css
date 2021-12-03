@@ -1,15 +1,18 @@
 body {
-	background: #ccc;
-	font-family: arial;
+    background: #ccc;
+    font-family: arial;
 }
 
-h1, h2, p, li {
-	color: #333;
+h1,
+h2,
+p,
+li {
+    color: #333;
 }
 
 p {
-	background: #666;
-	color: white;
-	padding: 10px;
-	width: 60%;
+    background: #666;
+    color: white;
+    padding: 10px;
+    width: 60%;
 }
