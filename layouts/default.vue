@@ -5,14 +5,17 @@
             <vs-alert class="alert" color="primary">
                 <p>
                     Beastsaber Mapping Awards are happening - I appreciate anyone who considers or votes for any of my
-                    maps. Thanks in advance<img src="peepohappycry.png" />
+                    maps. Thanks in advance<img src="/peepohappycry.png" />
+                </p>
+                <p>
+                    Some maps: Kingslayer, Popular Monster, Trapped In The Past, Drifting, Obey, Clouds, CD 321,
+                    Architecture, Dabun Ningen, Duplication, Alone
                 </p>
                 <a class="bsaber" href="https://bsaber.com/introducing-the-beastsaber-mapping-awards" target="_blank"
                     >https://bsaber.com/introducing-the-beastsaber-mapping-awards/</a
                 >
                 <p>
-                    Some maps: Kingslayer, Popular Monster, Trapped In The Past, Drifting, Obey, Clouds, CD 321,
-                    Architecture, Dabun Ningen, Duplication, Alone
+                    Also make sure to consider voting for AntiLink as Rookie Mapper of the Year, he makes sick maps 😁
                 </p>
             </vs-alert>
         </div>
