@@ -15,7 +15,9 @@
                     >https://bsaber.com/introducing-the-beastsaber-mapping-awards/</a
                 >
                 <p>
-                    Also make sure to consider voting for AntiLink as Rookie Mapper of the Year, he makes sick maps 😁
+                    Also make sure to consider voting for
+                    <a class="colored" href="https://beatsaver.com/profile/4284453" target="_blank">AnitLink</a> as
+                    Rookie Mapper of the Year, he makes sick maps 😁
                 </p>
             </vs-alert>
         </div>
@@ -159,8 +161,18 @@ export default {
     .title {
         padding-bottom: 0;
     }
-    p {
+    p,
+    span {
         color: white;
+
+        a {
+            color: rgb(var(--vs-primary)) !important;
+            font-weight: bold;
+            text-decoration: inherit;
+            &:hover {
+                opacity: 1;
+            }
+        }
     }
     img {
         width: 30px;
