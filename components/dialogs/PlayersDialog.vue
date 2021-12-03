@@ -5,28 +5,20 @@
         </template>
 
         <ul class="con-content">
-            <li
-                class="player"
-                v-for="player of players"
-                :key="player.scoresaberId"
-            >
-                <a
-                    target="_blank"
-                    :href="`https://www.twitch.tv/${player.twitchName}`"
+            <li class="player" v-for="player of players" :key="player.scoresaberId">
+                <a target="_blank" :href="`https://www.twitch.tv/${player.twitchName}`"
                     ><b>{{ `${player.twitchName}` }}</b></a
                 >
-                <a
-                    target="_blank"
-                    :href="`https://scoresaber.com/u/${player.scoresaberId}`"
-                    >{{ `scoresaber.com/u/${player.scoresaberId}` }}</a
-                >
+                <a target="_blank" :href="`https://scoresaber.com/u/${player.scoresaberId}`">{{
+                    `scoresaber.com/u/${player.scoresaberId}`
+                }}</a>
             </li>
         </ul>
     </vs-dialog>
 </template>
 
 <script>
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie'
 export default {
     props: {
         value: Object,
@@ -34,12 +26,12 @@ export default {
     data() {
         return {
             players: [],
-        };
+        }
     },
     async created() {
-        this.players = await this.$mapttsApi.$get(`players/`);
+        this.players = await this.$mapttsApi.$get(`players/`)
     },
-};
+}
 </script>
 
 <style lang="scss">
@@ -65,7 +57,7 @@ export default {
             &:after {
                 background: none repeat scroll 0 0 transparent;
                 bottom: 0;
-                content: "";
+                content: '';
                 display: block;
                 height: 2px;
                 left: 50%;
@@ -82,7 +74,7 @@ export default {
     }
 
     ul li::before {
-        content: "\2022";
+        content: '\2022';
         color: white;
         font-weight: bold;
         display: inline-block;

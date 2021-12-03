@@ -7,21 +7,21 @@
                         Statistics stuff
                     </h2>
                     <p v-if="stats">
-                        Difficulties ranked: {{ stats["total"] }}
+                        Difficulties ranked: {{ stats['total'] }}
                         <br />
-                        > 600pp: {{ stats["600"] }}
+                        > 600pp: {{ stats['600'] }}
                         <br />
-                        > 500pp: {{ stats["500"] }}
+                        > 500pp: {{ stats['500'] }}
                         <br />
-                        > 400pp: {{ stats["400"] }}
+                        > 400pp: {{ stats['400'] }}
                         <br />
-                        > 300pp: {{ stats["300"] }}
+                        > 300pp: {{ stats['300'] }}
                         <br />
-                        > 200pp: {{ stats["200"] }}
+                        > 200pp: {{ stats['200'] }}
                         <br />
-                        > 100pp: {{ stats["100"] }}
+                        > 100pp: {{ stats['100'] }}
                         <br />
-                        > 0pp: {{ stats["0"] }}
+                        > 0pp: {{ stats['0'] }}
                         <br />
                     </p>
                 </div>
@@ -43,22 +43,22 @@
 
 <script>
 export default {
-    transition: "slide-bottom",
+    transition: 'slide-bottom',
     data() {
         return {
             stats: null,
-            active: "beatsaver"
-        };
+            active: 'beatsaver',
+        }
     },
     async created() {
-        if (this.$route.name.split("-").length == 1) {
-            this.$router.push({ path: "Statistics/beatsaver" });
-        } else if (this.$route.path.includes("scoresaber")) {
-            this.active = "scoresaber";
+        if (this.$route.name.split('-').length == 1) {
+            this.$router.push({ path: 'Statistics/beatsaver' })
+        } else if (this.$route.path.includes('scoresaber')) {
+            this.active = 'scoresaber'
         }
-        this.stats = await this.$defaultApi.$get("scoresaber/ppdist");
-    }
-};
+        this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
+    },
+}
 </script>
 
 <style lang="scss">

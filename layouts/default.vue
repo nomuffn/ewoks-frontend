@@ -40,7 +40,7 @@
 </template>
 
 <script>
-var ColorHandler = require("@/assets/ColorHandler.js")
+var ColorHandler = require('@/assets/ColorHandler.js')
 export default {
     created() {
         ColorHandler.setColor()
@@ -49,66 +49,66 @@ export default {
         return {
             link: [
                 {
-                    rel: "icon",
-                    type: "image/svg+xml",
-                    href: "/favicons/" + this.getRandomFavicon()
-                }
-            ]
+                    rel: 'icon',
+                    type: 'image/svg+xml',
+                    href: '/favicons/' + this.getRandomFavicon(),
+                },
+            ],
         }
     },
     methods: {
         isActive(page) {
-            if (this.$route.path.substring(1).split("/")[0] == page.path) {
+            if (this.$route.path.substring(1).split('/')[0] == page.path) {
                 return true
             }
         },
         getRandomFavicon() {
             const icons = [
-                "easmile.ico",
-                "gael.ico",
-                "monkaogre.ico",
-                "muffn.ico",
-                "muffncool.ico",
-                "muffnw.ico",
-                "waaa.ico",
-                "wicked.ico",
-                "lohl.ico"
+                'easmile.ico',
+                'gael.ico',
+                'monkaogre.ico',
+                'muffn.ico',
+                'muffncool.ico',
+                'muffnw.ico',
+                'waaa.ico',
+                'wicked.ico',
+                'lohl.ico',
             ]
             return icons[Math.floor(Math.random() * icons.length)]
-        }
+        },
     },
     data() {
         return {
-            active: "",
+            active: '',
             pages: [
                 {
-                    path: "",
-                    icon: "bx-home",
-                    name: "Home"
+                    path: '',
+                    icon: 'bx-home',
+                    name: 'Home',
                 },
                 {
-                    path: "RankingQueue",
-                    icon: "bx-list-ul",
-                    name: "Ranking Queue"
+                    path: 'RankingQueue',
+                    icon: 'bx-list-ul',
+                    name: 'Ranking Queue',
                 },
                 {
-                    path: "MapTts",
-                    icon: "bx-tv",
-                    name: "MapTts"
+                    path: 'MapTts',
+                    icon: 'bx-tv',
+                    name: 'MapTts',
                 },
                 {
-                    path: "Statistics",
-                    icon: "bx-stats",
-                    name: "Statistics"
+                    path: 'Statistics',
+                    icon: 'bx-stats',
+                    name: 'Statistics',
                 },
                 {
-                    path: "Playlists",
-                    icon: "bxs-playlist",
-                    name: "Playlist maker"
-                }
-            ]
+                    path: 'Playlists',
+                    icon: 'bxs-playlist',
+                    name: 'Playlist maker',
+                },
+            ],
         }
-    }
+    },
 }
 </script>
 

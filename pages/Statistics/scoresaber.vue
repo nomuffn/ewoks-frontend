@@ -39,7 +39,7 @@
 
 <script>
 export default {
-    transition: "slide-bottom",
+    transition: 'slide-bottom',
     data() {
         return {
             data: [],
@@ -50,64 +50,64 @@ export default {
             mapsDialog: null,
             lists: {
                 mapsetMappers: {
-                    title: "Mapset Count By Mappers",
+                    title: 'Mapset Count By Mappers',
                     getData: () => {
-                        return this.loadFromApi("scoresaber/mapperdist");
-                    }
+                        return this.loadFromApi('scoresaber/mapperdist')
+                    },
                 },
                 diffMappers: {
-                    title: "Difficulty Count By Mappers",
+                    title: 'Difficulty Count By Mappers',
                     getData: () => {
-                        return this.loadFromApi("scoresaber/mapperdiffdist");
-                    }
+                        return this.loadFromApi('scoresaber/mapperdiffdist')
+                    },
                 },
                 mapsetArtists: {
-                    title: "Mapset Count By Song Artists",
+                    title: 'Mapset Count By Song Artists',
                     getData: () => {
-                        return this.loadFromApi("scoresaber/artistdist");
-                    }
+                        return this.loadFromApi('scoresaber/artistdist')
+                    },
                 },
                 mapsetMappersQueue: {
-                    title: "Mappers Count (Ranking Queue)",
+                    title: 'Mappers Count (Ranking Queue)',
                     getData: async () => {
-                        return (await this.loadFromApi("scoresaber/rq/mappers")).map(mapper => {
-                            return { ...mapper, value: mapper.value.length, maps: mapper.value };
-                        });
-                    }
-                }
-            }
-        };
+                        return (await this.loadFromApi('scoresaber/rq/mappers')).map(mapper => {
+                            return { ...mapper, value: mapper.value.length, maps: mapper.value }
+                        })
+                    },
+                },
+            },
+        }
     },
     computed: {
         getVisibleItems() {
-            return this.data.slice(0, this.visibleItems);
-        }
+            return this.data.slice(0, this.visibleItems)
+        },
     },
 
     async created() {
-        this.stats = await this.$defaultApi.$get("scoresaber/ppdist");
-        this.activeList = this.$route.query?.list || "mapsetMappers";
+        this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
+        this.activeList = this.$route.query?.list || 'mapsetMappers'
     },
     watch: {
         async activeList() {
-            this.loading = true;
-            this.$router.push({ query: { list: this.activeList } });
-            this.visibleItems = 10;
-            this.data = await this.lists[this.activeList].getData();
-            this.loading = false;
-        }
+            this.loading = true
+            this.$router.push({ query: { list: this.activeList } })
+            this.visibleItems = 10
+            this.data = await this.lists[this.activeList].getData()
+            this.loading = false
+        },
     },
     methods: {
         openUrl: function(mapper) {
-            window.open("https://scoresaber.com/?search=" + mapper, "_blank");
+            window.open('https://scoresaber.com/?search=' + mapper, '_blank')
         },
         async loadFromApi(endpoint) {
             return Object.entries(await this.$defaultApi.$get(endpoint)).map(item => {
-                return { name: item[0], value: item[1] };
-            });
-        }
-    }
-};
+                return { name: item[0], value: item[1] }
+            })
+        },
+    },
+}
 </script>
 
 <style lang="scss">

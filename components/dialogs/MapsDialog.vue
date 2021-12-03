@@ -10,7 +10,7 @@
                     `${map.name} (id: ${map.id})`
                 }}</a>
                 <p>Mapper(s): {{ map.mapper }}</p>
-                <p>Queued: {{ map.created_at.replace("T", " ").replace("Z", "") }}</p>
+                <p>Queued: {{ map.created_at.replace('T', ' ').replace('Z', '') }}</p>
                 <p>Rt Up/Downvotes: {{ `${map.rtupvotes} / ${map.rtdownvotes}` }}</p>
                 <p>Qat Up/Downvotes: {{ `${map.qatupvotes} / ${map.qatdownvotes}` }}</p>
                 <p>Hash: {{ map.hash }}</p>
@@ -26,18 +26,18 @@ export default {
         value: {
             immediate: true,
             handler(val) {
-                this.active = val != null;
-            }
-        }
+                this.active = val != null
+            },
+        },
     },
-    props: ["value"],
+    props: ['value'],
     data() {
         return {
-            active: false
-        };
+            active: false,
+        }
     },
-    async created() {}
-};
+    async created() {},
+}
 </script>
 
 <style lang="scss">

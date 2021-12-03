@@ -31,30 +31,30 @@
 <script>
 export default {
     props: {
-        score: Object
+        score: Object,
     },
     methods: {
         openUrl: function(id) {
-            window.open("https://scoresaber.com/leaderboard/" + id, "_blank");
+            window.open('https://scoresaber.com/leaderboard/' + id, '_blank')
         },
         getAgo(timeSet) {
-            const diffTime = Math.abs(Date.now() - new Date(timeSet));
-            let timeAgo = Math.ceil(diffTime / (1000 * 60 * 60));
+            const diffTime = Math.abs(Date.now() - new Date(timeSet))
+            let timeAgo = Math.ceil(diffTime / (1000 * 60 * 60))
             if (timeAgo > 24) {
-                timeAgo = Math.round(timeAgo / 24) + "d";
+                timeAgo = Math.round(timeAgo / 24) + 'd'
             } else {
-                timeAgo = timeAgo + "h";
+                timeAgo = timeAgo + 'h'
             }
-            return timeAgo;
+            return timeAgo
         },
         getPosition(string, subString, index) {
-            return string.split(subString, index).join(subString).length;
+            return string.split(subString, index).join(subString).length
         },
         getDifficulty(difficultyRaw) {
-            return difficultyRaw.substring(1, this.getPosition(difficultyRaw, "_", 2));
-        }
-    }
-};
+            return difficultyRaw.substring(1, this.getPosition(difficultyRaw, '_', 2))
+        },
+    },
+}
 </script>
 
 <style lang="scss" scoped>

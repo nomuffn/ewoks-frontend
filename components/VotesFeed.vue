@@ -9,7 +9,7 @@
                     <span v-for="(string, index) of vote.strings" :key="index">
                         <span
                             v-bind:class="{
-                                red: string[0] == 'qat'
+                                red: string[0] == 'qat',
                             }"
                             >{{ string[0].toUpperCase() }}</span
                         >
@@ -34,49 +34,49 @@ export default {
         return {
             votes: null,
             loading: true,
-            visibleItems: 10
-        };
+            visibleItems: 10,
+        }
     },
     async created() {
-        this.votes = await this.$defaultApi.$get("scoresaber/rq/feed");
-        this.loading = false;
+        this.votes = await this.$defaultApi.$get('scoresaber/rq/feed')
+        this.loading = false
 
         for (let index = 0; index < this.votes.length; index++) {
-            let element = this.votes[index];
+            let element = this.votes[index]
 
             if (element.hoursleft > 24) {
-                this.votes[index].hoursago = "~" + Math.round(element.hoursago / 24) + " days";
+                this.votes[index].hoursago = '~' + Math.round(element.hoursago / 24) + ' days'
             } else {
-                this.votes[index].hoursago = "~" + element.hoursago + " hours";
+                this.votes[index].hoursago = '~' + element.hoursago + ' hours'
             }
 
             for (let [key, value] of Object.entries(this.votes[index].votes)) {
-                let str = key.split("_");
-                str[1] = this.capitalizeTheFirstLetterOfEachWord(str[1]) + ": " + (value > 0 ? "+" + value : value);
+                let str = key.split('_')
+                str[1] = this.capitalizeTheFirstLetterOfEachWord(str[1]) + ': ' + (value > 0 ? '+' + value : value)
 
-                if (!this.votes[index].strings) this.votes[index].strings = [];
-                this.votes[index].strings.push(str);
+                if (!this.votes[index].strings) this.votes[index].strings = []
+                this.votes[index].strings.push(str)
             }
         }
     },
     computed: {
         getVotes() {
-            return this.votes?.slice(0, this.visibleItems);
-        }
+            return this.votes?.slice(0, this.visibleItems)
+        },
     },
     methods: {
         openUrl: function(id) {
-            window.open("https://new.scoresaber.com/ranking/request/" + id, "_blank");
+            window.open('https://new.scoresaber.com/ranking/request/' + id, '_blank')
         },
         capitalizeTheFirstLetterOfEachWord(words) {
-            var separateWord = words.toLowerCase().split(" ");
+            var separateWord = words.toLowerCase().split(' ')
             for (var i = 0; i < separateWord.length; i++) {
-                separateWord[i] = separateWord[i].charAt(0).toUpperCase() + separateWord[i].substring(1);
+                separateWord[i] = separateWord[i].charAt(0).toUpperCase() + separateWord[i].substring(1)
             }
-            return separateWord.join(" ");
-        }
-    }
-};
+            return separateWord.join(' ')
+        },
+    },
+}
 </script>
 
 <style lang="scss">

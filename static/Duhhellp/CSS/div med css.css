@@ -1,15 +1,14 @@
 .lame {
-	border: 10px ridge #FF0000;
-	background-color: #FFFF00;
-	padding: .5rem;
-	display: flex;
-	flex-direction: column;
+    border: 10px ridge #ff0000;
+    background-color: #ffff00;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
 }
 
 .lame p {
-	color: #060606;
+    color: #060606;
 }
 
 .lame img {
-	
 }

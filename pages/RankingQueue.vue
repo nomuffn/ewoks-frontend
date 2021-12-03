@@ -16,15 +16,15 @@
                         <br />
 
                         <template v-if="stats">
-                            - week: <b>{{ stats["168"] }}</b>
+                            - week: <b>{{ stats['168'] }}</b>
                             <br />
-                            - 2 weeks: <b>{{ stats["336"] }}</b>
+                            - 2 weeks: <b>{{ stats['336'] }}</b>
                             <br />
-                            - month: <b>{{ stats["720"] }}</b>
+                            - month: <b>{{ stats['720'] }}</b>
                             <br />
-                            - 3 months: <b>{{ stats["2160"] }}</b>
+                            - 3 months: <b>{{ stats['2160'] }}</b>
                             <br />
-                            - 6 months: <b>{{ stats["4320"] }}</b>
+                            - 6 months: <b>{{ stats['4320'] }}</b>
                         </template>
                     </vs-alert>
 
@@ -83,28 +83,28 @@
 
 <script>
 export default {
-    transition: "slide-bottom",
+    transition: 'slide-bottom',
     data() {
         return {
             maps: null,
             stats: null,
             votesStats: null,
-            loading: true
-        };
+            loading: true,
+        }
     },
     async created() {
-        this.maps = await this.$defaultApi.$get("scoresaber/qualified");
-        this.stats = await this.$defaultApi.$get("scoresaber/rankedspans");
-        this.votesStats = await this.$defaultApi.$get("scoresaber/rq/stats");
-        this.loading = false;
+        this.maps = await this.$defaultApi.$get('scoresaber/qualified')
+        this.stats = await this.$defaultApi.$get('scoresaber/rankedspans')
+        this.votesStats = await this.$defaultApi.$get('scoresaber/rq/stats')
+        this.loading = false
     },
     mounted() {
         this.$nextTick(() => {
-            this.$nuxt.$loading.start();
-            setTimeout(() => this.$nuxt.$loading.finish(), 500);
-        });
-    }
-};
+            this.$nuxt.$loading.start()
+            setTimeout(() => this.$nuxt.$loading.finish(), 500)
+        })
+    },
+}
 </script>
 
 <style lang="scss">
