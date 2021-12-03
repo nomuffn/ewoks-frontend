@@ -4,7 +4,7 @@
             <div class="summary">
                 <h2>Ayo</h2>
                 <span>
-                    <p>i do stuff for beatsaber</p>
+                    <p>i do stuff for beat saber</p>
                     <img style="margin-left: 10px" src="wicked.png" />
                 </span>
 
@@ -36,7 +36,7 @@
                     </vs-button>
                 </div>
                 <figure>
-                    <img src="muffnsuic.webp" />
+                    <img src="muffnsuic.gif" />
                     <footer>
                         <small
                             >Made by
@@ -401,23 +401,23 @@
 </template>
 
 <script>
-import { fixWalls, convertToDots } from "@/assets/Helpers";
+import { fixWalls, convertToDots } from "@/assets/Helpers"
 
 export default {
     data() {
         return {
             bpm: ""
-        };
+        }
     },
     methods: {
         convertToDots(input) {
-            convertToDots(input);
+            convertToDots(input)
         },
         fixWalls(input) {
-            fixWalls(input, this.bpm);
+            fixWalls(input, this.bpm)
         }
     }
-};
+}
 </script>
 
 <style lang="scss">
