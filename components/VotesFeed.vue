@@ -66,7 +66,7 @@ export default {
     },
     methods: {
         openUrl: function(id) {
-            window.open('https://new.scoresaber.com/ranking/request/' + id, '_blank')
+            window.open('https://scoresaber.com/ranking/request/' + id, '_blank')
         },
         capitalizeTheFirstLetterOfEachWord(words) {
             var separateWord = words.toLowerCase().split(' ')

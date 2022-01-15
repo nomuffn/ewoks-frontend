@@ -99,7 +99,7 @@ export default {
     },
     methods: {
         openUrl: function(mapper) {
-            window.open('https://scoresaber.com/?search=' + mapper, '_blank')
+            window.open('https://scoresaber.com/leaderboards?search=' + mapper, '_blank')
         },
         async loadFromApi(endpoint) {
             return Object.entries(await this.$defaultApi.$get(endpoint)).map(item => {
