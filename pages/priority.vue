@@ -63,7 +63,7 @@ export default {
             return modsLeft
         },
         openUrl: function(item) {
-            window.open('https://new.scoresaber.com/ranking/request/' + item.request)
+            window.open('https://scoresaber.com/ranking/request/' + item.request)
         },
         getRemainingModsText(item) {
             const modsLeft = this.remainingMods(item)
@@ -79,8 +79,8 @@ export default {
     async created() {
         const axios = this.$axios.create()
         //beautiful
-        this.data = (await axios.$get('https://new.scoresaber.com/api/ranking/requests/top')).requests.concat(
-            (await axios.$get('https://new.scoresaber.com/api/ranking/requests/belowTop')).requests,
+        this.data = (await axios.$get('https://scoresaber.com/api/ranking/requests/top')).requests.concat(
+            (await axios.$get('https://scoresaber.com/api/ranking/requests/belowTop')).requests,
         )
 
         let i = 0
@@ -90,14 +90,14 @@ export default {
                     i++
 
                     let requestDetails = (
-                        await axios.$get('https://new.scoresaber.com/api/ranking/request/' + mapset.request)
+                        await axios.$get('https://scoresaber.com/api/ranking/request/' + mapset.request)
                     ).request
                     let allComments = requestDetails.info.rankComments
 
                     for (const diff of requestDetails.difficulties) {
                         if (diff.request != mapset.request) {
                             let diffDetails = await axios.$get(
-                                'https://new.scoresaber.com/api/ranking/request/' + diff.request,
+                                'https://scoresaber.com/api/ranking/request/' + diff.request,
                             )
                             allComments = allComments.concat(diffDetails.request.info.rankComments)
                         }
