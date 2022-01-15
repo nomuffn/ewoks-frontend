@@ -102,9 +102,14 @@ export default {
             window.open('https://scoresaber.com/leaderboards?search=' + mapper, '_blank')
         },
         async loadFromApi(endpoint) {
-            return Object.entries(await this.$defaultApi.$get(endpoint)).map(item => {
-                return { name: item[0], value: item[1] }
-            })
+            let data = await this.$defaultApi.$get(endpoint)
+            return Object.entries(data)
+                .sort((a, b) => {
+                    return b[1] - a[1]
+                })
+                .map(item => {
+                    return { name: item[0], value: item[1] }
+                })
         },
     },
 }
