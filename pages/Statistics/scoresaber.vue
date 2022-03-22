@@ -1,19 +1,31 @@
 <template>
     <div class="scoresaber">
-        <vs-navbar color="#18191c" text-white square v-model="activeList">
+        <vs-select
+            v-if="activeList"
+            v-model="activeList"
+            label-placeholder="Sorted by"
+            class="select"
+            :loading="loading"
+        >
+            <vs-option
+                v-for="(item, key) in lists"
+                :key="key"
+                :value="key"
+                :label="item.title"
+            >
+                {{ item.title }}
+            </vs-option>
+        </vs-select>
+
+        <!-- <vs-navbar color="#18191c" text-white square v-model="activeList">
             <vs-navbar-item v-for="(item, key) in lists" :key="key" :active="activeList == key" :id="key">
                 {{ item.title }}
             </vs-navbar-item>
-        </vs-navbar>
+        </vs-navbar> -->
 
         <div class="sub-content">
             <div v-if="activeList" class="list">
-                <div class="title_container">
-                    <h2 class="title">{{ lists[activeList].title }}</h2>
-                </div>
-
-                <loading-spinner v-if="loading" style="margin-bottom: 500px;" />
-                <div v-else-if="!loading && data.length > 0" class="cards vertical">
+                <div v-if="!loading && data.length > 0" class="cards vertical">
                     <p>Amount: {{ data.length }}</p>
                     <div
                         class="card"
@@ -21,13 +33,23 @@
                         v-on:click="openUrl(item.name)"
                         :key="index"
                     >
-                        <h3>
+                        <h4>
                             <span class="colored">#{{ index + 1 }}</span>
                             {{ item.name }}: {{ item.value }}
-                        </h3>
-                        <vs-button v-if="item.maps" v-on:click.stop="mapsDialog = item" border>Maps</vs-button>
+                        </h4>
+                        <vs-button
+                            v-if="item.maps"
+                            v-on:click.stop="mapsDialog = item"
+                            border
+                            >Maps</vs-button
+                        >
                     </div>
-                    <vs-button v-if="visibleItems < data.length" class="showMore" icon @click="visibleItems += 50">
+                    <vs-button
+                        v-if="visibleItems < data.length"
+                        class="showMore"
+                        icon
+                        @click="visibleItems += 50"
+                    >
                         Show more
                     </vs-button>
                 </div>
@@ -43,7 +65,7 @@ export default {
     data() {
         return {
             data: [],
-            activeList: null,
+            activeList: this.$route.query?.list || 'mapsetMappers',
             visibleItems: 10,
             loading: false,
             stats: null,
@@ -67,11 +89,17 @@ export default {
                         return this.loadFromApi('scoresaber/artistdist')
                     },
                 },
-                mapsetMappersQueue: {
+                mapsetRQMappers: {
                     title: 'Mappers Count (Ranking Queue)',
                     getData: async () => {
-                        return (await this.loadFromApi('scoresaber/rq/mappers')).map(mapper => {
-                            return { ...mapper, value: mapper.value.length, maps: mapper.value }
+                        return (
+                            await this.loadFromApi('scoresaber/rq/mappers')
+                        ).map(mapper => {
+                            return {
+                                ...mapper,
+                                value: mapper.value.length,
+                                maps: mapper.value,
+                            }
                         })
                     },
                 },
@@ -86,20 +114,25 @@ export default {
 
     async created() {
         this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
-        this.activeList = this.$route.query?.list || 'mapsetMappers'
     },
     watch: {
-        async activeList() {
-            this.loading = true
-            this.$router.push({ query: { list: this.activeList } })
-            this.visibleItems = 10
-            this.data = await this.lists[this.activeList].getData()
-            this.loading = false
+        activeList: {
+            immediate: true,
+            async handler(val) {
+                this.loading = true
+                this.$router.push({ query: { list: this.activeList } })
+                this.visibleItems = 10
+                this.data = await this.lists[this.activeList].getData()
+                this.loading = false
+            },
         },
     },
     methods: {
         openUrl: function(mapper) {
-            window.open('https://scoresaber.com/leaderboards?search=' + mapper, '_blank')
+            window.open(
+                'https://scoresaber.com/leaderboards?search=' + mapper,
+                '_blank',
+            )
         },
         async loadFromApi(endpoint) {
             let data = await this.$defaultApi.$get(endpoint)
@@ -124,6 +157,12 @@ export default {
     align-items: center;
     margin-top: 0;
     max-width: 100%;
+
+    .select {
+        margin: 60px 0px 20px;
+        width: 100%;
+        max-width: 400px;
+    }
 
     .sub-content {
         width: 100%;

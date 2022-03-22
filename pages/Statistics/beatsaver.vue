@@ -5,12 +5,24 @@
                 <h2>Filter for ranked songs</h2>
                 <div class="myrow">
                     <label>Filter by mapper</label>
-                    <vs-input v-model="mapperName" type="search" placeholder="Mapper name" />
+                    <!-- maybe generally use forms? lohl -->
+                    <form @submit.prevent="loadResults">
+                        <vs-input
+                            v-model="mapperName"
+                            type="search"
+                            placeholder="Mapper name"
+                        />
+                    </form>
                 </div>
                 <div class="myrow">
                     <label>Order by</label>
                     <vs-select placeholder="Order by" v-model="column">
-                        <vs-option v-for="col in allColumns" :key="col" :label="col" :value="col">
+                        <vs-option
+                            v-for="col in allColumns"
+                            :key="col"
+                            :label="col"
+                            :value="col"
+                        >
                             {{ col }}
                         </vs-option>
                     </vs-select>
@@ -25,14 +37,23 @@
                 </div>
                 <div class="myrow">
                     <label>Uploaded since: {{ getFormattedMonths }}</label>
-                    <Slider v-model="months" :min="0" :max="getMonthsDifference" :tooltips="false" />
+                    <Slider
+                        v-model="months"
+                        :min="0"
+                        :max="getMonthsDifference"
+                        :tooltips="false"
+                    />
                 </div>
                 <div class="myrow">
                     <div class="radios">
                         <vs-radio v-model="descending" val="-">
                             Descending
                         </vs-radio>
-                        <vs-radio style="margin-left: 10px" v-model="descending" val="+">
+                        <vs-radio
+                            style="margin-left: 10px"
+                            v-model="descending"
+                            val="+"
+                        >
                             Ascending
                         </vs-radio>
                     </div>
@@ -42,19 +63,20 @@
                         Filter
                     </vs-button>
                 </div>
-                <div class="myrow">
-                    <vs-alert color="primary">
-                        Beatsaver doesn't give downloads properly anymore :(
-                    </vs-alert>
-                </div>
             </div>
         </div>
         <div class="cards-container">
             <h2>Results</h2>
             <Loading v-if="loading" />
-            <p v-else-if="getVisibleItems.length == 0" class="grey">No results</p>
+            <p v-else-if="getVisibleItems.length == 0" class="grey">
+                No results
+            </p>
             <div v-else class="cards vertical">
-                <div class="card" v-for="(item, index) in getVisibleItems" :key="item.key">
+                <div
+                    class="card"
+                    v-for="(item, index) in getVisibleItems"
+                    :key="item.key"
+                >
                     <div class="top">
                         <div>
                             <p class="mapper">{{ item['levelAuthorName'] }}</p>
@@ -65,16 +87,29 @@
                         </div>
                     </div>
                     <div class="stats">
-                        <p :class="{ colored: isActive('downloads') }">Downloads: {{ item['downloads'] }}</p>
-                        <p :class="{ colored: isActive('ratio') }">Ratio: {{ item['ratio'] }}</p>
-                        <p :class="{ colored: isActive('upvotes') }">Upvotes: {{ item['upvotes'] }}</p>
+                        <p :class="{ colored: isActive('ratio') }">
+                            Ratio: {{ item['ratio'] }}
+                        </p>
+                        <p :class="{ colored: isActive('upvotes') }">
+                            Upvotes: {{ item['upvotes'] }}
+                        </p>
                         <p>Star: {{ item['highestStar'] }}</p>
-                        <p :class="{ colored: isActive('downvotes') }">Downvotes: {{ item['downvotes'] }}</p>
+                        <p :class="{ colored: isActive('downvotes') }">
+                            Downvotes: {{ item['downvotes'] }}
+                        </p>
                         <p>Bpm: {{ item['bpm'] }}</p>
-                        <p style="flex: 1 1 100%">Uploaded: {{ getFormattedUploaded(item['uploaded']) }}</p>
+                        <p style="flex: 1 1 100%">
+                            Uploaded:
+                            {{ getFormattedUploaded(item['uploaded']) }}
+                        </p>
                     </div>
                 </div>
-                <vs-button v-if="visibleItems < results.length" class="showMore" icon @click="visibleItems += 50">
+                <vs-button
+                    v-if="visibleItems < results.length"
+                    class="showMore"
+                    icon
+                    @click="visibleItems += 50"
+                >
                     Show more
                 </vs-button>
             </div>
@@ -118,7 +153,11 @@ export default {
         getMonthsDifference() {
             var date1 = new Date(this.gameReleaseDate * 1000)
             var difference = date1.getTime() - new Date()
-            return Math.abs(Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437)) - 1
+            return (
+                Math.abs(
+                    Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437),
+                ) - 1
+            )
         },
     },
     created() {
@@ -130,7 +169,8 @@ export default {
             this.results = []
 
             let headers = {
-                withCredentials: process.env.NODE_ENV === 'development' ? false : true,
+                withCredentials:
+                    process.env.NODE_ENV === 'development' ? false : true,
                 headers: {
                     'content-type': 'application/json',
                     'X-CSRFToken': Cookies.get('csrftoken'),
@@ -143,7 +183,11 @@ export default {
                 months: this.months,
                 mapper: this.mapperName,
             }
-            this.results = await this.$defaultApi.$post('beatsaver/stats/', data, headers)
+            this.results = await this.$defaultApi.$post(
+                'beatsaver/stats/',
+                data,
+                headers,
+            )
             this.visibleItems = 10
             this.loading = false
         },
@@ -184,6 +228,7 @@ export default {
             max-width: 400px;
             display: flex;
             flex-direction: column;
+            width: 100%;
 
             @media (max-width: 1000px) {
                 max-width: 100%;
@@ -209,7 +254,6 @@ export default {
             .vs-select-content {
                 max-width: inherit;
             }
-
             .vs-button {
                 width: 100%;
                 margin: 0px;

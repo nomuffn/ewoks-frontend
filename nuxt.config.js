@@ -87,4 +87,10 @@ export default {
     server: {
         host: '0.0.0.0',
     },
+
+    watchers: {
+        webpack: {
+            ignored: /node_modules/,
+        },
+    },
 }
