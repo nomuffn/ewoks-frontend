@@ -11,7 +11,7 @@
                 <div class="buttons">
                     <vs-button
                         style="flex: 1 1 100%"
-                        href="https://scoresaber.com/?search=muffn"
+                        href="https://scoresaber.com/leaderboards?search=muffn"
                         blank
                         icon
                         class="yellow"
@@ -346,14 +346,14 @@
                         </li>
                         <li>
                             <a target="_blank" href="https://accsaber.com/"
-                                >Accsaber - Ranking system about acc</a
+                                >Accsaber - Ranking system focused on accuracy</a
                             >
                         </li>
                         <li>
                             <a
                                 target="_blank"
                                 href="https://beat-savior.herokuapp.com/#/"
-                                >Beat Savior - Scoresaber Ranking Stats Tool</a
+                                >Beat Savior - Third party stats tool for scoresaber</a
                             >
                         </li>
                         <li>
