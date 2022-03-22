@@ -113,7 +113,7 @@ h3 {
     flex-wrap: wrap;
     flex-direction: row;
 }
-a {
+a:not(.nope) {
     color: inherit;
     text-decoration: none;
     position: relative;

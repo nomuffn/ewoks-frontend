@@ -22,15 +22,30 @@
                         muffn#2345
                         <i class="bx bxl-discord"></i>
                     </vs-button>
-                    <vs-button href="https://twitter.com/nomuffn" blank icon color="twitter">
+                    <vs-button
+                        href="https://twitter.com/nomuffn"
+                        blank
+                        icon
+                        color="twitter"
+                    >
                         @nomuffn
                         <i class="bx bxl-twitter"></i>
                     </vs-button>
-                    <vs-button href="https://www.twitch.tv/muffnnt" blank icon color="twitch">
+                    <vs-button
+                        href="https://www.twitch.tv/muffnnt"
+                        blank
+                        icon
+                        color="twitch"
+                    >
                         muffnnt
                         <i class="bx bxl-twitch"></i>
                     </vs-button>
-                    <vs-button href="https://github.com/nomuffn" blank icon class="github">
+                    <vs-button
+                        href="https://github.com/nomuffn"
+                        blank
+                        icon
+                        class="github"
+                    >
                         nomuffn
                         <i class="bx bxl-github"></i>
                     </vs-button>
@@ -62,15 +77,21 @@
                                 Interactive walls length fixer for rankability
                             </h3>
                             <p>
-                                Thanks Qwasyx for proper wall detection code since I'm lazy.
+                                Thanks Qwasyx for proper wall detection code
+                                since I'm lazy.
                                 <br />
                                 <br />
-                                Enter bpm and upload file. If it doesnt work try to refresh and try again.
+                                Enter bpm and upload file. If it doesnt work try
+                                to refresh and try again.
                                 <br />
                                 If it still doesnt work message me on discord.
                             </p>
 
-                            <vs-input label-placeholder="BPM" primary v-model="bpm" />
+                            <vs-input
+                                label-placeholder="BPM"
+                                primary
+                                v-model="bpm"
+                            />
 
                             <div class="buttons" id="fileinputblaWalls">
                                 <div style="flex: 1"></div>
@@ -103,8 +124,8 @@
                                 Notes to just boring dots as timings converter
                             </h3>
                             <p>
-                                If it doesnt work try to refresh and try again. If it still doesnt work message me on
-                                discord.
+                                If it doesnt work try to refresh and try again.
+                                If it still doesnt work message me on discord.
                             </p>
 
                             <div class="buttons" id="fileinputbla">
@@ -138,8 +159,8 @@
                             <p>
                                 Playlist will update every 3 hours.
                                 <br />
-                                Use Beatlist, Modassistant or the playlist downloader to the right to download
-                                playlists.
+                                Use Beatlist, Modassistant or the playlist
+                                downloader to the right to download playlists.
                                 <br />
                             </p>
 
@@ -147,10 +168,16 @@
                                 <div style="flex: 1"></div>
 
                                 <a
+                                    class="nope"
                                     href="bsplaylist://playlist/https://muffnlabs.de/playlists/InRankingQueue.json"
                                     download
                                 >
-                                    <vs-button border style="min-width: 120px" primary animation-type="scale">
+                                    <vs-button
+                                        border
+                                        style="min-width: 120px"
+                                        primary
+                                        animation-type="scale"
+                                    >
                                         <i class="bx bx-cloud-download"></i>
                                         <template #animate>
                                             One-Click Install
@@ -158,8 +185,17 @@
                                     </vs-button>
                                 </a>
 
-                                <a href="playlists/InRankingQueue.json" download>
-                                    <vs-button border style="min-width: 80px" primary animation-type="scale">
+                                <a
+                                    class="nope"
+                                    href="playlists/InRankingQueue.json"
+                                    download
+                                >
+                                    <vs-button
+                                        border
+                                        style="min-width: 80px"
+                                        primary
+                                        animation-type="scale"
+                                    >
                                         <i class="bx bx-download"></i>
                                         <template #animate> Download </template>
                                     </vs-button>
@@ -239,7 +275,8 @@
                         <div class="card">
                             <h3>Bookmarks 2 Text</h3>
                             <p>
-                                Converts bookmarks to pure text so you can rankability/playability mod in the editor.
+                                Converts bookmarks to pure text so you can
+                                rankability/playability mod in the editor.
                                 <br />
                                 - Run in a song folder
                             </p>
@@ -282,13 +319,19 @@
                     </div>
                     <ul>
                         <li>
-                            <a target="_blank" href="https://skystudioapps.com/bs-viewer/"
-                                >+1 Rabbit's BS Viewer - Map preview in browser</a
+                            <a
+                                target="_blank"
+                                href="https://skystudioapps.com/bs-viewer/"
+                                >+1 Rabbit's BS Viewer - Map preview in
+                                browser</a
                             >
                         </li>
                         <li>
-                            <a target="_blank" href="https://skystudioapps.com/mapping-tools/"
-                                >+1 Rabbit's Mapping Tools - Very helpful if you're a mapper</a
+                            <a
+                                target="_blank"
+                                href="https://skystudioapps.com/mapping-tools/"
+                                >+1 Rabbit's Mapping Tools - Very helpful if
+                                you're a mapper</a
                             >
                         </li>
                         <li>
@@ -297,24 +340,36 @@
                             >
                         </li>
                         <li>
-                            <a target="_blank" href="https://hitbloq.com/">Hitbloq - Alternative Ranking System</a>
+                            <a target="_blank" href="https://hitbloq.com/"
+                                >Hitbloq - Alternative Ranking System</a
+                            >
                         </li>
                         <li>
-                            <a target="_blank" href="https://accsaber.com/">Accsaber - Ranking system about acc</a>
+                            <a target="_blank" href="https://accsaber.com/"
+                                >Accsaber - Ranking system about acc</a
+                            >
                         </li>
                         <li>
-                            <a target="_blank" href="https://beat-savior.herokuapp.com/#/"
+                            <a
+                                target="_blank"
+                                href="https://beat-savior.herokuapp.com/#/"
                                 >Beat Savior - Scoresaber Ranking Stats Tool</a
                             >
                         </li>
                         <li>
-                            <a target="_blank" href="https://scoresaber.balibalo.xyz"
-                                >Balibalo Tools - PP Calculator, Top 200 PP Playlist, etc.
+                            <a
+                                target="_blank"
+                                href="https://scoresaber.balibalo.xyz"
+                                >Balibalo Tools - PP Calculator, Top 200 PP
+                                Playlist, etc.
                             </a>
                         </li>
                         <li>
-                            <a target="_blank" href="https://cmlsc.itch.io/beat-saber-song-downloader"
-                                >DaFluffyPotato's Beat Saber Song Downloader/Installer</a
+                            <a
+                                target="_blank"
+                                href="https://cmlsc.itch.io/beat-saber-song-downloader"
+                                >DaFluffyPotato's Beat Saber Song
+                                Downloader/Installer</a
                             >
                         </li>
                         <li>
@@ -347,7 +402,9 @@
                             >
                         </li>
                         <li>
-                            <a target="_blank" href="https://bsmg.wiki/assets/img/vive-grips-guide.d9b6ee34.png"
+                            <a
+                                target="_blank"
+                                href="https://bsmg.wiki/assets/img/vive-grips-guide.d9b6ee34.png"
                                 >Vive Grips</a
                             >
                         </li>
@@ -367,7 +424,9 @@
                     </div>
                     <ul>
                         <li>
-                            <a target="_blank" href="https://discord.gg/beatsabermods"
+                            <a
+                                target="_blank"
+                                href="https://discord.gg/beatsabermods"
                                 >Beat Saber Modding Group - Modding stuff</a
                             >
                         </li>
@@ -377,25 +436,36 @@
                             >
                         </li>
                         <li>
-                            <a target="_blank" href="https://discord.gg/dwe8mbC">Cube Community - Community stuff</a>
+                            <a target="_blank" href="https://discord.gg/dwe8mbC"
+                                >Cube Community - Community stuff</a
+                            >
                         </li>
                         <li>
-                            <a target="_blank" href="https://discord.gg/5NjfSAC">BeatKhana! - Tournament stuff</a>
+                            <a target="_blank" href="https://discord.gg/5NjfSAC"
+                                >BeatKhana! - Tournament stuff</a
+                            >
                         </li>
                         <li>
-                            <a target="_blank" href="https://discordapp.com/invite/pxWwtWJ"
+                            <a
+                                target="_blank"
+                                href="https://discordapp.com/invite/pxWwtWJ"
                                 >Hitbloq - Alternative Ranking stuff</a
                             >
                         </li>
                         <li>
-                            <a target="_blank" href="https://discord.gg/EdRYahH">Refugee Camp - :)</a>
+                            <a target="_blank" href="https://discord.gg/EdRYahH"
+                                >Refugee Camp - :)</a
+                            >
                         </li>
                     </ul>
                 </div>
             </div>
         </div>
         <div class="col" style="text-align: center">
-            <img src="monkaOgreBlinking.gif" style="width: 100%; max-width: 50%;" />
+            <img
+                src="monkaOgreBlinking.gif"
+                style="width: 100%; max-width: 50%;"
+            />
         </div>
     </div>
 </template>

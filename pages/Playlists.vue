@@ -7,10 +7,12 @@
                         Playlist maker thing
                     </h2>
                     <p>
-                        Filters by various conditions across all maps on beatsaver and puts them into a playlist
+                        Filters by various conditions across all maps on
+                        beatsaver and puts them into a playlist
                     </p>
                     <p>
-                        Database of all maps used for this only updates once a day
+                        Database of all maps used for this only updates once a
+                        day
                     </p>
                 </div>
             </div>
@@ -20,8 +22,12 @@
                 <div class="filter">
                     <div class="myrow search" style="padding-top: 10px">
                         <label>Enter mappers and press enter</label>
-                        <p class="grey">Will include all occurences in mapper names</p>
-                        <p class="grey">You can also enter a comma separated list</p>
+                        <p class="grey">
+                            Will include all occurences in mapper names
+                        </p>
+                        <p class="grey">
+                            You can also enter a comma separated list
+                        </p>
                         <vs-input
                             v-model="mapperInput"
                             type="search"
@@ -29,7 +35,11 @@
                             v-on:keyup.enter="addMapper"
                         />
                         <div v-if="mappers.length" class="mappers">
-                            <div class="mapper" v-for="mapper in mappers" :key="mapper">
+                            <div
+                                class="mapper"
+                                v-for="mapper in mappers"
+                                :key="mapper"
+                            >
                                 <vs-button icon @click="removeMapper(mapper)">
                                     {{ mapper }}
                                     <i class="bx bx-x"></i>
@@ -39,30 +49,52 @@
                     </div>
                     <div class="myrow">
                         <label>Uploaded after: {{ getFormattedMonths }}</label>
-                        <Slider v-model="months" :min="0" :max="getMonthsDifference" :tooltips="false" />
+                        <Slider
+                            v-model="months"
+                            :min="0"
+                            :max="getMonthsDifference"
+                            :tooltips="false"
+                        />
                     </div>
                     <div class="myrow">
                         <label>Minimum ratio: {{ ratio }}%</label>
                         <p class="grey">
-                            Ratio calculation (not the same like on beatsaver): upvotes / (upvotes + downvotes) * 100
+                            Ratio calculation (not the same like on beatsaver):
+                            upvotes / (upvotes + downvotes) * 100
                         </p>
                         <p class="grey">
                             To get an idea of it go to
-                            <nuxt-link style="color: grey" to="/Statistics/beatsaver">statistics/beatsaver</nuxt-link>
+                            <nuxt-link
+                                style="color: grey"
+                                to="/Statistics/beatsaver"
+                                >statistics/beatsaver</nuxt-link
+                            >
                         </p>
                         <Slider v-model="ratio" :max="100" :tooltips="false" />
                     </div>
                     <div class="myrow">
                         <label>Minimum upvotes: {{ minUpvotes }}</label>
-                        <Slider v-model="minUpvotes" :max="1000" :tooltips="false" />
+                        <Slider
+                            v-model="minUpvotes"
+                            :max="1000"
+                            :tooltips="false"
+                        />
                     </div>
                     <div class="myrow">
                         <label>Maximum downvotes: {{ getmaxDownvotes }}</label>
-                        <Slider v-model="maxDownvotes" :max="1000" :tooltips="false" />
+                        <Slider
+                            v-model="maxDownvotes"
+                            :max="1000"
+                            :tooltips="false"
+                        />
                     </div>
 
                     <div class="myrow">
-                        <vs-button :loading="loading" @click="fetchPlaylist" :disabled="!mappers.length || loading">
+                        <vs-button
+                            :loading="loading"
+                            @click="fetchPlaylist"
+                            :disabled="!mappers.length || loading"
+                        >
                             Make da playlist
                         </vs-button>
                     </div>
@@ -100,7 +132,11 @@ export default {
         getMonthsDifference() {
             var date1 = new Date(this.gameReleaseDate * 1000)
             var difference = date1.getTime() - new Date()
-            return Math.abs(Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437)) - 1
+            return (
+                Math.abs(
+                    Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437),
+                ) - 1
+            )
         },
         getmaxDownvotes() {
             return this.maxDownvotes == 0 ? '-' : this.maxDownvotes
@@ -111,13 +147,16 @@ export default {
             this.loading = true
             try {
                 let headers = {
-                    withCredentials: process.env.NODE_ENV === 'development' ? false : true,
+                    withCredentials:
+                        process.env.NODE_ENV === 'development' ? false : true,
                     responseType: 'blob',
                     headers: {
                         'content-type': 'application/json',
                         'X-CSRFToken': Cookies.get('csrftoken'),
                     },
                 }
+
+                //use form
                 const data = {
                     mappers: this.mappers,
                     uploadedAfter: this.months,
@@ -129,10 +168,15 @@ export default {
                 this.$defaultApi
                     .$post('beatsaver/playlists/', data, headers)
                     .then(response => {
-                        const blob = new Blob([response], { type: 'application/json' })
+                        const blob = new Blob([response], {
+                            type: 'application/json',
+                        })
                         const link = document.createElement('a')
                         link.href = URL.createObjectURL(blob)
-                        link.download = 'muffnlabs playlist of ' + this.mappers.length + ' mappers'
+                        link.download =
+                            'muffnlabs playlist of ' +
+                            this.mappers.length +
+                            ' mappers'
                         link.click()
                         URL.revokeObjectURL(link.href)
                     })
@@ -151,7 +195,8 @@ export default {
                 const mappers = this.mapperInput.split(',')
                 for (let mapper of mappers) {
                     mapper = mapper.trim()
-                    if (mapper && !this.mappers.includes(mapper)) this.mappers.push(mapper)
+                    if (mapper && !this.mappers.includes(mapper))
+                        this.mappers.push(mapper)
                 }
                 this.mapperInput = ''
             }

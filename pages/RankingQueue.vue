@@ -5,12 +5,16 @@
                 <div>
                     <div class="title_container">
                         <h2 class="title">Qualified Maps</h2>
-                        <vs-button href="https://scoresaber.com/ranking/requests" blank>
+                        <vs-button
+                            href="https://scoresaber.com/ranking/requests"
+                            blank
+                        >
                             Rank Requests
                         </vs-button>
                     </div>
                     <vs-alert color="primary">
-                        If a map disappears from the queue it will be seen as a new qualified map.
+                        If a map disappears from the queue it will be seen as a
+                        new qualified map.
                         <br />
                         Vague amount of mapsets ranked in the last:
                         <br />
