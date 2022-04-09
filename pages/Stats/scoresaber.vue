@@ -122,7 +122,7 @@ export default {
     data() {
         return {
             data: [],
-            activeList: this.$route.query?.list || 'mapsetMappers',
+            activeList: this.$route.query?.list || 'highestScores',
             visibleItems: 10,
             loading: false,
             stats: null,
