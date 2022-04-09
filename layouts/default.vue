@@ -85,6 +85,11 @@ export default {
                     icon: 'bx-stats',
                     name: 'Stats',
                 },
+                {
+                    path: 'Configs',
+                    icon: 'bx-file-blank',
+                    name: 'Configs',
+                },
                 // {
                 //     path: 'Timeline',
                 //     icon: 'bx-stats',
