@@ -18,14 +18,14 @@
 
         <vs-navbar color="#18191c" shadow text-white square v-model="active">
             <vs-navbar-item
-                to="/Stats/beatsaver"
+                to="/stats/beatsaver"
                 :active="active == 'beatsaver'"
                 id="beatsaver"
             >
                 Beatsaver
             </vs-navbar-item>
             <vs-navbar-item
-                to="/Stats/scoresaber"
+                to="/stats/scoresaber"
                 :active="active == 'scoresaber'"
                 id="scoresaber"
             >
@@ -48,7 +48,7 @@ export default {
     },
     async created() {
         if (this.$route.name.split('-').length == 1) {
-            this.$router.push({ path: 'Stats/beatsaver' })
+            this.$router.push({ path: 'stats/beatsaver' })
         } else if (this.$route.path.includes('scoresaber')) {
             this.active = 'scoresaber'
         }

@@ -6,7 +6,7 @@
 export default {
     middleware: [
         function({ redirect }) {
-            redirect('/Stats/beatsaver')
+            redirect('/stats/beatsaver')
         },
     ],
 }
