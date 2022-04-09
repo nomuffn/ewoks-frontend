@@ -91,7 +91,7 @@ export default {
         getCategoryName(category) {
             if (category == 'hsv') return 'HSV'
             if (category == 'customnotes') return 'Custom Notes'
-            return category.charAt(0).toUpperCase() + string.slice(1)
+            return category.charAt(0).toUpperCase() + category.slice(1)
         },
         showSource(item) {
             const type = item.file.substring(item.file.lastIndexOf('.') + 1)
@@ -128,11 +128,12 @@ export default {
         margin-top: 10px;
     }
     .card {
+        height: 100%;
         max-width: 500px;
         min-height: auto;
         cursor: default;
         p {
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         .description {
             max-width: 500px;

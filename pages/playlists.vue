@@ -64,9 +64,7 @@
                         </p>
                         <p class="grey">
                             To get an idea of it go to
-                            <nuxt-link
-                                style="color: grey"
-                                to="/Stats/beatsaver"
+                            <nuxt-link style="color: grey" to="/stats/beatsaver"
                                 >statistics/beatsaver</nuxt-link
                             >
                         </p>
