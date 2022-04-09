@@ -1,10 +1,16 @@
 <template>
-    <div class="cards toptenfeed vertical">
+    <div class="cards row toptenfeed">
         <Loading v-if="loading" />
-        <div class="card" v-for="(score, index) of getScores" :key="index" v-on:click="openUrl(score.leaderboard_id)">
+        <div
+            class="card"
+            v-for="(score, index) of getScores"
+            :key="index"
+            v-on:click="openUrl(score.leaderboard_id)"
+        >
             <p class="leaderboard">
                 <span style="font-weight: bold"
-                    ><span class="colored">#{{ score.rank }}</span> {{ score.player_name }}</span
+                    ><span class="colored">#{{ score.rank }}</span>
+                    {{ score.player_name }}</span
                 >
                 <br />
                 {{ score.leaderboard_name }}
@@ -19,7 +25,12 @@
                 </p>
             </div>
         </div>
-        <vs-button v-if="visibleItems < 25" class="showMore" icon @click="visibleItems += 10">
+        <vs-button
+            v-if="visibleItems < 25"
+            class="showMore"
+            icon
+            @click="visibleItems += 10"
+        >
             Show more
         </vs-button>
     </div>
@@ -53,24 +64,20 @@ export default {
 
 <style lang="scss">
 .toptenfeed {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-
     .card {
         flex-direction: row !important;
         text-align: left;
+        max-width: 600px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .leaderboard {
-        width: 75%;
-        padding-right: 10px;
+        margin-right: 10px;
     }
 
     .score {
-        width: 25%;
-        text-align: right;
-        align-self: center;
         text-align: right;
         font-weight: bold;
     }
