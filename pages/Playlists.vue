@@ -66,7 +66,7 @@
                             To get an idea of it go to
                             <nuxt-link
                                 style="color: grey"
-                                to="/Statistics/beatsaver"
+                                to="/Stats/beatsaver"
                                 >statistics/beatsaver</nuxt-link
                             >
                         </p>
