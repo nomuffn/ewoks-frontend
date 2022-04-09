@@ -61,7 +61,8 @@
                                         >{{
                                             mapDiff(item.leaderboard.diff)
                                         }}</span
-                                    >; {{ item.leaderboard.bpm }} bpm)
+                                    >; {{ item.leaderboard.stars }} stars;
+                                    {{ item.leaderboard.bpm }} bpm)
                                 </p>
                             </div>
 
@@ -72,8 +73,7 @@
                                         >{{ item.pp }}pp</span
                                     >
                                 </p>
-                                <p>{{ item.percentage }}%</p>
-                                <p>{{ item.leaderboard.stars }}*</p>
+                                <p class="acc">{{ item.percentage }}%</p>
                             </div>
                         </div>
                     </template>
@@ -334,6 +334,11 @@ export default {
 
             .pp {
                 font-size: 1.2rem;
+            }
+
+            .acc {
+                font-size: 1rem;
+                font-weight: bold;
             }
         }
 
