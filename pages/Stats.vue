@@ -9,6 +9,7 @@
                     <p v-if="stats">
                         Difficulties ranked: {{ stats['total'] }}
                         <!-- pp distribution: fix backend calc -->
+                        <br />
                         Most stuff refreshes every hour
                     </p>
                 </div>
