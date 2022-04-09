@@ -12,6 +12,7 @@
     "heroku-postbuild": "npm run build"
   },
   "dependencies": {
+    "@growthbunker/vuetimeline": "^0.1.17",
     "@nuxt/components": "^2.2.1",
     "@nuxtjs/axios": "^5.13.6",
     "@vueform/slider": "^2.0.4",
