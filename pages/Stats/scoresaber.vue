@@ -27,23 +27,80 @@
             <div v-if="activeList" class="list">
                 <div v-if="!loading && data.length > 0" class="cards vertical">
                     <p>Amount: {{ data.length }}</p>
-                    <div
-                        class="card"
-                        v-for="(item, index) in getVisibleItems"
-                        v-on:click="openUrl(item.name)"
-                        :key="index"
-                    >
-                        <h4>
-                            <span class="colored">#{{ index + 1 }}</span>
-                            {{ item.name }}: {{ item.value }}
-                        </h4>
-                        <vs-button
-                            v-if="item.maps"
-                            v-on:click.stop="mapsDialog = item"
-                            border
-                            >Maps</vs-button
+
+                    <template v-if="activeList == 'highestScores'">
+                        <div
+                            v-for="(item, index) in getVisibleItems"
+                            :key="index"
+                            v-on:click="
+                                openUrl(
+                                    'https://scoresaber.com/leaderboard/' +
+                                        item.leaderboard.id,
+                                )
+                            "
+                            class="card highestScores"
                         >
-                    </div>
+                            <div>
+                                <p>
+                                    <span class="colored"
+                                        >#{{ index + 1 }}</span
+                                    >
+                                    <span class="big">{{
+                                        item.player_name
+                                    }}</span>
+                                    on
+                                </p>
+                                <p class="big">
+                                    {{
+                                        `${item.leaderboard.artist} - ${item.leaderboard.name} ${item.leaderboard.subname}`
+                                    }}
+                                </p>
+                                <p>
+                                    by {{ item.leaderboard.mapper }} (<span
+                                        :class="item.leaderboard.diff"
+                                        >{{
+                                            mapDiff(item.leaderboard.diff)
+                                        }}</span
+                                    >; {{ item.leaderboard.bpm }} bpm)
+                                </p>
+                            </div>
+
+                            <div class="score">
+                                <p>#{{ item.rank }}</p>
+                                <p>
+                                    <span class="pp colored"
+                                        >{{ item.pp }}pp</span
+                                    >
+                                </p>
+                                <p>{{ item.percentage }}%</p>
+                                <p>{{ item.leaderboard.stars }}*</p>
+                            </div>
+                        </div>
+                    </template>
+                    <template v-else>
+                        <div
+                            v-for="(item, index) in getVisibleItems"
+                            :key="index"
+                            v-on:click="
+                                openUrl(
+                                    'https://scoresaber.com/leaderboards?search=' +
+                                        item.name,
+                                )
+                            "
+                            class="card"
+                        >
+                            <h4>
+                                <span class="colored">#{{ index + 1 }}</span>
+                                {{ item.name }}: {{ item.value }}
+                            </h4>
+                            <vs-button
+                                v-if="item.maps"
+                                v-on:click.stop="mapsDialog = item"
+                                border
+                                >Maps</vs-button
+                            >
+                        </div>
+                    </template>
                     <vs-button
                         v-if="visibleItems < data.length"
                         class="showMore"
@@ -71,6 +128,14 @@ export default {
             stats: null,
             mapsDialog: null,
             lists: {
+                highestScores: {
+                    title: 'Highest PP Scores',
+                    getData: async () => {
+                        return await this.$defaultApi.$get(
+                            'scoresaber/highestscores',
+                        )
+                    },
+                },
                 mapsetMappers: {
                     title: 'Mapset Count By Mappers',
                     getData: () => {
@@ -128,11 +193,8 @@ export default {
         },
     },
     methods: {
-        openUrl: function(mapper) {
-            window.open(
-                'https://scoresaber.com/leaderboards?search=' + mapper,
-                '_blank',
-            )
+        openUrl: function(url) {
+            window.open(url, '_blank')
         },
         async loadFromApi(endpoint) {
             let data = await this.$defaultApi.$get(endpoint)
@@ -143,6 +205,13 @@ export default {
                 .map(item => {
                     return { name: item[0], value: item[1] }
                 })
+        },
+        mapDiff(diff) {
+            if (diff.includes('ExpertPlus')) return 'Expert+'
+            if (diff.includes('Expert')) return 'Expert'
+            if (diff.includes('Hard')) return 'Hard'
+            if (diff.includes('Normal')) return 'Normal'
+            if (diff.includes('Easy')) return 'Easy'
         },
     },
 }
@@ -233,8 +302,8 @@ export default {
     }
 
     .card {
-        max-width: 400px;
-        width: 400px;
+        max-width: 600px;
+        width: 100%;
 
         flex-direction: row;
         justify-content: space-between;
@@ -247,6 +316,32 @@ export default {
         button {
             padding: 0px 5px;
             margin: 0px;
+        }
+    }
+
+    .highestScores {
+        display: flex;
+        justify-content: space-between;
+
+        .big {
+            font-weight: bold;
+            font-size: 1rem;
+        }
+
+        .score {
+            text-align: right;
+            margin-left: 20px;
+
+            .pp {
+                font-size: 1.2rem;
+            }
+        }
+
+        ._ExpertPlus_SoloStandard {
+            color: #8f48db;
+        }
+        ._Expert_SoloStandard {
+            color: #bf2a42;
         }
     }
 }
