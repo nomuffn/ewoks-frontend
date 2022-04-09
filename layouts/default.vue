@@ -71,9 +71,9 @@ export default {
                     name: 'Home',
                 },
                 {
-                    path: 'RankingQueue',
+                    path: 'RankingStuff',
                     icon: 'bx-list-ul',
-                    name: 'Ranking Queue',
+                    name: 'Ranking stuff',
                 },
                 {
                     path: 'MapTts',
@@ -81,10 +81,15 @@ export default {
                     name: 'MapTts',
                 },
                 {
-                    path: 'Statistics',
+                    path: 'Stats',
                     icon: 'bx-stats',
-                    name: 'Statistics',
+                    name: 'Stats',
                 },
+                // {
+                //     path: 'Timeline',
+                //     icon: 'bx-stats',
+                //     name: 'Timeline',
+                // },
                 {
                     path: 'Playlists',
                     icon: 'bxs-playlist',
@@ -159,7 +164,14 @@ export default {
         margin-left: 10px;
     }
     .bsaber {
-        background: linear-gradient(to right, #ff03f1, #ad63ff, #00a1ff, #00c4ff, #ffffff);
+        background: linear-gradient(
+            to right,
+            #ff03f1,
+            #ad63ff,
+            #00a1ff,
+            #00c4ff,
+            #ffffff
+        );
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         width: fit-content;
