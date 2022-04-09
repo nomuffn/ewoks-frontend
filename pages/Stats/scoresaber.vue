@@ -276,6 +276,7 @@ export default {
         display: flex;
         flex-direction: column;
         align-items: center;
+        margin: 0px 20px;
 
         > p {
             color: #fff;
@@ -292,7 +293,7 @@ export default {
         }
 
         .card:nth-child(4) .colored {
-            color: #ffa726 !important;
+            color: #b2641d !important;
         }
     }
 

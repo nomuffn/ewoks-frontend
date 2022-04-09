@@ -280,7 +280,7 @@ export default {
 
         .card {
             max-width: 100%;
-
+            cursor: default;
             .top {
                 display: flex;
                 width: 100%;
