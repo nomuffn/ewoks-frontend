@@ -8,21 +8,8 @@
                     </h2>
                     <p v-if="stats">
                         Difficulties ranked: {{ stats['total'] }}
-                        <br />
-                        > 600pp: {{ stats['600'] }}
-                        <br />
-                        > 500pp: {{ stats['500'] }}
-                        <br />
-                        > 400pp: {{ stats['400'] }}
-                        <br />
-                        > 300pp: {{ stats['300'] }}
-                        <br />
-                        > 200pp: {{ stats['200'] }}
-                        <br />
-                        > 100pp: {{ stats['100'] }}
-                        <br />
-                        > 0pp: {{ stats['0'] }}
-                        <br />
+                        <!-- pp distribution: fix backend calc -->
+                        Most stuff refreshes every hour
                     </p>
                 </div>
             </div>
