@@ -71,22 +71,22 @@ export default {
                     name: 'Home',
                 },
                 {
-                    path: 'RankingStuff',
+                    path: 'ranking-stuff',
                     icon: 'bx-list-ul',
                     name: 'Ranking stuff',
                 },
                 {
-                    path: 'MapTts',
+                    path: 'maptts',
                     icon: 'bx-tv',
                     name: 'MapTts',
                 },
                 {
-                    path: 'Stats',
+                    path: 'stats',
                     icon: 'bx-stats',
                     name: 'Stats',
                 },
                 {
-                    path: 'Configs',
+                    path: 'configs',
                     icon: 'bx-file-blank',
                     name: 'Configs',
                 },
@@ -96,7 +96,7 @@ export default {
                 //     name: 'Timeline',
                 // },
                 {
-                    path: 'Playlists',
+                    path: 'playlists',
                     icon: 'bxs-playlist',
                     name: 'Playlist maker',
                 },
