@@ -37,8 +37,11 @@ export default {
 
     publicRuntimeConfig: {
         baseURL: process.env.API_URL || 'https://muffnlabs.de/',
-        discordLogin: (process.env.API_URL || 'https://muffnlabs.de/') + 'backend/oauth/login/discord',
-        discordLogout: (process.env.API_URL || 'https://muffnlabs.de/') + 'backend/logout',
+        discordLogin:
+            (process.env.API_URL || 'https://muffnlabs.de/') +
+            'backend/oauth/login/discord',
+        discordLogout:
+            (process.env.API_URL || 'https://muffnlabs.de/') + 'backend/logout',
     },
 
     generate: {
@@ -46,7 +49,11 @@ export default {
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
-    css: ['vuesax/dist/vuesax.css', 'boxicons/css/boxicons.min.css', '~/assets/scss/global.scss'],
+    css: [
+        'vuesax/dist/vuesax.css',
+        'boxicons/css/boxicons.min.css',
+        '~/assets/scss/global.scss',
+    ],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
@@ -56,6 +63,7 @@ export default {
         '@/plugins/mapttsApi',
         '@/plugins/auth',
         { src: '~~/node_modules/vue-rellax/lib/nuxt-plugin', ssr: false },
+        { src: '@/plugins/vuetimeline.js' },
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
