@@ -106,13 +106,10 @@ export default {
 <style lang="scss">
 .votesFeed {
     .spans {
-        width: 50%;
+        margin-right: 10px;
+        min-width: 150px;
         display: flex;
         flex-flow: column;
-    }
-
-    h3 {
-        flex: 1;
     }
 
     .wrapper {

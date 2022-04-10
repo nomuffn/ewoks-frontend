@@ -139,10 +139,5 @@ export default {
             max-width: 500px;
         }
     }
-    .updated_at {
-        text-align: right;
-        font-size: 90%;
-        opacity: 0.5;
-    }
 }
 </style>

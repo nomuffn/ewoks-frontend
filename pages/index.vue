@@ -121,7 +121,7 @@
                         </div>
                         <div class="card">
                             <h3>
-                                Notes to just boring dots as timings converter
+                                Notes to dots converter
                             </h3>
                             <p>
                                 If it doesnt work try to refresh and try again.
@@ -202,263 +202,86 @@
                                 </a>
                             </div>
                         </div>
-                        <div class="card">
-                            <h3>CustomLevelsToPlaylist</h3>
-                            <p>
-                                Converts CustomLevels to a playlist :o
-                                <br />
-                                - Run in a CustomLevels folder
-                            </p>
 
-                            <div class="buttons">
-                                <div style="flex: 1"></div>
-                                <vs-button
-                                    border
-                                    style="min-width: 60px"
-                                    primary
-                                    animation-type="scale"
-                                    blank
-                                    href="scripts/CustomLevelsToPlaylist Converter.py"
-                                >
-                                    <i class="bx bx-code-alt"></i>
-                                    <template #animate> Source </template>
-                                </vs-button>
-
-                                <vs-button
-                                    border
-                                    style="min-width: 80px"
-                                    primary
-                                    animation-type="scale"
-                                    blank
-                                    href="scripts/CustomLevelsToPlaylist Converter.exe"
-                                >
-                                    <i class="bx bxs-download"></i>
-                                    <template #animate> Download </template>
-                                </vs-button>
-                            </div>
+                        <div
+                            v-if="!scripts.length"
+                            style="align-self: center; margin: 0px 50px;"
+                        >
+                            <loading-spinner />
                         </div>
-                        <div class="card">
-                            <h3>BlueOrRedRemover</h3>
-                            <p>
-                                Removes either all blue or red notes.
-                                <br />
-                                - Just drag a difficulty on the file
-                            </p>
+                        <template v-else>
+                            <div
+                                v-for="(item, index) in scripts"
+                                :key="index"
+                                class="card"
+                            >
+                                <h3>{{ item.title }}</h3>
+                                <div v-html="item.description"></div>
+                                <p class="updated_at">
+                                    Last updated:
+                                    {{
+                                        new Date(
+                                            item.updated_at,
+                                        ).toLocaleDateString()
+                                    }}
+                                </p>
 
-                            <div class="buttons">
-                                <div style="flex: 1"></div>
-                                <vs-button
-                                    border
-                                    style="min-width: 60px"
-                                    primary
-                                    animation-type="scale"
-                                    blank
-                                    href="scripts/BlueOrRedRemoverYesYEs.py"
-                                >
-                                    <i class="bx bx-code-alt"></i>
-                                    <template #animate> Source </template>
-                                </vs-button>
+                                <div class="buttons">
+                                    <vs-button
+                                        border
+                                        style="min-width: 60px"
+                                        primary
+                                        animation-type="scale"
+                                        blank
+                                        :href="item.source"
+                                    >
+                                        <i class="bx bx-code-alt"></i>
+                                        <template #animate> Source </template>
+                                    </vs-button>
 
-                                <vs-button
-                                    border
-                                    style="min-width: 80px"
-                                    primary
-                                    animation-type="scale"
-                                    blank
-                                    href="scripts/BlueOrRedRemoverYesYEs.exe"
-                                >
-                                    <i class="bx bxs-download"></i>
-                                    <template #animate> Download </template>
-                                </vs-button>
+                                    <vs-button
+                                        border
+                                        style="min-width: 80px"
+                                        primary
+                                        animation-type="scale"
+                                        blank
+                                        :href="item.executable"
+                                    >
+                                        <i class="bx bxs-download"></i>
+                                        <template #animate> Download </template>
+                                    </vs-button>
+                                </div>
                             </div>
-                        </div>
-                        <div class="card">
-                            <h3>Bookmarks 2 Text</h3>
-                            <p>
-                                Converts bookmarks to pure text so you can
-                                rankability/playability mod in the editor.
-                                <br />
-                                - Run in a song folder
-                            </p>
-
-                            <div class="buttons">
-                                <div style="flex: 1"></div>
-                                <vs-button
-                                    border
-                                    style="min-width: 60px"
-                                    primary
-                                    animation-type="scale"
-                                    blank
-                                    href="scripts/bookmarks2Text.py"
-                                >
-                                    <i class="bx bx-code-alt"></i>
-                                    <template #animate> Source </template>
-                                </vs-button>
-
-                                <vs-button
-                                    border
-                                    style="min-width: 80px"
-                                    primary
-                                    animation-type="scale"
-                                    blank
-                                    href="scripts/bookmarks2Text.exe"
-                                >
-                                    <i class="bx bxs-download"></i>
-                                    <template #animate> Download </template>
-                                </vs-button>
-                            </div>
-                        </div>
+                        </template>
                     </div>
                 </div>
             </div>
 
             <div class="misc">
-                <div class="col">
-                    <div class="title_container">
-                        <h2 class="title">Useful links</h2>
-                    </div>
-                    <ul>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://skystudioapps.com/bs-viewer/"
-                                >+1 Rabbit's BS Viewer - Map preview in
-                                browser</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://skystudioapps.com/mapping-tools/"
-                                >+1 Rabbit's Mapping Tools - Very helpful if
-                                you're a mapper</a
-                            >
-                        </li>
-                        <li>
-                            <a target="_blank" href="https://scoresaber.com/"
-                                >Scoresaber - Leaderboards & Ranking System</a
-                            >
-                        </li>
-                        <li>
-                            <a target="_blank" href="https://hitbloq.com/"
-                                >Hitbloq - Alternative Ranking System</a
-                            >
-                        </li>
-                        <li>
-                            <a target="_blank" href="https://accsaber.com/"
-                                >Accsaber - Ranking system focused on accuracy</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://beat-savior.herokuapp.com/#/"
-                                >Beat Savior - Third party stats tool for scoresaber</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://scoresaber.balibalo.xyz"
-                                >Balibalo Tools - PP Calculator, Top 200 PP
-                                Playlist, etc.
-                            </a>
-                        </li>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://cmlsc.itch.io/beat-saber-song-downloader"
-                                >DaFluffyPotato's Beat Saber Song
-                                Downloader/Installer</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://docs.google.com/document/d/1FwG_Zv5FcB2UpjTxmH1y5-cQ85W2ezwr4z_D6_Z_QPY/edit#heading=h.v70h5b4th1j1"
-                                >Tracking/Scoring on Oculus</a
-                            >
-                        </li>
-                    </ul>
+                <!-- sorry not sorry -->
+                <div
+                    v-if="!links.length"
+                    style="display: flex; width: 100%; justify-content: center; margin-top: 100px"
+                >
+                    <loading-spinner />
                 </div>
-
-                <div class="col">
-                    <div class="title_container">
-                        <h2 class="title">Grips</h2>
+                <template v-else>
+                    <div v-for="cat in linkCategories" :key="cat" class="col">
+                        <div class="title_container">
+                            <h2 class="title">{{ getCategoryName(cat) }}</h2>
+                        </div>
+                        <ul>
+                            <li
+                                v-for="(item, index) in getLinks(cat)"
+                                :key="index"
+                            >
+                                <a target="_blank" :href="item.link">{{
+                                    item.name
+                                }}</a>
+                            </li>
+                        </ul>
                     </div>
-                    <ul>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://cdn.discordapp.com/attachments/401173069001129984/515257917927325717/Oculus_Grips_Guide.png"
-                                >Rift Grips</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://media.discordapp.net/attachments/585906960164192315/715617955261448202/unknown.png"
-                                >Rift S and Quest Grips</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://bsmg.wiki/assets/img/vive-grips-guide.d9b6ee34.png"
-                                >Vive Grips</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://media.discordapp.net/attachments/585906960164192315/708893196687769610/PSVR_Grips.png"
-                                >PS VR Grips</a
-                            >
-                        </li>
-                    </ul>
-                </div>
-
-                <div class="col">
-                    <div class="title_container">
-                        <h2 class="title">Useful discords</h2>
-                    </div>
-                    <ul>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://discord.gg/beatsabermods"
-                                >Beat Saber Modding Group - Modding stuff</a
-                            >
-                        </li>
-                        <li>
-                            <a target="_blank" href="https://discord.gg/WpuDMwU"
-                                >Scoresaber - Leaderboards & Ranking stuff</a
-                            >
-                        </li>
-                        <li>
-                            <a target="_blank" href="https://discord.gg/dwe8mbC"
-                                >Cube Community - Community stuff</a
-                            >
-                        </li>
-                        <li>
-                            <a target="_blank" href="https://discord.gg/5NjfSAC"
-                                >BeatKhana! - Tournament stuff</a
-                            >
-                        </li>
-                        <li>
-                            <a
-                                target="_blank"
-                                href="https://discordapp.com/invite/pxWwtWJ"
-                                >Hitbloq - Alternative Ranking stuff</a
-                            >
-                        </li>
-                        <li>
-                            <a target="_blank" href="https://discord.gg/EdRYahH"
-                                >Refugee Camp - :)</a
-                            >
-                        </li>
-                    </ul>
-                </div>
+                </template>
             </div>
         </div>
         <div class="col" style="text-align: center">
@@ -477,7 +300,13 @@ export default {
     data() {
         return {
             bpm: '',
+            scripts: [],
+            links: [],
         }
+    },
+    async created() {
+        this.scripts = await this.$defaultApi.$get('general/scripts')
+        this.links = await this.$defaultApi.$get('general/links')
     },
     methods: {
         convertToDots(input) {
@@ -485,6 +314,20 @@ export default {
         },
         fixWalls(input) {
             fixWalls(input, this.bpm)
+        },
+        getCategoryName(category) {
+            if (category == 'hsv') return 'HSV'
+            if (category == 'customnotes') return 'Custom Notes'
+            return category.charAt(0).toUpperCase() + category.slice(1)
+        },
+        getLinks(category) {
+            return this.links.filter(conf => conf.category == category)
+        },
+    },
+    computed: {
+        linkCategories() {
+            const links = this.links.map(conf => conf.category)
+            return [...new Set(links)] //makes it unique
         },
     },
 }
@@ -546,12 +389,14 @@ export default {
         }
 
         p {
-            margin-bottom: 10px;
             flex: 1;
+            // margin-bottom: 10px;
         }
 
         .buttons {
             display: flex;
+            margin-top: 5px;
+            justify-content: flex-end;
         }
 
         a {
