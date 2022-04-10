@@ -31,7 +31,7 @@
                     </template>
                 </vs-alert>
 
-                <loading-spinner v-if="loading" />
+                <loading-spinner v-if="!maps.length" />
                 <time-maps-list :maps="maps" />
             </div>
             <div>
@@ -84,23 +84,15 @@ export default {
     transition: 'slide-bottom',
     data() {
         return {
-            maps: null,
+            maps: [],
             stats: null,
             votesStats: null,
-            loading: true,
         }
     },
     async created() {
         this.maps = await this.$defaultApi.$get('scoresaber/qualified')
         this.stats = await this.$defaultApi.$get('scoresaber/rankedspans')
         this.votesStats = await this.$defaultApi.$get('scoresaber/rq/stats')
-        this.loading = false
-    },
-    mounted() {
-        this.$nextTick(() => {
-            this.$nuxt.$loading.start()
-            setTimeout(() => this.$nuxt.$loading.finish(), 500)
-        })
     },
 }
 </script>
@@ -118,13 +110,12 @@ export default {
         button {
             max-height: 50px;
             align-self: center;
-        margin-bottom: 20px;
+            margin-bottom: 20px;
         }
     }
 
     .card {
         max-width: 400px;
     }
-
 }
 </style>

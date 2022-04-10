@@ -6,11 +6,11 @@
                     <h2 class="title">
                         Statistics stuff
                     </h2>
-                    <p v-if="stats">
-                        Difficulties ranked: {{ stats['total'] }}
+                    <p>
                         <!-- pp distribution: fix backend calc -->
+                        Scoresaber stuff refreshes every hour
                         <br />
-                        Most stuff refreshes every hour
+                        Beatsaver stuff every 24 hours
                     </p>
                 </div>
             </div>
@@ -42,7 +42,7 @@ export default {
     transition: 'slide-bottom',
     data() {
         return {
-            stats: null,
+            // stats: null,
             active: 'beatsaver',
         }
     },
@@ -52,7 +52,7 @@ export default {
         } else if (this.$route.path.includes('scoresaber')) {
             this.active = 'scoresaber'
         }
-        this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
+        // this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
     },
 }
 </script>
