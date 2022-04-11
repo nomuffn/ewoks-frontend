@@ -91,7 +91,7 @@ export default {
                     name: 'Configs',
                 },
                 {
-                    path: 'Timeline',
+                    path: 'timeline',
                     icon: 'bx-stats',
                     name: 'Timeline',
                 },
