@@ -7,7 +7,7 @@
                 :key="event.title + event.description"
                 :date="new Date(event.date)"
                 :title="getTitle(event)"
-                :description="event.description"
+                :description="getDesc(event)"
                 :category="event.category"
                 :icon="event.icon"
                 :color="event.color"
@@ -30,8 +30,12 @@ export default {
     },
     methods: {
         getTitle(event) {
+            return event.title
+        },
+        getDesc(event) {
+            console.log(event)
             const date = new Date(event.date).toLocaleDateString()
-            return `${date} - ${event.title}`
+            return `${event.description}<p style="float: right;"><strong>${date}</strong></p>`
         },
     },
 }

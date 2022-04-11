@@ -90,11 +90,11 @@ export default {
                     icon: 'bx-file-blank',
                     name: 'Configs',
                 },
-                // {
-                //     path: 'Timeline',
-                //     icon: 'bx-stats',
-                //     name: 'Timeline',
-                // },
+                {
+                    path: 'Timeline',
+                    icon: 'bx-stats',
+                    name: 'Timeline',
+                },
                 {
                     path: 'playlists',
                     icon: 'bxs-playlist',
