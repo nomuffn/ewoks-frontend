@@ -35,7 +35,7 @@
                             v-on:click="
                                 openUrl(
                                     'https://scoresaber.com/leaderboard/' +
-                                        item.leaderboard.id,
+                                        item.leaderboard_id,
                                 )
                             "
                             class="card highestScores"
@@ -50,12 +50,15 @@
                                     }}</span>
                                     on
                                 </p>
-                                <p class="big">
+                                <p class="big" v-if="item.leaderboard">
                                     {{
                                         `${item.leaderboard.artist} - ${item.leaderboard.name} ${item.leaderboard.subname}`
                                     }}
                                 </p>
-                                <p>
+                                <p class="big" v-else>
+                                    {{ item.leaderboard_name }}
+                                </p>
+                                <p v-if="item.leaderboard">
                                     by {{ item.leaderboard.mapper }} (<span
                                         :class="item.leaderboard.diff"
                                         >{{
