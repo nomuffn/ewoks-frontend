@@ -82,6 +82,12 @@ export default {
                     : map[rangeKey].downvotes
             return `<span class="upvotes">${upvotes}</span><span class="slash">/</span> <span class="downvotes">${downvotes}</span>`
         },
+        sortVotes(x, y, col, rowX, rowY) {
+            const colField = col.field
+            x = rowX['map'][colField].upvotes + rowX['map'][colField].downvotes
+            y = rowY['map'][colField].upvotes + rowY['map'][colField].downvotes
+            return x < y ? -1 : x > y ? 1 : 0
+        },
     },
     watch: {
         async selectedMapper(newval, oldval) {
@@ -107,6 +113,7 @@ export default {
                     thClass: 'text-center',
                     tdClass: 'votes text-center',
                     html: true,
+                    sortFn: this.sortVotes,
                 }
             })
             return [
@@ -114,8 +121,16 @@ export default {
                     field: 'name',
                     key: 'a',
                     label: 'Map',
-                    align: 'left',
                     tdClass: 'mapname',
+                },
+                {
+                    field: 'latest',
+                    key: 'b',
+                    label: 'Latest',
+                    thClass: 'text-center',
+                    tdClass: 'votes text-center',
+                    html: true,
+                    sortFn: this.sortVotes,
                 },
                 ...rangeFields,
             ]
@@ -128,8 +143,10 @@ export default {
                     stats[rangeKey] = this.getVotesString(map, rangeKey)
                 })
                 return {
-                    name: map.songName,
+                    name: `${map.songName} ${map.songSubName} - ${map.songAuthorName}`,
+                    latest: `<span class="upvotes">${map.latest.upvotes}</span><span class="slash">/</span> <span class="downvotes">${map.latest.downvotes}</span>`,
                     ...stats,
+                    map,
                 }
             })
         },
@@ -179,6 +196,7 @@ export default {
             }
             .votes > span {
                 display: flex;
+                justify-content: center;
             }
             .upvotes {
                 color: #00d900;
