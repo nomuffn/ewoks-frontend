@@ -34,14 +34,12 @@ export default {
     },
     async created() {
         this.events = await this.$defaultApi.$get('timeline/events')
-        console.log(this.events)
     },
     methods: {
         getTitle(event) {
             return event.title
         },
         getDesc(event) {
-            console.log(event)
             const date = new Date(event.date).toLocaleDateString()
             return `${event.description}<p style="float: right;"><strong>${date}</strong></p>`
         },
