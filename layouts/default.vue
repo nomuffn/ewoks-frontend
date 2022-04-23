@@ -81,6 +81,11 @@ export default {
                     name: 'MapTts',
                 },
                 {
+                    path: 'bsst',
+                    icon: 'bx-trending-up',
+                    name: 'Bsst',
+                },
+                {
                     path: 'stats',
                     icon: 'bx-stats',
                     name: 'Stats',
@@ -92,7 +97,7 @@ export default {
                 },
                 {
                     path: 'timeline',
-                    icon: 'bx-stats',
+                    icon: 'bx-time',
                     name: 'Timeline',
                 },
                 {

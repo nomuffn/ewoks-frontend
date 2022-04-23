@@ -21,6 +21,7 @@
     "js-cookie": "^2.2.1",
     "nuxt": "^2.15.8",
     "nuxt-matomo": "^1.2.4",
+    "vue-good-table": "^2.21.11",
     "vue-rellax": "^0.2.0",
     "vuesax": "^4.0.1-alpha.25"
   },
