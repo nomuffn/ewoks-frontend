@@ -187,6 +187,11 @@ export default {
 
             tbody tr {
                 border: 1px solid #dcdfe6;
+                transition: background-color 0.3s;
+
+                &:hover {
+                    background-color: rgba(#fff, 0.2);
+                }
             }
             .mapname {
                 max-width: 400px;
