@@ -2,7 +2,7 @@
     <div class="beatsaver">
         <div class="filter-container">
             <div class="filter">
-                <h2>Filter for ranked songs</h2>
+                <h2>Filter for ranked maps</h2>
                 <div class="myrow">
                     <label>Filter by mapper</label>
                     <!-- maybe generally use forms? lohl -->
