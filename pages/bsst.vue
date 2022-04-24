@@ -179,12 +179,13 @@ export default {
             background-color: transparent;
 
             thead th {
+                background: transparent;
                 color: #fff;
                 font-weight: bold;
                 border: none;
-                background: #18191c;
             }
             thead tr {
+                background: #18191c;
                 border-bottom: 1px solid #dcdfe6;
             }
             tbody td {
