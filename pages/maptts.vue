@@ -9,23 +9,31 @@
                     <p>
                         Shows timestamps for maps that streamers have played.
                         <br />
-                        You can suggest players for which you have to be logged in.
+                        You can suggest players for which you have to be logged
+                        in.
                         <br />
-                        After suggesting they will have to be approved by the Approval Team.
+                        After suggesting they will have to be approved by the
+                        Approval Team.
                         <br />
                         Updates every three hours.
-                        <br />
-                        Recorded scores:
-                        {{ scoresCount.toLocaleString() }}
                     </p>
-                    <vs-button icon @click="dialog['players'] = true" transparent>
+                    <vs-button
+                        icon
+                        @click="dialog['players'] = true"
+                        transparent
+                    >
                         Approved Players
                     </vs-button>
                 </div>
             </div>
 
             <div class="discordWrapper">
-                <vs-button class="disc" :href="discord['href']" icon color="discord">
+                <vs-button
+                    class="disc"
+                    :href="discord['href']"
+                    icon
+                    color="discord"
+                >
                     {{ discord['status'] }}
                     <i class="bx bxl-discord"></i>
                 </vs-button>
@@ -41,7 +49,11 @@
             <div class="title_container">
                 <h2 class="title">Latest Scores</h2>
 
-                <vs-button v-if="isAuthenticated" icon @click="dialog['suggest'] = true">
+                <vs-button
+                    v-if="isAuthenticated"
+                    icon
+                    @click="dialog['suggest'] = true"
+                >
                     Suggest Player
                     <i class="bx bxs-message-square-add"></i>
                 </vs-button>
@@ -49,7 +61,12 @@
 
             <div class="row">
                 <div class="search">
-                    <vs-input v-model="search" type="search" placeholder="Search" v-on:keyup.enter="startSearch" />
+                    <vs-input
+                        v-model="search"
+                        type="search"
+                        placeholder="Search"
+                        v-on:keyup.enter="startSearch"
+                    />
                     <vs-button icon transparent @click="startSearch">
                         <i class="bx bx-search-alt"></i>
                     </vs-button>
@@ -93,7 +110,6 @@ export default {
     data({ $config: { discordLogin } }) {
         return {
             scores: [],
-            scoresCount: 0,
             search: '',
             page: 1,
             paginationLength: 3,
@@ -127,8 +143,9 @@ export default {
         },
         async loadScores() {
             this.loading = true
-            this.scores = await this.$mapttsApi.$get(`scores/${this.page - 1}/${this.search}`)
-            this.scoresCount = await this.$mapttsApi.$get(`scores/count`)
+            this.scores = await this.$mapttsApi.$get(
+                `scores/${this.page - 1}/${this.search}`,
+            )
 
             if (this.scores.length < 25) {
                 this.paginationLength = this.page
