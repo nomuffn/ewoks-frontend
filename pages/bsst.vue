@@ -104,6 +104,7 @@ export default {
             const rangeFields = timeRanges.map(range => {
                 let title
                 if (range == 1) title = '24h'
+                else if (range == 360) title = '1y'
                 else title = `${range}d`
 
                 return {
@@ -122,6 +123,7 @@ export default {
                     key: 'a',
                     label: 'Map',
                     tdClass: 'mapname',
+                    html: true,
                 },
                 {
                     field: 'latest',
@@ -143,7 +145,10 @@ export default {
                     stats[rangeKey] = this.getVotesString(map, rangeKey)
                 })
                 return {
-                    name: `${map.songName} ${map.songSubName} - ${map.songAuthorName}`,
+                    name: `<img src="https://cdn.scoresaber.com/covers/${map.hash.toUpperCase()}.png" />
+                    <span>${map.songAuthorName}<br/>${map.songName} ${
+                        map.songSubName
+                    }</span>`,
                     latest: `<span class="upvotes">${map.latest.upvotes}</span><span class="slash">/</span> <span class="downvotes">${map.latest.downvotes}</span>`,
                     ...stats,
                     map,
@@ -177,7 +182,10 @@ export default {
                 color: #fff;
                 font-weight: bold;
                 border: none;
-                background: transparent;
+                background: #18191c;
+            }
+            thead tr {
+                border-bottom: 1px solid #dcdfe6;
             }
             tbody td {
                 border: none;
@@ -186,7 +194,7 @@ export default {
             }
 
             tbody tr {
-                border: 1px solid #dcdfe6;
+                border-bottom: 1px solid #dcdfe6;
                 transition: background-color 0.3s;
 
                 &:hover {
@@ -194,10 +202,22 @@ export default {
                 }
             }
             .mapname {
-                max-width: 400px;
+                > span {
+                    display: flex;
+                    align-items: center;
+                    max-width: 400px;
+
+                    > span {
+                        margin-left: 20px;
+                    }
+                }
+                img {
+                    max-width: 80px;
+                }
             }
             .text-center {
                 text-align: center;
+                vertical-align: middle;
             }
             .votes > span {
                 display: flex;
