@@ -144,11 +144,13 @@ export default {
                     const rangeKey = `days-${range}`
                     stats[rangeKey] = this.getVotesString(map, rangeKey)
                 })
+
+                const img = map.hash
+                    ? `<img src="https://cdn.scoresaber.com/covers/${map.hash.toUpperCase()}.png" />`
+                    : ''
+
                 return {
-                    name: `<img src="https://cdn.scoresaber.com/covers/${map.hash.toUpperCase()}.png" />
-                    <span>${map.songAuthorName}<br/>${map.songName} ${
-                        map.songSubName
-                    }</span>`,
+                    name: `${img}<span>${map.songAuthorName}<br/>${map.songName} ${map.songSubName}</span>`,
                     latest: `<span class="upvotes">${map.latest.upvotes}</span><span class="slash">/</span> <span class="downvotes">${map.latest.downvotes}</span>`,
                     ...stats,
                     map,
