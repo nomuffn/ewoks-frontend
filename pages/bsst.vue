@@ -69,23 +69,28 @@ export default {
         }
     },
     methods: {
-        getVotesString(map, rangeKey) {
-            if (!map[rangeKey]) return '-'
-            //pepegebadd
-            const upvotes =
-                map[rangeKey].upvotes > 0
-                    ? '+' + map[rangeKey].upvotes
-                    : map[rangeKey].upvotes
-            const downvotes =
-                map[rangeKey].downvotes > 0
-                    ? '+' + map[rangeKey].downvotes
-                    : map[rangeKey].downvotes
+        getVotesString(upvotes = 0, downvotes = 0, symbol = true) {
+            if (symbol) {
+                upvotes = upvotes > 0 ? '+' + upvotes : upvotes
+                downvotes = downvotes > 0 ? '+' + downvotes : downvotes
+            }
             return `<span class="upvotes">${upvotes}</span><span class="slash">/</span> <span class="downvotes">${downvotes}</span>`
         },
         sortVotes(x, y, col, rowX, rowY) {
             const colField = col.field
-            x = rowX['map'][colField].upvotes + rowX['map'][colField].downvotes
-            y = rowY['map'][colField].upvotes + rowY['map'][colField].downvotes
+
+            x = rowX['map']
+                ? rowX['map'][colField].upvotes +
+                  rowX['map'][colField].downvotes
+                : 0
+            y = rowY['map']
+                ? rowY['map'][colField].upvotes +
+                  rowY['map'][colField].downvotes
+                : 0
+
+            if (rowX.name == 'Total') x = Number.POSITIVE_INFINITY
+            if (rowY.name == 'Total') y = Number.POSITIVE_INFINITY
+
             return x < y ? -1 : x > y ? 1 : 0
         },
     },
@@ -138,24 +143,48 @@ export default {
             ]
         },
         rows() {
-            return this.maps.map(map => {
-                let stats = {}
-                timeRanges.forEach(range => {
-                    const rangeKey = `days-${range}`
-                    stats[rangeKey] = this.getVotesString(map, rangeKey)
+            let stats = {}
+            //needs the const temp or it would throw errors?
+            const temp = ['latest', ...timeRanges].forEach(range => {
+                const latest = range == 'latest'
+                if (!latest) range = `days-${range}`
+                console.log(range)
+                const votes = ['upvotes', 'downvotes'].map(i => {
+                    return this.maps.reduce((prev, curr) => {
+                        return prev + (curr[range] ? curr[range][i] : 0)
+                    }, 0)
                 })
-
-                const img = map.hash
-                    ? `<img src="https://cdn.scoresaber.com/covers/${map.hash.toUpperCase()}.png" />`
-                    : ''
-
-                return {
-                    name: `${img}<span>${map.songAuthorName}<br/>${map.songName} ${map.songSubName}</span>`,
-                    latest: `<span class="upvotes">${map.latest.upvotes}</span><span class="slash">/</span> <span class="downvotes">${map.latest.downvotes}</span>`,
-                    ...stats,
-                    map,
-                }
+                console.log(votes)
+                stats[range] = this.getVotesString(votes[0], votes[1], !latest)
             })
+
+            return [
+                { name: 'Total', ...stats },
+                ...this.maps.map(map => {
+                    let stats = {}
+                    timeRanges.forEach(range => {
+                        const rangeKey = `days-${range}`
+                        stats[rangeKey] = this.getVotesString(
+                            map[rangeKey]?.upvotes,
+                            map[rangeKey]?.downvotes,
+                        )
+                    })
+                    const img = map.hash
+                        ? `<img src="https://cdn.scoresaber.com/covers/${map.hash.toUpperCase()}.png" />`
+                        : ''
+
+                    return {
+                        name: `${img}<span>${map.songAuthorName}<br/>${map.songName} ${map.songSubName}</span>`,
+                        latest: this.getVotesString(
+                            map.latest.upvotes,
+                            map.latest.downvotes,
+                            false,
+                        ),
+                        ...stats,
+                        map,
+                    }
+                }),
+            ]
         },
     },
 }
