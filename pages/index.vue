@@ -81,10 +81,7 @@
                                 since I'm lazy.
                                 <br />
                                 <br />
-                                Enter bpm and upload file. If it doesnt work try
-                                to refresh and try again.
-                                <br />
-                                If it still doesnt work message me on discord.
+                                Enter bpm and upload file
                             </p>
 
                             <vs-input
@@ -124,9 +121,20 @@
                                 Notes to dots converter
                             </h3>
                             <p>
-                                If it doesnt work try to refresh and try again.
-                                If it still doesnt work message me on discord.
+                                Converts all notes to bottom right dot notes so
+                                it can technically be used as timings
+                                (theoretically)
                             </p>
+
+                            <vs-checkbox v-model="dotsConverter.obstacles">
+                                Remove Obstacles
+                            </vs-checkbox>
+                            <vs-checkbox v-model="dotsConverter.lights">
+                                Remove Lights
+                            </vs-checkbox>
+                            <vs-checkbox v-model="dotsConverter.bookmarks">
+                                Remove Bookmarks
+                            </vs-checkbox>
 
                             <div class="buttons" id="fileinputbla">
                                 <div style="flex: 1"></div>
@@ -158,9 +166,6 @@
                             <h3>Ranking Queue Playlist</h3>
                             <p>
                                 Playlist will update every 3 hours.
-                                <br />
-                                Use Beatlist, Modassistant or the playlist
-                                downloader to the right to download playlists.
                                 <br />
                             </p>
 
@@ -302,6 +307,11 @@ export default {
             bpm: '',
             scripts: [],
             links: [],
+            dotsConverter: {
+                obstacles: true,
+                lights: true,
+                bookmarks: true,
+            },
         }
     },
     async created() {
@@ -310,7 +320,7 @@ export default {
     },
     methods: {
         convertToDots(input) {
-            convertToDots(input)
+            convertToDots(input, this.dotsConverter)
         },
         fixWalls(input) {
             fixWalls(input, this.bpm)
