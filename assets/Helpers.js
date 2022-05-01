@@ -1,4 +1,5 @@
-function convertToDots(input) {
+//disgustingly old
+async function convertToDots(input, config) {
     var f = input.target.files[0]
 
     if (f) {
@@ -34,10 +35,17 @@ function convertToDots(input) {
                         obj._notes[k]._type = 1
                         obj._notes[k]._cutDirection = 8
                     }
+
+                    if (config.obstacles === true) obj._obstacles = []
+                    if (config.lights === true) obj._events = []
+                    if (config.bookmarks === true)
+                        obj._customData._bookmarks = []
+
                     var element = document.createElement('a')
                     element.setAttribute(
                         'href',
-                        'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(obj)),
+                        'data:text/plain;charset=utf-8,' +
+                            encodeURIComponent(JSON.stringify(obj)),
                     )
                     element.setAttribute('download', 'Timings of ' + f.name)
 
@@ -79,7 +87,9 @@ function fixWalls(input, bpm) {
 
                         if (
                             wall._duration * (60 / bpm) + 1e-9 < 0.02 &&
-                            (wall._width >= 2 || wall._lineIndex == 1 || wall._lineIndex == 2)
+                            (wall._width >= 2 ||
+                                wall._lineIndex == 1 ||
+                                wall._lineIndex == 2)
                         ) {
                             wall._duration = (0.02 - 1e-9) / (60 / bpm)
                         }
@@ -88,14 +98,22 @@ function fixWalls(input, bpm) {
                     var element = document.createElement('a')
                     element.setAttribute(
                         'href',
-                        'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(obj)),
+                        'data:text/plain;charset=utf-8,' +
+                            encodeURIComponent(JSON.stringify(obj)),
                     )
-                    element.setAttribute('download', 'Fixed Walls for ' + f.name)
+                    element.setAttribute(
+                        'download',
+                        'Fixed Walls for ' + f.name,
+                    )
 
                     element.style.display = 'none'
-                    document.getElementById('fileinputblaWalls').appendChild(element)
+                    document
+                        .getElementById('fileinputblaWalls')
+                        .appendChild(element)
                     element.click()
-                    document.getElementById('fileinputblaWalls').removeChild(element)
+                    document
+                        .getElementById('fileinputblaWalls')
+                        .removeChild(element)
                 } else {
                     alert('Invalid file1')
                 }
