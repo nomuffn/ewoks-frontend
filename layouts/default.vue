@@ -57,6 +57,7 @@ export default {
                 'waaa.ico',
                 'wicked.ico',
                 'lohl.ico',
+                'muffnDerp.ico',
             ]
             return icons[Math.floor(Math.random() * icons.length)]
         },
