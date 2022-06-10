@@ -3,23 +3,49 @@
         <div class="wrapper">
             <div class="left">
                 <h3>
-                    <a target="_blank" :href="`https://scoresaber.com/u/${score.player.scoresaberId}`">{{
-                        score.player.twitchName
-                    }}</a>
+                    <a
+                        target="_blank"
+                        :href="
+                            `https://scoresaber.com/u/${score.player.scoresaberId}`
+                        "
+                        >{{ score.player.twitchName }}</a
+                    ><span> played</span>
                 </h3>
-                <a target="_blank" :href="`https://scoresaber.com/leaderboard/${score.leaderboardId}`"
-                    >{{ `${score.leaderboardSongAuthor} - ${score.leaderboardName}` }} [{{
-                        getDifficulty(score.difficultyRaw)
-                    }}]</a
-                >
-                <p class="grey">
-                    by
-                    <b>{{ score.mapper }}</b>
-                </p>
-                <p class="grey">~{{ getAgo(score.timeSet) }} ago</p>
+                <div class="third">
+                    <img
+                        :src="
+                            `https://cdn.scoresaber.com/covers/${score.songHash}.png`
+                        "
+                    />
+                    <div class="fourth">
+                        <a
+                            target="_blank"
+                            :href="
+                                `https://scoresaber.com/leaderboard/${score.leaderboardId}`
+                            "
+                            >{{
+                                `${score.leaderboardSongAuthor} - ${score.leaderboardName}`
+                            }}
+                            [{{ getDifficulty(score.difficultyRaw) }}]</a
+                        >
+                        <p class="grey">
+                            by
+                            <b>{{ score.mapper }}</b>
+                        </p>
+                        <p v-if="score.timeSet" class="grey">
+                            ~{{ getAgo(score.timeSet) }} ago
+                        </p>
+                    </div>
+                </div>
             </div>
             <div class="right">
-                <vs-button icon color="twitch" :href="score.twitchUrl" blank>
+                <vs-button
+                    v-if="score.twitchUrl"
+                    icon
+                    color="twitch"
+                    :href="score.twitchUrl"
+                    blank
+                >
                     Open VOD
                     <i class="bx bx-window-open"></i>
                 </vs-button>
@@ -51,7 +77,10 @@ export default {
             return string.split(subString, index).join(subString).length
         },
         getDifficulty(difficultyRaw) {
-            return difficultyRaw.substring(1, this.getPosition(difficultyRaw, '_', 2))
+            return difficultyRaw.substring(
+                1,
+                this.getPosition(difficultyRaw, '_', 2),
+            )
         },
     },
 }
@@ -62,7 +91,29 @@ export default {
     margin-bottom: 20px;
 
     h3 {
-        margin: 0;
+        margin: 0 0 10px;
+        text-align: left;
+
+        span {
+            font-weight: normal;
+        }
+    }
+
+    .third {
+        display: flex;
+
+        img {
+            width: 80px;
+            object-fit: contain;
+            border-radius: 10px;
+        }
+    }
+
+    .fourth {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        margin-left: 15px;
     }
 
     .wrapper {
@@ -73,7 +124,6 @@ export default {
 
         .left {
             text-align: left;
-            margin-left: 10px;
             min-width: 350px;
             flex: 1;
         }
