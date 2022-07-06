@@ -3,7 +3,18 @@
         <div class="wrapper">
             <div class="left">
                 <h3>
-                    {{ score.playerName }}
+                    <template v-if="score.player">
+                        <a
+                            target="_blank"
+                            :href="
+                                `https://scoresaber.com/u/${score.player.scoresaberId}`
+                            "
+                            >{{ score.player.twitchName }}</a
+                        ><span> played</span>
+                    </template>
+                    <template v-else>
+                        {{ score.playerName }}
+                    </template>
                     <span> played</span>
                 </h3>
                 <div class="third">
