@@ -3,13 +3,8 @@
         <div class="wrapper">
             <div class="left">
                 <h3>
-                    <a
-                        target="_blank"
-                        :href="
-                            `https://scoresaber.com/u/${score.player.scoresaberId}`
-                        "
-                        >{{ score.player.twitchName }}</a
-                    ><span> played</span>
+                    {{ score.playerName }}
+                    <span> played</span>
                 </h3>
                 <div class="third">
                     <img
