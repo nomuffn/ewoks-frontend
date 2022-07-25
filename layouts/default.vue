@@ -87,6 +87,11 @@ export default {
                     name: 'Home',
                 },
                 {
+                    path: 'tierlist',
+                    icon: 'bx-link-external',
+                    name: 'mEBSMBSBSMTM',
+                },
+                {
                     path: 'ranking-stuff',
                     icon: 'bx-list-ul',
                     name: 'Ranking stuff',
