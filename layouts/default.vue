@@ -1,7 +1,22 @@
 <template>
     <div>
         <div class="navbar">
-            <h2 class="title">muffnlabs</h2>
+            <div></div>
+            <div>
+                <h2 class="title">muffnlabs</h2>
+            </div>
+            <div class="donate">
+                <vs-button
+                    icon
+                    color="#8c329f"
+                    gradient
+                    blank
+                    href="https://ko-fi.com/muffn"
+                >
+                    <p>Buy me a muffin irl</p>
+                    <i class="bx bxs-donate-heart"></i>
+                </vs-button>
+            </div>
         </div>
 
         <vs-sidebar square open>
@@ -141,8 +156,31 @@ export default {
 }
 .navbar {
     display: flex;
-    flex-direction: column;
-    align-items: center;
+    justify-content: center;
+    padding: 20px;
+
+    .title {
+        padding: 0;
+    }
+
+    > * {
+        flex: 1 1 100%;
+    }
+
+    .spacer {
+    }
+    .donate {
+        align-self: center;
+
+        button {
+            padding: 0px 20px;
+            margin: 0 20px 0 auto;
+
+            i {
+                margin-left: 5px;
+            }
+        }
+    }
 
     .vs-alert__content__text {
         padding: 10px 5px;
