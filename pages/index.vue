@@ -11,7 +11,7 @@
                 <div class="buttons">
                     <vs-button
                         style="flex: 1 1 100%"
-                        href="https://scoresaber.com/leaderboards?page=1&verified=1&ranked=0&qualified=0&minStar=0&maxStar=20&category=2&sort=0&search=muffn"
+                        href="https://beatsaver.com/profile/4284309"
                         blank
                         icon
                         class="yellow"
