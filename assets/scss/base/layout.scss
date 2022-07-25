@@ -27,8 +27,9 @@ html {
 
 .navbar {
     --vs-color: var(--vs-background);
-    background: rgba(var(--vs-color), 1);
+    background: #18191c;
     text-align: center;
+    z-index: 100;
 }
 
 h3 {

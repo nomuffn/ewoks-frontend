@@ -17,11 +17,7 @@
                         <br />
                         Updates every three hours.
                     </p>
-                    <vs-button
-                        icon
-                        @click="dialog['players'] = true"
-                        transparent
-                    >
+                    <vs-button icon @click="dialog['players'] = true" border>
                         Approved Players
                     </vs-button>
                 </div>
@@ -174,8 +170,7 @@ export default {
     }
 
     .header .left .aaa button {
-        margin-left: -10px;
-        margin-top: 5px;
+        margin-top: 10px;
     }
 
     .content {

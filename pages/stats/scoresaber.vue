@@ -92,7 +92,7 @@
                             "
                             class="card"
                         >
-                            <h4>
+                            <h4 class="mr-4">
                                 <span class="colored">#{{ index + 1 }}</span>
                                 {{ item.name }}: {{ item.value }}
                             </h4>
