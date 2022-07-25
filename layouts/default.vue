@@ -23,7 +23,7 @@
             <vs-sidebar-item
                 v-for="page in pages"
                 :key="page.path"
-                :to="'/' + page.path"
+                v-bind="link(page)"
                 :id="page.path"
                 :class="{ active: isActive(page) }"
             >
@@ -75,6 +75,16 @@ export default {
                 'muffnDerp.ico',
             ]
             return icons[Math.floor(Math.random() * icons.length)]
+        },
+        link(page) {
+            if (page.path == 'tierlist')
+                return {
+                    href: '/' + page.path,
+                }
+            else
+                return {
+                    to: '/' + page.path,
+                }
         },
     },
     data() {
