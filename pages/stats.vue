@@ -47,7 +47,8 @@ export default {
         }
     },
     async created() {
-        if (this.$route.name.split('-').length == 1) {
+        console.log(this.$route)
+        if (this.$route.path == '/stats') {
             this.$router.push({ path: 'stats/beatsaver' })
         } else if (this.$route.path.includes('scoresaber')) {
             this.active = 'scoresaber'
