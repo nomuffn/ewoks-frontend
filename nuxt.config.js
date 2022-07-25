@@ -30,7 +30,7 @@ export default {
             },
         ],
         bodyAttrs: {
-            class: 'hidden darken',
+            class: 'darken',
             'vs-theme': 'dark',
         },
     },
@@ -50,6 +50,7 @@ export default {
 
     // Global CSS: https://go.nuxtjs.dev/config-css
     css: [
+        '~/assets/scss/tailwind.css',
         'vuesax/dist/vuesax.css',
         'boxicons/css/boxicons.min.css',
         '~/assets/scss/global.scss',
@@ -62,6 +63,7 @@ export default {
         '@/plugins/defaultApi',
         '@/plugins/mapttsApi',
         '@/plugins/auth',
+        '@/plugins/axios',
         { src: '~~/node_modules/vue-rellax/lib/nuxt-plugin', ssr: false },
         { src: '@/plugins/vuetimeline.js' },
     ],
@@ -74,6 +76,7 @@ export default {
         // https://go.nuxtjs.dev/eslint
         //'@nuxtjs/eslint-module',
         '@nuxtjs/composition-api/module',
+        '@nuxt/postcss8',
     ],
 
     // Modules: https://go.nuxtjs.dev/config-modules
@@ -88,10 +91,35 @@ export default {
                 siteId: 1,
             },
         ],
+        [
+            'primevue/nuxt',
+            {
+                theme: 'saga-blue',
+                ripple: true, //whether the ripple animation is enabled, defaults to false
+                components: [
+                    'InputText',
+                    'Button',
+                    'Toast',
+                    'Slider',
+                    'ColorPicker',
+                    'Dialog',
+                    'Message',
+                    'OverlayPanel',
+                ],
+                // directives: ['Tooltip', 'Badge'], //an array of directives to be registered
+            },
+        ],
     ],
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
-    build: {},
+    build: {
+        postcss: {
+            plugins: {
+                tailwindcss: {},
+                autoprefixer: {},
+            },
+        },
+    },
     server: {
         host: '0.0.0.0',
     },

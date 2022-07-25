@@ -23,7 +23,7 @@
             <vs-sidebar-item
                 v-for="page in pages"
                 :key="page.path"
-                v-bind="link(page)"
+                :to="'/' + page.path"
                 :id="page.path"
                 :class="{ active: isActive(page) }"
             >
@@ -76,16 +76,6 @@ export default {
             ]
             return icons[Math.floor(Math.random() * icons.length)]
         },
-        link(page) {
-            if (page.path == 'tierlist')
-                return {
-                    href: '/' + page.path,
-                }
-            else
-                return {
-                    to: '/' + page.path,
-                }
-        },
     },
     data() {
         return {
@@ -98,8 +88,8 @@ export default {
                 },
                 {
                     path: 'tierlist',
-                    icon: 'bx-link-external',
-                    name: 'mEBSMBSBSMTM',
+                    icon: 'bx-pyramid',
+                    name: 'Tierlists',
                 },
                 {
                     path: 'ranking-stuff',
@@ -122,6 +112,16 @@ export default {
                     name: 'Stats',
                 },
                 {
+                    path: 'playlists',
+                    icon: 'bxs-playlist',
+                    name: 'Playlist maker',
+                },
+                {
+                    path: 'tools',
+                    icon: 'bxs-wrench',
+                    name: 'Tools/Misc',
+                },
+                {
                     path: 'configs',
                     icon: 'bx-file-blank',
                     name: 'Configs',
@@ -130,11 +130,6 @@ export default {
                     path: 'timeline',
                     icon: 'bx-time',
                     name: 'Timeline',
-                },
-                {
-                    path: 'playlists',
-                    icon: 'bxs-playlist',
-                    name: 'Playlist maker',
                 },
             ],
         }
