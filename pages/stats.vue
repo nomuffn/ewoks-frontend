@@ -16,18 +16,16 @@
             </div>
         </div>
 
-        <vs-navbar color="#18191c" shadow text-white square v-model="active">
+        <vs-navbar color="#18191c" shadow text-white square>
             <vs-navbar-item
                 to="/stats/beatsaver"
-                :active="active == 'beatsaver'"
-                id="beatsaver"
+                :active="$route.path == '/stats/beatsaver'"
             >
                 Beatsaver
             </vs-navbar-item>
             <vs-navbar-item
                 to="/stats/scoresaber"
-                :active="active == 'scoresaber'"
-                id="scoresaber"
+                :active="$route.path == '/stats/scoresaber'"
             >
                 Scoresaber
             </vs-navbar-item>
@@ -42,17 +40,16 @@ export default {
     transition: 'slide-bottom',
     data() {
         return {
-            // stats: null,
             active: 'beatsaver',
         }
     },
+    beforeRouteEnter(to, from, next) {
+        next(vm => {
+            if (to.path == '/stats') return next('/stats/beatsaver')
+            next()
+        })
+    },
     async created() {
-        console.log(this.$route)
-        if (this.$route.path == '/stats') {
-            this.$router.push({ path: 'stats/beatsaver' })
-        } else if (this.$route.path.includes('scoresaber')) {
-            this.active = 'scoresaber'
-        }
         // this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
     },
 }

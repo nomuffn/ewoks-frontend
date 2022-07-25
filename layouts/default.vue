@@ -57,7 +57,11 @@ export default {
     },
     methods: {
         isActive(page) {
-            if (this.$route.path.substring(1).split('/')[0] == page.path) {
+            // cringe
+            if (
+                this.$route.path.substring(1).split('/')[0] ==
+                page.path.split('/')[0]
+            ) {
                 return true
             }
         },
@@ -107,7 +111,7 @@ export default {
                     name: 'Bsst',
                 },
                 {
-                    path: 'stats',
+                    path: 'stats/beatsaver',
                     icon: 'bx-stats',
                     name: 'Stats',
                 },
