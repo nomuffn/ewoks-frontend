@@ -98,7 +98,7 @@ export default {
                 {
                     path: 'ranking-stuff',
                     icon: 'bx-list-ul',
-                    name: 'Ranking stuff',
+                    name: 'Ranking',
                 },
                 {
                     path: 'maptts',
