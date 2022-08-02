@@ -222,7 +222,6 @@ export default {
             tbody td {
                 border: none;
                 color: #fff;
-                opacity: 0.7;
             }
 
             tbody tr {
