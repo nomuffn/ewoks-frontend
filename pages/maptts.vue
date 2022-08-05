@@ -9,17 +9,8 @@
                     <p>
                         Shows timestamps for maps that streamers have played.
                         <br />
-                        You can suggest players for which you have to be logged
-                        in.
-                        <br />
-                        After suggesting they will have to be approved by the
-                        Approval Team.
-                        <br />
                         Updates every three hours.
                     </p>
-                    <vs-button icon @click="dialog['players'] = true" border>
-                        Approved Players
-                    </vs-button>
                 </div>
             </div>
 
@@ -33,7 +24,7 @@
                     {{ discord['status'] }}
                     <i class="bx bxl-discord"></i>
                 </vs-button>
-                <p>(Only needed to suggest players)</p>
+                <p>(Useless for now)</p>
             </div>
         </div>
 
@@ -44,15 +35,6 @@
 
             <div class="title_container">
                 <h2 class="title">Latest Scores</h2>
-
-                <vs-button
-                    v-if="isAuthenticated"
-                    icon
-                    @click="dialog['suggest'] = true"
-                >
-                    Suggest Player
-                    <i class="bx bxs-message-square-add"></i>
-                </vs-button>
             </div>
 
             <div class="row">
@@ -78,9 +60,6 @@
 
             <vs-pagination v-model="page" :length="paginationLength" />
         </div>
-
-        <dialogs-suggest-player-dialog v-model="dialog" />
-        <dialogs-players-dialog class="players-dialog" v-model="dialog" />
     </div>
 </template>
 
@@ -111,10 +90,6 @@ export default {
             paginationLength: 3,
             loading: true,
             isAuthenticated: false,
-            dialog: {
-                suggest: false,
-                players: false,
-            },
             discord: {
                 status: 'Login ',
                 href: discordLogin,
