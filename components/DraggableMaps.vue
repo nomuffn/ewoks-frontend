@@ -1,10 +1,9 @@
 <template>
-    <!-- <draggable  :animation="400":force-fallback="true" @start="filedStart2" :list = "t.filedList" @end="filedEnd" group="testList" :disabled="editable"> -->
     <draggable
         style="min-height: 100px"
         class="w-full h-full py-5"
         :value="value"
-        @input="(input) => $emit('input', input)"
+        @input="input => $emit('input', input)"
         :disabled="false"
         @start="drag = true"
         @end="drag = false"
@@ -27,18 +26,21 @@
         >
             <div
                 v-for="map in value"
-                :key="map.id"
+                :key="map.hash"
                 class="map flex flex-col m-2 relative overflow-hidden select-none"
                 :style="`width: ${coverSize}px`"
+                @contextmenu="event => $emit('onRightClick', event, map)"
             >
                 <img
-                    :src="`https://eu.cdn.beatsaver.com/${map.versions[0].hash}.jpg`"
+                    :src="
+                        `https://eu.cdn.beatsaver.com/${map.hash.toLowerCase()}.jpg`
+                    "
                 />
                 <p
                     style="font-size: 80%"
                     class="truncate absolute bottom-0 w-full text-center bg-white text-black px-1 select-none"
                 >
-                    {{ map.metadata.songName }}
+                    {{ map.songName }}
                 </p>
             </div>
         </transition-group>
@@ -46,7 +48,7 @@
 </template>
 
 <script>
-import draggable from 'vuedraggable';
+import draggable from 'vuedraggable'
 
 export default {
     props: {
@@ -60,7 +62,7 @@ export default {
         return {
             tiers: [],
             drag: false,
-        };
+        }
     },
     async mounted() {},
     methods: {
@@ -68,10 +70,10 @@ export default {
             this.tiers.push({
                 key: new Date(),
                 list: [],
-            });
+            })
         },
     },
-};
+}
 </script>
 
 <style lang="scss">

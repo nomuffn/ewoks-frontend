@@ -105,6 +105,8 @@ export default {
                     'Dialog',
                     'Message',
                     'OverlayPanel',
+                    'Dropdown',
+                    'ContextMenu',
                 ],
                 // directives: ['Tooltip', 'Badge'], //an array of directives to be registered
             },

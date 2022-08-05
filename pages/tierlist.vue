@@ -14,8 +14,8 @@
 
         <Message class="self-center mt-8" :closable="false">
             <p>
-                Search for mapper names down below to get their maps and drag &
-                drop them into a tier
+                Search beat saver down below to get maps and drag & drop them
+                into a tier
             </p>
             <p>Just screenshot with win + shift + s <strong>:D</strong></p>
             <p>
@@ -83,6 +83,7 @@
                         <draggable-maps
                             v-model="tier.list"
                             :coverSize="coverSize"
+                            @onRightClick="onRightClick"
                         />
                     </div>
                 </div>
@@ -97,14 +98,33 @@
 
             <p class="text-2xl mt-4">Maps</p>
             <div class="flex mx-4 mt-4 pb-4">
-                <InputText
-                    v-model="mapper"
-                    style="min-width: 280px; margin-right: 10px"
-                    placeholder="Search for exact beat saver name"
-                    @keydown.enter="loadMaps"
-                />
+                <div class="flex flex-col">
+                    <label for="search">Search</label>
+                    <InputText
+                        id="search"
+                        v-model="search"
+                        style="min-width: 280px; margin-right: 10px"
+                        placeholder="Search beat saver"
+                        @keydown.enter="loadMaps"
+                    />
+                </div>
+
+                <div class="flex flex-col">
+                    <label for="order">Order by</label>
+                    <Dropdown
+                        id="order"
+                        v-model="order"
+                        :options="orderings"
+                        optionLabel="name"
+                        placeholder="Select a City"
+                        scrollHeight="400px"
+                    />
+                </div>
                 <Button
-                    label="YES"
+                    label="LOAD 😋"
+                    class="self-end"
+                    style="margin-left: 10px"
+                    :disabled="loading"
                     :loading="loading"
                     :icon="spinnerComputed"
                     @click="loadMaps"
@@ -115,11 +135,13 @@
                     v-model="maps"
                     :coverSize="coverSize"
                     class="mb-4"
+                    @onRightClick="onRightClick"
                 />
                 <Button
-                    v-if="pagination >= 0"
+                    v-if="pagination > 0"
                     class="self-center"
                     label="MOOORE"
+                    :disabled="loading"
                     :loading="loading"
                     :icon="spinnerComputed"
                     @click="loadMaps(true)"
@@ -162,6 +184,7 @@
             </div>
         </OverlayPanel>
 
+        <ContextMenu ref="menu" :model="mapContextMenu" />
         <img class="sheep w-full" src="sheep.jpg" />
     </div>
 </template>
@@ -198,18 +221,32 @@ export default {
                     list: [],
                 },
             ],
+            orderings: [
+                { name: 'Uploaded descending', value: '-uploaded' },
+                { name: 'Uploaded ascending', value: 'uploaded' },
+                { name: 'Upvotes descending', value: '-upvotes' },
+                { name: 'Upvotes ascending', value: 'upvotes' },
+                { name: 'Downvotes descending', value: '-downvotes' },
+                { name: 'Downvotes ascending', value: 'downvotes' },
+                { name: 'Star rating descending', value: '-highestStar' },
+                { name: 'Star rating ascending', value: 'highestStar' },
+                { name: 'BPM descending', value: '-bpm' },
+                { name: 'BPM ascending', value: 'bpm' },
+            ],
+            order: { name: 'Uploaded descending', value: '-uploaded' },
             editTier: null,
             drag: false,
             maps: [],
             coverSize: 125,
-            mapper: '',
-            pagination: 0,
+            search: '',
+            pagination: 1,
             loading: false,
+            mapContextMenu: [],
         }
     },
     async mounted() {
-        // this.mapper = 'muffn';
-        // this.loadMaps();
+        // this.search = 'muffn'
+        // this.loadMaps()
     },
     methods: {
         toggle(event, index) {
@@ -264,24 +301,22 @@ export default {
             this.loading = true
             if (more !== true) {
                 this.maps = []
-                this.pagination = 0
+                this.pagination = 1
             }
             try {
-                const { data: mapper } = await this.$http.get(
-                    'https://api.beatsaver.com/users/name/' + this.mapper,
-                )
-                const { data } = await this.$http.get(
-                    `https://api.beatsaver.com/maps/uploader/${mapper.id}/${this.pagination}`,
+                const result = await this.$defaultApi.$get(
+                    `beatsaver/search/?search=${this.search}&page=${this.pagination}&ordering=${this.order.value}`,
                 )
                 this.pagination++
-                if (data.docs.length < 20) {
+                if (!result.next) {
                     this.pagination = -1
                 }
-                this.maps = this.maps.concat(data.docs)
+                this.maps = this.maps.concat(result.results)
             } catch (e) {
+                console.log(e)
                 this.$toast.add({
                     severity: 'error',
-                    summary: 'Mapper not found',
+                    summary: 'Invalid search',
                     life: 3000,
                 })
             }
@@ -303,6 +338,37 @@ export default {
             const otherIndex = down ? index + 1 : index - 1
             this.$set(this.tiers, index, this.tiers[otherIndex])
             this.$set(this.tiers, otherIndex, tmp)
+        },
+        onRightClick(event, map) {
+            this.mapContextMenu = [
+                ...[
+                    `Uploaded by: ${map.uploaderUsername}`,
+                    `Mapper: ${map.levelAuthorName}`,
+                    `Song Name: ${map.songName} ${map.songSubName}`,
+                    `Song Artist: ${map.songAuthorName}`,
+                    `BPM: ${map.bpm}`,
+                    `Votes: ${map.upvotes} / ${map.downvotes}`,
+                    ...(map.highestStar > 0
+                        ? [`Highest Star rating: ${map.highestStar}`]
+                        : []),
+                ].map(string => {
+                    return {
+                        label: string,
+                        disabled: true,
+                    }
+                }),
+                {
+                    separator: true,
+                },
+                {
+                    label: 'Open on Beatsaver',
+                    icon: 'pi pi-fw pi-external-link',
+                    command: event => {
+                        window.open(`https://beatsaver.com/maps/${map.key}`)
+                    },
+                },
+            ]
+            this.$refs.menu.show(event)
         },
     },
     computed: {
@@ -359,6 +425,10 @@ export default {
         &:last-child {
             border-bottom-left-radius: 3px;
         }
+    }
+    .p-contextmenu {
+        width: auto;
+        max-width: 500px;
     }
     .tier {
         .p-inputtext {
