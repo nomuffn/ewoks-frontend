@@ -1,7 +1,7 @@
 <template>
     <draggable
         style="min-height: 100px"
-        class="w-full h-full py-5"
+        class="w-full h-full py-2"
         :value="value"
         @input="input => $emit('input', input)"
         :disabled="false"
@@ -17,17 +17,17 @@
         <transition-group
             style="
                 min-height: 100px;
-                margin-bottom: -0.5rem;
-                margin-top: -0.5rem;
+                margin-bottom: -0.25rem;
+                margin-top: -0.25rem;
             "
-            class="flex flex-wrap pl-2"
+            class="flex flex-wrap pl-1"
             type="transition"
             :name="!drag ? 'flip-list' : null"
         >
             <div
                 v-for="map in value"
                 :key="map.hash"
-                class="map flex flex-col m-2 relative overflow-hidden select-none"
+                class="map flex flex-col m-1 relative overflow-hidden select-none"
                 :style="`width: ${coverSize}px`"
                 @contextmenu="event => $emit('onRightClick', event, map)"
             >

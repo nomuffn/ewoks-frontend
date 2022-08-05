@@ -133,7 +133,7 @@
             <div v-if="maps.length" class="flex flex-col mx-4">
                 <Message class="self-center" :closable="false">
                     <p>
-                        You can also now right click maps for more info
+                        You can also right click maps for more info now
                     </p>
                 </Message>
                 <draggable-maps
