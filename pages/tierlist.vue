@@ -131,6 +131,11 @@
                 />
             </div>
             <div v-if="maps.length" class="flex flex-col mx-4">
+                <Message class="self-center" :closable="false">
+                    <p>
+                        You can also now right click maps for more info
+                    </p>
+                </Message>
                 <draggable-maps
                     v-model="maps"
                     :coverSize="coverSize"
