@@ -14,7 +14,7 @@
                     </vs-button>
                     <vs-button
                         href="https://scoresaber.com/ranking/requests"
-                        blank
+                        target="_blank"
                     >
                         Rank Requests
                     </vs-button>
@@ -25,7 +25,11 @@
                     Now this list should always be fully up to date with the
                     current qualified maps. Updates every 30 minutes.
                     <br />
-                    Thanks to miitchel for some code to get this going again 🤗
+                    Thanks to
+                    <a href="https://twitter.com/miitchelVR" target="_blank"
+                        ><strong>miitchel</strong></a
+                    >
+                    for some code to get this going again 🤗
                 </Message>
 
                 <loading-spinner v-if="!maps.length" />
@@ -87,7 +91,12 @@ export default {
         }
     },
     async created() {
-        this.maps = await this.$defaultApi.$get('scoresaber/qualified')
+        this.maps = (await this.$defaultApi.$get('scoresaber/qualified')).sort(
+            (a, b) => {
+                if (a.hoursleft > 0) return a.hoursleft - b.hoursleft
+                else return b.hoursleft - a.hoursleft
+            },
+        )
         this.stats = await this.$defaultApi.$get('scoresaber/rankedspans')
         this.votesStats = await this.$defaultApi.$get('scoresaber/rq/stats')
     },

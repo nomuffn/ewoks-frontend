@@ -31,8 +31,8 @@ export default {
             } else {
                 const timeLeft =
                     hoursleft < -24
-                        ? `${parseInt(hoursleft / 24)} days ago`
-                        : `${hoursleft} hours ago`
+                        ? `${Math.round(Math.abs(hoursleft / 24))} days ago` // 🤮
+                        : `${Math.round(Math.abs(hoursleft))} hours ago` // 🤮
                 return `<p style='color: green; text-align: right; font-weight: bold' >${timeLeft}</p>`
             }
         },
