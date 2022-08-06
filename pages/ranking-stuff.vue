@@ -4,6 +4,14 @@
             <div>
                 <div class="title_container">
                     <h2 class="title">Qualified Maps</h2>
+                </div>
+
+                <div class="flex">
+                    <vs-button
+                        href="https://muffnlabs.de/static/qualified-maps.bplist"
+                    >
+                        Download playlist
+                    </vs-button>
                     <vs-button
                         href="https://scoresaber.com/ranking/requests"
                         blank
@@ -11,25 +19,14 @@
                         Rank Requests
                     </vs-button>
                 </div>
-                <vs-alert color="primary">
-                    If a map disappears from the queue it will be seen as a new
-                    qualified map.
+                <Message class="self-center" :closable="false">
+                    Finally moved to the new scoresaber api.
                     <br />
-                    Vague amount of mapsets ranked in the last:
+                    Now this list should always be fully up to date with the
+                    current qualified maps. Updates every 30 minutes.
                     <br />
-
-                    <template v-if="stats">
-                        - week: <b>{{ stats['168'] }}</b>
-                        <br />
-                        - 2 weeks: <b>{{ stats['336'] }}</b>
-                        <br />
-                        - month: <b>{{ stats['720'] }}</b>
-                        <br />
-                        - 3 months: <b>{{ stats['2160'] }}</b>
-                        <br />
-                        - 6 months: <b>{{ stats['4320'] }}</b>
-                    </template>
-                </vs-alert>
+                    Thanks to miitchel for some code to get this going again 🤗
+                </Message>
 
                 <loading-spinner v-if="!maps.length" />
                 <time-maps-list :maps="maps" />
@@ -69,7 +66,7 @@
             <div>
                 <div class="title_container">
                     <h2 class="title">
-                        Top Ten Scores Feed for Top 150 Ranked Songs
+                        Top Ten Scores Feed for > 500pp plays
                     </h2>
                 </div>
                 <vs-alert color="primary"> Updates every hour </vs-alert>
