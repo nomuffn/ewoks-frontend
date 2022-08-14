@@ -96,6 +96,11 @@ export default {
                     name: 'Tierlists',
                 },
                 {
+                    path: 'guess',
+                    icon: 'bx-question-mark',
+                    name: 'Guess',
+                },
+                {
                     path: 'ranking-stuff',
                     icon: 'bx-list-ul',
                     name: 'Ranking',

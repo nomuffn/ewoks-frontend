@@ -98,6 +98,7 @@ export default {
                 ripple: true, //whether the ripple animation is enabled, defaults to false
                 components: [
                     'InputText',
+                    'InputNumber',
                     'Button',
                     'Toast',
                     'Slider',
