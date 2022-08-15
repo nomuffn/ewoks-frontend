@@ -10,45 +10,135 @@
             </div>
         </div>
 
+        <!-- <InputNumber v-model="one" />
+        <InputNumber v-model="two" />
+        <p>
+            {{
+                Math.round(
+                    Math.max(10 * (1 - (Math.abs(one - two) / one) ** 2), 0),
+                )
+            }}
+        </p> -->
+
         <div class="content">
             <div class="flex flex-col mt-4 items-center flex-grow">
                 <div class="my-4 font-bold text-2xl">
-                    Points on this run: {{ points }}
+                    Points on this run: {{ points }}pts ({{ guesses }} guesses)
                 </div>
+                <template v-if="loading">
+                    <Loading />
+                </template>
+                <template v-else-if="!showResult">
+                    <div v-if="score" class="twitch-embed">
+                        <iframe
+                            :src="
+                                `https://player.twitch.tv/?parent=muffnlabs.de&video=${videoId}&${timestamp}`
+                            "
+                            height="720"
+                            width="1280"
+                        >
+                        </iframe>
+                    </div>
 
-                <div v-if="score" class="twitch-embed">
-                    <iframe
-                        :src="
-                            `https://player.twitch.tv/?parent=muffnlabs.de&video=${videoId}&${timestamp}`
-                        "
-                        height="720"
-                        width="1280"
-                    >
-                    </iframe>
-                </div>
+                    <InputNumber
+                        v-model="rankGuess"
+                        placeholder="Guess the rank"
+                        class="my-4"
+                    />
 
-                <InputNumber
-                    v-model="rank"
-                    placeholder="Guess the rank"
-                    class="my-4"
-                />
+                    <Dropdown
+                        v-model="hmdGuess"
+                        :options="hmds"
+                        optionLabel="value"
+                        placeholder="Guess the hardware"
+                        class="mb-4"
+                    />
 
-                <Dropdown
-                    v-model="hmd"
-                    :options="hmds"
-                    optionLabel="value"
-                    placeholder="Guess the hardware"
-                    class="mb-4"
-                />
+                    <Button
+                        label="Submit"
+                        :disabled="!hmdGuess || !rankGuess"
+                        @click="submit"
+                    />
+                </template>
+                <template v-else>
+                    <div class="flex flex-col mt-4">
+                        <p class="self-center font-bold text-2xl">Result</p>
 
-                <Button label="Submit" @click="submit" />
+                        <div class="my-4 flex">
+                            <img
+                                class="rounded-full w-24"
+                                :src="playerData.player.profilePicture"
+                            />
+                            <div class="flex flex-col ml-4 justify-center">
+                                <p class="font-bold text-2xl">
+                                    {{ playerData.player.name }}
+                                </p>
+                                <a
+                                    :href="
+                                        `https://scoresaber.com/u/${playerData.player.id}`
+                                    "
+                                    target="_blank"
+                                    >Scoresaber</a
+                                >
+                                <a
+                                    :href="
+                                        `https://twitch.tv/${score.twitchName}`
+                                    "
+                                    target="_blank"
+                                    >Twitch</a
+                                >
+                            </div>
+                        </div>
+
+                        <div class="my-4 flex flex-col">
+                            <span
+                                >Gussed rank:
+                                <strong>#{{ rankGuess }}</strong></span
+                            >
+                            <span
+                                >Actual rank:
+                                <strong>#{{ actualRank }}</strong></span
+                            >
+                            <p class="font-bold">
+                                => +{{ rankGuessPoints }} points
+                            </p>
+                        </div>
+
+                        <div class="my-4 flex flex-col">
+                            <span
+                                >Gussed hmd:
+                                <strong>{{ hmdGuess.value }}</strong></span
+                            >
+                            <span
+                                >Actual hmd:
+                                <strong>{{ actualHMD }}</strong></span
+                            >
+                            <p class="font-bold">
+                                => +{{ hmdGuessPoints }} points
+                            </p>
+                        </div>
+                    </div>
+
+                    <Button label="Next" @click="next" />
+                </template>
             </div>
-            <div v-if="result"></div>
         </div>
     </div>
 </template>
 
 <script>
+const HMDs = {
+    0: 'Unknown',
+    1: 'Oculus Rift CV1',
+    2: 'Vive',
+    4: 'Vive Pro',
+    8: 'Windows Mixed Reality',
+    16: 'Rift S',
+    32: 'Oculus Quest',
+    64: 'Valve Index',
+    128: 'Vive Cosmos',
+}
+
 export default {
     transition: 'slide-bottom',
     watch: {
@@ -62,22 +152,22 @@ export default {
     },
     data() {
         return {
-            score: null,
-            hmd: null,
-            rank: null,
-            loading: true,
             points: 0,
+            score: null,
+            hmdGuess: null,
+            rankGuess: null,
+            loading: true,
+            showResult: false,
+            playerData: null,
+            guesses: 0,
+            one: 0,
+            two: 0,
 
             hmds: [
-                { value: 'Unknown' },
-                { value: 'Oculus Rift CV1' },
-                { value: 'Vive' },
-                { value: 'Vive Pro' },
-                { value: 'Windows Mixed Reality' },
-                { value: 'Rift S' },
-                { value: 'Oculus Quest' },
-                { value: 'Valve Index' },
-                { value: 'Vive Cosmos' },
+                { value: 'Dont know :(' },
+                ...Object.values(HMDs).map(entry => {
+                    return { value: entry }
+                }),
             ],
         }
     },
@@ -86,10 +176,36 @@ export default {
         async load() {
             this.loading = true
             this.score = await this.$mapttsApi.$get('randomScore')
-
             this.loading = false
         },
-        async submit() {},
+        async submit() {
+            this.loading = true
+
+            // TODO save hmd in randomScore in the future, this is kinda shit but laziness ftw
+            const axios = this.$axios.create()
+            this.playerData = {
+                player: await axios.$get(
+                    `https://scoresaber.com/api/player/${this.score.scoresaberId}/basic`,
+                ),
+                scores: (
+                    await axios.$get(
+                        `https://scoresaber.com/api/player/${this.score.scoresaberId}/scores?sort=recent`,
+                    )
+                ).playerScores,
+            }
+
+            this.points += this.rankGuessPoints + this.hmdGuessPoints
+
+            this.loading = false
+            this.showResult = true
+        },
+        next() {
+            this.showResult = false
+            this.rank = null
+            this.hmd = null
+            this.load()
+            this.guesses++
+        },
     },
     computed: {
         videoId() {
@@ -101,6 +217,27 @@ export default {
             return this.score?.twitchUrl
                 .split('https://www.twitch.tv/videos/')[1]
                 .split('?')[1]
+        },
+        actualRank() {
+            return this.playerData?.player?.rank
+        },
+        actualHMD() {
+            return HMDs[this.playerData?.scores[0]?.score.hmd]
+        },
+        rankGuessPoints() {
+            const guess = this.rankGuess
+            const rank = this.actualRank
+
+            return Math.round(
+                Math.max(
+                    10 * (1 - (Math.abs(rank - guess) / rank / 1.5) ** 2),
+                    0,
+                ),
+            )
+        },
+        hmdGuessPoints() {
+            if (this.hmdGuess == this.actualHMD) return 7
+            return 0
         },
     },
 }
