@@ -182,17 +182,9 @@ export default {
             this.loading = true
 
             // TODO save hmd in randomScore in the future, this is kinda shit but laziness ftw
-            const axios = this.$axios.create()
-            this.playerData = {
-                player: await axios.$get(
-                    `https://scoresaber.com/api/player/${this.score.scoresaberId}/basic`,
-                ),
-                scores: (
-                    await axios.$get(
-                        `https://scoresaber.com/api/player/${this.score.scoresaberId}/scores?sort=recent`,
-                    )
-                ).playerScores,
-            }
+            this.playerData = await this.$mapttsApi.$get(
+                `randomScore/${this.score.scoresaberId}`,
+            )
 
             this.points += this.rankGuessPoints + this.hmdGuessPoints
 
@@ -200,9 +192,9 @@ export default {
             this.showResult = true
         },
         next() {
-            this.showResult = false
+            this.rankGuess = false
             this.rank = null
-            this.hmd = null
+            this.hmdGuess = null
             this.load()
             this.guesses++
         },
