@@ -85,7 +85,7 @@
                                 >
                                 <a
                                     :href="
-                                        `https://twitch.tv/${score.twitchName}`
+                                        `https://twitch.tv/${score.playerName}`
                                     "
                                     target="_blank"
                                     >Twitch</a
