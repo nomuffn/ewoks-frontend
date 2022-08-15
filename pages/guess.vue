@@ -190,7 +190,7 @@ export default {
             // TODO save hmd in randomScore in the future, this is kinda shit but laziness ftw
             try {
                 this.playerData = await this.$mapttsApi.$get(
-                    `randomScoree/${this.score.scoresaberId}`,
+                    `randomScore/${this.score.scoresaberId}`,
                 )
             } catch (e) {
                 this.$toast.add({
