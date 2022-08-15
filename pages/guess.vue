@@ -57,6 +57,7 @@
                         :disabled="!hmdGuess || !rankGuess"
                         @click="submit"
                     />
+                    <Button label="Skip" @click="next" />
                 </template>
                 <template v-else>
                     <div class="flex flex-col mt-4">
