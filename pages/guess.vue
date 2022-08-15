@@ -10,13 +10,13 @@
             </div>
         </div>
 
-        <InputNumber v-model="one" />
+        <!-- <InputNumber v-model="one" />
         <InputNumber v-model="two" />
         <p>
             {{
                 Math.round(10 * Math.max(1 - Math.abs(one - two) / one, 0) ** 2)
             }}
-        </p>
+        </p> -->
 
         <div class="content">
             <div class="flex flex-col mt-4 items-center flex-grow">
