@@ -10,15 +10,13 @@
             </div>
         </div>
 
-        <!-- <InputNumber v-model="one" />
+        <InputNumber v-model="one" />
         <InputNumber v-model="two" />
         <p>
             {{
-                Math.round(
-                    Math.max(10 * (1 - (Math.abs(one - two) / one) ** 2), 0),
-                )
+                Math.round(10 * Math.max(1 - Math.abs(one - two) / one, 0) ** 2)
             }}
-        </p> -->
+        </p>
 
         <div class="content">
             <div class="flex flex-col mt-4 items-center flex-grow">
@@ -107,7 +105,9 @@
                         <div class="my-4 flex flex-col">
                             <span
                                 >Gussed hmd:
-                                <strong>{{ hmdGuess.value }}</strong></span
+                                <strong>{{
+                                    hmdGuess && hmdGuess.value
+                                }}</strong></span
                             >
                             <span
                                 >Actual hmd:
@@ -193,10 +193,10 @@ export default {
         },
         next() {
             this.rankGuess = false
-            this.rank = null
             this.hmdGuess = null
-            this.load()
+            this.showResult = false
             this.guesses++
+            this.load()
         },
     },
     computed: {
@@ -221,10 +221,7 @@ export default {
             const rank = this.actualRank
 
             return Math.round(
-                Math.max(
-                    10 * (1 - (Math.abs(rank - guess) / rank / 1.5) ** 2),
-                    0,
-                ),
+                10 * Math.max(1 - Math.abs(rank - guess) / rank, 0) ** 2,
             )
         },
         hmdGuessPoints() {
