@@ -192,7 +192,7 @@ export default {
             this.showResult = true
         },
         next() {
-            this.rankGuess = false
+            this.rankGuess = null
             this.hmdGuess = null
             this.showResult = false
             this.guesses++
@@ -225,7 +225,7 @@ export default {
             )
         },
         hmdGuessPoints() {
-            if (this.hmdGuess == this.actualHMD) return 7
+            if (this.hmdGuess.value == this.actualHMD) return 2
             return 0
         },
     },
