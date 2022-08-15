@@ -21,7 +21,7 @@
         <div class="content">
             <div class="flex flex-col mt-4 items-center flex-grow">
                 <div class="my-4 font-bold text-2xl">
-                    Points on this run: {{ points }}pts ({{ guesses }} guesses)
+                    Current run: {{ points }}pts ({{ guesses }} guesses)
                 </div>
                 <template v-if="loading">
                     <Loading />
@@ -57,7 +57,11 @@
                         :disabled="!hmdGuess || !rankGuess"
                         @click="submit"
                     />
-                    <Button label="Skip" @click="next" />
+                    <Button
+                        style="margin-top: 1rem"
+                        label="Skip"
+                        @click="next"
+                    />
                 </template>
                 <template v-else>
                     <div class="flex flex-col mt-4">
@@ -124,6 +128,7 @@
                 </template>
             </div>
         </div>
+        <Toast />
     </div>
 </template>
 
@@ -183,9 +188,18 @@ export default {
             this.loading = true
 
             // TODO save hmd in randomScore in the future, this is kinda shit but laziness ftw
-            this.playerData = await this.$mapttsApi.$get(
-                `randomScore/${this.score.scoresaberId}`,
-            )
+            try {
+                this.playerData = await this.$mapttsApi.$get(
+                    `randomScoree/${this.score.scoresaberId}`,
+                )
+            } catch (e) {
+                this.$toast.add({
+                    severity: 'error',
+                    summary: 'Something went wrong :( Skipping this one',
+                    life: 3000,
+                })
+                return this.next()
+            }
 
             this.points += this.rankGuessPoints + this.hmdGuessPoints
 
@@ -215,7 +229,7 @@ export default {
             return this.playerData?.player?.rank
         },
         actualHMD() {
-            return HMDs[this.playerData?.scores[0]?.score.hmd]
+            return HMDs[this.playerData?.scores[0]?.score?.hmd]
         },
         rankGuessPoints() {
             const guess = this.rankGuess
@@ -226,7 +240,7 @@ export default {
             )
         },
         hmdGuessPoints() {
-            if (this.hmdGuess.value == this.actualHMD) return 2
+            if (this.hmdGuess?.value == this.actualHMD) return 2
             return 0
         },
     },
