@@ -32,6 +32,17 @@
                     for some code to get this going again 🤗
                 </Message>
 
+                <div class="m-4">
+                    <p>
+                        Maps past the ranked date:
+                        <strong>{{ passedRankedDateAmount }}</strong>
+                    </p>
+                    <p>
+                        Maps with remaining time:
+                        <strong>{{ remainingTimeAmount }}</strong>
+                    </p>
+                </div>
+
                 <loading-spinner v-if="!maps.length" />
                 <time-maps-list :maps="maps" />
             </div>
@@ -99,6 +110,20 @@ export default {
         )
         this.stats = await this.$defaultApi.$get('scoresaber/rankedspans')
         this.votesStats = await this.$defaultApi.$get('scoresaber/rq/stats')
+    },
+    computed: {
+        passedRankedDateAmount() {
+            return this.maps.reduce((a, b) => {
+                if (b.hoursleft < 0) return a + 1
+                else return a
+            }, 0)
+        },
+        remainingTimeAmount() {
+            return this.maps.reduce((a, b) => {
+                if (b.hoursleft > 0) return a + 1
+                else return a
+            }, 0)
+        },
     },
 }
 </script>
