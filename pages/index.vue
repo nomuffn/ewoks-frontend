@@ -50,31 +50,62 @@
                         <i class="bx bxl-github"></i>
                     </vs-button>
                 </div>
-                <figure>
-                    <img src="muffnsuic.gif" />
-                    <footer>
-                        <small
-                            >Made by
-                            <a
-                                class="colored"
-                                href="https://twitter.com/AntiLink99"
-                                target="_blank"
-                                style="color: white;"
-                                >AntiLink</a
-                            ></small
+                <div class="flex flex-col">
+                    <div class="flex flex-row">
+                        <img
+                            v-for="emote in emotes"
+                            :key="emote"
+                            :src="emote"
+                            class="mx-2"
+                        />
+                    </div>
+                    <p class="mt-2 mb-4">
+                        Made by
+                        <a
+                            class="colored"
+                            href="https://discordapp.com/users/261522369200390147/"
+                            target="_blank"
+                            style="color: white;"
+                            >Skadii#6969 (commissions open)</a
                         >
-                    </footer>
-                </figure>
+                    </p>
+                    <img class="w-80 self-center" src="muffnsuic.gif" />
+                    <p class="mt-2 mb-4">
+                        Made by
+                        <a
+                            class="colored"
+                            href="https://twitter.com/AntiLink99"
+                            target="_blank"
+                            style="color: white;"
+                            >AntiLink</a
+                        >
+                    </p>
+                </div>
             </div>
         </div>
         <div class="flex justify-center" style="margin-top: 150vh">
-            <img class="w-full" src="monkaOgreBlinking.gif" />
+            <img
+                class="w-96"
+                src="https://cdn.discordapp.com/emojis/1026118455172288552.webp?size=160&quality=lossless"
+            />
         </div>
     </div>
 </template>
 
 <script>
-export default {}
+export default {
+    data() {
+        return {
+            emotes: [],
+        }
+    },
+    async mounted() {
+        this.emotes = (
+            await this.$defaultApi.$get('general/stuff/public_home_emotes')
+        ).json
+        console.log(this.emotes)
+    },
+}
 </script>
 
 <style lang="scss">
