@@ -21,7 +21,12 @@
                 <p v-if="!reaction.emoji.url" style="font-size: 25px">
                     {{ reaction.emoji }}
                 </p>
-                <img v-else class="w-8 h-8" :src="reaction.emoji.url" />
+                <img
+                    v-else
+                    class="w-8 h-8"
+                    :src="reaction.emoji.url"
+                    :alt="`${reaction.emoji.name} (${reaction.emoji.id})`"
+                />
                 <p class="self-end" style="margin-left: 4px">
                     x{{ reaction.count }}
                 </p>
