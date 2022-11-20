@@ -59,7 +59,7 @@ export default {
 <style lang="scss">
 .messageContent {
     margin: 5px 0px !important;
-    white-space: pre;
+    white-space: break-spaces;
 
     &::before {
         content: '';
