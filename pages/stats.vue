@@ -29,6 +29,12 @@
             >
                 Scoresaber
             </vs-navbar-item>
+            <vs-navbar-item
+                to="/stats/discord"
+                :active="$route.path == '/stats/discord'"
+            >
+                RC Discord
+            </vs-navbar-item>
         </vs-navbar>
 
         <NuxtChild class="content sub-page" keep-alive />
