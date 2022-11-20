@@ -25,7 +25,7 @@
                     v-else
                     class="w-8 h-8"
                     :src="reaction.emoji.url"
-                    :alt="`${reaction.emoji.name} (${reaction.emoji.id})`"
+                    :title="`${reaction.emoji.name} (${reaction.emoji.id})`"
                 />
                 <p class="self-end" style="margin-left: 4px">
                     x{{ reaction.count }}
