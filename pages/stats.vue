@@ -10,7 +10,7 @@
                         <!-- pp distribution: fix backend calc -->
                         Scoresaber stuff refreshes every hour
                         <br />
-                        Beatsaver stuff every 24 hours
+                        Beatsaver & RC Discord stuff every 24 hours
                     </p>
                 </div>
             </div>
