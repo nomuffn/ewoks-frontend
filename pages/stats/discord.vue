@@ -1,5 +1,5 @@
 <template>
-    <div class="discord justify-center">
+    <div class="discord justify-center flex flex-col items-center">
         <p class="title">
             Top Ten Scores Feed Messages sorted by Total Reactions Count
         </p>
