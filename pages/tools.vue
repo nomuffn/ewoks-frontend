@@ -116,7 +116,7 @@
 
                                 <a
                                     class="nope"
-                                    href="bsplaylist://playlist/https://muffnlabs.de/playlists/InRankingQueue.json"
+                                    href="bsplaylist://playlist/https://muffnlabs.de/static/ranking-queue.bplist"
                                     download
                                 >
                                     <vs-button
@@ -134,7 +134,7 @@
 
                                 <a
                                     class="nope"
-                                    href="playlists/InRankingQueue.json"
+                                    href="https://muffnlabs.de/static/ranking-queue.bplist"
                                     download
                                 >
                                     <vs-button
