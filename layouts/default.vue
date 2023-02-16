@@ -25,7 +25,7 @@
                 :key="page.path"
                 :to="'/' + page.path"
                 :id="page.path"
-                :class="{ active: isActive(page) }"
+                :class="{ active: isActive(page), new: page.new }"
             >
                 <template #icon>
                     <i :class="`bx ${page.icon}`"></i>
@@ -124,6 +124,7 @@ export default {
                     path: 'playlists',
                     icon: 'bxs-playlist',
                     name: 'Playlists stuff',
+                    new: true,
                 },
                 {
                     path: 'tools',
@@ -147,6 +148,25 @@ export default {
 </script>
 
 <style lang="scss">
+.vs-sidebar {
+    button.new {
+        &:after {
+            content: 'NEW';
+            display: block;
+            padding: 0px 10px;
+            height: auto;
+            position: absolute;
+            background: #c700ff;
+            width: auto;
+            bottom: 0;
+            left: 50%;
+            color: white;
+            border-radius: 10px;
+            font-size: 60%;
+            top: auto;
+        }
+    }
+}
 .page {
     color: #fff;
     .content {
