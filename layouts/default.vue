@@ -123,7 +123,7 @@ export default {
                 {
                     path: 'playlists',
                     icon: 'bxs-playlist',
-                    name: 'Playlist maker',
+                    name: 'Playlists stuff',
                 },
                 {
                     path: 'tools',

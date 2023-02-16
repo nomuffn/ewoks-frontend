@@ -3,9 +3,45 @@
         <div class="header">
             <div class="left">
                 <div class="aaa">
-                    <h2 class="title">
-                        Playlist maker thing
-                    </h2>
+                    <h2 class="title">Playlists stuff</h2>
+                </div>
+            </div>
+        </div>
+        <div class="content flex justify-evenly flex-wrap">
+            <div class="feature">
+                <h3 class="title" style="padding-left: 0px">Playlist Viewer</h3>
+                <Message class="self-center mt-8 w-full" :closable="false">
+                    <p>Look at playlists without opening the game wowww!</p>
+                    <p>
+                        Kinda limited with big playlists but it will do the job
+                        for now
+                    </p>
+                    <p>Might not show maps uploaded within the last 24 hrs</p>
+                </Message>
+                <vs-button
+                    border
+                    primary
+                    animation-type="scale"
+                    @click="$refs.playlistInput.click()"
+                >
+                    <template> Upload playlist </template>
+                </vs-button>
+                <input
+                    @change="readPlaylist"
+                    style="display: None"
+                    type="file"
+                    ref="playlistInput"
+                    id="file"
+                    name="file"
+                    accept=".json,.bplist"
+                />
+                <div v-if="playlist" class="mt-4">
+                    <playlist-viewer v-if="playlist" :playlist="playlist" />
+                </div>
+            </div>
+            <div class="feature">
+                <h3 class="title" style="padding-left: 0px">Playlist maker</h3>
+                <Message class="self-center mt-8 w-full" :closable="false">
                     <p>
                         Filters by various conditions across all maps on
                         beatsaver and puts them into a playlist
@@ -14,88 +50,83 @@
                         Database of all maps used for this only updates once a
                         day
                     </p>
-                </div>
-            </div>
-        </div>
-        <div class="content">
-            <div class="filter-container">
-                <div class="filter">
-                    <div class="myrow search" style="padding-top: 10px">
-                        <label>Enter mappers and press enter</label>
-                        <p class="grey">
-                            Will include all occurences in mapper names
-                        </p>
-                        <p class="grey">
-                            You can also enter a comma separated list
-                        </p>
-                        <vs-input
-                            v-model="mapperInput"
-                            type="search"
-                            placeholder="Mapper name"
-                            v-on:keyup.enter="addMapper"
-                        />
-                        <div v-if="mappers.length" class="mappers">
-                            <div
-                                class="mapper"
-                                v-for="mapper in mappers"
-                                :key="mapper"
-                            >
-                                <vs-button icon @click="removeMapper(mapper)">
-                                    {{ mapper }}
-                                    <i class="bx bx-x"></i>
-                                </vs-button>
-                            </div>
+                </Message>
+
+                <div class="myrow search" style="padding-top: 10px">
+                    <label>Enter mappers and press enter</label>
+                    <p class="grey">
+                        Will include all occurences in mapper names
+                    </p>
+                    <p class="grey">
+                        You can also enter a comma separated list
+                    </p>
+                    <vs-input
+                        v-model="mapperInput"
+                        type="search"
+                        placeholder="Mapper name"
+                        v-on:keyup.enter="addMapper"
+                    />
+                    <div v-if="mappers.length" class="mappers">
+                        <div
+                            class="mapper"
+                            v-for="mapper in mappers"
+                            :key="mapper"
+                        >
+                            <vs-button icon @click="removeMapper(mapper)">
+                                {{ mapper }}
+                                <i class="bx bx-x"></i>
+                            </vs-button>
                         </div>
                     </div>
-                    <div class="myrow">
-                        <label>Uploaded after: {{ getFormattedMonths }}</label>
-                        <Slider
-                            v-model="months"
-                            :min="0"
-                            :max="getMonthsDifference"
-                            :tooltips="false"
-                        />
-                    </div>
-                    <div class="myrow">
-                        <label>Minimum ratio: {{ ratio }}%</label>
-                        <p class="grey">
-                            Ratio calculation (not the same like on beatsaver):
-                            upvotes / (upvotes + downvotes) * 100
-                        </p>
-                        <p class="grey">
-                            To get an idea of it go to
-                            <nuxt-link style="color: grey" to="/stats/beatsaver"
-                                >statistics/beatsaver</nuxt-link
-                            >
-                        </p>
-                        <Slider v-model="ratio" :max="100" :tooltips="false" />
-                    </div>
-                    <div class="myrow">
-                        <label>Minimum upvotes: {{ minUpvotes }}</label>
-                        <Slider
-                            v-model="minUpvotes"
-                            :max="1000"
-                            :tooltips="false"
-                        />
-                    </div>
-                    <div class="myrow">
-                        <label>Maximum downvotes: {{ getmaxDownvotes }}</label>
-                        <Slider
-                            v-model="maxDownvotes"
-                            :max="1000"
-                            :tooltips="false"
-                        />
-                    </div>
-
-                    <div class="myrow">
-                        <vs-button
-                            :loading="loading"
-                            @click="fetchPlaylist"
-                            :disabled="!mappers.length || loading"
+                </div>
+                <div class="myrow">
+                    <label>Uploaded after: {{ getFormattedMonths }}</label>
+                    <Slider
+                        v-model="months"
+                        :min="0"
+                        :max="getMonthsDifference"
+                        :tooltips="false"
+                    />
+                </div>
+                <div class="myrow">
+                    <label>Minimum ratio: {{ ratio }}%</label>
+                    <p class="grey">
+                        Ratio calculation (not the same like on beatsaver):
+                        upvotes / (upvotes + downvotes) * 100
+                    </p>
+                    <p class="grey">
+                        To get an idea of it go to
+                        <nuxt-link style="color: grey" to="/stats/beatsaver"
+                            >statistics/beatsaver</nuxt-link
                         >
-                            Make da playlist
-                        </vs-button>
-                    </div>
+                    </p>
+                    <Slider v-model="ratio" :max="100" :tooltips="false" />
+                </div>
+                <div class="myrow">
+                    <label>Minimum upvotes: {{ minUpvotes }}</label>
+                    <Slider
+                        v-model="minUpvotes"
+                        :max="1000"
+                        :tooltips="false"
+                    />
+                </div>
+                <div class="myrow">
+                    <label>Maximum downvotes: {{ getmaxDownvotes }}</label>
+                    <Slider
+                        v-model="maxDownvotes"
+                        :max="1000"
+                        :tooltips="false"
+                    />
+                </div>
+
+                <div class="myrow">
+                    <vs-button
+                        :loading="loading"
+                        @click="fetchPlaylist"
+                        :disabled="!mappers.length || loading"
+                    >
+                        Make da playlist
+                    </vs-button>
                 </div>
             </div>
         </div>
@@ -118,6 +149,7 @@ export default {
             uploadedAfter: 0,
             gameReleaseDate: 1525179660, //Tuesday, May 1, 2018
             months: 0,
+            playlist: null,
         }
     },
     computed: {
@@ -165,7 +197,7 @@ export default {
 
                 this.$defaultApi
                     .$post('beatsaver/playlists/', data, headers)
-                    .then(response => {
+                    .then((response) => {
                         const blob = new Blob([response], {
                             type: 'application/json',
                         })
@@ -178,7 +210,7 @@ export default {
                         link.click()
                         URL.revokeObjectURL(link.href)
                     })
-                    .catch(e => {
+                    .catch((e) => {
                         console.log(e)
                         alert('No maps found')
                     })
@@ -200,10 +232,30 @@ export default {
             }
         },
         removeMapper(mapper) {
-            this.mappers = this.mappers.filter(m => m != mapper)
+            this.mappers = this.mappers.filter((m) => m != mapper)
         },
         getFormattedUploaded(date) {
             return date.split('T')[0]
+        },
+        async readPlaylist(input) {
+            // TODO clean up at some point
+            var f = input.target.files[0]
+            if (f) {
+                var r = new FileReader()
+                r.onload = (e) => {
+                    var contents = e.target.result
+                    try {
+                        var obj = JSON.parse(contents)
+                        this.playlist = obj
+                    } catch (err) {
+                        console.log(err)
+                        alert('Invalid file')
+                    }
+                }
+                r.readAsText(f)
+            } else {
+                alert('Failed to load file')
+            }
         },
     },
 }
@@ -217,57 +269,51 @@ export default {
         margin: 15px 0;
     }
 
-    .filter-container {
-        flex: 1;
-        display: flex;
-        justify-content: center;
+    .feature {
         min-width: 350px;
+        max-width: 800px;
+        display: flex;
+        flex-direction: column;
+        width: 100%;
 
-        .filter {
-            max-width: 800px;
+        .vs-input-parent {
+            margin-top: 5px;
+        }
+        .mappers {
             display: flex;
-            flex-direction: column;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            .mapper {
+                max-width: 200px;
+                margin: 0px 10px 10px 0px;
+
+                button {
+                    padding: 0px 10px;
+                }
+
+                i {
+                    margin-left: 5px;
+                }
+            }
+        }
+
+        .myrow {
+            margin: 7px 0px;
+
+            > label {
+                display: block;
+                color: #fff;
+                font-weight: bold;
+                margin-bottom: 5px;
+            }
+            &.search label {
+                margin: 0;
+            }
+        }
+
+        .vs-button {
             width: 100%;
-
-            .vs-input-parent {
-                margin-top: 5px;
-            }
-            .mappers {
-                display: flex;
-                flex-wrap: wrap;
-                margin-top: 15px;
-                .mapper {
-                    max-width: 200px;
-                    margin: 0px 10px 10px 0px;
-
-                    button {
-                        padding: 0px 10px;
-                    }
-
-                    i {
-                        margin-left: 5px;
-                    }
-                }
-            }
-
-            .myrow {
-                margin: 7px 0px;
-
-                > label {
-                    display: block;
-                    color: #fff;
-                    font-weight: bold;
-                    margin-bottom: 5px;
-                }
-                &.search label {
-                    margin: 0;
-                }
-            }
-
-            .vs-button {
-                width: 100%;
-                margin: 0px;
-            }
+            margin: 0px;
         }
     }
 }
