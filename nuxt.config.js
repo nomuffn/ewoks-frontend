@@ -1,3 +1,5 @@
+const SpeedMeasurePlugin = require('speed-measure-webpack-plugin')
+
 export default {
     // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
     ssr: false,
@@ -108,6 +110,7 @@ export default {
                     'OverlayPanel',
                     'Dropdown',
                     'ContextMenu',
+                    'TabMenu',
                 ],
                 // directives: ['Tooltip', 'Badge'], //an array of directives to be registered
             },
@@ -122,11 +125,16 @@ export default {
     // Build Configuration: https://go.nuxtjs.dev/config-build
     build: {
         postcss: {
-            plugins: {
-                tailwindcss: {},
-                autoprefixer: {},
+            postcssOptions: {
+                plugins: {
+                    tailwindcss: {},
+                    autoprefixer: {},
+                },
             },
         },
+        plugins: [new SpeedMeasurePlugin()],
+        analyze: true,
+        cache: true,
     },
     server: {
         host: '0.0.0.0',

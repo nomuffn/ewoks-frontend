@@ -1,3 +1,4 @@
+//
 <template>
     <div class="start">
         <div class="content">
@@ -9,46 +10,27 @@
                 </span>
 
                 <div class="buttons">
-                    <vs-button
-                        style="flex: 1 1 100%"
+                    <my-button
+                        label="My Maps"
                         href="https://beatsaver.com/profile/4284309"
-                        blank
-                        icon
-                        class="yellow"
-                    >
-                        My maps
-                    </vs-button>
-                    <vs-button class="discord" icon border color="discord">
+                        warning
+                    />
+                    <my-button class="discord" outlined color="discord">
                         muffn#2345
                         <i class="bx bxl-discord"></i>
-                    </vs-button>
-                    <vs-button
-                        href="https://twitter.com/nomuffn"
-                        blank
-                        icon
-                        color="twitter"
-                    >
+                    </my-button>
+                    <my-button href="https://twitter.com/nomuffn">
                         @nomuffn
                         <i class="bx bxl-twitter"></i>
-                    </vs-button>
-                    <vs-button
-                        href="https://www.twitch.tv/muffnnt"
-                        blank
-                        icon
-                        color="twitch"
-                    >
+                    </my-button>
+                    <my-button help href="https://www.twitch.tv/muffnnt">
                         muffnnt
                         <i class="bx bxl-twitch"></i>
-                    </vs-button>
-                    <vs-button
-                        href="https://github.com/nomuffn"
-                        blank
-                        icon
-                        class="github"
-                    >
+                    </my-button>
+                    <my-button secondary href="https://github.com/nomuffn">
                         nomuffn
                         <i class="bx bxl-github"></i>
-                    </vs-button>
+                    </my-button>
                 </div>
                 <div class="flex flex-col">
                     <div class="flex flex-row">
@@ -65,7 +47,7 @@
                             class="colored"
                             href="https://discordapp.com/users/261522369200390147/"
                             target="_blank"
-                            style="color: white;"
+                            style="color: white"
                             >Skadii#6969 (commissions open)</a
                         >
                     </p>
@@ -76,7 +58,7 @@
                             class="colored"
                             href="https://twitter.com/AntiLink99"
                             target="_blank"
-                            style="color: white;"
+                            style="color: white"
                             >AntiLink</a
                         >
                     </p>
