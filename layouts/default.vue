@@ -6,16 +6,13 @@
                 <h2 class="title">muffnlabs</h2>
             </div>
             <div class="donate">
-                <vs-button
-                    icon
-                    color="#8c329f"
-                    gradient
-                    blank
+                <my-button
+                    style="background-color='#8c329f'"
                     href="https://ko-fi.com/muffn"
                 >
                     <p>Buy me a muffin irl</p>
                     <i class="bx bxs-donate-heart"></i>
-                </vs-button>
+                </my-button>
             </div>
         </div>
 
@@ -39,10 +36,10 @@
 </template>
 
 <script>
-var ColorHandler = require('@/assets/ColorHandler.js')
+// var ColorHandler = require('@/assets/ColorHandler.js')
 export default {
     created() {
-        ColorHandler.setColor()
+        // ColorHandler.setColor()
     },
     head() {
         return {
@@ -124,7 +121,6 @@ export default {
                     path: 'playlists',
                     icon: 'bxs-playlist',
                     name: 'Playlists stuff',
-                    new: true,
                 },
                 {
                     path: 'tools',
@@ -212,7 +208,6 @@ export default {
         align-self: center;
 
         button {
-            padding: 0px 20px;
             margin: 0 20px 0 auto;
 
             i {

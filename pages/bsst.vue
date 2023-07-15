@@ -3,9 +3,7 @@
         <div class="header">
             <div class="left">
                 <div class="aaa">
-                    <h2 class="title">
-                        Beatsaver Stats Tracker (WIP)
-                    </h2>
+                    <h2 class="title">Beatsaver Stats Tracker (WIP)</h2>
                     <p>
                         Updates every 24 hours
                         <br />
@@ -106,7 +104,7 @@ export default {
     },
     computed: {
         columns() {
-            const rangeFields = timeRanges.map(range => {
+            const rangeFields = timeRanges.map((range) => {
                 let title
                 if (range == 1) title = '24h'
                 else if (range == 360) title = '1y'
@@ -145,11 +143,11 @@ export default {
         rows() {
             let stats = {}
             //needs the const temp or it would throw errors?
-            const temp = ['latest', ...timeRanges].forEach(range => {
+            const temp = ['latest', ...timeRanges].forEach((range) => {
                 const latest = range == 'latest'
                 if (!latest) range = `days-${range}`
                 console.log(range)
-                const votes = ['upvotes', 'downvotes'].map(i => {
+                const votes = ['upvotes', 'downvotes'].map((i) => {
                     return this.maps.reduce((prev, curr) => {
                         return prev + (curr[range] ? curr[range][i] : 0)
                     }, 0)
@@ -160,9 +158,9 @@ export default {
 
             return [
                 { name: 'Total', ...stats },
-                ...this.maps.map(map => {
+                ...this.maps.map((map) => {
                     let stats = {}
-                    timeRanges.forEach(range => {
+                    timeRanges.forEach((range) => {
                         const rangeKey = `days-${range}`
                         stats[rangeKey] = this.getVotesString(
                             map[rangeKey]?.upvotes,
