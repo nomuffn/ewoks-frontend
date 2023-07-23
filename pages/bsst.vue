@@ -1,21 +1,26 @@
 <template>
     <div class="bsst">
-        <div class="header">
-            <div class="left">
-                <div class="aaa">
-                    <h2 class="title">Beatsaver Stats Tracker (WIP)</h2>
-                    <p>
-                        Updates every 24 hours
-                        <br />
-                        If you want your account to be tracked, message me on
-                        discord
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="content">
-            <vs-select
+        <sub-header title="Beatsaver Stats Tracker (WIP)">
+            <p>
+                Updates every 24 hours
+                <br />
+                If you want your account to be tracked, message me on discord
+            </p>
+        </sub-header>
+
+        <div class="content flex flex-col items-center">
+            <Dropdown
                 v-if="mappers"
+                v-model="selectedMapper"
+                :options="mappers"
+                optionLabel="mapperName"
+                placeholder="Select mapper"
+                scrollHeight="400px"
+                :disabled="loading"
+            />
+            <ProgressSpinner class="mt-4" v-if="loading" />
+
+            <!-- <vs-select
                 v-model="selectedMapper"
                 label-placeholder="Select mapper"
                 class="select"
@@ -29,8 +34,9 @@
                 >
                     {{ item.mapperName }}
                 </vs-option>
-            </vs-select>
+            </vs-select> -->
 
+            <!-- // TODO replace with primevue table -->
             <vue-good-table
                 v-if="maps"
                 :columns="columns"
@@ -54,7 +60,7 @@ export default {
     transition: 'slide-bottom',
     data() {
         return {
-            selectedMapper: '',
+            selectedMapper: {},
             mappers: null,
             maps: null,
             loading: false,
@@ -63,7 +69,10 @@ export default {
     async created() {
         this.mappers = await this.$defaultApi.$get('beatsaver/bsst_mappers')
         if (this.$route.query.mapperId) {
-            this.selectedMapper = this.$route.query.mapperId
+            this.selectedMapper =
+                this.mappers.find(
+                    (i) => i.mapperId == this.$route.query.mapperId,
+                ) || {}
         }
     },
     methods: {
@@ -95,9 +104,11 @@ export default {
     watch: {
         async selectedMapper(newval, oldval) {
             this.loading = true
-            this.$router.push({ query: { mapperId: this.selectedMapper } })
+            this.$router.push({
+                query: { mapperId: this.selectedMapper.mapperId },
+            })
             this.maps = await this.$defaultApi.$get(
-                'beatsaver/bsst/' + this.selectedMapper,
+                'beatsaver/bsst/' + this.selectedMapper.mapperId,
             )
             this.loading = false
         },

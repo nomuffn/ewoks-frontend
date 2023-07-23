@@ -1,35 +1,35 @@
 <template>
     <div>
         <div class="navbar">
-            <div></div>
-            <div>
-                <h2 class="title">muffnlabs</h2>
-            </div>
-            <div class="donate">
-                <my-button
-                    style="background-color='#8c329f'"
-                    href="https://ko-fi.com/muffn"
-                >
+            <div class="flex justify-start">
+                <my-button href="https://ko-fi.com/muffn" help>
                     <p>Buy me a muffin irl</p>
                     <i class="bx bxs-donate-heart"></i>
                 </my-button>
             </div>
+            <div class="self-center">
+                <h2 class="title">muffnlabs</h2>
+            </div>
+            <div class="flex justify-end">
+                <my-button outlined>
+                    <p>Login</p>
+                    <!-- <i class="bx bxs-donate-heart"></i> -->
+                </my-button>
+            </div>
         </div>
-
-        <vs-sidebar square open>
-            <vs-sidebar-item
+        <div class="menu p-2 flex flex-wrap justify-center">
+            <my-button
                 v-for="page in pages"
                 :key="page.path"
                 :to="'/' + page.path"
                 :id="page.path"
-                :class="{ active: isActive(page), new: page.new }"
+                :text="!isActive(page) || false"
+                :raised="isActive(page) || false"
             >
-                <template #icon>
-                    <i :class="`bx ${page.icon}`"></i>
-                </template>
-                {{ page.name }}
-            </vs-sidebar-item>
-        </vs-sidebar>
+                <p style="color: #fff; font-weight: bold">{{ page.name }}</p>
+                <i :class="`bx ${page.icon}`"></i>
+            </my-button>
+        </div>
 
         <Nuxt class="page" keep-alive />
     </div>
@@ -144,23 +144,21 @@ export default {
 </script>
 
 <style lang="scss">
-.vs-sidebar {
-    button.new {
-        &:after {
-            content: 'NEW';
-            display: block;
-            padding: 0px 10px;
-            height: auto;
-            position: absolute;
-            background: #c700ff;
-            width: auto;
-            bottom: 0;
-            left: 50%;
-            color: white;
-            border-radius: 10px;
-            font-size: 60%;
-            top: auto;
-        }
+button.new {
+    &:after {
+        content: 'NEW';
+        display: block;
+        padding: 0px 10px;
+        height: auto;
+        position: absolute;
+        background: #c700ff;
+        width: auto;
+        bottom: 0;
+        left: 50%;
+        color: white;
+        border-radius: 10px;
+        font-size: 60%;
+        top: auto;
     }
 }
 .page {
@@ -189,10 +187,16 @@ export default {
         }
     }
 }
+.menu {
+    background-color: rgb(30, 32, 35);
+    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s ease;
+}
 .navbar {
     display: flex;
     justify-content: center;
     padding: 20px;
+    background-color: #141417;
 
     .title {
         padding: 0;
@@ -200,20 +204,6 @@ export default {
 
     > * {
         flex: 1 1 100%;
-    }
-
-    .spacer {
-    }
-    .donate {
-        align-self: center;
-
-        button {
-            margin: 0 20px 0 auto;
-
-            i {
-                margin-left: 5px;
-            }
-        }
     }
 
     .vs-alert__content__text {

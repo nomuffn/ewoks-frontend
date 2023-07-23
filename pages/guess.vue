@@ -1,14 +1,6 @@
 <template>
     <div class="guess">
-        <div class="header">
-            <div class="left">
-                <div class="aaa">
-                    <h2 class="title">
-                        Guessing game
-                    </h2>
-                </div>
-            </div>
-        </div>
+        <sub-header title="Guessing game"> </sub-header>
 
         <!-- <InputNumber v-model="one" />
         <InputNumber v-model="two" />
@@ -29,9 +21,7 @@
                 <template v-else-if="!showResult">
                     <div v-if="score" class="twitch-embed">
                         <iframe
-                            :src="
-                                `https://player.twitch.tv/?parent=muffnlabs.de&video=${videoId}&${timestamp}`
-                            "
+                            :src="`https://player.twitch.tv/?parent=muffnlabs.de&video=${videoId}&${timestamp}`"
                             height="720"
                             width="1280"
                         >
@@ -77,16 +67,12 @@
                                     {{ playerData.player.name }}
                                 </p>
                                 <a
-                                    :href="
-                                        `https://scoresaber.com/u/${playerData.player.id}`
-                                    "
+                                    :href="`https://scoresaber.com/u/${playerData.player.id}`"
                                     target="_blank"
                                     >Scoresaber</a
                                 >
                                 <a
-                                    :href="
-                                        `https://twitch.tv/${score.playerName}`
-                                    "
+                                    :href="`https://twitch.tv/${score.playerName}`"
                                     target="_blank"
                                     >Twitch</a
                                 >
@@ -171,7 +157,7 @@ export default {
 
             hmds: [
                 { value: 'Dont know :(' },
-                ...Object.values(HMDs).map(entry => {
+                ...Object.values(HMDs).map((entry) => {
                     return { value: entry }
                 }),
             ],

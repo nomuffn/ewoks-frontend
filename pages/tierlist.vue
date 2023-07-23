@@ -1,196 +1,190 @@
 <template>
-    <div class="tierlist flex flex-col justify-center pt-16 w-full">
-        <div class="flex justify-center items-center">
-            <h1 class="text-5xl text-center leading-tight mr-8">
-                mEBSMBSBSMTM (fr)
-            </h1>
-            <img class="w-32" src="real.png" />
-        </div>
+    <div class="tierlist">
+        <sub-header title="mEBSMBSBSMTM (fr)">
+            <h3 class="text-lg text-center mt-4">
+                also <strong>famously</strong> known as muffn's Epic Beat Saber
+                Mappers Beat Saver Beat Saber Maps Tierlist Maker by muffn
+            </h3>
+            <!-- <img class="w-32" src="real.png" /> -->
+        </sub-header>
 
-        <h3 class="text-lg text-center mt-4">
-            also <strong>famously</strong> known as muffn's Epic Beat Saber
-            Mappers Beat Saver Beat Saber Maps Tierlist Maker by muffn
-        </h3>
+        <div class="content flex flex-col justify-center pt-16 w-full">
+            <Message class="self-center mt-8" :closable="false">
+                <p>
+                    Search beat saver down below to get maps and drag & drop
+                    them into a tier
+                </p>
+                <p>Just screenshot with win + shift + s <strong>:D</strong></p>
+                <p>
+                    Also zoom out with ctrl + mouse wheel if you dont have
+                    enough space. Couldnt figure out a quick good way to make a
+                    screenshot of the tierlist yet
+                </p>
+            </Message>
 
-        <Message class="self-center mt-8" :closable="false">
-            <p>
-                Search beat saver down below to get maps and drag & drop them
-                into a tier
-            </p>
-            <p>Just screenshot with win + shift + s <strong>:D</strong></p>
-            <p>
-                Also zoom out with ctrl + mouse wheel if you dont have enough
-                space. Couldnt figure out a quick good way to make a screenshot
-                of the tierlist yet
-            </p>
-        </Message>
-
-        <div class="w-full flex flex-col py-10 mt-4 xl:px-20">
-            <p>Cover size</p>
-            <Slider
-                class="w-1/4 my-4"
-                v-model="coverSize"
-                :min="100"
-                :max="300"
-                :tooltips="false"
-            />
-
-            <div class="flex w-full justify-center">
-                <InputText
-                    placeholder="Enter Title"
-                    class="mapperName w-full text-center"
-                    style="
-                        border-bottom: solid 2px;
-                        padding-bottom: 10px;
-                        border-radius: 0;
-                    "
+            <div class="w-full flex flex-col py-10 mt-4 xl:px-20">
+                <p>Cover size</p>
+                <Slider
+                    class="w-1/4 my-4"
+                    v-model="coverSize"
+                    :min="100"
+                    :max="300"
+                    :tooltips="false"
                 />
-            </div>
 
-            <div class="tiers flex flex-col">
-                <div
-                    v-for="(tier, index) in tiers"
-                    :key="tier.key"
-                    class="tier"
-                >
-                    <div class="flex" style="min-height: 100px">
-                        <div class="flex flex-col">
-                            <Button
-                                class="setting flex-grow"
-                                @click="move(index)"
-                                :disabled="index == 0"
-                                ><i class="pi pi-chevron-up"></i
-                            ></Button>
-                            <Button
-                                class="setting flex-grow"
-                                @click="e => toggle(e, index)"
-                                ><i class="pi pi-cog"></i
-                            ></Button>
-                            <Button
-                                class="setting flex-grow"
-                                @click="move(index, true)"
-                                :disabled="index == tiers.length - 1"
-                                ><i class="pi pi-chevron-down"></i
-                            ></Button>
+                <div class="flex w-full justify-center">
+                    <InputText
+                        placeholder="Enter Title"
+                        class="mapperName w-full text-center"
+                        style="
+                            border-bottom: solid 2px;
+                            padding-bottom: 10px;
+                            border-radius: 0;
+                        "
+                    />
+                </div>
+
+                <div class="tiers flex flex-col">
+                    <div
+                        v-for="(tier, index) in tiers"
+                        :key="tier.key"
+                        class="tier"
+                    >
+                        <div class="flex" style="min-height: 100px">
+                            <div class="flex flex-col">
+                                <Button
+                                    class="setting flex-grow"
+                                    @click="move(index)"
+                                    :disabled="index == 0"
+                                    ><i class="pi pi-chevron-up"></i
+                                ></Button>
+                                <Button
+                                    class="setting flex-grow"
+                                    @click="(e) => toggle(e, index)"
+                                    ><i class="pi pi-cog"></i
+                                ></Button>
+                                <Button
+                                    class="setting flex-grow"
+                                    @click="move(index, true)"
+                                    :disabled="index == tiers.length - 1"
+                                    ><i class="pi pi-chevron-down"></i
+                                ></Button>
+                            </div>
+                            <InputText
+                                :style="`background-color: #${tier.bgColor}; color: #${tier.textColor}`"
+                                class="w-32 text-center resize-none min-h-full"
+                                :value="tier.label"
+                            />
+                            <draggable-maps
+                                v-model="tier.list"
+                                :coverSize="coverSize"
+                                @onRightClick="onRightClick"
+                            />
                         </div>
-                        <InputText
-                            :style="
-                                `background-color: #${tier.bgColor}; color: #${tier.textColor}`
-                            "
-                            class="w-32 text-center resize-none min-h-full"
-                            :value="tier.label"
-                        />
-                        <draggable-maps
-                            v-model="tier.list"
-                            :coverSize="coverSize"
-                            @onRightClick="onRightClick"
-                        />
                     </div>
                 </div>
-            </div>
 
-            <Button
-                style="margin-left: 50px"
-                class="self-start w-32 text-center justify-center"
-                @click="addTier"
-                >Add Tier</Button
-            >
+                <Button
+                    style="margin-left: 50px"
+                    class="self-start w-32 text-center justify-center"
+                    @click="addTier"
+                    >Add Tier</Button
+                >
 
-            <p class="text-2xl mt-4">Maps</p>
-            <div class="flex mx-4 mt-4 pb-4">
-                <div class="flex flex-col">
-                    <label for="search">Search</label>
-                    <InputText
-                        id="search"
-                        v-model="search"
-                        style="min-width: 280px; margin-right: 10px"
-                        placeholder="Search beat saver"
-                        @keydown.enter="loadMaps"
+                <p class="text-2xl mt-4">Maps</p>
+                <div class="flex mx-4 mt-4 pb-4">
+                    <div class="flex flex-col">
+                        <label for="search">Search</label>
+                        <InputText
+                            id="search"
+                            v-model="search"
+                            style="min-width: 280px; margin-right: 10px"
+                            placeholder="Search beat saver"
+                            @keydown.enter="loadMaps"
+                        />
+                    </div>
+
+                    <div class="flex flex-col">
+                        <label for="order">Order by</label>
+                        <Dropdown
+                            id="order"
+                            v-model="order"
+                            :options="orderings"
+                            optionLabel="name"
+                            placeholder="Select a City"
+                            scrollHeight="400px"
+                        />
+                    </div>
+                    <Button
+                        label="LOAD 😋"
+                        class="self-end"
+                        style="margin-left: 10px"
+                        :disabled="loading"
+                        :loading="loading"
+                        :icon="spinnerComputed"
+                        @click="loadMaps"
                     />
                 </div>
-
-                <div class="flex flex-col">
-                    <label for="order">Order by</label>
-                    <Dropdown
-                        id="order"
-                        v-model="order"
-                        :options="orderings"
-                        optionLabel="name"
-                        placeholder="Select a City"
-                        scrollHeight="400px"
+                <div v-if="maps.length" class="flex flex-col mx-4">
+                    <Message class="self-center" :closable="false">
+                        <p>You can also right click maps for more info now</p>
+                    </Message>
+                    <draggable-maps
+                        v-model="maps"
+                        :coverSize="coverSize"
+                        class="mb-4"
+                        @onRightClick="onRightClick"
+                    />
+                    <Button
+                        v-if="pagination > 0"
+                        class="self-center"
+                        label="MOOORE"
+                        :disabled="loading"
+                        :loading="loading"
+                        :icon="spinnerComputed"
+                        @click="loadMaps(true)"
                     />
                 </div>
-                <Button
-                    label="LOAD 😋"
-                    class="self-end"
-                    style="margin-left: 10px"
-                    :disabled="loading"
-                    :loading="loading"
-                    :icon="spinnerComputed"
-                    @click="loadMaps"
-                />
             </div>
-            <div v-if="maps.length" class="flex flex-col mx-4">
-                <Message class="self-center" :closable="false">
-                    <p>
-                        You can also right click maps for more info now
-                    </p>
-                </Message>
-                <draggable-maps
-                    v-model="maps"
-                    :coverSize="coverSize"
-                    class="mb-4"
-                    @onRightClick="onRightClick"
-                />
-                <Button
-                    v-if="pagination > 0"
-                    class="self-center"
-                    label="MOOORE"
-                    :disabled="loading"
-                    :loading="loading"
-                    :icon="spinnerComputed"
-                    @click="loadMaps(true)"
-                />
-            </div>
+
+            <Toast />
+            <OverlayPanel ref="tierMenu">
+                <div class="flex flex-col">
+                    <div class="flex justify-between mt-2">
+                        <label class="font-bold" for="bgcolor"
+                            >Background Color:
+                        </label>
+                        <ColorPicker
+                            id="bgcolor"
+                            class="ml-4"
+                            v-if="editTier != null"
+                            v-model="tiers[editTier].bgColor"
+                        />
+                    </div>
+                    <div class="flex justify-between mt-2 mb-4">
+                        <label class="font-bold" for="textcolor"
+                            >Text Color:
+                        </label>
+                        <ColorPicker
+                            id="textcolor"
+                            class="ml-4"
+                            v-if="editTier != null"
+                            v-model="tiers[editTier].textColor"
+                        />
+                    </div>
+
+                    <Button
+                        label="Delete"
+                        class="p-button-danger"
+                        icon="pi pi-trash"
+                        @click="deleteTier"
+                    />
+                </div>
+            </OverlayPanel>
+
+            <ContextMenu ref="menu" :model="mapContextMenu" />
+            <img class="sheep w-full" src="sheep.jpg" />
         </div>
-
-        <Toast />
-        <OverlayPanel ref="tierMenu">
-            <div class="flex flex-col">
-                <div class="flex justify-between mt-2">
-                    <label class="font-bold" for="bgcolor"
-                        >Background Color:
-                    </label>
-                    <ColorPicker
-                        id="bgcolor"
-                        class="ml-4"
-                        v-if="editTier != null"
-                        v-model="tiers[editTier].bgColor"
-                    />
-                </div>
-                <div class="flex justify-between mt-2 mb-4">
-                    <label class="font-bold" for="textcolor"
-                        >Text Color:
-                    </label>
-                    <ColorPicker
-                        id="textcolor"
-                        class="ml-4"
-                        v-if="editTier != null"
-                        v-model="tiers[editTier].textColor"
-                    />
-                </div>
-
-                <Button
-                    label="Delete"
-                    class="p-button-danger"
-                    icon="pi pi-trash"
-                    @click="deleteTier"
-                />
-            </div>
-        </OverlayPanel>
-
-        <ContextMenu ref="menu" :model="mapContextMenu" />
-        <img class="sheep w-full" src="sheep.jpg" />
     </div>
 </template>
 
@@ -328,7 +322,7 @@ export default {
             this.loading = false
 
             if (!window.onbeforeunload)
-                window.onbeforeunload = function() {
+                window.onbeforeunload = function () {
                     console.log(1)
                     return 'Are you sure you want to leave?'
                 }
@@ -356,7 +350,7 @@ export default {
                     ...(map.highestStar > 0
                         ? [`Highest Star rating: ${map.highestStar}`]
                         : []),
-                ].map(string => {
+                ].map((string) => {
                     return {
                         label: string,
                         disabled: true,
@@ -368,7 +362,7 @@ export default {
                 {
                     label: 'Open on Beatsaver',
                     icon: 'pi pi-fw pi-external-link',
-                    command: event => {
+                    command: (event) => {
                         window.open(`https://beatsaver.com/maps/${map.key}`)
                     },
                 },

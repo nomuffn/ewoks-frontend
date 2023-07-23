@@ -5,38 +5,35 @@
                 <h2>Filter for ranked maps</h2>
                 <div class="myrow">
                     <label>Filter by mapper</label>
-                    <!-- maybe generally use forms? lohl -->
-                    <form @submit.prevent="loadResults">
-                        <vs-input
-                            v-model="mapperName"
-                            type="search"
-                            placeholder="Mapper name"
-                        />
-                    </form>
+                    <InputText
+                        v-model="mapperName"
+                        placeholder="Mapper name"
+                        v-on:keyup.enter="loadResults"
+                        style="background: #141417; border: none"
+                    />
                 </div>
                 <div class="myrow">
                     <label>Order by</label>
-                    <vs-select placeholder="Order by" v-model="column">
-                        <vs-option
-                            v-for="col in allColumns"
-                            :key="col"
-                            :label="col"
-                            :value="col"
-                        >
-                            {{ col }}
-                        </vs-option>
-                    </vs-select>
+                    <Dropdown
+                        v-model="column"
+                        :options="allColumns"
+                        placeholder="Order by"
+                        scrollHeight="400px"
+                    />
                 </div>
                 <div class="myrow">
                     <label>Minimum stars: {{ stars }}</label>
+                    <!-- // TODO replace with primevue slider -->
                     <Slider v-model="stars" :max="14" :tooltips="false" />
                 </div>
                 <div class="myrow">
                     <label>Minimum bpm: {{ bpm }}</label>
+                    <!-- // TODO replace with primevue slider -->
                     <Slider v-model="bpm" :max="350" :tooltips="false" />
                 </div>
                 <div class="myrow">
                     <label>Uploaded since: {{ getFormattedMonths }}</label>
+                    <!-- // TODO replace with primevue slider -->
                     <Slider
                         v-model="months"
                         :min="0"
@@ -46,22 +43,19 @@
                 </div>
                 <div class="myrow">
                     <div class="radios">
-                        <vs-radio v-model="descending" val="-">
-                            Descending
-                        </vs-radio>
-                        <vs-radio
-                            style="margin-left: 10px"
-                            v-model="descending"
-                            val="+"
-                        >
-                            Ascending
-                        </vs-radio>
+                        <RadioButton value="-" v-model="descending" />
+                        <RadioButton value="+" v-model="descending" />
                     </div>
                 </div>
                 <div class="myrow">
-                    <vs-button :loading="loading" @click="loadResults">
+                    <!-- // TODO loading -->
+                    <MyButton
+                        class="w-full"
+                        :loading="true"
+                        @click="loadResults"
+                    >
                         Filter
-                    </vs-button>
+                    </MyButton>
                 </div>
             </div>
         </div>
@@ -104,14 +98,13 @@
                         </p>
                     </div>
                 </div>
-                <vs-button
+                <my-button
                     v-if="visibleItems < results.length"
                     class="showMore"
-                    icon
                     @click="visibleItems += 50"
                 >
                     Show more
-                </vs-button>
+                </my-button>
             </div>
         </div>
         <div class="placeholder"></div>
