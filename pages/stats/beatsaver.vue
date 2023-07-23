@@ -9,7 +9,6 @@
                         v-model="mapperName"
                         placeholder="Mapper name"
                         v-on:keyup.enter="loadResults"
-                        style="background: #141417; border: none"
                     />
                 </div>
                 <div class="myrow">
@@ -43,8 +42,11 @@
                 </div>
                 <div class="myrow">
                     <div class="radios">
-                        <RadioButton value="-" v-model="descending" />
-                        <RadioButton value="+" v-model="descending" />
+                        <!-- // TODO combine into radio component -->
+                        <label for="desc">Descending</label>
+                        <RadioButton id="desc" value="-" v-model="descending" />
+                        <label for="asc">Ascending</label>
+                        <RadioButton id="asc" value="+" v-model="descending" />
                     </div>
                 </div>
                 <div class="myrow">

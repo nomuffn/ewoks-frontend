@@ -21,7 +21,6 @@
                             v-model="search"
                             placeholder="Search"
                             v-on:keyup.enter="startSearch"
-                            style="background: #141417; border: none"
                         />
                         <Button icon="pi pi-search" @click="startSearch" />
                     </div>

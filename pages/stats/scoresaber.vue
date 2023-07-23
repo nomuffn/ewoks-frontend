@@ -1,21 +1,14 @@
 <template>
     <div class="scoresaber">
-        <vs-select
+        <Dropdown
+            class="select"
             v-if="activeList"
             v-model="activeList"
-            label-placeholder="Sorted by"
-            class="select"
+            :options="lists"
+            placeholder="Sorted by"
+            scrollHeight="400px"
             :loading="loading"
-        >
-            <vs-option
-                v-for="(item, key) in lists"
-                :key="key"
-                :value="key"
-                :label="item.title"
-            >
-                {{ item.title }}
-            </vs-option>
-        </vs-select>
+        />
 
         <!-- <vs-navbar color="#18191c" text-white square v-model="activeList">
             <vs-navbar-item v-for="(item, key) in lists" :key="key" :active="activeList == key" :id="key">
