@@ -31,14 +31,13 @@
                     </p>
                 </div>
             </div>
-            <vs-button
+            <my-button
                 v-if="visibleItems < 25"
                 class="showMore"
-                icon
                 @click="visibleItems += 10"
             >
                 Show more
-            </vs-button>
+            </my-button>
         </div>
     </div>
 </template>
@@ -84,7 +83,7 @@ export default {
         },
     },
     methods: {
-        openUrl: function(id) {
+        openUrl: function (id) {
             window.open(
                 'https://scoresaber.com/ranking/request/' + id,
                 '_blank',

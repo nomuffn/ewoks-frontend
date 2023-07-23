@@ -96,7 +96,8 @@ export default {
         [
             'primevue/nuxt',
             {
-                theme: 'saga-blue',
+                // theme: 'md-dark-indigo',
+                theme: 'arya-blue',
                 ripple: true, //whether the ripple animation is enabled, defaults to false
                 components: [
                     'InputText',
@@ -111,6 +112,9 @@ export default {
                     'Dropdown',
                     'ContextMenu',
                     'TabMenu',
+                    'Paginator',
+                    'ProgressSpinner',
+                    "RadioButton"
                 ],
                 // directives: ['Tooltip', 'Badge'], //an array of directives to be registered
             },

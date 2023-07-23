@@ -1,22 +1,17 @@
 <template>
     <div class="rankingstats">
-        <div class="header">
-            <div class="left">
-                <div class="aaa">
-                    <h2 class="title">
-                        Statistics stuff
-                    </h2>
-                    <p>
-                        <!-- pp distribution: fix backend calc -->
-                        Scoresaber stuff refreshes every hour
-                        <br />
-                        Beatsaver & RC Discord stuff every 24 hours
-                    </p>
-                </div>
-            </div>
-        </div>
+        <sub-header title="Statistics stuff">
+            <p>
+                <!-- pp distribution: fix backend calc -->
+                Scoresaber stuff refreshes every hour
+                <br />
+                Beatsaver & RC Discord stuff every 24 hours
+            </p>
+        </sub-header>
 
-        <vs-navbar color="#18191c" shadow text-white square>
+        <TabMenu :model="items" :activeIndex.sync="active" />
+
+        <!-- <vs-navbar color="#18191c" shadow text-white square>
             <vs-navbar-item
                 to="/stats/beatsaver"
                 :active="$route.path == '/stats/beatsaver'"
@@ -35,7 +30,7 @@
             >
                 RC Discord
             </vs-navbar-item>
-        </vs-navbar>
+        </vs-navbar> -->
 
         <NuxtChild class="content sub-page" keep-alive />
     </div>
@@ -46,11 +41,15 @@ export default {
     transition: 'slide-bottom',
     data() {
         return {
-            active: 'beatsaver',
+            items: [
+                { label: 'Beatsaver', to: '/stats/beatsaver' },
+                { label: 'Scoresaber', to: '/stats/scoresaber' },
+                { label: 'RC Discord', to: '/stats/discord' },
+            ],
         }
     },
     beforeRouteEnter(to, from, next) {
-        next(vm => {
+        next((vm) => {
             if (to.path == '/stats') return next('/stats/beatsaver')
             next()
         })
@@ -64,6 +63,15 @@ export default {
 <style lang="scss">
 .rankingstats {
     justify-content: center;
+
+    .p-tabmenu ul {
+        justify-content: center;
+    }
+
+    .p-tabmenu,
+    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
+        background: rgb(30, 32, 35);
+    }
 
     .vs-navbar-content {
         position: relative;

@@ -20,11 +20,13 @@ const classes = [
 ]
 
 export default {
-    props: ['icon', 'iconPos', 'href'],
+    props: ['icon', 'iconPos', 'href', 'to'],
     mounted() {},
     methods: {
         onClick() {
-            if (this.href) {
+            if (this.to) {
+                this.$router.push(this.to)
+            } else if (this.href) {
                 window.open(this.href, '_blank')
             } else {
                 if (this.$listeners.click) this.$listeners.click()
@@ -38,11 +40,14 @@ export default {
                 attrs.icon = this.computedIcon
                 attrs.iconPos = this.computedIconPos
             }
+            console.log(this.$attrs)
             for (const key of Object.keys(this.$attrs)) {
-                if (classes.includes(key)) {
+                if (classes.includes(key) && this.$attrs[key] !== false) {
                     attrs.class += ` p-button-${key}`
                 }
             }
+            console.log(this.$attrs)
+            console.log(attrs)
             return attrs
         },
         computedIcon() {
@@ -78,6 +83,9 @@ export default {
         -webkit-transform: translateY(-2px);
         transform: translateY(-2px);
     }
+}
+.p-button::v-deep i {
+    margin-left: 8px;
 }
 .p-button.p-button-rounded {
     border-radius: 0.5rem;

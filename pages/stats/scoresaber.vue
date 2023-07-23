@@ -104,14 +104,13 @@
                             >
                         </div>
                     </template>
-                    <vs-button
+                    <my-button
                         v-if="visibleItems < data.length"
                         class="showMore"
-                        icon
                         @click="visibleItems += 50"
                     >
                         Show more
-                    </vs-button>
+                    </my-button>
                 </div>
             </div>
         </div>
@@ -162,7 +161,7 @@ export default {
                     getData: async () => {
                         return (
                             await this.loadFromApi('scoresaber/rq/mappers')
-                        ).map(mapper => {
+                        ).map((mapper) => {
                             return {
                                 ...mapper,
                                 value: mapper.value.length,
@@ -196,7 +195,7 @@ export default {
         },
     },
     methods: {
-        openUrl: function(url) {
+        openUrl: function (url) {
             window.open(url, '_blank')
         },
         async loadFromApi(endpoint) {
@@ -205,7 +204,7 @@ export default {
                 .sort((a, b) => {
                     return b[1] - a[1]
                 })
-                .map(item => {
+                .map((item) => {
                     return { name: item[0], value: item[1] }
                 })
         },

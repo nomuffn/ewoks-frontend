@@ -1,92 +1,72 @@
 <template>
     <div class="rankingStuff">
+        <sub-header title="Ranking stuff for scoresaber"> </sub-header>
+
         <div class="content">
-            <div>
-                <div class="title_container">
-                    <h2 class="title">Qualified Maps</h2>
-                </div>
+            <h2 class="title">Qualified Maps</h2>
 
-                <div class="flex">
-                    <vs-button
-                        href="https://muffnlabs.de/static/qualified-maps.bplist"
-                    >
-                        Download playlist
-                    </vs-button>
-                    <vs-button
-                        href="https://scoresaber.com/ranking/requests"
-                        target="_blank"
-                    >
-                        Rank Requests
-                    </vs-button>
-                </div>
-                <Message class="self-center" :closable="false">
-                    Finally moved to the new scoresaber api.
-                    <br />
-                    Now this list should always be fully up to date with the
-                    current qualified maps. Updates every 30 minutes.
-                    <br />
-                    Thanks to
-                    <a href="https://twitter.com/miitchelVR" target="_blank"
-                        ><strong>miitchel</strong></a
-                    >
-                    for some code to get this going again 🤗
-                </Message>
+            <div class="flex">
+                <my-button
+                    href="https://muffnlabs.de/static/qualified-maps.bplist"
+                >
+                    Download playlist
+                </my-button>
+                <my-button href="https://scoresaber.com/ranking/requests">
+                    Rank Requests
+                </my-button>
+            </div>
+            <Message class="" :closable="false">
+                Thanks to
+                <a href="https://twitter.com/miitchelVR" target="_blank"
+                    ><strong>miitchel</strong></a
+                >
+                for some code to get this going again 🤗
+            </Message>
 
-                <div class="m-4">
-                    <p>
-                        Maps past the ranked date:
-                        <strong>{{ passedRankedDateAmount }}</strong>
-                    </p>
-                    <p>
-                        Maps with remaining time:
-                        <strong>{{ remainingTimeAmount }}</strong>
-                    </p>
-                </div>
+            <div class="m-4">
+                <p>
+                    Maps past the ranked date:
+                    <strong>{{ passedRankedDateAmount }}</strong>
+                </p>
+                <p>
+                    Maps with remaining time:
+                    <strong>{{ remainingTimeAmount }}</strong>
+                </p>
+            </div>
 
-                <loading-spinner v-if="!maps.length" />
-                <time-maps-list :maps="maps" />
-            </div>
-            <div>
-                <div class="title_container">
-                    <h2 class="title">Latest RT/QAT Votes</h2>
-                </div>
-                <vs-alert v-if="votesStats" color="primary">
-                    Updates every hour, numbers will be slightly off :)<br />
-                    Votes in the last month:<br />
-                    RT Up-/Downvotes:
-                    <b>{{ votesStats.lastMonth.rtupvotes__sum }}</b>
-                    /
-                    <b>{{ votesStats.lastMonth.rtdownvotes__sum }}</b>
-                    <br />
-                    QAT Up-/Downvotes:
-                    <b>{{ votesStats.lastMonth.qatupvotes__sum }}</b>
-                    /
-                    <b>{{ votesStats.lastMonth.qatdownvotes__sum }}</b>
-                    <br />
-                    <br />
-                    Votes since 8th August 2020:<br />
-                    RT Up-/Downvotes:
-                    <b>{{ votesStats.allTime.rtupvotes__sum }}</b>
-                    /
-                    <b>{{ votesStats.allTime.rtdownvotes__sum }}</b>
-                    <br />
-                    QAT Up-/Downvotes:
-                    <b>{{ votesStats.allTime.qatupvotes__sum }}</b>
-                    /
-                    <b>{{ votesStats.allTime.qatdownvotes__sum }}</b>
-                    <br />
-                </vs-alert>
-                <votes-feed />
-            </div>
-            <div>
-                <div class="title_container">
-                    <h2 class="title">
-                        Top Ten Scores Feed for > 500pp plays
-                    </h2>
-                </div>
-                <vs-alert color="primary"> Updates every hour </vs-alert>
-                <top-ten-feed-list />
-            </div>
+            <loading-spinner v-if="!maps.length" />
+            <time-maps-list :maps="maps" />
+            <h2 class="title">Latest RT/QAT Votes</h2>
+            <Message v-if="votesStats" class="" :closable="false">
+                Updates every hour, numbers will be slightly off :)<br />
+                Votes in the last month:<br />
+                RT Up-/Downvotes:
+                <b>{{ votesStats.lastMonth.rtupvotes__sum }}</b>
+                /
+                <b>{{ votesStats.lastMonth.rtdownvotes__sum }}</b>
+                <br />
+                QAT Up-/Downvotes:
+                <b>{{ votesStats.lastMonth.qatupvotes__sum }}</b>
+                /
+                <b>{{ votesStats.lastMonth.qatdownvotes__sum }}</b>
+                <br />
+                <br />
+                Votes since 8th August 2020:<br />
+                RT Up-/Downvotes:
+                <b>{{ votesStats.allTime.rtupvotes__sum }}</b>
+                /
+                <b>{{ votesStats.allTime.rtdownvotes__sum }}</b>
+                <br />
+                QAT Up-/Downvotes:
+                <b>{{ votesStats.allTime.qatupvotes__sum }}</b>
+                /
+                <b>{{ votesStats.allTime.qatdownvotes__sum }}</b>
+                <br />
+            </Message>
+            <votes-feed />
+            <h2 class="title">Top Ten Scores Feed for > 500pp plays</h2>
+            <Message class="" :closable="false">Updates every hour </Message>
+            <top-ten-feed-list />
         </div>
     </div>
 </template>

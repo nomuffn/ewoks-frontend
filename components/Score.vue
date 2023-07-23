@@ -6,9 +6,7 @@
                     <template v-if="score.player">
                         <a
                             target="_blank"
-                            :href="
-                                `https://scoresaber.com/u/${score.player.scoresaberId}`
-                            "
+                            :href="`https://scoresaber.com/u/${score.player.scoresaberId}`"
                             >{{ score.player.twitchName }}</a
                         ><span> played</span>
                     </template>
@@ -19,16 +17,12 @@
                 </h3>
                 <div class="third">
                     <img
-                        :src="
-                            `https://cdn.scoresaber.com/covers/${score.songHash}.png`
-                        "
+                        :src="`https://cdn.scoresaber.com/covers/${score.songHash}.png`"
                     />
                     <div class="fourth">
                         <a
                             target="_blank"
-                            :href="
-                                `https://scoresaber.com/leaderboard/${score.leaderboardId}`
-                            "
+                            :href="`https://scoresaber.com/leaderboard/${score.leaderboardId}`"
                             >{{
                                 `${score.leaderboardSongAuthor} - ${score.leaderboardName}`
                             }}
@@ -45,16 +39,10 @@
                 </div>
             </div>
             <div class="right">
-                <vs-button
-                    v-if="score.twitchUrl"
-                    icon
-                    color="twitch"
-                    :href="score.twitchUrl"
-                    blank
-                >
-                    Open VOD
+                <MyButton v-if="score.twitchUrl" help :href="score.twitchUrl">
+                    VOD
                     <i class="bx bx-window-open"></i>
-                </vs-button>
+                </MyButton>
             </div>
         </div>
     </div>
@@ -66,7 +54,7 @@ export default {
         score: Object,
     },
     methods: {
-        openUrl: function(id) {
+        openUrl: function (id) {
             window.open('https://scoresaber.com/leaderboard/' + id, '_blank')
         },
         getAgo(timeSet) {
@@ -134,7 +122,7 @@ export default {
             flex: 1;
         }
         .right {
-            max-width: 120px;
+            max-width: 140px;
             width: 100%;
             flex: 1;
             i {
