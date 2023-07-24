@@ -53,10 +53,21 @@
                     <i class="bx bxl-twitter bx-sm"></i>
                 </my-button>
 
-                <my-button outlined>
+                <my-button v-if="!profile" @click="$auth.login()" outlined>
                     <p>Login</p>
-                    <!-- <i class="bx bxs-donate-heart"></i> -->
+                    <i class="bx bxl-discord"></i>
                 </my-button>
+                <div v-else class="flex m-2">
+                    <my-button
+                        notround
+                        nomargin
+                        class="pointer-events-none"
+                        :label="profile.username"
+                    />
+                    <my-button reset outlined @click="$auth.logout()">
+                        <i class="bx bx-log-out"></i>
+                    </my-button>
+                </div>
             </div>
         </div>
         <div class="menu p-2 flex flex-wrap justify-center">
@@ -74,14 +85,16 @@
         </div>
 
         <Nuxt class="page" keep-alive />
+        <Toast />
     </div>
 </template>
 
 <script>
 // var ColorHandler = require('@/assets/ColorHandler.js')
 export default {
-    created() {
-        // ColorHandler.setColor()
+    async created() {
+        // TODO move to vuex store
+        this.profile = await this.$auth.fetch()
     },
     head() {
         return {
@@ -123,12 +136,19 @@ export default {
     data() {
         return {
             active: '',
+            profile: null,
             pages: [
                 {
                     path: '',
                     icon: 'bx-home',
                     name: 'Home',
                 },
+                // {
+                //     path: 'cyberramen',
+                //     icon: 'bx-bot',
+                //     name: 'CyberRamen',
+                //     new: true
+                // },
                 {
                     path: 'tierlist',
                     icon: 'bx-pyramid',

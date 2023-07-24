@@ -35,11 +35,6 @@ export default {
 
     publicRuntimeConfig: {
         baseURL: process.env.API_URL || 'https://muffnlabs.de/',
-        discordLogin:
-            (process.env.API_URL || 'https://muffnlabs.de/') +
-            'backend/oauth/login/discord',
-        discordLogout:
-            (process.env.API_URL || 'https://muffnlabs.de/') + 'backend/logout',
     },
 
     generate: {
@@ -55,13 +50,13 @@ export default {
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
-        '@plugins/global-components',
+        { src: '@/plugins/client-plugins', mode: 'client' },
+        { src: '@/plugins/auth', mode: 'client' },
+        '@/plugins/axios',
         '@/plugins/defaultApi',
         '@/plugins/mapttsApi',
-        '@/plugins/auth',
-        '@/plugins/axios',
+        '@/plugins/cyberramenApi',
         { src: '~~/node_modules/vue-rellax/lib/nuxt-plugin', ssr: false },
-        { src: '@/plugins/vuetimeline.js' },
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -97,6 +92,7 @@ export default {
                     'InputText',
                     'InputNumber',
                     'Button',
+                    'Fieldset',
                     'Toast',
                     'Slider',
                     'ColorPicker',
@@ -110,6 +106,16 @@ export default {
                     'ProgressSpinner',
                     'RadioButton',
                     'Checkbox',
+                    'DataTable',
+                    'Column',
+                    'ColumnGroup',
+                    'DataTable',
+                    'Panel',
+                    'ConfirmDialog',
+                    'InlineMessage',
+                    'TabView',
+                    'TabPanel',
+                    'ProgressBar',
                 ],
                 // directives: ['Tooltip', 'Badge'], //an array of directives to be registered
             },
