@@ -1,24 +1,17 @@
 <template>
     <div class="configs">
-        <div class="header">
-            <div class="left">
-                <div class="aaa">
-                    <h2 class="title">
-                        Configs & files
-                    </h2>
-                    <p>
-                        This is an attempt to gather most of the various player
-                        configs & files for stuff like:
-                        <br />
-                        HitScoreVisualizer, Playlists, Counters+, public Sabers,
-                        Hitsounds
-                        <br />
-                        If you want any of yours to be added here dm me your
-                        file on discord: muffn#2345
-                    </p>
-                </div>
-            </div>
-        </div>
+        <sub-header title="Configs & files">
+            <p>
+                This is an attempt to gather most of the various player configs
+                & files for stuff like:
+                <br />
+                HitScoreVisualizer, Playlists, Counters+, public Sabers,
+                Hitsounds
+                <br />
+                If you want any of yours to be added here dm me your file on
+                discord: muffn#2345
+            </p>
+        </sub-header>
 
         <div class="content">
             <loading-spinner v-if="!configs.length" />
@@ -41,30 +34,19 @@
                         </p>
 
                         <div class="buttons">
-                            <vs-button
+                            <my-button
                                 v-if="showSource(item)"
-                                border
-                                style="min-width: 60px"
-                                primary
-                                animation-type="scale"
-                                blank
+                                outlined
                                 :href="item.file"
                             >
+                                Open
                                 <i class="bx bx-code-alt"></i>
-                                <template #animate> Open </template>
-                            </vs-button>
+                            </my-button>
 
-                            <a class="nope" :href="item.file" download>
-                                <vs-button
-                                    border
-                                    style="min-width: 80px"
-                                    primary
-                                    animation-type="scale"
-                                >
-                                    <i class="bx bx-download"></i>
-                                    <template #animate> Download </template>
-                                </vs-button>
-                            </a>
+                            <my-button outlined :href="item.file">
+                                Download
+                                <i class="bx bx-download"></i>
+                            </my-button>
                         </div>
                     </div>
                 </div>
@@ -86,7 +68,7 @@ export default {
     },
     methods: {
         getConfigs(category) {
-            return this.configs.filter(conf => conf.category == category)
+            return this.configs.filter((conf) => conf.category == category)
         },
         getCategoryName(category) {
             if (category == 'hsv') return 'HSV'
@@ -102,7 +84,7 @@ export default {
     },
     computed: {
         categories() {
-            const confs = this.configs.map(conf => conf.category)
+            const confs = this.configs.map((conf) => conf.category)
             return [...new Set(confs)] //makes it unique
         },
     },

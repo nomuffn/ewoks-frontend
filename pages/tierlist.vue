@@ -389,13 +389,8 @@ export default {
 <style lang="scss">
 .tierlist {
     .p-button {
-        background: rgb(var(--vs-primary));
-        border-color: rgb(var(--vs-primary));
-
-        &:hover:enabled {
-            background-color: rgba(var(--vs-primary), 0.6);
-            border-color: rgba(var(--vs-primary), 0.6);
-        }
+        background: var(--primary-color);
+        border-color: var(--primary-color);
     }
     .sheep {
         margin-top: 100vh;

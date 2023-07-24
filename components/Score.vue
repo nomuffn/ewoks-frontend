@@ -39,10 +39,10 @@
                 </div>
             </div>
             <div class="right">
-                <MyButton v-if="score.twitchUrl" help :href="score.twitchUrl">
+                <my-button v-if="score.twitchUrl" help :href="score.twitchUrl">
                     VOD
                     <i class="bx bx-window-open"></i>
-                </MyButton>
+                </my-button>
             </div>
         </div>
     </div>

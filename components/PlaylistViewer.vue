@@ -16,18 +16,20 @@
             <img class="w-32 object-contain" :src="image" />
         </div>
         <div>
-            <vs-pagination
-                v-model="page"
-                :length="Math.ceil(playlist['songs'].length / offset)"
-                class="my-3"
-                :disabled="loading"
-            />
+            <Paginator
+                v-if="this.playlist['songs']"
+                style="background: none"
+                class="w-full"
+                :rows="offset"
+                :totalRecords="this.playlist['songs'].length"
+                @page="onPage($event)"
+            ></Paginator>
 
             <loading-spinner v-if="loading" />
             <div
                 v-for="song of songs"
+                :key="song"
                 class="card mb-3 flex flex-row overflow-hidden"
-                @click=""
             >
                 <div class="flex justify-start">
                     <template v-if="!song.key">
@@ -60,7 +62,7 @@
                                 background-color: #00000082;
                             "
                         >
-                            <p v-for="diff of song.difficulties">
+                            <p v-for="diff of song.difficulties" :key="diff">
                                 {{ diff.name }}
                             </p>
                         </div>
@@ -102,23 +104,17 @@
                                 Uploaded:
                                 {{ new Date(song.uploaded).toLocaleString() }}
                             </p>
-                            <vs-button
-                                style="width: 160px; margin-top: 5px"
+                            <my-button
+                                style="width: 160px"
                                 :href="`https://beatsaver.com/maps/${song.key}`"
-                                blank
+                                nomargin
                             >
-                                Open on Beatsaver
-                            </vs-button>
+                                Beatsaver
+                            </my-button>
                         </div>
                     </template>
                 </div>
             </div>
-            <vs-pagination
-                v-model="page"
-                :length="Math.ceil(playlist['songs'].length / offset)"
-                class="my-3"
-                :disabled="loading"
-            />
         </div>
     </div>
 </template>
@@ -127,9 +123,7 @@
 import Cookies from 'js-cookie'
 
 export default {
-    mounted() {
-        this.paginationLength = this.loadSongs()
-    },
+    mounted() {},
     props: {
         playlist: {
             required: true,
@@ -138,8 +132,7 @@ export default {
     data() {
         return {
             offset: 50,
-            page: 1,
-            paginationLength: 1,
+            page: 0,
             songs: [],
             loading: false,
         }
@@ -172,15 +165,19 @@ export default {
         },
         playlist(newval, oldval) {
             console.log('playlist change')
-            this.page = 1
+            this.page = 0
             this.loadSongs()
         },
     },
     methods: {
+        onPage(event) {
+            if (this.page == event.page) return
+            this.page = event.page
+        },
         async loadSongs() {
             this.loading = true
             this.songs = []
-            const offset = this.offset * (this.page - 1)
+            const offset = this.offset * this.page
 
             const songs = this.playlist['songs'].slice(
                 offset,

@@ -14,7 +14,7 @@
 
             <p class="title text-left">Latest Scores</p>
 
-            <div class="row">
+            <div class="row flex justify-between">
                 <div class="search">
                     <div class="p-inputgroup">
                         <InputText
@@ -26,14 +26,24 @@
                     </div>
                 </div>
 
-                <!-- // TODO fix up paginator -->
-                <Paginator
-                    :rows="25"
-                    :totalRecords="(page + 2) * scores.length"
-                    @page="onPage($event)"
-                    :first.sync="paginatorOffset"
-                ></Paginator>
-                <!-- <vs-pagination v-model="page" :length="paginationLength" /> -->
+                <div class="flex">
+                    <Button
+                        icon="pi pi-angle-left"
+                        @click="page--"
+                        :disabled="loading || page <= 0"
+                    />
+                    <p
+                        class="self-center py-3 px-5"
+                        style="background: #141417"
+                    >
+                        {{ page }}
+                    </p>
+                    <Button
+                        icon="pi pi-angle-right"
+                        @click="page++"
+                        :disabled="loading || scores.length < 25"
+                    />
+                </div>
             </div>
 
             <div class="scores cards vertical">
@@ -41,13 +51,26 @@
                 <score v-for="score of scores" :key="score.id" :score="score" />
             </div>
 
-            <Paginator
-                :rows="25"
-                :totalRecords="(page + 2) * scores.length"
-                @page="onPage($event)"
-                :first.sync="paginatorOffset"
-            ></Paginator>
-            <!-- <vs-pagination v-model="page" :length="paginationLength" /> -->
+            <div class="row justify-center">
+                <div class="flex">
+                    <Button
+                        icon="pi pi-angle-left"
+                        @click="page--"
+                        :disabled="page <= 0"
+                    />
+                    <p
+                        class="self-center py-3 px-5"
+                        style="background: #141417"
+                    >
+                        {{ page }}
+                    </p>
+                    <Button
+                        icon="pi pi-angle-right"
+                        @click="page++"
+                        :disabled="scores.length < 25"
+                    />
+                </div>
+            </div>
         </div>
     </div>
 </template>
@@ -64,6 +87,12 @@ export default {
             this.search = this.$route.query.search
             this.startSearch()
         }
+    },
+    watch: {
+        async page(newval, oldval) {
+            await this.loadScores()
+            console.log(this.scores.length)
+        },
     },
     data({ $config: { discordLogin } }) {
         return {
@@ -83,12 +112,6 @@ export default {
         this.loadScores()
     },
     methods: {
-        onPage(event) {
-            console.log({ event })
-            if (this.page == event.page) return
-            this.page = event.page
-            this.loadScores()
-        },
         doesHttpOnlyCookieExist(cookiename) {
             var d = new Date()
             d.setTime(d.getTime() + 1000)
@@ -162,7 +185,6 @@ export default {
     .row {
         display: flex;
         margin-bottom: 30px;
-        place-content: space-between;
         flex-wrap: wrap;
 
         .search {

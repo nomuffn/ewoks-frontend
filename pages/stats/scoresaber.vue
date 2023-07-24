@@ -5,23 +5,18 @@
             v-if="activeList"
             v-model="activeList"
             :options="lists"
+            optionLabel="title"
             placeholder="Sorted by"
             scrollHeight="400px"
             :loading="loading"
         />
-
-        <!-- <vs-navbar color="#18191c" text-white square v-model="activeList">
-            <vs-navbar-item v-for="(item, key) in lists" :key="key" :active="activeList == key" :id="key">
-                {{ item.title }}
-            </vs-navbar-item>
-        </vs-navbar> -->
 
         <div class="sub-content">
             <div v-if="activeList" class="list">
                 <div v-if="!loading && data.length > 0" class="cards vertical">
                     <p>Amount: {{ data.length }}</p>
 
-                    <template v-if="activeList == 'highestScores'">
+                    <template v-if="activeList.key == 'highestScores'">
                         <div
                             v-for="(item, index) in getVisibleItems"
                             :key="index"
@@ -89,12 +84,13 @@
                                 <span class="colored">#{{ index + 1 }}</span>
                                 {{ item.name }}: {{ item.value }}
                             </h4>
-                            <vs-button
+                            <my-button
                                 v-if="item.maps"
-                                v-on:click.stop="mapsDialog = item"
-                                border
-                                >Maps</vs-button
+                                @click="openDialog"
+                                outlined
                             >
+                                Maps
+                            </my-button>
                         </div>
                     </template>
                     <my-button
@@ -112,18 +108,21 @@
 </template>
 
 <script>
+import TestModal from '@/components/TestModal.vue'
+
 export default {
     transition: 'slide-bottom',
     data() {
         return {
             data: [],
-            activeList: this.$route.query?.list || 'highestScores',
+            activeList: null,
             visibleItems: 10,
             loading: false,
             stats: null,
             mapsDialog: null,
-            lists: {
-                highestScores: {
+            lists: [
+                {
+                    key: 'highestScores',
                     title: 'Highest PP Scores',
                     getData: async () => {
                         return await this.$defaultApi.$get(
@@ -131,25 +130,29 @@ export default {
                         )
                     },
                 },
-                mapsetMappers: {
+                {
+                    key: 'mapsetMappers',
                     title: 'Mapset Count By Mappers',
                     getData: () => {
                         return this.loadFromApi('scoresaber/mapperdist')
                     },
                 },
-                diffMappers: {
+                {
+                    key: 'diffMappers',
                     title: 'Difficulty Count By Mappers',
                     getData: () => {
                         return this.loadFromApi('scoresaber/mapperdiffdist')
                     },
                 },
-                mapsetArtists: {
+                {
+                    key: 'mapsetArtists',
                     title: 'Mapset Count By Song Artists',
                     getData: () => {
                         return this.loadFromApi('scoresaber/artistdist')
                     },
                 },
-                mapsetRQMappers: {
+                {
+                    key: 'mapsetRQMappers',
                     title: 'Mappers Count (Ranking Queue)',
                     getData: async () => {
                         return (
@@ -163,7 +166,7 @@ export default {
                         })
                     },
                 },
-            },
+            ],
         }
     },
     computed: {
@@ -173,16 +176,21 @@ export default {
     },
 
     async created() {
+        this.activeList =
+            this.lists.find((i) => i.key == this.$route.query?.list) ||
+            this.lists[0]
+
         this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
     },
     watch: {
         activeList: {
-            immediate: true,
             async handler(val) {
+                console.log('activeList', val)
+                if (!val) return
                 this.loading = true
-                this.$router.push({ query: { list: this.activeList } })
+                this.$router.push({ query: { list: this.activeList.key } })
                 this.visibleItems = 10
-                this.data = await this.lists[this.activeList].getData()
+                this.data = await this.activeList.getData()
                 this.loading = false
             },
         },
@@ -207,6 +215,19 @@ export default {
             if (diff.includes('Hard')) return 'Hard'
             if (diff.includes('Normal')) return 'Normal'
             if (diff.includes('Easy')) return 'Easy'
+        },
+        openDialog() {
+            this.$buefy.modal.open({
+                parent: this,
+                component: TestModal,
+                hasModalCard: true,
+                trapFocus: true,
+                fullScreen: false,
+                props: {},
+                events: {
+                    close: () => {},
+                },
+            })
         },
     },
 }

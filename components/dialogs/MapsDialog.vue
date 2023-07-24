@@ -1,18 +1,36 @@
 <template>
-    <vs-dialog auto-width not-center dark v-model="active" v-on:close="$emit('close')">
+    <vs-dialog
+        auto-width
+        not-center
+        dark
+        v-model="active"
+        v-on:close="$emit('close')"
+    >
         <template v-if="value" #header>
             <h3>{{ `${value.name}'s maps in queue` }}</h3>
         </template>
 
         <div v-if="value" class="con-content">
             <div class="map" v-for="map in value.maps" :key="map.id">
-                <a class="link" :href="`https://scoresaber.com/leaderboard/${map.songId}`" target="_blank">{{
-                    `${map.name} (id: ${map.id})`
-                }}</a>
+                <a
+                    class="link"
+                    :href="`https://scoresaber.com/leaderboard/${map.songId}`"
+                    target="_blank"
+                    >{{ `${map.name} (id: ${map.id})` }}</a
+                >
                 <p>Mapper(s): {{ map.mapper }}</p>
-                <p>Queued: {{ map.created_at.replace('T', ' ').replace('Z', '') }}</p>
-                <p>Rt Up/Downvotes: {{ `${map.rtupvotes} / ${map.rtdownvotes}` }}</p>
-                <p>Qat Up/Downvotes: {{ `${map.qatupvotes} / ${map.qatdownvotes}` }}</p>
+                <p>
+                    Queued:
+                    {{ map.created_at.replace('T', ' ').replace('Z', '') }}
+                </p>
+                <p>
+                    Rt Up/Downvotes:
+                    {{ `${map.rtupvotes} / ${map.rtdownvotes}` }}
+                </p>
+                <p>
+                    Qat Up/Downvotes:
+                    {{ `${map.qatupvotes} / ${map.qatdownvotes}` }}
+                </p>
                 <p>Hash: {{ map.hash }}</p>
             </div>
         </div>
@@ -58,7 +76,7 @@ export default {
             margin: 0px 15px 30px 15px;
 
             .link {
-                color: rgb(var(--vs-primary));
+                color: var(--primary-color);
                 font-weight: bold;
             }
         }

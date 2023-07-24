@@ -32,12 +32,12 @@ export default {}
 }
 
 .half-circle-spinner .circle.circle-1 {
-    border-top-color: rgb(var(--vs-primary));
+    border-top-color: var(--primary-color);
     animation: half-circle-spinner-animation 1s infinite;
 }
 
 .half-circle-spinner .circle.circle-2 {
-    border-bottom-color: rgb(var(--vs-primary));
+    border-bottom-color: var(--primary-color);
     animation: half-circle-spinner-animation 1s infinite alternate;
 }
 

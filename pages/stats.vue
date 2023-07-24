@@ -9,28 +9,7 @@
             </p>
         </sub-header>
 
-        <TabMenu :model="items" :activeIndex.sync="active" />
-
-        <!-- <vs-navbar color="#18191c" shadow text-white square>
-            <vs-navbar-item
-                to="/stats/beatsaver"
-                :active="$route.path == '/stats/beatsaver'"
-            >
-                Beatsaver
-            </vs-navbar-item>
-            <vs-navbar-item
-                to="/stats/scoresaber"
-                :active="$route.path == '/stats/scoresaber'"
-            >
-                Scoresaber
-            </vs-navbar-item>
-            <vs-navbar-item
-                to="/stats/discord"
-                :active="$route.path == '/stats/discord'"
-            >
-                RC Discord
-            </vs-navbar-item>
-        </vs-navbar> -->
+        <TabMenu :model="items" />
 
         <NuxtChild class="content sub-page" keep-alive />
     </div>

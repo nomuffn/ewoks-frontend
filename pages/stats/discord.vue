@@ -3,19 +3,32 @@
         <p class="title">
             Top Ten Scores Feed Messages sorted by Total Reactions Count
         </p>
-        <div class="container" v-if="paginationLength > 0 && page > 0">
-            <vs-pagination v-model="page" :length="paginationLength" />
-            <div class="results mt-6">
+        <div class="container">
+            <Paginator
+                style="background: none"
+                class="w-full"
+                :rows="50"
+                :totalRecords="totalRecords"
+                @page="onPage($event)"
+            ></Paginator>
+
+            <loading-spinner class="ml-auto mr-auto mt-6" v-if="loading" />
+
+            <div v-else class="results mt-6">
                 <discord-message
                     v-for="message in messages"
                     :message="message"
                     :key="message.id"
                 />
             </div>
-            <vs-pagination v-model="page" :length="paginationLength" />
-        </div>
-        <div v-else>
-            <loading-spinner />
+
+            <Paginator
+                style="background: none"
+                class="w-full"
+                :rows="50"
+                :totalRecords="totalRecords"
+                @page="onPage($event)"
+            ></Paginator>
         </div>
     </div>
 </template>
@@ -26,30 +39,39 @@ export default {
     data() {
         return {
             page: 0,
-            paginationLength: 0,
+            totalRecords: 0,
             messages: [],
+            loading: false,
         }
     },
     computed: {},
-
-    async created() {
-        this.page += 1
-    },
     watch: {
-        async page(newVal, oldVal) {
-            const data = await this.$defaultApi.$get(
-                `general/messages?page=${newVal}`,
-            )
-            this.messages = data.results
-            this.paginationLength = Math.ceil(data.count / data.results.length)
+        page: {
+            immediate: true,
+            async handler(newVal, oldVal) {
+                this.load()
+            },
         },
     },
 
-    methods: {},
+    methods: {
+        async load() {
+            this.loading = true
+            const data = await this.$defaultApi.$get(
+                `general/messages?page=${this.page + 1}`,
+            )
+            this.messages = data.results
+            this.totalRecords = data.count
+
+            this.loading = false
+        },
+        onPage(event) {
+            if (this.page == event.page) return
+            this.page = event.page
+        },
+    },
 }
 </script>
 
 <style lang="scss">
-.page .discord {
-}
 </style>
