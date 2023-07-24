@@ -1,6 +1,7 @@
 #own stuff
 static/scripts
 static/playlists
+deploy.sh
 
 # Created by .ignore support plugin (hsz.mobi)
 ### Node template

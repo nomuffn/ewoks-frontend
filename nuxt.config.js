@@ -138,9 +138,9 @@ export default {
                 },
             },
         },
-        plugins: [new SpeedMeasurePlugin()],
-        analyze: true,
-        cache: true,
+        // plugins: [new SpeedMeasurePlugin()],
+        // analyze: true,
+        // cache: true,
     },
     server: {
         host: '0.0.0.0',
