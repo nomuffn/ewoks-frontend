@@ -11,29 +11,38 @@
 
                 <div class="buttons">
                     <my-button
+                        style="flex: 1 1 100%"
                         label="My Maps"
                         href="https://beatsaver.com/profile/4284309"
                         warning
-                    />
-                    <my-button class="discord" outlined color="discord">
+                    >
+                        My Maps
+                        <img
+                            class="w-6 ml-1"
+                            src="https://beatsaver.com/static/favicon/favicon-32x32.png"
+                        />
+                    </my-button>
+                    <my-button
+                        href="https://discordapp.com/users/219099186505711616/"
+                    >
                         muffn#2345
-                        <i class="bx bxl-discord"></i>
+                        <i class="bx bxl-discord bx-sm"></i>
                     </my-button>
                     <my-button href="https://twitter.com/nomuffn">
                         @nomuffn
-                        <i class="bx bxl-twitter"></i>
+                        <i class="bx bxl-twitter bx-sm"></i>
                     </my-button>
                     <my-button help href="https://www.twitch.tv/muffnnt">
                         muffnnt
-                        <i class="bx bxl-twitch"></i>
+                        <i class="bx bxl-twitch bx-sm"></i>
                     </my-button>
                     <my-button secondary href="https://github.com/nomuffn">
                         nomuffn
-                        <i class="bx bxl-github"></i>
+                        <i class="bx bxl-github bx-sm"></i>
                     </my-button>
                 </div>
                 <div class="flex flex-col">
-                    <div class="flex flex-row">
+                    <div class="flex flex-row flex-wrap">
                         <img
                             v-for="emote in emotes"
                             :key="emote"
@@ -112,10 +121,6 @@ export default {
                 flex: 1 1 45%;
                 i {
                     margin-left: 5px;
-                }
-
-                &.discord {
-                    pointer-events: none;
                 }
             }
         }

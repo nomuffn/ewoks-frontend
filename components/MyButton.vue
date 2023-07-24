@@ -1,5 +1,5 @@
 <template>
-    <Button v-bind="attrs" @click="onClick()"><slot></slot></Button>
+    <Button v-bind="attrs" @click.stop="onClick()"><slot></slot></Button>
     <!-- v-on="$listeners" -->
 </template>
 
@@ -27,7 +27,10 @@ export default {
             if (this.to) {
                 this.$router.push(this.to)
             } else if (this.href) {
-                window.open(this.href, '_blank')
+                window.open(
+                    this.href,
+                    this.$attrs.notblank == undefined ? '_blank' : '',
+                )
             } else {
                 if (this.$listeners.click) this.$listeners.click()
             }
@@ -35,19 +38,23 @@ export default {
     },
     computed: {
         attrs() {
-            let attrs = { class: 'p-button-rounded', ...this.$attrs }
+            let attrs = { class: '', ...this.$attrs }
+
+            if (this.$attrs.notround == undefined)
+                attrs.class += ' p-button-rounded'
+            if (this.$attrs.nomargin == undefined) attrs.class += ' margin'
+            if (this.$attrs.noiconmargin == undefined)
+                attrs.class += ' iconmargin'
+
             if (this.icon) {
                 attrs.icon = this.computedIcon
                 attrs.iconPos = this.computedIconPos
             }
-            console.log(this.$attrs)
             for (const key of Object.keys(this.$attrs)) {
                 if (classes.includes(key) && this.$attrs[key] !== false) {
                     attrs.class += ` p-button-${key}`
                 }
             }
-            console.log(this.$attrs)
-            console.log(attrs)
             return attrs
         },
         computedIcon() {
@@ -66,7 +73,6 @@ export default {
 <style lang="scss" scoped>
 .p-button {
     justify-content: center;
-    margin: 7px;
 
     box-sizing: border-box;
     list-style: none;
@@ -74,6 +80,20 @@ export default {
     transition: all 0.25s ease;
     z-index: 1;
     user-select: none;
+
+    &.margin {
+        margin: 7px;
+    }
+
+    &.iconmargin {
+        &::v-deep i {
+            margin-left: 8px;
+        }
+    }
+
+    i {
+        color: #fff;
+    }
 
     &:hover {
         // -webkit-box-shadow: 0 10px 20px -10px #111214;
@@ -84,9 +104,9 @@ export default {
         transform: translateY(-2px);
     }
 }
-.p-button::v-deep i {
-    margin-left: 8px;
-}
+// .p-button::v-deep i {
+//     margin-left: 8px;
+// }
 .p-button.p-button-rounded {
     border-radius: 0.5rem;
 }

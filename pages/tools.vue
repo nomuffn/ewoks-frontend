@@ -1,14 +1,6 @@
 <template>
     <div class="tools">
-        <div class="header">
-            <div class="left">
-                <div class="aaa">
-                    <h2 class="title">
-                        Tools & Scripts
-                    </h2>
-                </div>
-            </div>
-        </div>
+        <sub-header title="Tools & Scripts"> </sub-header>
 
         <div class="content">
             <div class="tools">
@@ -26,27 +18,18 @@
                                 Enter bpm and upload file
                             </p>
 
-                            <vs-input
-                                label-placeholder="BPM"
-                                primary
-                                v-model="bpm"
-                            />
+                            <InputText placeholder="BPM" v-model="bpm" />
 
                             <div class="buttons" id="fileinputblaWalls">
                                 <div style="flex: 1"></div>
 
-                                <vs-button
-                                    border
-                                    style="min-width: 120px"
-                                    primary
-                                    animation-type="scale"
+                                <my-button
+                                    outlined
                                     @click="$refs.wallsInput.click()"
                                 >
+                                    Upload difficulty
                                     <i class="bx bx-upload"></i>
-                                    <template #animate>
-                                        Upload difficulty
-                                    </template>
-                                </vs-button>
+                                </my-button>
                                 <input
                                     @change="fixWalls"
                                     style="display: None"
@@ -59,40 +42,36 @@
                             </div>
                         </div>
                         <div class="card">
-                            <h3>
-                                Notes to dots converter
-                            </h3>
+                            <h3>Notes to dots converter</h3>
                             <p>
                                 Converts all notes to bottom right dot notes so
                                 it can technically be used as timings
                                 (theoretically)
                             </p>
 
-                            <vs-checkbox v-model="dotsConverter.obstacles">
-                                Remove Obstacles
-                            </vs-checkbox>
-                            <vs-checkbox v-model="dotsConverter.lights">
-                                Remove Lights
-                            </vs-checkbox>
-                            <vs-checkbox v-model="dotsConverter.bookmarks">
-                                Remove Bookmarks
-                            </vs-checkbox>
+                            <my-checkbox
+                                label="Remove Obstacles"
+                                v-model="dotsConverter.obstacles"
+                            />
+                            <my-checkbox
+                                label="Remove Lights"
+                                v-model="dotsConverter.lights"
+                            />
+                            <my-checkbox
+                                label="Remove Bookmarks"
+                                v-model="dotsConverter.bookmarks"
+                            />
 
                             <div class="buttons" id="fileinputbla">
                                 <div style="flex: 1"></div>
 
-                                <vs-button
-                                    border
-                                    style="min-width: 120px"
-                                    primary
-                                    animation-type="scale"
+                                <my-button
+                                    outlined
                                     @click="$refs.dotsInput.click()"
                                 >
+                                    Upload difficulty
                                     <i class="bx bx-upload"></i>
-                                    <template #animate>
-                                        Upload difficulty
-                                    </template>
-                                </vs-button>
+                                </my-button>
                                 <input
                                     @change="convertToDots"
                                     style="display: None"
@@ -111,48 +90,27 @@
                                 <br />
                             </p>
 
-                            <div class="buttons">
-                                <div style="flex: 1"></div>
+                            <my-button
+                                href="bsplaylist://playlist/https://muffnlabs.de/static/ranking-queue.bplist"
+                                outlined
+                                notblank
+                            >
+                                One-Click Install
+                                <i class="bx bx-cloud-download"></i>
+                            </my-button>
 
-                                <a
-                                    class="nope"
-                                    href="bsplaylist://playlist/https://muffnlabs.de/static/ranking-queue.bplist"
-                                    download
-                                >
-                                    <vs-button
-                                        border
-                                        style="min-width: 120px"
-                                        primary
-                                        animation-type="scale"
-                                    >
-                                        <i class="bx bx-cloud-download"></i>
-                                        <template #animate>
-                                            One-Click Install
-                                        </template>
-                                    </vs-button>
-                                </a>
-
-                                <a
-                                    class="nope"
-                                    href="https://muffnlabs.de/static/ranking-queue.bplist"
-                                    download
-                                >
-                                    <vs-button
-                                        border
-                                        style="min-width: 80px"
-                                        primary
-                                        animation-type="scale"
-                                    >
-                                        <i class="bx bx-download"></i>
-                                        <template #animate> Download </template>
-                                    </vs-button>
-                                </a>
-                            </div>
+                            <my-button
+                                href="https://muffnlabs.de/static/ranking-queue.bplist"
+                                outlined
+                            >
+                                Download
+                                <i class="bx bx-download"></i>
+                            </my-button>
                         </div>
 
                         <div
                             v-if="!scripts.length"
-                            style="align-self: center; margin: 0px 50px;"
+                            style="align-self: center; margin: 0px 50px"
                         >
                             <loading-spinner />
                         </div>
@@ -174,29 +132,15 @@
                                 </p>
 
                                 <div class="buttons">
-                                    <vs-button
-                                        border
-                                        style="min-width: 60px"
-                                        primary
-                                        animation-type="scale"
-                                        blank
-                                        :href="item.source"
-                                    >
+                                    <my-button outlined :href="item.source">
+                                        Source
                                         <i class="bx bx-code-alt"></i>
-                                        <template #animate> Source </template>
-                                    </vs-button>
+                                    </my-button>
 
-                                    <vs-button
-                                        border
-                                        style="min-width: 80px"
-                                        primary
-                                        animation-type="scale"
-                                        blank
-                                        :href="item.executable"
-                                    >
+                                    <my-button outlined :href="item.executable">
+                                        Download
                                         <i class="bx bxs-download"></i>
-                                        <template #animate> Download </template>
-                                    </vs-button>
+                                    </my-button>
                                 </div>
                             </div>
                         </template>
@@ -208,7 +152,12 @@
                 <!-- sorry not sorry -->
                 <div
                     v-if="!links.length"
-                    style="display: flex; width: 100%; justify-content: center; margin-top: 100px"
+                    style="
+                        display: flex;
+                        width: 100%;
+                        justify-content: center;
+                        margin-top: 100px;
+                    "
                 >
                     <loading-spinner />
                 </div>
@@ -267,12 +216,12 @@ export default {
             return category.charAt(0).toUpperCase() + category.slice(1)
         },
         getLinks(category) {
-            return this.links.filter(conf => conf.category == category)
+            return this.links.filter((conf) => conf.category == category)
         },
     },
     computed: {
         linkCategories() {
-            const links = this.links.map(conf => conf.category)
+            const links = this.links.map((conf) => conf.category)
             return [...new Set(links)] //makes it unique
         },
     },
@@ -281,55 +230,56 @@ export default {
 
 <style lang="scss">
 .tools {
-        .vs-input-parent {
-            margin: 15px;
-            width: 100%;
-        }
-
-        .cards {
-            display: flex;
-            flex-wrap: wrap;
-
-            .card {
-                height: 100%;
-                max-width: 500px;
-            }
-        }
-
-        p {
-            flex: 1;
-            // margin-bottom: 10px;
-        }
-
-        .buttons {
-            display: flex;
-            margin-top: 5px;
-            justify-content: flex-end;
-        }
-
-        a {
-            text-decoration: none;
-        }
+    .vs-input-parent {
+        margin: 15px;
+        width: 100%;
     }
-    .misc {
+
+    .cards {
         display: flex;
         flex-wrap: wrap;
-        .col {
-            flex: inherit;
-        }
 
-        ul {
-            list-style: initial;
-            padding-left: 40px;
+        .card {
+            height: 100%;
+            max-width: 500px;
         }
+    }
 
-        li {
-            color: white;
-            margin-bottom: 7px;
-        }
+    p {
+        flex: 1;
+        // margin-bottom: 10px;
+    }
 
-        a {
-            color: rgb(var(--vs-primary));
-            font-weight: bold;
-        }
-    }</stylescss>
+    .buttons {
+        display: flex;
+        margin-top: 5px;
+        justify-content: flex-end;
+    }
+
+    a {
+        text-decoration: none;
+    }
+}
+.misc {
+    display: flex;
+    flex-wrap: wrap;
+    .col {
+        flex: inherit;
+    }
+
+    ul {
+        list-style: initial;
+        padding-left: 40px;
+    }
+
+    li {
+        color: white;
+        margin-bottom: 7px;
+    }
+
+    a {
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+}
+</stylescss>

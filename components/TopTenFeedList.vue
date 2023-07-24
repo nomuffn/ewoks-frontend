@@ -87,7 +87,7 @@ export default {
     }
 
     .pp {
-        color: rgb(var(--vs-primary));
+        color: var(--primary-color);
         font-weight: bold;
     }
 }

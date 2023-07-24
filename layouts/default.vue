@@ -3,14 +3,56 @@
         <div class="navbar">
             <div class="flex justify-start">
                 <my-button href="https://ko-fi.com/muffn" help>
-                    <p>Buy me a muffin irl</p>
-                    <i class="bx bxs-donate-heart"></i>
+                    <p>Buy me a muffin irl 🧁</p>
                 </my-button>
             </div>
             <div class="self-center">
                 <h2 class="title">muffnlabs</h2>
             </div>
             <div class="flex justify-end">
+                <my-button
+                    href="https://beatsaver.com/profile/4284309"
+                    warning
+                    outlined
+                    noiconmargin
+                >
+                    <img
+                        class="w-6"
+                        src="https://beatsaver.com/static/favicon/favicon-32x32.png"
+                    />
+                </my-button>
+                <my-button
+                    href="https://github.com/nomuffn"
+                    noiconmargin
+                    outlined
+                    secondary
+                >
+                    <i class="bx bxl-github bx-sm"></i>
+                </my-button>
+                <my-button
+                    href="https://www.twitch.tv/muffnnt"
+                    noiconmargin
+                    outlined
+                    help
+                >
+                    <i class="bx bxl-twitch bx-sm"></i>
+                </my-button>
+
+                <my-button
+                    href="https://discordapp.com/users/219099186505711616/"
+                    noiconmargin
+                    outlined
+                >
+                    <i class="bx bxl-discord bx-sm"></i>
+                </my-button>
+                <my-button
+                    href="https://twitter.com/nomuffn"
+                    noiconmargin
+                    outlined
+                >
+                    <i class="bx bxl-twitter bx-sm"></i>
+                </my-button>
+
                 <my-button outlined>
                     <p>Login</p>
                     <!-- <i class="bx bxs-donate-heart"></i> -->
@@ -223,7 +265,7 @@ button.new {
         color: white;
 
         a {
-            color: rgb(var(--vs-primary)) !important;
+            color: var(--primary-color) !important;
             font-weight: bold;
             text-decoration: inherit;
             &:hover {
@@ -232,9 +274,9 @@ button.new {
         }
     }
     img {
-        width: 30px;
-        height: 30px;
-        margin-left: 10px;
+        // width: 30px;
+        // height: 30px;
+        // margin-left: 10px;
     }
     .bsaber {
         background: linear-gradient(

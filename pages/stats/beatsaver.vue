@@ -51,13 +51,13 @@
                 </div>
                 <div class="myrow">
                     <!-- // TODO loading -->
-                    <MyButton
+                    <my-button
                         class="w-full"
                         :loading="true"
                         @click="loadResults"
                     >
                         Filter
-                    </MyButton>
+                    </my-button>
                 </div>
             </div>
         </div>

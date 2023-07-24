@@ -1,6 +1,6 @@
 @import '@vueform/slider/themes/default.scss';
 
 .slider-horizontal {
-    --slider-connect-bg: rgb(var(--vs-primary));
+    --slider-connect-bg: var(--primary-color);
     margin: 10px;
 }

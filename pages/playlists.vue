@@ -1,12 +1,7 @@
 <template>
     <div class="playlists">
-        <div class="header">
-            <div class="left">
-                <div class="aaa">
-                    <h2 class="title">Playlists stuff</h2>
-                </div>
-            </div>
-        </div>
+        <sub-header title="Playlists stuff"> </sub-header>
+
         <div class="content flex justify-evenly flex-wrap">
             <div class="feature">
                 <h3 class="title" style="padding-left: 0px">Playlist Viewer</h3>
@@ -18,14 +13,9 @@
                     </p>
                     <p>Might not show maps uploaded within the last 24 hrs</p>
                 </Message>
-                <vs-button
-                    border
-                    primary
-                    animation-type="scale"
-                    @click="$refs.playlistInput.click()"
-                >
-                    <template> Upload playlist </template>
-                </vs-button>
+                <my-button @click="$refs.playlistInput.click()">
+                    Upload playlist
+                </my-button>
                 <input
                     @change="readPlaylist"
                     style="display: None"
@@ -60,9 +50,8 @@
                     <p class="grey">
                         You can also enter a comma separated list
                     </p>
-                    <vs-input
+                    <InputText
                         v-model="mapperInput"
-                        type="search"
                         placeholder="Mapper name"
                         v-on:keyup.enter="addMapper"
                     />
@@ -72,10 +61,10 @@
                             v-for="mapper in mappers"
                             :key="mapper"
                         >
-                            <vs-button icon @click="removeMapper(mapper)">
+                            <my-button @click="removeMapper(mapper)">
                                 {{ mapper }}
                                 <i class="bx bx-x"></i>
-                            </vs-button>
+                            </my-button>
                         </div>
                     </div>
                 </div>
@@ -120,13 +109,14 @@
                 </div>
 
                 <div class="myrow">
-                    <vs-button
+                    <my-button
+                        class="w-full"
                         :loading="loading"
                         @click="fetchPlaylist"
                         :disabled="!mappers.length || loading"
                     >
                         Make da playlist
-                    </vs-button>
+                    </my-button>
                 </div>
             </div>
         </div>
@@ -286,11 +276,6 @@ export default {
             .mapper {
                 max-width: 200px;
                 margin: 0px 10px 10px 0px;
-
-                button {
-                    padding: 0px 10px;
-                }
-
                 i {
                     margin-left: 5px;
                 }

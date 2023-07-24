@@ -20,22 +20,6 @@
             />
             <ProgressSpinner class="mt-4" v-if="loading" />
 
-            <!-- <vs-select
-                v-model="selectedMapper"
-                label-placeholder="Select mapper"
-                class="select"
-                :loading="loading"
-            >
-                <vs-option
-                    v-for="(item, key) in mappers"
-                    :key="key"
-                    :value="item.mapperId"
-                    :label="item.mapperName"
-                >
-                    {{ item.mapperName }}
-                </vs-option>
-            </vs-select> -->
-
             <!-- // TODO replace with primevue table -->
             <vue-good-table
                 v-if="maps"
