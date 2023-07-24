@@ -79,10 +79,6 @@
 export default {
     transition: 'slide-bottom',
     async created() {
-        if ((this.isAuthenticated = await this.$isAuthenticated())) {
-            this.discord['status'] = 'Logout '
-            this.discord['href'] = this.$config.discordLogout
-        }
         if (this.$route.query.search) {
             this.search = this.$route.query.search
             this.startSearch()
@@ -94,17 +90,12 @@ export default {
             console.log(this.scores.length)
         },
     },
-    data({ $config: { discordLogin } }) {
+    data() {
         return {
             scores: [],
             search: '',
             page: 0,
             loading: true,
-            isAuthenticated: false,
-            discord: {
-                status: 'Login ',
-                href: discordLogin,
-            },
             paginatorOffset: 0,
         }
     },

@@ -1,5 +1,5 @@
 <template>
-    <Button v-bind="attrs" @click.stop="onClick()"><slot></slot></Button>
+    <Button v-bind="attrs" @click.stop="onClick"><slot></slot></Button>
     <!-- v-on="$listeners" -->
 </template>
 
@@ -23,7 +23,7 @@ export default {
     props: ['icon', 'iconPos', 'href', 'to'],
     mounted() {},
     methods: {
-        onClick() {
+        onClick(event) {
             if (this.to) {
                 this.$router.push(this.to)
             } else if (this.href) {
@@ -32,7 +32,7 @@ export default {
                     this.$attrs.notblank == undefined ? '_blank' : '',
                 )
             } else {
-                if (this.$listeners.click) this.$listeners.click()
+                if (this.$listeners.click) this.$listeners.click(event)
             }
         },
     },
@@ -43,8 +43,13 @@ export default {
             if (this.$attrs.notround == undefined)
                 attrs.class += ' p-button-rounded'
             if (this.$attrs.nomargin == undefined) attrs.class += ' margin'
+            if (this.$attrs.nohover == undefined) attrs.class += ' hoveranim'
             if (this.$attrs.noiconmargin == undefined)
                 attrs.class += ' iconmargin'
+
+            if (this.$attrs.reset != undefined) {
+                attrs.class = ''
+            }
 
             if (this.icon) {
                 attrs.icon = this.computedIcon
@@ -95,7 +100,7 @@ export default {
         color: #fff;
     }
 
-    &:hover {
+    &.hoveranim:hover {
         // -webkit-box-shadow: 0 10px 20px -10px #111214;
         // -webkit-box-shadow: 0 10px 20px -10px rgba(var(--vs-color), 1);
         // box-shadow: 0 10px 20px -10px #111214;
