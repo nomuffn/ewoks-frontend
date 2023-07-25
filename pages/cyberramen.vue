@@ -80,7 +80,7 @@
                                 job.done == 1
                                     ? 'Done'
                                     : job.done == 0
-                                    ? 'Generating...'
+                                    ? 'Queued'
                                     : 'ERROR'
                             }}</InlineMessage
                         >
@@ -91,13 +91,16 @@
                         <!-- p-button-text -->
                         <my-button
                             :label="job.SongName"
-                            class="p-button-raised p-button-outlined"
+                            :outlined="
+                                !expandedRows.some((i) => i.JobId == job.JobId)
+                            "
                             @click="toggleRow(job)"
                         />
                     </template>
                 </Column>
                 <Column field="Diff" header="Diff" sortable />
-                <Column field="CompletedDate" header="CompletedDate" sortable />
+                <Column field="CreatedDate" header="Created" sortable />
+                <Column field="CompletedDate" header="Completed" sortable />
                 <Column header="Actions">
                     <template #body="{ data: job }">
                         <div class="flex">
@@ -542,7 +545,10 @@ export default {
                     ),
                 )
             }
-            return jobs.sort((i) => i.CreatedDate)
+
+            return jobs.sort(
+                (a, b) => Date.parse(b.CreatedDate) - Date.parse(a.CreatedDate),
+            )
         },
         jobUserIds() {
             return [...new Set(this.jobs.map((job) => job.UserId))].sort()
