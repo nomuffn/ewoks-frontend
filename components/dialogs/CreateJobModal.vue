@@ -8,27 +8,44 @@
         </header>
         <section class="modal-card-body">
             <div class="flex flex-col">
-                <p>Map hash</p>
-                <InputText
-                    type="text"
-                    v-model="job.songHash"
-                    placeholder="Map hash"
-                    class="mt-1 mb-2"
-                />
-                <p>Mode</p>
-                <InputText
-                    type="text"
+                <p class="mb-1">Enter map</p>
+                <p class="mb-1 opacity-75">hash, discord link ending on .zip</p>
+                <div class="flex">
+                    <InputText
+                        type="text"
+                        v-model="job.songHash"
+                        placeholder="Map"
+                        class="flex-1"
+                    />
+                    <my-button
+                        nomargin
+                        label="Fetch"
+                        @click="fetchMap"
+                        :disabled="!job.songHash.length"
+                    />
+                </div>
+                <p class="mt-2 mb-1">Mode</p>
+                <Dropdown
                     v-model="job.mode"
+                    :options="computedModes"
                     placeholder="Mode"
-                    class="mt-1 mb-2"
+                    :editable="true"
+                    appendTo="body"
                 />
-                <p>Difficulty</p>
-                <InputText
-                    type="text"
+                <p class="mt-2 mb-1">Difficulty</p>
+                <Dropdown
                     v-model="job.diff"
-                    placeholder="Diff"
-                    class="mt-1 mb-2"
+                    :options="diffs"
+                    placeholder="Difficulty"
+                    :editable="true"
+                    appendTo="body"
                 />
+
+                <div class="mt-4">
+                    <InlineMessage class="w-full" severity="warn"
+                        >V3, NE and ME not supported!</InlineMessage
+                    >
+                </div>
             </div>
         </section>
         <footer class="modal-card-foot">
@@ -60,13 +77,52 @@ export default {
                 mode: 'Standard', // TODO Dropdown
                 diff: 'ExpertPlus', // TODO Dropdown
             },
+            modes: [],
             loading: false,
         }
     },
     created() {},
     methods: {
-        async load() {},
+        async fetchMap() {
+            const type = this.isBsrCode ? 'id' : 'hash'
+
+            const map = (
+                await this.$http.get(
+                    `https://api.beatsaver.com/maps/${type}/${this.job.songHash}`,
+                )
+            ).data
+
+            this.job.songHash = map.versions[0].hash
+
+            let modes = {}
+            map.versions[0].diffs.forEach((i) => {
+                if (!modes[i.characteristic]) {
+                    modes[i.characteristic] = map.versions[0].diffs
+                        .filter((ii) => ii.characteristic == i.characteristic)
+                        .map((ii) => ii.difficulty)
+                }
+            })
+            this.modes = modes
+            this.job.mode = this.computedModes[0]
+        },
         async submit() {
+            if (
+                this.job.songHash.includes('http') &&
+                !this.job.songHash.includes('https://cdn.discordapp.com/')
+            )
+                return this.$toast.add({
+                    severity: 'error',
+                    summary: `Only links from discord are allowed`,
+                    life: 3000,
+                })
+
+            if (this.isBsrCode)
+                return this.$toast.add({
+                    severity: 'error',
+                    summary: `You entered a bsr code, please click fetch`,
+                    life: 3000,
+                })
+
             this.loading = true
             try {
                 const result = await this.$crrApi.post('job', this.job, {
@@ -97,6 +153,15 @@ export default {
             return (
                 Object.values(this.job).filter((i) => i.length > 0).length != 3
             )
+        },
+        isBsrCode() {
+            return this.job.songHash.length > 0 && this.job.songHash.length <= 6
+        },
+        computedModes() {
+            return Object.keys(this.modes)
+        },
+        diffs() {
+            return this.modes[this.job.mode]
         },
     },
 }
