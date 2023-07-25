@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="navbar flex-wrap">
+        <div class="navbar max-[1000px]:flex-wrap">
             <div class="flex justify-start">
                 <my-button href="https://ko-fi.com/muffn" help>
                     <p>Buy me a muffin irl 🧁</p>
