@@ -23,6 +23,7 @@
             />
 
             <Dropdown
+                v-if="jobUserIds.length > 7"
                 v-model="jobFilters.userid"
                 placeholder="Filter by user"
                 :options="jobUserIds"
@@ -47,7 +48,7 @@
             >
 
             <ProgressBar
-                v-if="!computedJobs.length"
+                v-if="loading && !this.computedJobs.length"
                 class="my-4"
                 style="width: 100px"
                 mode="indeterminate"
@@ -480,6 +481,7 @@ export default {
             users: [],
             jobsOffset: 0,
             rowsCount: 50,
+            loading: false,
         }
     },
     timers: {
@@ -514,6 +516,7 @@ export default {
     computed: {
         computedJobs() {
             let jobs = this.jobs
+
             if (this.filteredJobs.length > 0) {
                 jobs = jobs.filter((job) =>
                     this.filteredJobs.includes(job.JobId),
@@ -546,6 +549,7 @@ export default {
             if (this.error) return
 
             console.log('load jobs')
+            this.loading = true
 
             try {
                 let jobs = (await this.$crrApi.get('jobs')).data
@@ -568,7 +572,6 @@ export default {
                     })
                     .reverse()
 
-                console.log({ force })
                 if (force) {
                     this.jobs = []
                     this.jobs = jobs
@@ -596,6 +599,8 @@ export default {
                     life: 3000,
                 })
                 this.error = e
+            } finally {
+                this.loading = false
             }
         },
         async createJob() {
@@ -607,7 +612,9 @@ export default {
                 fullScreen: false,
                 props: {},
                 events: {
-                    close: () => {},
+                    close: () => {
+                        this.loadJobs()
+                    },
                 },
             })
         },
@@ -763,7 +770,6 @@ export default {
                     ...this.computedJobs.filter((x) => x.JobId === job.JobId),
                     ...this.expandedRows,
                 ]
-                console.log(job)
                 this.loadJob(job)
             } else {
                 this.expandedRows = this.expandedRows.filter(
@@ -807,7 +813,7 @@ export default {
 .modal-card-head,
 .modal-card-body {
     // background-color: var(--surface-a) !important;
-    background-color: transparent !important;
+    background-color: var(--surface-a) !important;
     color: #fff;
 
     .modal-card-title {

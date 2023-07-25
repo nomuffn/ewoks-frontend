@@ -34,11 +34,12 @@
         <footer class="modal-card-foot">
             <Button
                 label="Close"
-                class="mx-2 ml-auto p-button-secondary"
+                class="p-button-secondary"
                 @click="$emit('close')"
                 :disabled="loading"
             />
             <Button
+                style="margin-left: auto"
                 label="Submit"
                 @click="submit()"
                 :disabled="submitReady || loading"
