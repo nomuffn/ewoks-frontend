@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="navbar">
+        <div class="navbar flex-wrap">
             <div class="flex justify-start">
                 <my-button href="https://ko-fi.com/muffn" help>
                     <p>Buy me a muffin irl 🧁</p>
@@ -9,7 +9,7 @@
             <div class="self-center">
                 <h2 class="title">muffnlabs</h2>
             </div>
-            <div class="flex justify-end">
+            <div class="flex justify-end flex-wrap">
                 <my-button
                     href="https://beatsaver.com/profile/4284309"
                     warning
