@@ -78,6 +78,7 @@
                 :id="page.path"
                 :text="!isActive(page) || false"
                 :raised="isActive(page) || false"
+                :class="{ new: page.new }"
             >
                 <p style="color: #fff; font-weight: bold">{{ page.name }}</p>
                 <i :class="`bx ${page.icon}`"></i>
@@ -143,12 +144,12 @@ export default {
                     icon: 'bx-home',
                     name: 'Home',
                 },
-                // {
-                //     path: 'cyberramen',
-                //     icon: 'bx-bot',
-                //     name: 'CyberRamen',
-                //     new: true
-                // },
+                {
+                    path: 'cyberramen',
+                    icon: 'bx-bot',
+                    name: 'CyberRamen',
+                    new: true,
+                },
                 {
                     path: 'tierlist',
                     icon: 'bx-pyramid',
@@ -213,14 +214,12 @@ button.new {
         padding: 0px 10px;
         height: auto;
         position: absolute;
-        background: #c700ff;
+        color: #c700ff;
         width: auto;
-        bottom: 0;
-        left: 50%;
-        color: white;
         border-radius: 10px;
         font-size: 60%;
-        top: auto;
+        bottom: 0px;
+        font-weight: bold;
     }
 }
 .page {
