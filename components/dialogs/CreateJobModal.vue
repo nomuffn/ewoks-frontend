@@ -149,9 +149,12 @@ export default {
                     life: 3000,
                 })
             } catch (e) {
+                console.log(e.response)
                 this.$toast.add({
                     severity: 'error',
-                    summary: `${e.response.statusText} ${e.response.status}`,
+                    summary: `${e.response.statusText || e.response.data} ${
+                        e.response.status
+                    }`,
                     life: 3000,
                 })
             } finally {
