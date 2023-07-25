@@ -261,7 +261,7 @@
                                     ></Column>
                                     <Column
                                         field="mistakes"
-                                        header="Mistakes"
+                                        header="Amount of replays that missed"
                                         sortable
                                     >
                                         <template #body="{ data: mistakes }">
