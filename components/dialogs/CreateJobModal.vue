@@ -9,7 +9,9 @@
         <section class="modal-card-body">
             <div class="flex flex-col">
                 <p class="mb-1">Enter map</p>
-                <p class="mb-1 opacity-75">hash, discord link ending on .zip</p>
+                <p class="mb-1 opacity-75">
+                    hash, bsr code, discord link ending on .zip
+                </p>
                 <div class="flex">
                     <InputText
                         type="text"
