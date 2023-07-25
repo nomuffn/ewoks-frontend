@@ -30,7 +30,7 @@
                     <i class="bx bxl-github bx-sm"></i>
                 </my-button>
                 <my-button
-                    href="https://www.twitch.tv/muffnnt"
+                    href="https://www.twitch.tv/muffn_"
                     noiconmargin
                     outlined
                     help
