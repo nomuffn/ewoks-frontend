@@ -1,6 +1,8 @@
 <template>
     <div class="cyberramen">
-        <sub-header title="CyberRamen Request Tool"> </sub-header>
+        <sub-header title="CyberRamen Request Tool">
+            <p v-html="description"></p>
+        </sub-header>
 
         <div v-if="error">
             <p>{{ error }}</p>
@@ -23,7 +25,7 @@
             />
 
             <Dropdown
-                v-if="jobUserIds.length > 7"
+                v-if="jobUserIds.length > 1"
                 v-model="jobFilters.userid"
                 placeholder="Filter by user"
                 :options="jobUserIds"
@@ -482,6 +484,7 @@ export default {
             jobsOffset: 0,
             rowsCount: 50,
             loading: false,
+            description: '',
         }
     },
     timers: {
@@ -490,6 +493,11 @@ export default {
             immediate: true,
             repeat: true,
         },
+    },
+    async created() {
+        this.description = (
+            await this.$defaultApi.$get('general/stuff/public_cyberramen')
+        ).json.html
     },
     async mounted() {
         this.profile = await this.$auth.fetch()
@@ -534,7 +542,7 @@ export default {
                     ),
                 )
             }
-            return jobs
+            return jobs.sort((i) => i.CreatedDate)
         },
         jobUserIds() {
             return [...new Set(this.jobs.map((job) => job.UserId))].sort()
@@ -592,10 +600,9 @@ export default {
 
                 this.jobs.push(...jobs)
             } catch (e) {
-                console.log(e)
                 this.$toast.add({
                     severity: 'error',
-                    summary: 'Something went wrong',
+                    summary: `${e.response.statusText} ${e.response.status}`,
                     life: 3000,
                 })
                 this.error = e

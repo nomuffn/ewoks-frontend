@@ -83,10 +83,9 @@ export default {
             } catch (e) {
                 this.$toast.add({
                     severity: 'error',
-                    summary: 'Something went wrong :(',
+                    summary: `${e.response.statusText} ${e.response.status}`,
                     life: 3000,
                 })
-                console.log(e)
             } finally {
                 this.loading = false
                 this.$emit('close')
