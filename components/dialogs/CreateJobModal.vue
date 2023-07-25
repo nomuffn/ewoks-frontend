@@ -86,26 +86,36 @@ export default {
     created() {},
     methods: {
         async fetchMap() {
-            const type = this.isBsrCode ? 'id' : 'hash'
+            try {
+                const type = this.isBsrCode ? 'id' : 'hash'
 
-            const map = (
-                await this.$http.get(
-                    `https://api.beatsaver.com/maps/${type}/${this.job.songHash}`,
-                )
-            ).data
+                const map = (
+                    await this.$http.get(
+                        `https://api.beatsaver.com/maps/${type}/${this.job.songHash}`,
+                    )
+                ).data
 
-            this.job.songHash = map.versions[0].hash
+                this.job.songHash = map.versions[0].hash
 
-            let modes = {}
-            map.versions[0].diffs.forEach((i) => {
-                if (!modes[i.characteristic]) {
-                    modes[i.characteristic] = map.versions[0].diffs
-                        .filter((ii) => ii.characteristic == i.characteristic)
-                        .map((ii) => ii.difficulty)
-                }
-            })
-            this.modes = modes
-            this.job.mode = this.computedModes[0]
+                let modes = {}
+                map.versions[0].diffs.forEach((i) => {
+                    if (!modes[i.characteristic]) {
+                        modes[i.characteristic] = map.versions[0].diffs
+                            .filter(
+                                (ii) => ii.characteristic == i.characteristic,
+                            )
+                            .map((ii) => ii.difficulty)
+                    }
+                })
+                this.modes = modes
+                this.job.mode = this.computedModes[0]
+            } catch (e) {
+                return this.$toast.add({
+                    severity: 'error',
+                    summary: `Couldnt find map`,
+                    life: 3000,
+                })
+            }
         },
         async submit() {
             if (
