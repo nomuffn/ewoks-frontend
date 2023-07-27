@@ -679,6 +679,7 @@ export default {
                     const newReplay = {
                         ...replay.ReplayParams,
                         mistakes: replay.ReplayMistakes.length,
+                        MapUrl: job.MapUrl,
                     }
 
                     job.sortedReplays[replayIndex] = newReplay

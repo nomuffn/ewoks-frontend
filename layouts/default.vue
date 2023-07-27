@@ -13,7 +13,7 @@
                 <my-button
                     href="https://beatsaver.com/profile/4284309"
                     warning
-                    outlined
+                    text
                     noiconmargin
                 >
                     <img
@@ -24,7 +24,7 @@
                 <my-button
                     href="https://github.com/nomuffn"
                     noiconmargin
-                    outlined
+                    text
                     secondary
                 >
                     <i class="bx bxl-github bx-sm"></i>
@@ -32,7 +32,7 @@
                 <my-button
                     href="https://www.twitch.tv/muffn_"
                     noiconmargin
-                    outlined
+                    text
                     help
                 >
                     <i class="bx bxl-twitch bx-sm"></i>
@@ -41,15 +41,11 @@
                 <my-button
                     href="https://discordapp.com/users/219099186505711616/"
                     noiconmargin
-                    outlined
+                    text
                 >
                     <i class="bx bxl-discord bx-sm"></i>
                 </my-button>
-                <my-button
-                    href="https://twitter.com/nomuffn"
-                    noiconmargin
-                    outlined
-                >
+                <my-button href="https://twitter.com/nomuffn" noiconmargin text>
                     <i class="bx bxl-twitter bx-sm"></i>
                 </my-button>
 
