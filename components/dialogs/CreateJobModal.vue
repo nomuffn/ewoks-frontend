@@ -44,7 +44,7 @@
                 />
 
                 <div class="mt-4">
-                    <InlineMessage class="w-full" severity="warn"
+                    <InlineMessage class="w-full" severity="error"
                         >V3, NE and ME not supported!</InlineMessage
                     >
                 </div>
@@ -182,5 +182,11 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
+::v-deep .p-inline-message {
+    span {
+        font-weight: bold;
+        font-size: 150%;
+    }
+}
 </style>
