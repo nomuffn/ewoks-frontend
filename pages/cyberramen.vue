@@ -758,6 +758,12 @@ export default {
                 url = `https://replay.beatleader.xyz/?link=${job.replayUrl}`
             }
 
+            if (job.MapUrl)
+                url = `${url}&mapLink=${job.MapUrl.replace(
+                    'http://',
+                    'https://',
+                )}`
+
             window.open(url, '_blank').focus()
         },
         getJobData(job) {
