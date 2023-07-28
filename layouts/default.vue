@@ -147,6 +147,41 @@ export default {
                     new: true,
                 },
                 {
+                    path: 'maptts',
+                    icon: 'bx-tv',
+                    name: 'MapTts',
+                },
+                {
+                    path: 'ranking-stuff',
+                    icon: 'bx-list-ul',
+                    name: 'Ranking',
+                },
+                {
+                    path: 'stats/beatsaver',
+                    icon: 'bx-stats',
+                    name: 'Stats',
+                },
+                {
+                    path: 'bsst',
+                    icon: 'bx-trending-up',
+                    name: 'Bsst',
+                },
+                {
+                    path: 'playlists',
+                    icon: 'bxs-playlist',
+                    name: 'Playlists stuff',
+                },
+                {
+                    path: 'configs',
+                    icon: 'bx-file-blank',
+                    name: 'Configs',
+                },
+                {
+                    path: 'tools',
+                    icon: 'bxs-wrench',
+                    name: 'Tools/Misc',
+                },
+                {
                     path: 'tierlist',
                     icon: 'bx-pyramid',
                     name: 'Tierlists',
@@ -155,41 +190,6 @@ export default {
                     path: 'guess',
                     icon: 'bx-question-mark',
                     name: 'Guess',
-                },
-                {
-                    path: 'ranking-stuff',
-                    icon: 'bx-list-ul',
-                    name: 'Ranking',
-                },
-                {
-                    path: 'maptts',
-                    icon: 'bx-tv',
-                    name: 'MapTts',
-                },
-                {
-                    path: 'bsst',
-                    icon: 'bx-trending-up',
-                    name: 'Bsst',
-                },
-                {
-                    path: 'stats/beatsaver',
-                    icon: 'bx-stats',
-                    name: 'Stats',
-                },
-                {
-                    path: 'playlists',
-                    icon: 'bxs-playlist',
-                    name: 'Playlists stuff',
-                },
-                {
-                    path: 'tools',
-                    icon: 'bxs-wrench',
-                    name: 'Tools/Misc',
-                },
-                {
-                    path: 'configs',
-                    icon: 'bx-file-blank',
-                    name: 'Configs',
                 },
                 {
                     path: 'timeline',
