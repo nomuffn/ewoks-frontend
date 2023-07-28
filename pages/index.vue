@@ -32,8 +32,8 @@
                         @nomuffn
                         <i class="bx bxl-twitter bx-sm"></i>
                     </my-button>
-                    <my-button help href="https://www.twitch.tv/muffnnt">
-                        muffnnt
+                    <my-button help href="https://www.twitch.tv/muffn_">
+                        muffn_
                         <i class="bx bxl-twitch bx-sm"></i>
                     </my-button>
                     <my-button secondary href="https://github.com/nomuffn">
