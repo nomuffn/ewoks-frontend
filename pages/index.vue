@@ -41,6 +41,25 @@
                         <i class="bx bxl-github bx-sm"></i>
                     </my-button>
                 </div>
+                <div>
+                    <blockquote class="twitter-tweet" data-theme="dark">
+                        <p lang="zxx" dir="ltr">
+                            <a href="https://t.co/aTMcnCed7g"
+                                >pic.twitter.com/aTMcnCed7g</a
+                            >
+                        </p>
+                        &mdash; かめりあ/Camellia @ 秋M3一展2F T23a (@cametek)
+                        <a
+                            href="https://twitter.com/cametek/status/1369753294977998848?ref_src=twsrc%5Etfw"
+                            >March 10, 2021</a
+                        >
+                    </blockquote>
+                    <script
+                        async
+                        src="https://platform.twitter.com/widgets.js"
+                        charset="utf-8"
+                    ></script>
+                </div>
                 <div class="flex flex-col">
                     <div class="flex flex-row flex-wrap">
                         <img
