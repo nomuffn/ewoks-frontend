@@ -1,11 +1,6 @@
 <template>
     <div v-if="uniqueId" class="field-checkbox flex items-center">
-        <Checkbox
-            v-model="checked"
-            v-bind="$attrs"
-            :binary="true"
-            :id="uniqueId"
-        />
+        <Checkbox v-model="checked" v-bind="$attrs" :binary="true" :id="uniqueId" />
         <label class="ml-2 mr-4" :for="uniqueId">{{ label }}</label>
     </div>
 </template>

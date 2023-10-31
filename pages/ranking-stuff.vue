@@ -6,20 +6,12 @@
             <h2 class="title">Qualified Maps</h2>
 
             <div class="flex">
-                <my-button
-                    href="https://muffnlabs.de/static/qualified-maps.bplist"
-                >
-                    Download playlist
-                </my-button>
-                <my-button href="https://scoresaber.com/ranking/requests">
-                    Rank Requests
-                </my-button>
+                <my-button href="https://muffnlabs.de/static/qualified-maps.bplist"> Download playlist </my-button>
+                <my-button href="https://scoresaber.com/ranking/requests"> Rank Requests </my-button>
             </div>
             <Message class="" :closable="false">
                 Thanks to
-                <a href="https://twitter.com/miitchelVR" target="_blank"
-                    ><strong>miitchel</strong></a
-                >
+                <a href="https://twitter.com/miitchelVR" target="_blank"><strong>miitchel</strong></a>
                 for some code to get this going again 🤗
             </Message>
 
@@ -82,12 +74,10 @@ export default {
         }
     },
     async created() {
-        this.maps = (await this.$defaultApi.$get('scoresaber/qualified')).sort(
-            (a, b) => {
-                if (a.hoursleft > 0) return a.hoursleft - b.hoursleft
-                else return b.hoursleft - a.hoursleft
-            },
-        )
+        this.maps = (await this.$defaultApi.$get('scoresaber/qualified')).sort((a, b) => {
+            if (a.hoursleft > 0) return a.hoursleft - b.hoursleft
+            else return b.hoursleft - a.hoursleft
+        })
         this.stats = await this.$defaultApi.$get('scoresaber/rankedspans')
         this.votesStats = await this.$defaultApi.$get('scoresaber/rq/stats')
     },

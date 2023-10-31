@@ -12,9 +12,7 @@
 
         <div class="content">
             <div class="flex flex-col mt-4 items-center flex-grow">
-                <div class="my-4 font-bold text-2xl">
-                    Current run: {{ points }}pts ({{ guesses }} guesses)
-                </div>
+                <div class="my-4 font-bold text-2xl">Current run: {{ points }}pts ({{ guesses }} guesses)</div>
                 <template v-if="loading">
                     <Loading />
                 </template>
@@ -28,11 +26,7 @@
                         </iframe>
                     </div>
 
-                    <InputNumber
-                        v-model="rankGuess"
-                        placeholder="Guess the rank"
-                        class="my-4"
-                    />
+                    <InputNumber v-model="rankGuess" placeholder="Guess the rank" class="my-4" />
 
                     <Dropdown
                         v-model="hmdGuess"
@@ -42,71 +36,44 @@
                         class="mb-4"
                     />
 
-                    <Button
-                        label="Submit"
-                        :disabled="!hmdGuess || !rankGuess"
-                        @click="submit"
-                    />
-                    <Button
-                        style="margin-top: 1rem"
-                        label="Skip"
-                        @click="next"
-                    />
+                    <Button label="Submit" :disabled="!hmdGuess || !rankGuess" @click="submit" />
+                    <Button style="margin-top: 1rem" label="Skip" @click="next" />
                 </template>
                 <template v-else>
                     <div class="flex flex-col mt-4">
                         <p class="self-center font-bold text-2xl">Result</p>
 
                         <div class="my-4 flex">
-                            <img
-                                class="rounded-full w-24"
-                                :src="playerData.player.profilePicture"
-                            />
+                            <img class="rounded-full w-24" :src="playerData.player.profilePicture" />
                             <div class="flex flex-col ml-4 justify-center">
                                 <p class="font-bold text-2xl">
                                     {{ playerData.player.name }}
                                 </p>
-                                <a
-                                    :href="`https://scoresaber.com/u/${playerData.player.id}`"
-                                    target="_blank"
+                                <a :href="`https://scoresaber.com/u/${playerData.player.id}`" target="_blank"
                                     >Scoresaber</a
                                 >
-                                <a
-                                    :href="`https://twitch.tv/${score.playerName}`"
-                                    target="_blank"
-                                    >Twitch</a
-                                >
+                                <a :href="`https://twitch.tv/${score.playerName}`" target="_blank">Twitch</a>
                             </div>
                         </div>
 
                         <div class="my-4 flex flex-col">
                             <span
-                                >Gussed rank:
-                                <strong>#{{ rankGuess }}</strong></span
+                                >Gussed rank: <strong>#{{ rankGuess }}</strong></span
                             >
                             <span
-                                >Actual rank:
-                                <strong>#{{ actualRank }}</strong></span
+                                >Actual rank: <strong>#{{ actualRank }}</strong></span
                             >
-                            <p class="font-bold">
-                                => +{{ rankGuessPoints }} points
-                            </p>
+                            <p class="font-bold">=> +{{ rankGuessPoints }} points</p>
                         </div>
 
                         <div class="my-4 flex flex-col">
                             <span
-                                >Gussed hmd:
-                                <strong>{{
-                                    hmdGuess && hmdGuess.value
-                                }}</strong></span
+                                >Gussed hmd: <strong>{{ hmdGuess && hmdGuess.value }}</strong></span
                             >
                             <span
-                                >Actual hmd:
-                                <strong>{{ actualHMD }}</strong></span
+                                >Actual hmd: <strong>{{ actualHMD }}</strong></span
                             >
-                            <p class="font-bold">
-                                => +{{ hmdGuessPoints }} points
-                            </p>
+                            <p class="font-bold">=> +{{ hmdGuessPoints }} points</p>
                         </div>
                     </div>
 
@@ -175,9 +142,7 @@ export default {
 
             // TODO save hmd in randomScore in the future, this is kinda shit but laziness ftw
             try {
-                this.playerData = await this.$mapttsApi.$get(
-                    `randomScore/${this.score.scoresaberId}`,
-                )
+                this.playerData = await this.$mapttsApi.$get(`randomScore/${this.score.scoresaberId}`)
             } catch (e) {
                 this.$toast.add({
                     severity: 'error',
@@ -202,14 +167,10 @@ export default {
     },
     computed: {
         videoId() {
-            return this.score?.twitchUrl
-                .split('https://www.twitch.tv/videos/')[1]
-                .split('?')[0]
+            return this.score?.twitchUrl.split('https://www.twitch.tv/videos/')[1].split('?')[0]
         },
         timestamp() {
-            return this.score?.twitchUrl
-                .split('https://www.twitch.tv/videos/')[1]
-                .split('?')[1]
+            return this.score?.twitchUrl.split('https://www.twitch.tv/videos/')[1].split('?')[1]
         },
         actualRank() {
             return this.playerData?.player?.rank
@@ -221,9 +182,7 @@ export default {
             const guess = this.rankGuess
             const rank = this.actualRank
 
-            return Math.round(
-                10 * Math.max(1 - Math.abs(rank - guess) / rank, 0) ** 2,
-            )
+            return Math.round(10 * Math.max(1 - Math.abs(rank - guess) / rank, 0) ** 2)
         },
         hmdGuessPoints() {
             if (this.hmdGuess?.value == this.actualHMD) return 2

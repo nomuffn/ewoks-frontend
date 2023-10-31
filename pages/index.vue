@@ -1,4 +1,3 @@
-//
 <template>
     <div class="start">
         <div class="content">
@@ -17,14 +16,9 @@
                         warning
                     >
                         My Maps
-                        <img
-                            class="w-6 ml-1"
-                            src="https://beatsaver.com/static/favicon/favicon-32x32.png"
-                        />
+                        <img class="w-6 ml-1" src="https://beatsaver.com/static/favicon/favicon-32x32.png" />
                     </my-button>
-                    <my-button
-                        href="https://discordapp.com/users/219099186505711616/"
-                    >
+                    <my-button href="https://discordapp.com/users/219099186505711616/">
                         muffn#2345
                         <i class="bx bxl-discord bx-sm"></i>
                     </my-button>
@@ -42,20 +36,13 @@
                     </my-button>
                 </div>
                 <div>
-                    <a
-                        href="https://twitter.com/cametek/status/1369753294977998848"
-                        target="_blank"
+                    <a href="https://twitter.com/cametek/status/1369753294977998848" target="_blank"
                         ><img src="/camellia.png"
                     /></a>
                 </div>
                 <div class="flex flex-col">
                     <div class="flex flex-row flex-wrap">
-                        <img
-                            v-for="emote in emotes"
-                            :key="emote"
-                            :src="emote"
-                            class="mx-2"
-                        />
+                        <img v-for="emote in emotes" :key="emote" :src="emote" class="mx-2" />
                     </div>
                     <p class="mt-2 mb-4">
                         Made by
@@ -70,11 +57,7 @@
                     <img class="w-80 self-center" src="muffnsuic.gif" />
                     <p class="mt-2 mb-4">
                         Made by
-                        <a
-                            class="colored"
-                            href="https://twitter.com/AntiLink99"
-                            target="_blank"
-                            style="color: white"
+                        <a class="colored" href="https://twitter.com/AntiLink99" target="_blank" style="color: white"
                             >AntiLink</a
                         >
                     </p>
@@ -98,9 +81,7 @@ export default {
         }
     },
     async mounted() {
-        this.emotes = (
-            await this.$defaultApi.$get('general/stuff/public_home_emotes')
-        ).json
+        this.emotes = (await this.$defaultApi.$get('general/stuff/public_home_emotes')).json
         console.log(this.emotes)
     },
 }

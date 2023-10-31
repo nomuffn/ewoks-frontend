@@ -5,20 +5,11 @@
                 <h2>Filter for ranked maps</h2>
                 <div class="myrow">
                     <label>Filter by mapper</label>
-                    <InputText
-                        v-model="mapperName"
-                        placeholder="Mapper name"
-                        v-on:keyup.enter="loadResults"
-                    />
+                    <InputText v-model="mapperName" placeholder="Mapper name" v-on:keyup.enter="loadResults" />
                 </div>
                 <div class="myrow">
                     <label>Order by</label>
-                    <Dropdown
-                        v-model="column"
-                        :options="allColumns"
-                        placeholder="Order by"
-                        scrollHeight="400px"
-                    />
+                    <Dropdown v-model="column" :options="allColumns" placeholder="Order by" scrollHeight="400px" />
                 </div>
                 <div class="myrow">
                     <label>Minimum stars: {{ stars }}</label>
@@ -33,12 +24,7 @@
                 <div class="myrow">
                     <label>Uploaded since: {{ getFormattedMonths }}</label>
                     <!-- // TODO replace with primevue slider -->
-                    <Slider
-                        v-model="months"
-                        :min="0"
-                        :max="getMonthsDifference"
-                        :tooltips="false"
-                    />
+                    <Slider v-model="months" :min="0" :max="getMonthsDifference" :tooltips="false" />
                 </div>
                 <div class="myrow">
                     <div class="radios">
@@ -51,28 +37,16 @@
                 </div>
                 <div class="myrow">
                     <!-- // TODO loading -->
-                    <my-button
-                        class="w-full"
-                        :loading="true"
-                        @click="loadResults"
-                    >
-                        Filter
-                    </my-button>
+                    <my-button class="w-full" :loading="true" @click="loadResults"> Filter </my-button>
                 </div>
             </div>
         </div>
         <div class="cards-container">
             <h2>Results</h2>
             <Loading v-if="loading" />
-            <p v-else-if="getVisibleItems.length == 0" class="grey">
-                No results
-            </p>
+            <p v-else-if="getVisibleItems.length == 0" class="grey">No results</p>
             <div v-else class="cards vertical">
-                <div
-                    class="card"
-                    v-for="(item, index) in getVisibleItems"
-                    :key="item.key"
-                >
+                <div class="card" v-for="(item, index) in getVisibleItems" :key="item.key">
                     <div class="top">
                         <div>
                             <p class="mapper">{{ item['levelAuthorName'] }}</p>
@@ -83,16 +57,10 @@
                         </div>
                     </div>
                     <div class="stats">
-                        <p :class="{ colored: isActive('ratio') }">
-                            Ratio: {{ item['ratio'] }}
-                        </p>
-                        <p :class="{ colored: isActive('upvotes') }">
-                            Upvotes: {{ item['upvotes'] }}
-                        </p>
+                        <p :class="{ colored: isActive('ratio') }">Ratio: {{ item['ratio'] }}</p>
+                        <p :class="{ colored: isActive('upvotes') }">Upvotes: {{ item['upvotes'] }}</p>
                         <p>Star: {{ item['highestStar'] }}</p>
-                        <p :class="{ colored: isActive('downvotes') }">
-                            Downvotes: {{ item['downvotes'] }}
-                        </p>
+                        <p :class="{ colored: isActive('downvotes') }">Downvotes: {{ item['downvotes'] }}</p>
                         <p>Bpm: {{ item['bpm'] }}</p>
                         <p style="flex: 1 1 100%">
                             Uploaded:
@@ -100,11 +68,7 @@
                         </p>
                     </div>
                 </div>
-                <my-button
-                    v-if="visibleItems < results.length"
-                    class="showMore"
-                    @click="visibleItems += 50"
-                >
+                <my-button v-if="visibleItems < results.length" class="showMore" @click="visibleItems += 50">
                     Show more
                 </my-button>
             </div>
@@ -148,11 +112,7 @@ export default {
         getMonthsDifference() {
             var date1 = new Date(this.gameReleaseDate * 1000)
             var difference = date1.getTime() - new Date()
-            return (
-                Math.abs(
-                    Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437),
-                ) - 1
-            )
+            return Math.abs(Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437)) - 1
         },
     },
     created() {
@@ -164,8 +124,7 @@ export default {
             this.results = []
 
             let headers = {
-                withCredentials:
-                    process.env.NODE_ENV === 'development' ? false : true,
+                withCredentials: process.env.NODE_ENV === 'development' ? false : true,
                 headers: {
                     'content-type': 'application/json',
                     'X-CSRFToken': Cookies.get('csrftoken'),
@@ -178,11 +137,7 @@ export default {
                 months: this.months,
                 mapper: this.mapperName,
             }
-            this.results = await this.$defaultApi.$post(
-                'beatsaver/stats/',
-                data,
-                headers,
-            )
+            this.results = await this.$defaultApi.$post('beatsaver/stats/', data, headers)
             this.visibleItems = 10
             this.loading = false
         },

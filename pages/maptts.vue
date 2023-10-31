@@ -7,42 +7,24 @@
         </sub-header>
 
         <div class="content">
-            <Message severity="info"
-                >Search is now put in link so you can F5 and bookmark it WOW!
-                😱</Message
-            >
+            <Message severity="info">Search is now put in link so you can F5 and bookmark it WOW! 😱</Message>
 
             <p class="title text-left">Latest Scores</p>
 
             <div class="row flex justify-between">
                 <div class="search">
                     <div class="p-inputgroup">
-                        <InputText
-                            v-model="search"
-                            placeholder="Search"
-                            v-on:keyup.enter="startSearch"
-                        />
+                        <InputText v-model="search" placeholder="Search" v-on:keyup.enter="startSearch" />
                         <Button icon="pi pi-search" @click="startSearch" />
                     </div>
                 </div>
 
                 <div class="flex">
-                    <Button
-                        icon="pi pi-angle-left"
-                        @click="page--"
-                        :disabled="loading || page <= 0"
-                    />
-                    <p
-                        class="self-center py-3 px-5"
-                        style="background: #141417"
-                    >
+                    <Button icon="pi pi-angle-left" @click="page--" :disabled="loading || page <= 0" />
+                    <p class="self-center py-3 px-5" style="background: #141417">
                         {{ page }}
                     </p>
-                    <Button
-                        icon="pi pi-angle-right"
-                        @click="page++"
-                        :disabled="loading || scores.length < 25"
-                    />
+                    <Button icon="pi pi-angle-right" @click="page++" :disabled="loading || scores.length < 25" />
                 </div>
             </div>
 
@@ -53,22 +35,11 @@
 
             <div class="row justify-center">
                 <div class="flex">
-                    <Button
-                        icon="pi pi-angle-left"
-                        @click="page--"
-                        :disabled="page <= 0"
-                    />
-                    <p
-                        class="self-center py-3 px-5"
-                        style="background: #141417"
-                    >
+                    <Button icon="pi pi-angle-left" @click="page--" :disabled="page <= 0" />
+                    <p class="self-center py-3 px-5" style="background: #141417">
                         {{ page }}
                     </p>
-                    <Button
-                        icon="pi pi-angle-right"
-                        @click="page++"
-                        :disabled="scores.length < 25"
-                    />
+                    <Button icon="pi pi-angle-right" @click="page++" :disabled="scores.length < 25" />
                 </div>
             </div>
         </div>
@@ -117,9 +88,7 @@ export default {
         },
         async loadScores() {
             this.loading = true
-            this.scores = await this.$mapttsApi.$get(
-                `scores/${this.page}/${this.search}`,
-            )
+            this.scores = await this.$mapttsApi.$get(`scores/${this.page}/${this.search}`)
 
             this.loading = false
         },

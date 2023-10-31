@@ -27,10 +27,7 @@ export default {
             if (this.to) {
                 this.$router.push(this.to)
             } else if (this.href) {
-                window.open(
-                    this.href,
-                    this.$attrs.notblank == undefined ? '_blank' : '',
-                )
+                window.open(this.href, this.$attrs.notblank == undefined ? '_blank' : '')
             } else {
                 if (this.$listeners.click) this.$listeners.click(event)
             }
@@ -40,12 +37,10 @@ export default {
         attrs() {
             let attrs = { class: '', ...this.$attrs }
 
-            if (this.$attrs.notround == undefined)
-                attrs.class += ' p-button-rounded'
+            if (this.$attrs.notround == undefined) attrs.class += ' p-button-rounded'
             if (this.$attrs.nomargin == undefined) attrs.class += ' margin'
             if (this.$attrs.nohover == undefined) attrs.class += ' hoveranim'
-            if (this.$attrs.noiconmargin == undefined)
-                attrs.class += ' iconmargin'
+            if (this.$attrs.noiconmargin == undefined) attrs.class += ' iconmargin'
 
             if (this.$attrs.reset != undefined) {
                 attrs.class = ''

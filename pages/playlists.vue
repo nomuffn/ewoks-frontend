@@ -7,15 +7,10 @@
                 <h3 class="title" style="padding-left: 0px">Playlist Viewer</h3>
                 <Message class="self-center mt-8 w-full" :closable="false">
                     <p>Look at playlists without opening the game wowww!</p>
-                    <p>
-                        Kinda limited with big playlists but it will do the job
-                        for now
-                    </p>
+                    <p>Kinda limited with big playlists but it will do the job for now</p>
                     <p>Might not show maps uploaded within the last 24 hrs</p>
                 </Message>
-                <my-button @click="$refs.playlistInput.click()">
-                    Upload playlist
-                </my-button>
+                <my-button @click="$refs.playlistInput.click()"> Upload playlist </my-button>
                 <input
                     @change="readPlaylist"
                     style="display: None"
@@ -32,35 +27,17 @@
             <div class="feature">
                 <h3 class="title" style="padding-left: 0px">Playlist maker</h3>
                 <Message class="self-center mt-8 w-full" :closable="false">
-                    <p>
-                        Filters by various conditions across all maps on
-                        beatsaver and puts them into a playlist
-                    </p>
-                    <p>
-                        Database of all maps used for this only updates once a
-                        day
-                    </p>
+                    <p>Filters by various conditions across all maps on beatsaver and puts them into a playlist</p>
+                    <p>Database of all maps used for this only updates once a day</p>
                 </Message>
 
                 <div class="myrow search" style="padding-top: 10px">
                     <label>Enter mappers and press enter</label>
-                    <p class="grey">
-                        Will include all occurences in mapper names
-                    </p>
-                    <p class="grey">
-                        You can also enter a comma separated list
-                    </p>
-                    <InputText
-                        v-model="mapperInput"
-                        placeholder="Mapper name"
-                        v-on:keyup.enter="addMapper"
-                    />
+                    <p class="grey">Will include all occurences in mapper names</p>
+                    <p class="grey">You can also enter a comma separated list</p>
+                    <InputText v-model="mapperInput" placeholder="Mapper name" v-on:keyup.enter="addMapper" />
                     <div v-if="mappers.length" class="mappers">
-                        <div
-                            class="mapper"
-                            v-for="mapper in mappers"
-                            :key="mapper"
-                        >
+                        <div class="mapper" v-for="mapper in mappers" :key="mapper">
                             <my-button @click="removeMapper(mapper)">
                                 {{ mapper }}
                                 <i class="bx bx-x"></i>
@@ -70,42 +47,26 @@
                 </div>
                 <div class="myrow">
                     <label>Uploaded after: {{ getFormattedMonths }}</label>
-                    <Slider
-                        v-model="months"
-                        :min="0"
-                        :max="getMonthsDifference"
-                        :tooltips="false"
-                    />
+                    <Slider v-model="months" :min="0" :max="getMonthsDifference" :tooltips="false" />
                 </div>
                 <div class="myrow">
                     <label>Minimum ratio: {{ ratio }}%</label>
                     <p class="grey">
-                        Ratio calculation (not the same like on beatsaver):
-                        upvotes / (upvotes + downvotes) * 100
+                        Ratio calculation (not the same like on beatsaver): upvotes / (upvotes + downvotes) * 100
                     </p>
                     <p class="grey">
                         To get an idea of it go to
-                        <nuxt-link style="color: grey" to="/stats/beatsaver"
-                            >statistics/beatsaver</nuxt-link
-                        >
+                        <nuxt-link style="color: grey" to="/stats/beatsaver">statistics/beatsaver</nuxt-link>
                     </p>
                     <Slider v-model="ratio" :max="100" :tooltips="false" />
                 </div>
                 <div class="myrow">
                     <label>Minimum upvotes: {{ minUpvotes }}</label>
-                    <Slider
-                        v-model="minUpvotes"
-                        :max="1000"
-                        :tooltips="false"
-                    />
+                    <Slider v-model="minUpvotes" :max="1000" :tooltips="false" />
                 </div>
                 <div class="myrow">
                     <label>Maximum downvotes: {{ getmaxDownvotes }}</label>
-                    <Slider
-                        v-model="maxDownvotes"
-                        :max="1000"
-                        :tooltips="false"
-                    />
+                    <Slider v-model="maxDownvotes" :max="1000" :tooltips="false" />
                 </div>
 
                 <div class="myrow">
@@ -152,11 +113,7 @@ export default {
         getMonthsDifference() {
             var date1 = new Date(this.gameReleaseDate * 1000)
             var difference = date1.getTime() - new Date()
-            return (
-                Math.abs(
-                    Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437),
-                ) - 1
-            )
+            return Math.abs(Math.floor(difference / 1000 / 60 / 60 / 24 / 30.437)) - 1
         },
         getmaxDownvotes() {
             return this.maxDownvotes == 0 ? '-' : this.maxDownvotes
@@ -167,8 +124,7 @@ export default {
             this.loading = true
             try {
                 let headers = {
-                    withCredentials:
-                        process.env.NODE_ENV === 'development' ? false : true,
+                    withCredentials: process.env.NODE_ENV === 'development' ? false : true,
                     responseType: 'blob',
                     headers: {
                         'content-type': 'application/json',
@@ -193,10 +149,7 @@ export default {
                         })
                         const link = document.createElement('a')
                         link.href = URL.createObjectURL(blob)
-                        link.download =
-                            'muffnlabs playlist of ' +
-                            this.mappers.length +
-                            ' mappers'
+                        link.download = 'muffnlabs playlist of ' + this.mappers.length + ' mappers'
                         link.click()
                         URL.revokeObjectURL(link.href)
                     })
@@ -215,8 +168,7 @@ export default {
                 const mappers = this.mapperInput.split(',')
                 for (let mapper of mappers) {
                     mapper = mapper.trim()
-                    if (mapper && !this.mappers.includes(mapper))
-                        this.mappers.push(mapper)
+                    if (mapper && !this.mappers.includes(mapper)) this.mappers.push(mapper)
                 }
                 this.mapperInput = ''
             }

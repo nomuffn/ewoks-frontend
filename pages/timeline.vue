@@ -4,8 +4,7 @@
             <Message color="primary">
                 DM me any suggestions or additions on discord: muffn#2345
                 <br />
-                I'll also add filters at some point and make it look better when
-                there's more data
+                I'll also add filters at some point and make it look better when there's more data
             </Message>
             <loading-spinner v-if="!events.length" />
             <div v-else class="wrapper">

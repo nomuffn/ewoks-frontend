@@ -1,23 +1,14 @@
 <template>
-    <vs-dialog
-        auto-width
-        not-center
-        dark
-        v-model="active"
-        v-on:close="$emit('close')"
-    >
+    <vs-dialog auto-width not-center dark v-model="active" v-on:close="$emit('close')">
         <template v-if="value" #header>
             <h3>{{ `${value.name}'s maps in queue` }}</h3>
         </template>
 
         <div v-if="value" class="con-content">
             <div class="map" v-for="map in value.maps" :key="map.id">
-                <a
-                    class="link"
-                    :href="`https://scoresaber.com/leaderboard/${map.songId}`"
-                    target="_blank"
-                    >{{ `${map.name} (id: ${map.id})` }}</a
-                >
+                <a class="link" :href="`https://scoresaber.com/leaderboard/${map.songId}`" target="_blank">{{
+                    `${map.name} (id: ${map.id})`
+                }}</a>
                 <p>Mapper(s): {{ map.mapper }}</p>
                 <p>
                     Queued:

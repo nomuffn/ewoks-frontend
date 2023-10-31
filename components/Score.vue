@@ -4,10 +4,9 @@
             <div class="left">
                 <h3>
                     <template v-if="score.player">
-                        <a
-                            target="_blank"
-                            :href="`https://scoresaber.com/u/${score.player.scoresaberId}`"
-                            >{{ score.player.twitchName }}</a
+                        <a target="_blank" :href="`https://scoresaber.com/u/${score.player.scoresaberId}`">{{
+                            score.player.twitchName
+                        }}</a
                         ><span> played</span>
                     </template>
                     <template v-else>
@@ -16,25 +15,18 @@
                     <span> played</span>
                 </h3>
                 <div class="third">
-                    <img
-                        :src="`https://cdn.scoresaber.com/covers/${score.songHash}.png`"
-                    />
+                    <img :src="`https://cdn.scoresaber.com/covers/${score.songHash}.png`" />
                     <div class="fourth">
-                        <a
-                            target="_blank"
-                            :href="`https://scoresaber.com/leaderboard/${score.leaderboardId}`"
-                            >{{
-                                `${score.leaderboardSongAuthor} - ${score.leaderboardName}`
-                            }}
-                            [{{ getDifficulty(score.difficultyRaw) }}]</a
+                        <a target="_blank" :href="`https://scoresaber.com/leaderboard/${score.leaderboardId}`"
+                            >{{ `${score.leaderboardSongAuthor} - ${score.leaderboardName}` }} [{{
+                                getDifficulty(score.difficultyRaw)
+                            }}]</a
                         >
                         <p class="grey">
                             by
                             <b>{{ score.mapper }}</b>
                         </p>
-                        <p v-if="score.timeSet" class="grey">
-                            ~{{ getAgo(score.timeSet) }} ago
-                        </p>
+                        <p v-if="score.timeSet" class="grey">~{{ getAgo(score.timeSet) }} ago</p>
                     </div>
                 </div>
             </div>
@@ -71,10 +63,7 @@ export default {
             return string.split(subString, index).join(subString).length
         },
         getDifficulty(difficultyRaw) {
-            return difficultyRaw.substring(
-                1,
-                this.getPosition(difficultyRaw, '_', 2),
-            )
+            return difficultyRaw.substring(1, this.getPosition(difficultyRaw, '_', 2))
         },
     },
 }

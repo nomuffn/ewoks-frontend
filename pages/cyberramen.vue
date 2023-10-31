@@ -33,20 +33,10 @@
                 :showClear="true"
             />
 
-            <InputText
-                type="text"
-                v-model="jobFilters.textSearch"
-                placeholder="Text search"
-                class="my-2"
-            />
+            <InputText type="text" v-model="jobFilters.textSearch" placeholder="Text search" class="my-2" />
 
-            <Message
-                v-if="filteredJobs.length"
-                severity="info"
-                @close="(event) => (filteredJobs = [])"
-                :closable="true"
-                >Jobs filtered by query param:
-                {{ this.filteredJobs.join() }}</Message
+            <Message v-if="filteredJobs.length" severity="info" @close="(event) => (filteredJobs = [])" :closable="true"
+                >Jobs filtered by query param: {{ this.filteredJobs.join() }}</Message
             >
 
             <ProgressBar
@@ -68,22 +58,9 @@
                 <Column :expander="true" :headerStyle="{ width: '3rem' }" />
                 <Column field="done" header="Status" sortable>
                     <template #body="{ data: job }">
-                        <InlineMessage
-                            :severity="
-                                job.done == 1
-                                    ? 'success'
-                                    : job.done == 0
-                                    ? 'info'
-                                    : 'error'
-                            "
-                            >{{
-                                job.done == 1
-                                    ? 'Done'
-                                    : job.done == 0
-                                    ? 'Queued'
-                                    : 'ERROR'
-                            }}</InlineMessage
-                        >
+                        <InlineMessage :severity="job.done == 1 ? 'success' : job.done == 0 ? 'info' : 'error'">{{
+                            job.done == 1 ? 'Done' : job.done == 0 ? 'Queued' : 'ERROR'
+                        }}</InlineMessage>
                     </template>
                 </Column>
                 <Column field="SongName" header="SongName" sortable>
@@ -91,9 +68,7 @@
                         <!-- p-button-text -->
                         <my-button
                             :label="job.SongName"
-                            :outlined="
-                                !expandedRows.some((i) => i.JobId == job.JobId)
-                            "
+                            :outlined="!expandedRows.some((i) => i.JobId == job.JobId)"
                             @click="toggleRow(job)"
                         />
                     </template>
@@ -115,32 +90,20 @@
                                 class="p-button-outlined m-1 w-24"
                                 type="button"
                                 iconPos="right"
-                                @click="
-                                    openLink(
-                                        `https://beatsaver.com/maps/${job.BeatSaverKey}`,
-                                    )
-                                "
+                                @click="openLink(`https://beatsaver.com/maps/${job.BeatSaverKey}`)"
                             ></my-button>
                         </div>
                     </template>
                 </Column>
                 <template #expansion="{ data: job, index }">
-                    <p v-if="!job.Result">
-                        Wait until the generation is completed :DDD
-                    </p>
+                    <p v-if="!job.Result">Wait until the generation is completed :DDD</p>
                     <p v-else-if="!job.Result?.includes('https://')">
                         {{ job.Result }}
                     </p>
-                    <ProgressBar
-                        v-else-if="!job.loadedResults"
-                        mode="indeterminate"
-                    />
+                    <ProgressBar v-else-if="!job.loadedResults" mode="indeterminate" />
                     <div v-else>
                         <div class="flex justify-center mb-2">
-                            <div
-                                v-if="job.specifics?.highestAcc"
-                                class="flex m-2"
-                            >
+                            <div v-if="job.specifics?.highestAcc" class="flex m-2">
                                 <my-button
                                     :label="`Highest Acc ${job.specifics.highestAcc.acc}%`"
                                     class="p-button-outlined m-1"
@@ -149,18 +112,9 @@
                                     icon="pi pi-external-link"
                                     notround
                                     nomargin
-                                    @click="
-                                        openReplay(job.specifics.highestAcc)
-                                    "
+                                    @click="openReplay(job.specifics.highestAcc)"
                                 ></my-button>
-                                <my-button
-                                    reset
-                                    @click="
-                                        openLink(
-                                            job.specifics.highestAcc.replayUrl,
-                                        )
-                                    "
-                                >
+                                <my-button reset @click="openLink(job.specifics.highestAcc.replayUrl)">
                                     <i class="bx bx-download"></i>
                                 </my-button>
                             </div>
@@ -168,83 +122,54 @@
                             <div class="flex m-2">
                                 <my-button
                                     v-if="job.specifics?.mostMistakes"
-                                    :label="`Most mistakes ${
-                                        job.specifics.mostMistakes.mistakes || 0
-                                    }`"
+                                    :label="`Most mistakes ${job.specifics.mostMistakes.mistakes || 0}`"
                                     class="p-button-outlined m-1"
                                     type="button"
                                     iconPos="right"
                                     icon="pi pi-external-link"
                                     notround
                                     nomargin
-                                    @click="
-                                        openReplay(job.specifics.mostMistakes)
-                                    "
+                                    @click="openReplay(job.specifics.mostMistakes)"
                                 ></my-button>
-                                <my-button
-                                    reset
-                                    @click="
-                                        openLink(
-                                            job.specifics.mostMistakes
-                                                .replayUrl,
-                                        )
-                                    "
-                                >
+                                <my-button reset @click="openLink(job.specifics.mostMistakes.replayUrl)">
                                     <i class="bx bx-download"></i>
                                 </my-button>
                             </div>
                         </div>
                         <TabView :activeIndex.sync="job.selectedTab">
-                            <TabPanel
-                                :header="`Mistakes: ${job.sortedMistakes.length}`"
-                            >
+                            <TabPanel :header="`Mistakes: ${job.sortedMistakes.length}`">
                                 <div class="flex justify-center">
                                     <div class="field-checkbox m-2">
                                         <Checkbox
                                             :id="`showBadcuts-${job.JobId}`"
-                                            v-model="
-                                                computedJobs[index].filters
-                                                    .showBadcuts
-                                            "
+                                            v-model="computedJobs[index].filters.showBadcuts"
                                             :binary="true"
                                             class="mr-2"
                                         />
                                         <label :for="`showBadcuts-${job.JobId}`"
-                                            >Show badcuts ({{
-                                                job.specifics['total_bad']
-                                            }})</label
+                                            >Show badcuts ({{ job.specifics['total_bad'] }})</label
                                         >
                                     </div>
                                     <div class="field-checkbox m-2">
                                         <Checkbox
                                             :id="`showMisses-${job.JobId}`"
-                                            v-model="
-                                                computedJobs[index].filters
-                                                    .showMisses
-                                            "
+                                            v-model="computedJobs[index].filters.showMisses"
                                             :binary="true"
                                             class="mr-2"
                                         />
                                         <label :for="`showMisses-${job.JobId}`"
-                                            >Show misses ({{
-                                                job.specifics['total_miss']
-                                            }})</label
+                                            >Show misses ({{ job.specifics['total_miss'] }})</label
                                         >
                                     </div>
                                     <div class="field-checkbox m-2">
                                         <Checkbox
                                             :id="`showBombs-${job.JobId}`"
-                                            v-model="
-                                                computedJobs[index].filters
-                                                    .showBombs
-                                            "
+                                            v-model="computedJobs[index].filters.showBombs"
                                             :binary="true"
                                             class="mr-2"
                                         />
                                         <label :for="`showBombs-${job.JobId}`"
-                                            >Show bomb hits ({{
-                                                job.specifics['total_bomb']
-                                            }})</label
+                                            >Show bomb hits ({{ job.specifics['total_bomb'] }})</label
                                         >
                                     </div>
                                 </div>
@@ -256,20 +181,9 @@
                                     :paginator="getMistakes(job).length > 10"
                                     :rows="10"
                                 >
-                                    <Column
-                                        :expander="true"
-                                        :headerStyle="{ width: '3rem' }"
-                                    />
-                                    <Column
-                                        field="time"
-                                        header="Timestamp"
-                                        sortable
-                                    ></Column>
-                                    <Column
-                                        field="mistakes"
-                                        header="Amount of replays that missed"
-                                        sortable
-                                    >
+                                    <Column :expander="true" :headerStyle="{ width: '3rem' }" />
+                                    <Column field="time" header="Timestamp" sortable></Column>
+                                    <Column field="mistakes" header="Amount of replays that missed" sortable>
                                         <template #body="{ data: mistakes }">
                                             {{ mistakes.mistakes.length }}
                                         </template>
@@ -280,42 +194,21 @@
                                             class="layer-3"
                                             :value="mistake.mistakes"
                                             responsiveLayout="scroll"
-                                            :paginator="
-                                                mistake.mistakes.length > 10
-                                            "
+                                            :paginator="mistake.mistakes.length > 10"
                                             :rows="10"
                                         >
-                                            <Column
-                                                field="type"
-                                                header="Type"
-                                                sortable
-                                            ></Column>
-                                            <Column
-                                                field="noteId"
-                                                header="Note ID"
-                                                sortable
-                                            ></Column>
+                                            <Column field="type" header="Type" sortable></Column>
+                                            <Column field="noteId" header="Note ID" sortable></Column>
                                             <Column header="Replay">
-                                                <template
-                                                    #body="{
-                                                        data: singleMistake,
-                                                    }"
-                                                >
-                                                    <div
-                                                        class="flex items-center"
-                                                    >
+                                                <template #body="{ data: singleMistake }">
+                                                    <div class="flex items-center">
                                                         <!-- <b class="mx-1 mr-auto">{{ singleMistake.replayId }}</b> -->
                                                         <my-button
                                                             icon="pi pi-external-link"
                                                             class="p-button-outlined mx-1"
                                                             type="button"
                                                             iconPos="right"
-                                                            @click="
-                                                                openReplay(
-                                                                    job,
-                                                                    singleMistake,
-                                                                )
-                                                            "
+                                                            @click="openReplay(job, singleMistake)"
                                                         ></my-button>
                                                         <my-button
                                                             icon="pi pi-info"
@@ -326,9 +219,7 @@
                                                                 (event) =>
                                                                     $refs[
                                                                         `panel-${singleMistake.replayId}-${singleMistake.noteId}-${singleMistake.time}`
-                                                                    ].toggle(
-                                                                        event,
-                                                                    )
+                                                                    ].toggle(event)
                                                             "
                                                         ></my-button>
                                                         <OverlayPanel
@@ -338,45 +229,22 @@
                                                             <b>Replay Info</b>
                                                             <div
                                                                 v-for="attribute of Object.entries(
-                                                                    job
-                                                                        .sortedReplays[
-                                                                        singleMistake
-                                                                            .replayId
-                                                                    ],
+                                                                    job.sortedReplays[singleMistake.replayId],
                                                                 )"
                                                                 class="flex"
-                                                                :key="
-                                                                    attribute[0]
-                                                                "
+                                                                :key="attribute[0]"
                                                             >
-                                                                <p
-                                                                    class="mr-auto pr-4"
-                                                                >
-                                                                    {{
-                                                                        attribute[0]
-                                                                    }}
+                                                                <p class="mr-auto pr-4">
+                                                                    {{ attribute[0] }}
                                                                 </p>
                                                                 <my-button
-                                                                    v-if="
-                                                                        attribute[1]
-                                                                            .toString()
-                                                                            .includes(
-                                                                                'https://',
-                                                                            )
-                                                                    "
+                                                                    v-if="attribute[1].toString().includes('https://')"
                                                                     label="Link"
                                                                     class="p-button-link p-0"
-                                                                    @click="
-                                                                        openReplay(
-                                                                            job,
-                                                                            singleMistake,
-                                                                        )
-                                                                    "
+                                                                    @click="openReplay(job, singleMistake)"
                                                                 />
                                                                 <b v-else>
-                                                                    {{
-                                                                        attribute[1]
-                                                                    }}
+                                                                    {{ attribute[1] }}
                                                                 </b>
                                                             </div>
                                                         </OverlayPanel>
@@ -387,11 +255,7 @@
                                     </template>
                                 </DataTable>
                             </TabPanel>
-                            <TabPanel
-                                :header="`Replays: ${
-                                    Object.keys(job.sortedReplays).length
-                                }`"
-                            >
+                            <TabPanel :header="`Replays: ${Object.keys(job.sortedReplays).length}`">
                                 <DataTable
                                     class="layer-2"
                                     :value="Object.values(job.sortedReplays)"
@@ -402,48 +266,16 @@
                                     :sortOrder="-1"
                                 >
                                     <Column field="acc" header="Acc" sortable />
-                                    <Column
-                                        field="fcAcc"
-                                        header="FC Acc"
-                                        sortable
-                                    />
+                                    <Column field="fcAcc" header="FC Acc" sortable />
                                     <Column field="fps" header="FPS" sortable />
-                                    <Column
-                                        field="mistakes"
-                                        header="Mistakes"
-                                        sortable
-                                    />
-                                    <Column
-                                        field="headsetYposition"
-                                        header="HMD Y Pos"
-                                        sortable
-                                    />
-                                    <Column
-                                        field="height"
-                                        header="height"
-                                        sortable
-                                    />
+                                    <Column field="mistakes" header="Mistakes" sortable />
+                                    <Column field="headsetYposition" header="HMD Y Pos" sortable />
+                                    <Column field="height" header="height" sortable />
                                     <Column field="jd" header="jd" sortable />
-                                    <Column
-                                        field="postSwingAngle"
-                                        header="Post Swing Angle"
-                                        sortable
-                                    />
-                                    <Column
-                                        field="preSwingAngle"
-                                        header="Pre Swing Angle"
-                                        sortable
-                                    />
-                                    <Column
-                                        field="timeDeviation"
-                                        header="Time deviation"
-                                        sortable
-                                    />
-                                    <Column
-                                        field="requestedAcc"
-                                        header="Requested Acc"
-                                        sortable
-                                    />
+                                    <Column field="postSwingAngle" header="Post Swing Angle" sortable />
+                                    <Column field="preSwingAngle" header="Pre Swing Angle" sortable />
+                                    <Column field="timeDeviation" header="Time deviation" sortable />
+                                    <Column field="requestedAcc" header="Requested Acc" sortable />
                                     <Column header="Replay">
                                         <template #body="{ data: replay }">
                                             <my-button
@@ -505,9 +337,7 @@ export default {
         },
     },
     async created() {
-        this.description = (
-            await this.$defaultApi.$get('general/stuff/public_cyberramen')
-        ).json.html
+        this.description = (await this.$defaultApi.$get('general/stuff/public_cyberramen')).json.html
     },
     async mounted() {
         this.profile = await this.$auth.fetch()
@@ -516,8 +346,7 @@ export default {
         let uri = window.location.search.substring(1)
         let params = new URLSearchParams(uri)
         if (params.get('jobs')) {
-            for (const job of params.get('jobs').split(','))
-                if (!isNaN(job)) this.filteredJobs.push(parseInt(job))
+            for (const job of params.get('jobs').split(',')) if (!isNaN(job)) this.filteredJobs.push(parseInt(job))
         }
     },
     watch: {
@@ -536,26 +365,18 @@ export default {
             let jobs = this.jobs
 
             if (this.filteredJobs.length > 0) {
-                jobs = jobs.filter((job) =>
-                    this.filteredJobs.includes(job.JobId),
-                )
+                jobs = jobs.filter((job) => this.filteredJobs.includes(job.JobId))
             }
             if (this.jobFilters.userid?.length) {
-                jobs = jobs.filter(
-                    (job) => job.UserId == this.jobFilters.userid,
-                )
+                jobs = jobs.filter((job) => job.UserId == this.jobFilters.userid)
             }
             if (this.jobFilters.textSearch?.length) {
                 jobs = jobs.filter((job) =>
-                    job.SongName?.toLowerCase().includes(
-                        this.jobFilters.textSearch.toLowerCase(),
-                    ),
+                    job.SongName?.toLowerCase().includes(this.jobFilters.textSearch.toLowerCase()),
                 )
             }
 
-            return jobs.sort(
-                (a, b) => Date.parse(b.CreatedDate) - Date.parse(a.CreatedDate),
-            )
+            return jobs.sort((a, b) => Date.parse(b.CreatedDate) - Date.parse(a.CreatedDate))
         },
         jobUserIds() {
             return [...new Set(this.jobs.map((job) => job.UserId))].sort()
@@ -584,11 +405,7 @@ export default {
                                 showMisses: false,
                                 showBombs: false,
                             },
-                            done: job.Result?.includes('https://')
-                                ? 1
-                                : job.Result == null
-                                ? 0
-                                : -1,
+                            done: job.Result?.includes('https://') ? 1 : job.Result == null ? 0 : -1,
                         }
                     })
                     .reverse()
@@ -599,13 +416,8 @@ export default {
                 }
 
                 jobs = jobs.filter((job) => {
-                    const existingJobIndex = this.jobs.findIndex(
-                        (innerJob) => innerJob.JobId == job.JobId,
-                    )
-                    if (
-                        existingJobIndex >= 0 &&
-                        job.Result != this.jobs[existingJobIndex].Result
-                    ) {
+                    const existingJobIndex = this.jobs.findIndex((innerJob) => innerJob.JobId == job.JobId)
+                    if (existingJobIndex >= 0 && job.Result != this.jobs[existingJobIndex].Result) {
                         this.$set(this.jobs, existingJobIndex, job)
                     }
                     return existingJobIndex < 0
@@ -651,18 +463,9 @@ export default {
         },
         async loadJob(job) {
             job = job.data || job
-            const index = this.computedJobs.findIndex(
-                (item) => item.JobId == job.JobId,
-            )
+            const index = this.computedJobs.findIndex((item) => item.JobId == job.JobId)
 
-            if (
-                !job ||
-                index == null ||
-                !job.Result ||
-                job.loadedResults ||
-                !job.Result?.includes('https://')
-            )
-                return
+            if (!job || index == null || !job.Result || job.loadedResults || !job.Result?.includes('https://')) return
 
             this.loadingJob = true
 
@@ -705,10 +508,7 @@ export default {
                     if ((job.specifics.highestAcc?.acc || 0) < newReplay.acc) {
                         job.specifics.highestAcc = newReplay
                     }
-                    if (
-                        (job.specifics.mostMistakes.mistakes || 0) <
-                        newReplay.mistakes
-                    ) {
+                    if ((job.specifics.mostMistakes.mistakes || 0) < newReplay.mistakes) {
                         job.specifics.mostMistakes = newReplay
                     }
                 }
@@ -719,10 +519,7 @@ export default {
                         return {
                             time: item[0],
                             mistakes: item[1].sort((a, b) => {
-                                return (
-                                    job.sortedReplays[a.replayId].acc -
-                                    job.sortedReplays[b.replayId].acc
-                                )
+                                return job.sortedReplays[a.replayId].acc - job.sortedReplays[b.replayId].acc
                             }),
                         }
                     })
@@ -740,21 +537,16 @@ export default {
         getMistakes(job) {
             return job.sortedMistakes
                 .map((mistake) => {
-                    const filteredMistakes = mistake.mistakes.filter(
-                        (singleMistake) => {
-                            if (
-                                (job.filters.showBadcuts &&
-                                    singleMistake.type == 'bad') ||
-                                (job.filters.showMisses &&
-                                    singleMistake.type == 'miss') ||
-                                (job.filters.showBombs &&
-                                    singleMistake.type == 'bomb')
-                            ) {
-                                return true
-                            }
-                            return false
-                        },
-                    )
+                    const filteredMistakes = mistake.mistakes.filter((singleMistake) => {
+                        if (
+                            (job.filters.showBadcuts && singleMistake.type == 'bad') ||
+                            (job.filters.showMisses && singleMistake.type == 'miss') ||
+                            (job.filters.showBombs && singleMistake.type == 'bomb')
+                        ) {
+                            return true
+                        }
+                        return false
+                    })
 
                     return {
                         ...mistake,
@@ -777,11 +569,7 @@ export default {
                 url = `https://replay.beatleader.xyz/?link=${job.replayUrl}`
             }
 
-            if (job.MapUrl)
-                url = `${url}&mapLink=${job.MapUrl.replace(
-                    'http://',
-                    'https://',
-                )}`
+            if (job.MapUrl) url = `${url}&mapLink=${job.MapUrl.replace('http://', 'https://')}`
 
             window.open(url, '_blank').focus()
         },
@@ -804,15 +592,10 @@ export default {
             const index = this.expandedRows.find((x) => x.JobId === job.JobId)
 
             if (index === undefined) {
-                this.expandedRows = [
-                    ...this.computedJobs.filter((x) => x.JobId === job.JobId),
-                    ...this.expandedRows,
-                ]
+                this.expandedRows = [...this.computedJobs.filter((x) => x.JobId === job.JobId), ...this.expandedRows]
                 this.loadJob(job)
             } else {
-                this.expandedRows = this.expandedRows.filter(
-                    (x) => x.JobId !== job.JobId,
-                )
+                this.expandedRows = this.expandedRows.filter((x) => x.JobId !== job.JobId)
             }
         },
     },
