@@ -108,10 +108,7 @@
                                 label="Job info"
                                 class="p-button-outlined m-1 w-24"
                                 type="button"
-                                @click="
-                                    (event) =>
-                                        $refs[`job-${job.JobId}`].toggle(event)
-                                "
+                                @click="openJob(job)"
                             ></my-button>
                             <my-button
                                 label="Beatsaver"
@@ -125,33 +122,6 @@
                                 "
                             ></my-button>
                         </div>
-                        <OverlayPanel :ref="`job-${job.JobId}`" appendTo="body">
-                            <div
-                                v-for="(attribute, index) of getJobData(job)"
-                                :key="index"
-                                class="flex flex-col my-2"
-                            >
-                                <p class="font-bold">
-                                    {{ attribute[0] }}
-                                </p>
-                                <my-button
-                                    v-if="
-                                        attribute[1] &&
-                                        attribute[1]
-                                            .toString()
-                                            .includes('https://')
-                                    "
-                                    label="Link"
-                                    outlined
-                                    reset
-                                    class="p-0 self-start"
-                                    @click="openLink(attribute[1])"
-                                />
-                                <p v-else style="margin-top: 0">
-                                    {{ attribute[1] || 'n/a' }}
-                                </p>
-                            </div>
-                        </OverlayPanel>
                     </template>
                 </Column>
                 <template #expansion="{ data: job, index }">
@@ -167,26 +137,62 @@
                     />
                     <div v-else>
                         <div class="flex justify-center mb-2">
-                            <my-button
+                            <div
                                 v-if="job.specifics?.highestAcc"
-                                :label="`Highest Acc ${job.specifics.highestAcc.acc}%`"
-                                class="p-button-outlined m-1"
-                                type="button"
-                                iconPos="right"
-                                icon="pi pi-external-link"
-                                @click="openReplay(job.specifics.highestAcc)"
-                            ></my-button>
-                            <my-button
-                                v-if="job.specifics?.mostMistakes"
-                                :label="`Most mistakes ${
-                                    job.specifics.mostMistakes.mistakes || 0
-                                }`"
-                                class="p-button-outlined m-1"
-                                type="button"
-                                iconPos="right"
-                                icon="pi pi-external-link"
-                                @click="openReplay(job.specifics.mostMistakes)"
-                            ></my-button>
+                                class="flex m-2"
+                            >
+                                <my-button
+                                    :label="`Highest Acc ${job.specifics.highestAcc.acc}%`"
+                                    class="p-button-outlined m-1"
+                                    type="button"
+                                    iconPos="right"
+                                    icon="pi pi-external-link"
+                                    notround
+                                    nomargin
+                                    @click="
+                                        openReplay(job.specifics.highestAcc)
+                                    "
+                                ></my-button>
+                                <my-button
+                                    reset
+                                    @click="
+                                        openLink(
+                                            job.specifics.highestAcc.replayUrl,
+                                        )
+                                    "
+                                >
+                                    <i class="bx bx-download"></i>
+                                </my-button>
+                            </div>
+
+                            <div class="flex m-2">
+                                <my-button
+                                    v-if="job.specifics?.mostMistakes"
+                                    :label="`Most mistakes ${
+                                        job.specifics.mostMistakes.mistakes || 0
+                                    }`"
+                                    class="p-button-outlined m-1"
+                                    type="button"
+                                    iconPos="right"
+                                    icon="pi pi-external-link"
+                                    notround
+                                    nomargin
+                                    @click="
+                                        openReplay(job.specifics.mostMistakes)
+                                    "
+                                ></my-button>
+                                <my-button
+                                    reset
+                                    @click="
+                                        openLink(
+                                            job.specifics.mostMistakes
+                                                .replayUrl,
+                                        )
+                                    "
+                                >
+                                    <i class="bx bx-download"></i>
+                                </my-button>
+                            </div>
                         </div>
                         <TabView :activeIndex.sync="job.selectedTab">
                             <TabPanel
@@ -470,6 +476,7 @@
 
 <script>
 import CreateJobModal from '@/components/dialogs/CreateJobModal.vue'
+import JobViewModal from '~/components/dialogs/JobViewModal.vue'
 
 export default {
     data() {
@@ -615,6 +622,17 @@ export default {
             } finally {
                 this.loading = false
             }
+        },
+        openJob(job) {
+            this.$buefy.modal.open({
+                parent: this,
+                component: JobViewModal,
+                hasModalCard: true,
+                trapFocus: true,
+                fullScreen: false,
+                props: { job: this.getJobData(job) },
+                events: {},
+            })
         },
         async createJob() {
             this.$buefy.modal.open({
