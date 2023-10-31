@@ -2,14 +2,11 @@
     <div class="configs">
         <sub-header title="Configs & files">
             <p>
-                This is an attempt to gather most of the various player configs
-                & files for stuff like:
+                This is an attempt to gather most of the various player configs & files for stuff like:
                 <br />
-                HitScoreVisualizer, Playlists, Counters+, public Sabers,
-                Hitsounds
+                HitScoreVisualizer, Playlists, Counters+, public Sabers, Hitsounds
                 <br />
-                If you want any of yours to be added here dm me your file on
-                discord: muffn#2345
+                If you want any of yours to be added here dm me your file on discord: muffn#2345
             </p>
         </sub-header>
 
@@ -18,11 +15,7 @@
             <div v-for="cat in categories" :key="cat" class="category">
                 <h2 class="title">{{ getCategoryName(cat) }}</h2>
                 <div class="cards row">
-                    <div
-                        class="card"
-                        v-for="(item, index) in getConfigs(cat)"
-                        :key="index"
-                    >
+                    <div class="card" v-for="(item, index) in getConfigs(cat)" :key="index">
                         <p v-if="item.player">{{ item.player }}</p>
                         <h3 v-if="item.name">{{ item.name }}</h3>
                         <p v-if="item.description" class="description">
@@ -34,11 +27,7 @@
                         </p>
 
                         <div class="buttons">
-                            <my-button
-                                v-if="showSource(item)"
-                                outlined
-                                :href="item.file"
-                            >
+                            <my-button v-if="showSource(item)" outlined :href="item.file">
                                 Open
                                 <i class="bx bx-code-alt"></i>
                             </my-button>

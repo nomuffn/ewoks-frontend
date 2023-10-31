@@ -10,39 +10,17 @@
                 <h2 class="title">muffnlabs</h2>
             </div>
             <div class="flex justify-end flex-wrap">
-                <my-button
-                    href="https://beatsaver.com/profile/4284309"
-                    warning
-                    text
-                    noiconmargin
-                >
-                    <img
-                        class="w-6"
-                        src="https://beatsaver.com/static/favicon/favicon-32x32.png"
-                    />
+                <my-button href="https://beatsaver.com/profile/4284309" warning text noiconmargin>
+                    <img class="w-6" src="https://beatsaver.com/static/favicon/favicon-32x32.png" />
                 </my-button>
-                <my-button
-                    href="https://github.com/nomuffn"
-                    noiconmargin
-                    text
-                    secondary
-                >
+                <my-button href="https://github.com/nomuffn" noiconmargin text secondary>
                     <i class="bx bxl-github bx-sm"></i>
                 </my-button>
-                <my-button
-                    href="https://www.twitch.tv/muffn_"
-                    noiconmargin
-                    text
-                    help
-                >
+                <my-button href="https://www.twitch.tv/muffn_" noiconmargin text help>
                     <i class="bx bxl-twitch bx-sm"></i>
                 </my-button>
 
-                <my-button
-                    href="https://discordapp.com/users/219099186505711616/"
-                    noiconmargin
-                    text
-                >
+                <my-button href="https://discordapp.com/users/219099186505711616/" noiconmargin text>
                     <i class="bx bxl-discord bx-sm"></i>
                 </my-button>
                 <my-button href="https://twitter.com/nomuffn" noiconmargin text>
@@ -54,12 +32,7 @@
                     <i class="bx bxl-discord"></i>
                 </my-button>
                 <div v-else class="flex m-2">
-                    <my-button
-                        notround
-                        nomargin
-                        class="pointer-events-none"
-                        :label="profile.username"
-                    />
+                    <my-button notround nomargin class="pointer-events-none" :label="profile.username" />
                     <my-button reset outlined @click="$auth.logout()">
                         <i class="bx bx-log-out"></i>
                     </my-button>
@@ -107,10 +80,7 @@ export default {
     methods: {
         isActive(page) {
             // cringe
-            if (
-                this.$route.path.substring(1).split('/')[0] ==
-                page.path.split('/')[0]
-            ) {
+            if (this.$route.path.substring(1).split('/')[0] == page.path.split('/')[0]) {
                 return true
             }
         },
@@ -294,14 +264,7 @@ button.new {
         // margin-left: 10px;
     }
     .bsaber {
-        background: linear-gradient(
-            to right,
-            #ff03f1,
-            #ad63ff,
-            #00a1ff,
-            #00c4ff,
-            #ffffff
-        );
+        background: linear-gradient(to right, #ff03f1, #ad63ff, #00a1ff, #00c4ff, #ffffff);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         width: fit-content;

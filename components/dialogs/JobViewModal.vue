@@ -1,17 +1,10 @@
 <template>
-    <div
-        class="jobViewModal modal-card"
-        style="width: auto; min-width: 400px; max-width: 700px"
-    >
+    <div class="jobViewModal modal-card" style="width: auto; min-width: 400px; max-width: 700px">
         <header class="modal-card-head">
             <p class="modal-card-title">Job details</p>
         </header>
         <section class="modal-card-body">
-            <div
-                v-for="(attribute, index) of job"
-                :key="index"
-                class="flex flex-col my-2"
-            >
+            <div v-for="(attribute, index) of job" :key="index" class="flex flex-col my-2">
                 <p class="font-bold">
                     {{ attribute[0] }}
                 </p>

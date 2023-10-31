@@ -3,7 +3,7 @@
         style="min-height: 100px"
         class="w-full h-full py-2"
         :value="value"
-        @input="input => $emit('input', input)"
+        @input="(input) => $emit('input', input)"
         :disabled="false"
         @start="drag = true"
         @end="drag = false"
@@ -15,11 +15,7 @@
         :scroll-speed="30"
     >
         <transition-group
-            style="
-                min-height: 100px;
-                margin-bottom: -0.25rem;
-                margin-top: -0.25rem;
-            "
+            style="min-height: 100px; margin-bottom: -0.25rem; margin-top: -0.25rem"
             class="flex flex-wrap pl-1"
             type="transition"
             :name="!drag ? 'flip-list' : null"
@@ -29,13 +25,9 @@
                 :key="map.hash"
                 class="map flex flex-col m-1 relative overflow-hidden select-none"
                 :style="`width: ${coverSize}px`"
-                @contextmenu="event => $emit('onRightClick', event, map)"
+                @contextmenu="(event) => $emit('onRightClick', event, map)"
             >
-                <img
-                    :src="
-                        `https://eu.cdn.beatsaver.com/${map.hash.toLowerCase()}.jpg`
-                    "
-                />
+                <img :src="`https://eu.cdn.beatsaver.com/${map.hash.toLowerCase()}.jpg`" />
                 <p
                     style="font-size: 80%"
                     class="truncate absolute bottom-0 w-full text-center bg-white text-black px-1 select-none"

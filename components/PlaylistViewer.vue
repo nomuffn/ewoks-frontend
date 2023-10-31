@@ -26,41 +26,24 @@
             ></Paginator>
 
             <loading-spinner v-if="loading" />
-            <div
-                v-for="song of songs"
-                :key="song"
-                class="card mb-3 flex flex-row overflow-hidden"
-            >
+            <div v-for="song of songs" :key="song" class="card mb-3 flex flex-row overflow-hidden">
                 <div class="flex justify-start">
                     <template v-if="!song.key">
                         <div class="flex flex-col">
                             <p v-if="song.songName">{{ song.songName }}</p>
-                            <p v-if="song.levelAuthorName">
-                                mapped by {{ song.levelAuthorName }}
-                            </p>
+                            <p v-if="song.levelAuthorName">mapped by {{ song.levelAuthorName }}</p>
                             <p>{{ song.hash }}</p>
                             <p>not available anymore :(</p>
                         </div>
                     </template>
                     <template v-else>
                         <img
-                            style="
-                                margin: -20px;
-                                max-height: 155px;
-                                max-width: 155px;
-                                object-fit: contain;
-                            "
+                            style="margin: -20px; max-height: 155px; max-width: 155px; object-fit: contain"
                             :src="`https://eu.cdn.beatsaver.com/${song.hash.toLowerCase()}.jpg`"
                         />
                         <div
                             v-if="song.difficulties"
-                            style="
-                                position: absolute;
-                                left: 0;
-                                bottom: 0;
-                                padding: 5px;
-                                background-color: #00000082;
-                            "
+                            style="position: absolute; left: 0; bottom: 0; padding: 5px; background-color: #00000082"
                         >
                             <p v-for="diff of song.difficulties" :key="diff">
                                 {{ diff.name }}
@@ -68,47 +51,23 @@
                         </div>
                         <div class="details flex flex-col justify-center ml-12">
                             <p style="font-size: 1.25rem; line-height: 1.75rem">
-                                {{
-                                    `${song.songAuthorName} - ${song.songName} ${song.songSubName} (#${song.key})`
-                                }}
+                                {{ `${song.songAuthorName} - ${song.songName} ${song.songSubName} (#${song.key})` }}
                             </p>
                             <p>
                                 Uploaded/mapped by:
-                                <strong>{{
-                                    `${song.uploaderUsername} (${song.levelAuthorName})`
-                                }}</strong>
+                                <strong>{{ `${song.uploaderUsername} (${song.levelAuthorName})` }}</strong>
                             </p>
                             <p>
-                                {{
-                                    `${song.upvotes} 👍 / ${song.downvotes} 👎`
-                                }}
+                                {{ `${song.upvotes} 👍 / ${song.downvotes} 👎` }}
                             </p>
-                            <p
-                                class="opacity-50"
-                                style="
-                                    position: absolute;
-                                    bottom: 20px;
-                                    right: 20px;
-                                "
-                            >
+                            <p class="opacity-50" style="position: absolute; bottom: 20px; right: 20px">
                                 {{ song.hash }}
                             </p>
-                            <p
-                                class="opacity-50"
-                                style="
-                                    position: absolute;
-                                    bottom: 40px;
-                                    right: 20px;
-                                "
-                            >
+                            <p class="opacity-50" style="position: absolute; bottom: 40px; right: 20px">
                                 Uploaded:
                                 {{ new Date(song.uploaded).toLocaleString() }}
                             </p>
-                            <my-button
-                                style="width: 160px"
-                                :href="`https://beatsaver.com/maps/${song.key}`"
-                                nomargin
-                            >
+                            <my-button style="width: 160px" :href="`https://beatsaver.com/maps/${song.key}`" nomargin>
                                 Beatsaver
                             </my-button>
                         </div>
@@ -143,10 +102,7 @@ export default {
             if (this.playlist['customData'])
                 obj = {
                     ...obj,
-                    ...this.readObject(
-                        this.playlist['customData'],
-                        'customData_',
-                    ),
+                    ...this.readObject(this.playlist['customData'], 'customData_'),
                 }
             delete obj.customData
             return obj
@@ -179,14 +135,10 @@ export default {
             this.songs = []
             const offset = this.offset * this.page
 
-            const songs = this.playlist['songs'].slice(
-                offset,
-                offset + this.offset,
-            )
+            const songs = this.playlist['songs'].slice(offset, offset + this.offset)
 
             let headers = {
-                withCredentials:
-                    process.env.NODE_ENV === 'development' ? false : true,
+                withCredentials: process.env.NODE_ENV === 'development' ? false : true,
                 headers: {
                     'content-type': 'application/json',
                     'X-CSRFToken': Cookies.get('csrftoken'),
@@ -202,11 +154,7 @@ export default {
             this.songs = songs.map((item) => {
                 return {
                     ...item,
-                    ...newSongs.find(
-                        (innerItem) =>
-                            item.hash.toLowerCase() ==
-                            innerItem.hash.toLowerCase(),
-                    ),
+                    ...newSongs.find((innerItem) => item.hash.toLowerCase() == innerItem.hash.toLowerCase()),
                 }
             })
             this.loading = false

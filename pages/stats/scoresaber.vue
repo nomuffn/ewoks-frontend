@@ -20,22 +20,13 @@
                         <div
                             v-for="(item, index) in getVisibleItems"
                             :key="index"
-                            v-on:click="
-                                openUrl(
-                                    'https://scoresaber.com/leaderboard/' +
-                                        item.leaderboard_id,
-                                )
-                            "
+                            v-on:click="openUrl('https://scoresaber.com/leaderboard/' + item.leaderboard_id)"
                             class="card highestScores"
                         >
                             <div>
                                 <p>
-                                    <span class="colored"
-                                        >#{{ index + 1 }}</span
-                                    >
-                                    <span class="big">{{
-                                        item.player_name
-                                    }}</span>
+                                    <span class="colored">#{{ index + 1 }}</span>
+                                    <span class="big">{{ item.player_name }}</span>
                                     on
                                 </p>
                                 <p class="big" v-if="item.leaderboard">
@@ -47,22 +38,17 @@
                                     {{ item.leaderboard_name }}
                                 </p>
                                 <p v-if="item.leaderboard">
-                                    by {{ item.leaderboard.mapper }} (<span
-                                        :class="item.leaderboard.diff"
-                                        >{{
-                                            mapDiff(item.leaderboard.diff)
-                                        }}</span
-                                    >; {{ item.leaderboard.stars }} stars;
-                                    {{ item.leaderboard.bpm }} bpm)
+                                    by {{ item.leaderboard.mapper }} (<span :class="item.leaderboard.diff">{{
+                                        mapDiff(item.leaderboard.diff)
+                                    }}</span
+                                    >; {{ item.leaderboard.stars }} stars; {{ item.leaderboard.bpm }} bpm)
                                 </p>
                             </div>
 
                             <div class="score">
                                 <p>#{{ item.rank }}</p>
                                 <p>
-                                    <span class="pp colored"
-                                        >{{ item.pp }}pp</span
-                                    >
+                                    <span class="pp colored">{{ item.pp }}pp</span>
                                 </p>
                                 <p class="acc">{{ item.percentage }}%</p>
                             </div>
@@ -72,32 +58,17 @@
                         <div
                             v-for="(item, index) in getVisibleItems"
                             :key="index"
-                            v-on:click="
-                                openUrl(
-                                    'https://scoresaber.com/leaderboards?search=' +
-                                        item.name,
-                                )
-                            "
+                            v-on:click="openUrl('https://scoresaber.com/leaderboards?search=' + item.name)"
                             class="card"
                         >
                             <h4 class="mr-4">
                                 <span class="colored">#{{ index + 1 }}</span>
                                 {{ item.name }}: {{ item.value }}
                             </h4>
-                            <my-button
-                                v-if="item.maps"
-                                @click="openDialog"
-                                outlined
-                            >
-                                Maps
-                            </my-button>
+                            <my-button v-if="item.maps" @click="openDialog" outlined> Maps </my-button>
                         </div>
                     </template>
-                    <my-button
-                        v-if="visibleItems < data.length"
-                        class="showMore"
-                        @click="visibleItems += 50"
-                    >
+                    <my-button v-if="visibleItems < data.length" class="showMore" @click="visibleItems += 50">
                         Show more
                     </my-button>
                 </div>
@@ -125,9 +96,7 @@ export default {
                     key: 'highestScores',
                     title: 'Highest PP Scores',
                     getData: async () => {
-                        return await this.$defaultApi.$get(
-                            'scoresaber/highestscores',
-                        )
+                        return await this.$defaultApi.$get('scoresaber/highestscores')
                     },
                 },
                 {
@@ -155,9 +124,7 @@ export default {
                     key: 'mapsetRQMappers',
                     title: 'Mappers Count (Ranking Queue)',
                     getData: async () => {
-                        return (
-                            await this.loadFromApi('scoresaber/rq/mappers')
-                        ).map((mapper) => {
+                        return (await this.loadFromApi('scoresaber/rq/mappers')).map((mapper) => {
                             return {
                                 ...mapper,
                                 value: mapper.value.length,
@@ -176,9 +143,7 @@ export default {
     },
 
     async created() {
-        this.activeList =
-            this.lists.find((i) => i.key == this.$route.query?.list) ||
-            this.lists[0]
+        this.activeList = this.lists.find((i) => i.key == this.$route.query?.list) || this.lists[0]
 
         this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
     },

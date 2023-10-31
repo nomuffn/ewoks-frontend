@@ -53,10 +53,7 @@ export default {
     async created() {
         this.mappers = await this.$defaultApi.$get('beatsaver/bsst_mappers')
         if (this.$route.query.mapperId) {
-            this.selectedMapper =
-                this.mappers.find(
-                    (i) => i.mapperId == this.$route.query.mapperId,
-                ) || {}
+            this.selectedMapper = this.mappers.find((i) => i.mapperId == this.$route.query.mapperId) || {}
         }
     },
     methods: {
@@ -70,14 +67,8 @@ export default {
         sortVotes(x, y, col, rowX, rowY) {
             const colField = col.field
 
-            x = rowX['map']
-                ? rowX['map'][colField].upvotes +
-                  rowX['map'][colField].downvotes
-                : 0
-            y = rowY['map']
-                ? rowY['map'][colField].upvotes +
-                  rowY['map'][colField].downvotes
-                : 0
+            x = rowX['map'] ? rowX['map'][colField].upvotes + rowX['map'][colField].downvotes : 0
+            y = rowY['map'] ? rowY['map'][colField].upvotes + rowY['map'][colField].downvotes : 0
 
             if (rowX.name == 'Total') x = Number.POSITIVE_INFINITY
             if (rowY.name == 'Total') y = Number.POSITIVE_INFINITY
@@ -91,9 +82,7 @@ export default {
             this.$router.push({
                 query: { mapperId: this.selectedMapper.mapperId },
             })
-            this.maps = await this.$defaultApi.$get(
-                'beatsaver/bsst/' + this.selectedMapper.mapperId,
-            )
+            this.maps = await this.$defaultApi.$get('beatsaver/bsst/' + this.selectedMapper.mapperId)
             this.loading = false
         },
     },
@@ -157,10 +146,7 @@ export default {
                     let stats = {}
                     timeRanges.forEach((range) => {
                         const rangeKey = `days-${range}`
-                        stats[rangeKey] = this.getVotesString(
-                            map[rangeKey]?.upvotes,
-                            map[rangeKey]?.downvotes,
-                        )
+                        stats[rangeKey] = this.getVotesString(map[rangeKey]?.upvotes, map[rangeKey]?.downvotes)
                     })
                     const img = map.hash
                         ? `<img src="https://cdn.scoresaber.com/covers/${map.hash.toUpperCase()}.png" />`
@@ -168,11 +154,7 @@ export default {
 
                     return {
                         name: `${img}<span>${map.songAuthorName}<br/>${map.songName} ${map.songSubName}</span>`,
-                        latest: this.getVotesString(
-                            map.latest.upvotes,
-                            map.latest.downvotes,
-                            false,
-                        ),
+                        latest: this.getVotesString(map.latest.upvotes, map.latest.downvotes, false),
                         ...stats,
                         map,
                     }
