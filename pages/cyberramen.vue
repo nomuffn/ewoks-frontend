@@ -25,12 +25,15 @@
             />
 
             <Dropdown
-                v-if="jobUserIds.length > 1"
+                v-if="jobUsers.length > 1"
                 v-model="jobFilters.userid"
+                optionLabel="name"
+                optionValue="id"
                 placeholder="Filter by user"
-                :options="jobUserIds"
+                :options="jobUsers"
                 class="my-2"
                 :showClear="true"
+                scrollHeight="400px"
             />
 
             <InputText type="text" v-model="jobFilters.textSearch" placeholder="Text search" class="my-2" />
@@ -378,8 +381,22 @@ export default {
 
             return jobs.sort((a, b) => Date.parse(b.CreatedDate) - Date.parse(a.CreatedDate))
         },
-        jobUserIds() {
-            return [...new Set(this.jobs.map((job) => job.UserId))].sort()
+        jobUsers() {
+            const jobs = this.jobs
+                .flatMap((job) => {
+                    if (unique[job.UserId]) {
+                        return []
+                    } else {
+                        unique[job.UserId] = true
+                        return { name: job.UserName, id: job.UserId }
+                    }
+                })
+                .sort((a, b) => {
+                    if (a.name < b.name) return -1
+                    if (a.name > b.name) return 1
+                    return 0
+                })
+            return jobs
         },
     },
     methods: {
