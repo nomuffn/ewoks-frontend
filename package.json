@@ -23,7 +23,6 @@
     "nuxt": "^2.15.8",
     "nuxt-buefy": "^0.4.25",
     "nuxt-matomo": "^1.2.4",
-    "prettier": "^3.0.3",
     "primeicons": "^6.0.1",
     "primevue": "^2.9.2",
     "vue-good-table": "^2.21.11",
