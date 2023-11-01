@@ -19,7 +19,7 @@
                         <img class="w-6 ml-1" src="https://beatsaver.com/static/favicon/favicon-32x32.png" />
                     </my-button>
                     <my-button href="https://discordapp.com/users/219099186505711616/">
-                        muffn#2345
+                        muffn
                         <i class="bx bxl-discord bx-sm"></i>
                     </my-button>
                     <my-button href="https://twitter.com/nomuffn">
@@ -51,7 +51,7 @@
                             href="https://discordapp.com/users/261522369200390147/"
                             target="_blank"
                             style="color: white"
-                            >Skadii#6969 (commissions open)</a
+                            >Skadii (commissions open)</a
                         >
                     </p>
                     <img class="w-80 self-center" src="muffnsuic.gif" />

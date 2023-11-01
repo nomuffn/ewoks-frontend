@@ -9,8 +9,8 @@
             <div class="self-center">
                 <h2 class="title">muffnlabs</h2>
             </div>
-            <div class="flex justify-end flex-wrap">
-                <my-button href="https://beatsaver.com/profile/4284309" warning text noiconmargin>
+            <div class="flex justify-end flex-wrap socials">
+                <my-button class="mx-0 my-2" href="https://beatsaver.com/profile/4284309" warning text noiconmargin>
                     <img class="w-6" src="https://beatsaver.com/static/favicon/favicon-32x32.png" />
                 </my-button>
                 <my-button href="https://github.com/nomuffn" noiconmargin text secondary>
@@ -273,6 +273,10 @@ button.new {
         &:hover {
             opacity: 1;
         }
+    }
+
+    .socials > button {
+        margin: 7px 0px !important;
     }
 }
 </style>

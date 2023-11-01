@@ -117,7 +117,7 @@
                                     nomargin
                                     @click="openReplay(job.specifics.highestAcc)"
                                 ></my-button>
-                                <my-button reset @click="openLink(job.specifics.highestAcc.replayUrl)">
+                                <my-button reset :href="job.specifics.highestAcc.replayUrl">
                                     <i class="bx bx-download"></i>
                                 </my-button>
                             </div>
@@ -134,7 +134,7 @@
                                     nomargin
                                     @click="openReplay(job.specifics.mostMistakes)"
                                 ></my-button>
-                                <my-button reset @click="openLink(job.specifics.mostMistakes.replayUrl)">
+                                <my-button reset :href="job.specifics.mostMistakes.replayUrl">
                                     <i class="bx bx-download"></i>
                                 </my-button>
                             </div>
@@ -281,13 +281,22 @@
                                     <Column field="requestedAcc" header="Requested Acc" sortable />
                                     <Column header="Replay">
                                         <template #body="{ data: replay }">
-                                            <my-button
-                                                icon="pi pi-external-link"
-                                                class="p-button-outlined mx-1"
-                                                type="button"
-                                                iconPos="right"
-                                                @click="openReplay(replay)"
-                                            ></my-button>
+                                            <div class="flex">
+                                                <my-button
+                                                    icon="pi pi-external-link"
+                                                    class="p-button-outlined mx-1"
+                                                    type="button"
+                                                    iconPos="right"
+                                                    @click="openReplay(replay)"
+                                                ></my-button>
+                                                <my-button
+                                                    icon="pi pi-download"
+                                                    class="p-button-outlined mx-1"
+                                                    type="button"
+                                                    iconPos="right"
+                                                    :href="replay.replayUrl"
+                                                ></my-button>
+                                            </div>
                                         </template>
                                     </Column>
                                 </DataTable>
@@ -576,6 +585,7 @@ export default {
                 })
         },
         openReplay(job, mistake) {
+            return console.log(job)
             let url
             if (mistake) {
                 const time = (mistake.time - 3) * 1000
