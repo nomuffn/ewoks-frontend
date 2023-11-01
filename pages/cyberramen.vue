@@ -382,6 +382,7 @@ export default {
             return jobs.sort((a, b) => Date.parse(b.CreatedDate) - Date.parse(a.CreatedDate))
         },
         jobUsers() {
+            const unique = {}
             const jobs = this.jobs
                 .flatMap((job) => {
                     if (unique[job.UserId]) {
