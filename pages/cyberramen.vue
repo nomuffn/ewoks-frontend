@@ -585,7 +585,6 @@ export default {
                 })
         },
         openReplay(job, mistake) {
-            return console.log(job)
             let url
             if (mistake) {
                 const time = (mistake.time - 3) * 1000
