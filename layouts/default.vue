@@ -114,7 +114,7 @@ export default {
                     path: 'cyberramen',
                     icon: 'bx-bot',
                     name: 'CyberRamen',
-                    new: true,
+                    // new: true,
                 },
                 {
                     path: 'maptts',
@@ -142,11 +142,6 @@ export default {
                     name: 'Playlists stuff',
                 },
                 {
-                    path: 'configs',
-                    icon: 'bx-file-blank',
-                    name: 'Configs',
-                },
-                {
                     path: 'tools',
                     icon: 'bxs-wrench',
                     name: 'Tools/Misc',
@@ -160,11 +155,6 @@ export default {
                     path: 'guess',
                     icon: 'bx-question-mark',
                     name: 'Guess',
-                },
-                {
-                    path: 'timeline',
-                    icon: 'bx-time',
-                    name: 'Timeline',
                 },
             ],
         }
