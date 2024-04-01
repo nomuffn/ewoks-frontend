@@ -7,7 +7,11 @@
         </sub-header>
 
         <div class="content">
-            <Message severity="info">Search is now put in link so you can F5 and bookmark it WOW! 😱</Message>
+            <Message severity="success" icon="pi-info-circle"
+                >Finally implemented AntiLinks tool to fetch new players from twitch (as long as they have any
+                associations to scoresaber on their twitch channel)since this has been running on like one year old data
+                lohl. Should fetch from a lot more players now</Message
+            >
 
             <p class="title text-left">Latest Scores</p>
 
@@ -122,7 +126,8 @@ export default {
         align-content: center;
     }
 
-    .vs-alert {
+    .vs-alertm,
+    .p-message {
         max-width: 800px;
     }
 
