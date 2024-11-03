@@ -1,7 +1,7 @@
 <template>
     <div class="createJobModal modal-card" style="width: auto; min-width: 400px">
         <header class="modal-card-head">
-            <p class="modal-card-title">Create new job</p>
+            <p class="modal-card-title">Create new request</p>
         </header>
         <section class="modal-card-body">
             <div class="flex flex-col">
@@ -9,12 +9,15 @@
                 <p class="mb-1 opacity-75">hash, bsr code, discord link ending on .zip</p>
                 <div class="flex">
                     <InputText type="text" v-model="job.songHash" placeholder="Map" class="flex-1" />
-                    <my-button nomargin label="Fetch" @click="fetchMap" :disabled="!job.songHash.length" />
+                    <my-button
+                        v-if="showFetch"
+                        nomargin
+                        label="Fetch"
+                        @click="fetchMap"
+                        :disabled="!job.songHash.length"
+                    />
                 </div>
-                <InlineMessage style="max-width: 420px" class="info w-full" severity="info"
-                    >Fetch button is optional! Its just for options in Mode & Difficulty but you can type them yourself
-                    as well</InlineMessage
-                >
+
                 <p class="mt-2 mb-1">Mode</p>
                 <Dropdown
                     v-model="job.mode"
@@ -144,6 +147,9 @@ export default {
         },
         diffs() {
             return this.modes[this.job.mode]
+        },
+        showFetch() {
+            return this.job.songHash && this.job.songHash.length < 8
         },
     },
 }
