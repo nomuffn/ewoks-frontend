@@ -16,13 +16,6 @@
                 :loading="creatingJob"
                 :disabled="creatingJob"
             />
-            <my-button
-                class="my-2"
-                label="Update jobs"
-                @click="loadJobs(true)"
-                :loading="loadingJobs"
-                :disabled="loadingJobs"
-            />
 
             <Dropdown
                 v-if="jobUsers.length > 1"
