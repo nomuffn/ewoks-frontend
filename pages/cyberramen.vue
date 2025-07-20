@@ -10,7 +10,7 @@
 
         <div v-else-if="profile" class="content flex flex-col items-center">
             <my-button
-                label="Create job"
+                label="Create request"
                 class="my-2"
                 @click="createJob"
                 :loading="creatingJob"
@@ -78,12 +78,12 @@
                 </Column>
                 <Column field="Diff" header="Diff" sortable />
                 <Column field="CreatedDate" header="Created" sortable />
-                <Column field="CompletedDate" header="Completed" sortable />
+                <Column field="CompletedDate" header="Finished" sortable />
                 <Column header="Actions">
                     <template #body="{ data: job }">
                         <div class="flex">
                             <my-button
-                                label="Job info"
+                                label="Request info"
                                 class="p-button-outlined m-1 w-24"
                                 type="button"
                                 @click="openJob(job)"
@@ -99,7 +99,7 @@
                     </template>
                 </Column>
                 <template #expansion="{ data: job, index }">
-                    <p v-if="!job.Result">Wait until the generation is completed :DDD</p>
+                    <p v-if="!job.Result">Wait until its done generating :DDD</p>
                     <p v-else-if="!job.Result?.includes('https://')">
                         {{ job.Result }}
                     </p>
