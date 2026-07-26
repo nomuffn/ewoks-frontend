@@ -31,6 +31,14 @@ export default {
                 href: '/favicon.ico',
             },
         ],
+        script: [
+            {
+                src: 'https://um.muffnlabs.de/script.js',
+                async: true,
+                defer: true,
+                'data-website-id': 'bf0b3fa6-96df-43a2-8b8f-1995f45d1538',
+            },
+        ],
     },
 
     publicRuntimeConfig: {
@@ -75,13 +83,6 @@ export default {
         // https://go.nuxtjs.dev/axios
         '@nuxtjs/axios',
         '@nuxtjs/proxy',
-        [
-            'nuxt-matomo',
-            {
-                matomoUrl: '//matomo.muffnlabs.de/',
-                siteId: 1,
-            },
-        ],
         [
             'primevue/nuxt',
             {
