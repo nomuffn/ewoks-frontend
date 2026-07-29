@@ -1,4 +1,3 @@
-const SpeedMeasurePlugin = require('speed-measure-webpack-plugin')
 
 export default {
     // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
@@ -8,16 +7,16 @@ export default {
     head: {
         title: 'muffnlabs',
         htmlAttrs: {
-            lang: 'en',
+            lang: 'en'
         },
         meta: [
             {
-                charset: 'utf-8',
+                charset: 'utf-8'
             },
             {
                 name: 'viewport',
-                content: 'width=device-width, initial-scale=1',
-            },
+                content: 'width=device-width, initial-scale=1'
+            }
             // {
             //     hid: "description",
             //     name: "description",
@@ -28,33 +27,29 @@ export default {
             {
                 rel: 'icon',
                 type: 'image/x-icon',
-                href: '/favicon.ico',
-            },
+                href: '/favicon.ico'
+            }
         ],
         script: [
             {
                 src: 'https://um.muffnlabs.de/script.js',
                 async: true,
                 defer: true,
-                'data-website-id': 'bf0b3fa6-96df-43a2-8b8f-1995f45d1538',
-            },
-        ],
+                'data-website-id': 'bf0b3fa6-96df-43a2-8b8f-1995f45d1538'
+            }
+        ]
     },
 
     publicRuntimeConfig: {
-        baseURL: process.env.API_URL || 'https://muffnlabs.de/',
+        baseURL: process.env.API_URL || (process.env.NODE_ENV !== 'production' ? '/' : 'https://muffnlabs.de/')
     },
 
     generate: {
-        fallback: true,
+        fallback: true
     },
 
     // Global CSS: https://go.nuxtjs.dev/config-css
-    css: [
-        '~/assets/scss/tailwind.css',
-        'boxicons/css/boxicons.min.css',
-        '~/assets/scss/global.scss',
-    ],
+    css: ['~/assets/scss/tailwind.css', 'boxicons/css/boxicons.min.css', '~/assets/scss/global.scss'],
 
     // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
     plugins: [
@@ -64,7 +59,7 @@ export default {
         '@/plugins/defaultApi',
         '@/plugins/mapttsApi',
         '@/plugins/cyberramenApi',
-        { src: '~~/node_modules/vue-rellax/lib/nuxt-plugin', ssr: false },
+        { src: '~~/node_modules/vue-rellax/lib/nuxt-plugin', ssr: false }
     ],
 
     // Auto import components: https://go.nuxtjs.dev/config-components
@@ -73,9 +68,8 @@ export default {
     // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
     buildModules: [
         // https://go.nuxtjs.dev/eslint
-        //'@nuxtjs/eslint-module',
-        '@nuxtjs/composition-api/module',
-        '@nuxt/postcss8',
+        // '@nuxtjs/eslint-module',
+        '@nuxt/postcss8'
     ],
 
     // Modules: https://go.nuxtjs.dev/config-modules
@@ -88,7 +82,7 @@ export default {
             {
                 // theme: 'md-dark-indigo',
                 theme: 'arya-blue',
-                ripple: true, //whether the ripple animation is enabled, defaults to false
+                ripple: true, // whether the ripple animation is enabled, defaults to false
                 components: [
                     'InputText',
                     'InputNumber',
@@ -116,17 +110,28 @@ export default {
                     'InlineMessage',
                     'TabView',
                     'TabPanel',
-                    'ProgressBar',
-                ],
+                    'ProgressBar'
+                ]
                 // directives: ['Tooltip', 'Badge'], //an array of directives to be registered
-            },
+            }
         ],
-        ['nuxt-buefy', { css: false, materialDesignIcons: false }],
+        ['nuxt-buefy', { css: false, materialDesignIcons: false }]
     ],
+
+    axios: {
+        proxy: true
+    },
+
+    proxy: {
+        '/backend/': {
+            target: process.env.BACKEND_URL || 'http://localhost:8050',
+            changeOrigin: true
+        }
+    },
 
     router: {
         trailingSlash: false,
-        middleware: 'trailingSlashRedirect',
+        middleware: 'trailingSlashRedirect'
     },
 
     // Build Configuration: https://go.nuxtjs.dev/config-build
@@ -135,21 +140,20 @@ export default {
             postcssOptions: {
                 plugins: {
                     tailwindcss: {},
-                    autoprefixer: {},
-                },
-            },
-        },
-        // plugins: [new SpeedMeasurePlugin()],
+                    autoprefixer: {}
+                }
+            }
+        }
         // analyze: true,
         // cache: true,
     },
     server: {
-        host: '0.0.0.0',
+        host: '0.0.0.0'
     },
 
     watchers: {
         webpack: {
-            ignored: /node_modules/,
-        },
-    },
+            ignored: /node_modules/
+        }
+    }
 }
