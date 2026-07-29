@@ -32,7 +32,7 @@
                 </div>
 
                 <!-- Search Input -->
-                <div class="relative flex-1 min-w-[240px] max-w-md">
+                <div class="relative flex-1 min-w-[200px] max-w-md">
                     <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></i>
                     <input
                         type="text"
@@ -62,10 +62,245 @@
                         optionLabel="label"
                         optionValue="value"
                         placeholder="Sort order"
-                        class="w-52 p-inputtext-sm"
+                        class="w-48 p-inputtext-sm"
                         :disabled="tableLoading"
                         @change="onOrderingChange"
                     />
+                </div>
+
+                <!-- Items Per Page Selector -->
+                <div class="flex items-center gap-2">
+                    <label class="text-sm font-semibold text-gray-300 flex items-center gap-1.5 whitespace-nowrap">
+                        <i class="bx bx-list-ol text-blue-400 text-lg"></i> Per page:
+                    </label>
+                    <Dropdown
+                        v-model="pageSize"
+                        :options="pageSizeOptions"
+                        optionLabel="label"
+                        optionValue="value"
+                        placeholder="Per page"
+                        class="w-36 p-inputtext-sm"
+                        :disabled="tableLoading"
+                        @change="onPageSizeChange"
+                    />
+                </div>
+            </div>
+
+            <!-- Deep Mapper Insights Analytics Dashboard -->
+            <div v-if="insights" class="space-y-6 mb-8">
+                <!-- Mapper Spotlight Banner -->
+                <div class="bg-[#18191c] border border-gray-800 rounded-2xl p-5 shadow-xl flex flex-wrap items-center justify-between gap-4">
+                    <div class="flex items-center gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600/30 to-purple-600/30 border border-blue-500/40 flex items-center justify-center text-blue-400 text-3xl font-mono font-bold shrink-0">
+                            {{ insights.mapperName ? insights.mapperName.charAt(0).toUpperCase() : 'M' }}
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-xl font-bold text-gray-100">{{ insights.mapperName }}</h2>
+                                <span class="px-2.5 py-0.5 bg-blue-950/60 text-blue-300 border border-blue-800/60 font-mono text-xs rounded-full font-semibold">
+                                    BeatSaver Mapper
+                                </span>
+                            </div>
+                            <p class="text-xs text-gray-400 mt-1 flex flex-wrap items-center gap-3">
+                                <span><i class="bx bx-calendar text-blue-400"></i> Active since <strong class="text-gray-200">{{ formatDate(insights.firstUpload) }}</strong></span>
+                                <span class="text-gray-600">•</span>
+                                <span><i class="bx bx-tachometer text-amber-400"></i> Output: <strong class="text-gray-200">{{ insights.mapsPerMonth }} maps/month</strong></span>
+                                <span class="text-gray-600">•</span>
+                                <span><i class="bx bx-music text-purple-400"></i> Total Mapped Music: <strong class="text-gray-200">{{ insights.totalDurationStr }}</strong></span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-3 font-mono">
+                        <div class="bg-[#121315] border border-gray-800 px-4 py-2 rounded-xl text-right">
+                            <span class="text-[11px] text-gray-400 block uppercase">Overall Approval</span>
+                            <span class="text-lg font-bold text-emerald-400">{{ insights.overallRatio }}%</span>
+                        </div>
+                        <div class="bg-[#121315] border border-gray-800 px-4 py-2 rounded-xl text-right">
+                            <span class="text-[11px] text-gray-400 block uppercase">Catalog Net Score</span>
+                            <span class="text-lg font-bold text-blue-400">+{{ insights.netScore.toLocaleString() }}</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6 Metric Highlight Cards Grid -->
+                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <!-- 1. Total Upvotes -->
+                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">Total Upvotes</span>
+                        <div class="text-2xl font-bold font-mono text-emerald-400 mt-1">
+                            +{{ insights.totalUpvotes.toLocaleString() }}
+                        </div>
+                        <span class="text-[11px] text-gray-400 mt-1">
+                            {{ insights.totalDownvotes.toLocaleString() }} downvotes
+                        </span>
+                    </div>
+
+                    <!-- 2. 30-Day Vote Growth -->
+                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">30d Vote Growth</span>
+                        <div class="text-2xl font-bold font-mono text-blue-400 mt-1">
+                            +{{ insights.growth30d.toLocaleString() }}
+                        </div>
+                        <span class="text-[11px] text-gray-400 mt-1">
+                            +{{ insights.dailyGrowth30d }} votes/day
+                        </span>
+                    </div>
+
+                    <!-- 3. Total Audio Time -->
+                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">Mapped Music</span>
+                        <div class="text-xl font-bold font-mono text-purple-300 mt-1">
+                            {{ insights.totalDurationStr }}
+                        </div>
+                        <span class="text-[11px] text-gray-400 mt-1">
+                            Across {{ insights.totalMaps }} maps
+                        </span>
+                    </div>
+
+                    <!-- 4. Average BPM -->
+                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">Average BPM</span>
+                        <div class="text-2xl font-bold font-mono text-amber-400 mt-1">
+                            {{ insights.avgBpm }} <span class="text-xs font-normal text-gray-400">BPM</span>
+                        </div>
+                        <span class="text-[11px] text-gray-400 mt-1">
+                            Max: {{ insights.maxBpmMap?.bpm ? Math.round(insights.maxBpmMap.bpm) : '-' }} BPM
+                        </span>
+                    </div>
+
+                    <!-- 5. Starred Maps -->
+                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">Starred Maps</span>
+                        <div class="text-2xl font-bold font-mono text-amber-300 mt-1">
+                            {{ insights.starredCount }} <span class="text-xs font-normal text-gray-400">maps</span>
+                        </div>
+                        <span class="text-[11px] text-gray-400 mt-1">
+                            Avg: ★ {{ insights.avgStar }} Stars
+                        </span>
+                    </div>
+
+                    <!-- 6. 7-Day Velocity -->
+                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
+                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">7d Velocity</span>
+                        <div class="text-2xl font-bold font-mono text-teal-400 mt-1">
+                            +{{ insights.growth7d.toLocaleString() }}
+                        </div>
+                        <span class="text-[11px] text-gray-400 mt-1">
+                            +{{ insights.dailyGrowth7d }} votes/day
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Standout Maps Portfolio Showcase Cards (4 Cards) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                    <!-- 1. Crown Jewel Map (Highest Approval Ratio) -->
+                    <div
+                        v-if="insights.highestRatioMap"
+                        @click="openMapModal(insights.highestRatioMap)"
+                        class="bg-[#18191c] border border-gray-800 hover:border-emerald-500/50 rounded-xl p-4 shadow-lg cursor-pointer transition-all flex items-center justify-between gap-3 group"
+                    >
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block mb-1 flex items-center gap-1">
+                                <i class="bx bx-crown text-sm"></i> Crown Jewel Map
+                            </span>
+                            <div class="font-bold text-gray-100 group-hover:text-emerald-300 transition-colors text-sm truncate" :title="insights.highestRatioMap.songName">
+                                {{ insights.highestRatioMap.songName }}
+                            </div>
+                            <div class="text-xs text-gray-400 truncate mt-0.5">
+                                {{ insights.highestRatioMap.songAuthorName }}
+                            </div>
+                        </div>
+                        <div class="text-right font-mono shrink-0">
+                            <span class="px-2.5 py-1 bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold text-xs rounded-lg block">
+                                {{ insights.highestRatioMap.ratio }}%
+                            </span>
+                            <span class="text-[10px] text-gray-400 mt-1 block">
+                                +{{ insights.highestRatioMap.upvotes }} up
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 2. Most Upvoted Map -->
+                    <div
+                        v-if="insights.mostUpvotedMap"
+                        @click="openMapModal(insights.mostUpvotedMap)"
+                        class="bg-[#18191c] border border-gray-800 hover:border-amber-500/50 rounded-xl p-4 shadow-lg cursor-pointer transition-all flex items-center justify-between gap-3 group"
+                    >
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1 flex items-center gap-1">
+                                <i class="bx bx-trophy text-sm"></i> Most Upvoted Map
+                            </span>
+                            <div class="font-bold text-gray-100 group-hover:text-amber-300 transition-colors text-sm truncate" :title="insights.mostUpvotedMap.songName">
+                                {{ insights.mostUpvotedMap.songName }}
+                            </div>
+                            <div class="text-xs text-gray-400 truncate mt-0.5">
+                                {{ insights.mostUpvotedMap.songAuthorName }}
+                            </div>
+                        </div>
+                        <div class="text-right font-mono shrink-0">
+                            <span class="px-2.5 py-1 bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold text-xs rounded-lg block">
+                                +{{ insights.mostUpvotedMap.upvotes.toLocaleString() }}
+                            </span>
+                            <span class="text-[10px] text-gray-400 mt-1 block">
+                                Total Upvotes
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 3. Highest Star Rating Map -->
+                    <div
+                        v-if="insights.highestStarMap"
+                        @click="openMapModal(insights.highestStarMap)"
+                        class="bg-[#18191c] border border-gray-800 hover:border-blue-500/50 rounded-xl p-4 shadow-lg cursor-pointer transition-all flex items-center justify-between gap-3 group"
+                    >
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-400 block mb-1 flex items-center gap-1">
+                                <i class="bx bx-star text-sm"></i> Hardest Star Map
+                            </span>
+                            <div class="font-bold text-gray-100 group-hover:text-blue-300 transition-colors text-sm truncate" :title="insights.highestStarMap.songName">
+                                {{ insights.highestStarMap.songName }}
+                            </div>
+                            <div class="text-xs text-gray-400 truncate mt-0.5">
+                                {{ insights.highestStarMap.songAuthorName }}
+                            </div>
+                        </div>
+                        <div class="text-right font-mono shrink-0">
+                            <span class="px-2.5 py-1 bg-blue-500/15 border border-blue-500/30 text-blue-300 font-bold text-xs rounded-lg block">
+                                ★ {{ insights.highestStarMap.highestStar.toFixed(1) }}
+                            </span>
+                            <span class="text-[10px] text-gray-400 mt-1 block">
+                                Star Rating
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- 4. Peak Speed / BPM Map -->
+                    <div
+                        v-if="insights.maxBpmMap"
+                        @click="openMapModal(insights.maxBpmMap)"
+                        class="bg-[#18191c] border border-gray-800 hover:border-purple-500/50 rounded-xl p-4 shadow-lg cursor-pointer transition-all flex items-center justify-between gap-3 group"
+                    >
+                        <div class="min-w-0">
+                            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-400 block mb-1 flex items-center gap-1">
+                                <i class="bx bx-bolt-circle text-sm"></i> Fastest BPM Map
+                            </span>
+                            <div class="font-bold text-gray-100 group-hover:text-purple-300 transition-colors text-sm truncate" :title="insights.maxBpmMap.songName">
+                                {{ insights.maxBpmMap.songName }}
+                            </div>
+                            <div class="text-xs text-gray-400 truncate mt-0.5">
+                                {{ insights.maxBpmMap.songAuthorName }}
+                            </div>
+                        </div>
+                        <div class="text-right font-mono shrink-0">
+                            <span class="px-2.5 py-1 bg-purple-500/15 border border-purple-500/30 text-purple-300 font-bold text-xs rounded-lg block">
+                                {{ Math.round(insights.maxBpmMap.bpm) }} BPM
+                            </span>
+                            <span class="text-[10px] text-gray-400 mt-1 block">
+                                Peak Speed
+                            </span>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -84,11 +319,12 @@
                 </div>
                 <div v-if="totalCount > 0" class="text-xs text-gray-400">
                     Showing page <span class="text-gray-200 font-medium">{{ currentPage }}</span> of <span class="text-gray-200 font-medium">{{ totalPages }}</span>
+                    <span class="text-gray-500 font-mono ml-1">({{ pageSize }} per page)</span>
                 </div>
             </div>
 
             <!-- Main Data Table Container (Fixed min-height to prevent vertical height jumps) -->
-            <div class="bg-[#18191c] border border-gray-800 rounded-xl shadow-xl relative overflow-hidden min-h-[620px] flex flex-col justify-between">
+            <div class="bg-[#18191c] border border-gray-800 rounded-xl shadow-xl relative overflow-hidden min-h-[580px] flex flex-col justify-between">
                 <!-- In-Table Loading Overlay (Table & controls stay mounted, overlay appears over data) -->
                 <div
                     v-if="tableLoading && maps && maps.length"
@@ -181,7 +417,7 @@
                     </div>
 
                     <!-- Scrollable Table with Compact Map Info Cell & Spaced Out Columns -->
-                    <div class="overflow-x-auto w-full flex-1 min-h-[480px]">
+                    <div class="overflow-x-auto w-full flex-1 min-h-[440px]">
                         <table class="w-full text-left border-collapse">
                             <thead>
                                 <tr class="bg-[#121315] border-b border-gray-800 text-xs font-bold text-gray-300 uppercase tracking-wider select-none">
@@ -289,17 +525,16 @@
 
                                     <!-- Current Total Votes & Up/Down Breakdown -->
                                     <td class="py-4 px-5 text-center whitespace-nowrap">
-                                        <div v-if="map.latest" class="inline-flex flex-col items-center">
+                                        <div class="inline-flex flex-col items-center">
                                             <div class="inline-flex items-center gap-1.5 bg-gray-900/90 px-3 py-1 rounded-lg border border-gray-700/80 font-bold text-sm">
-                                                <span class="text-emerald-400">+{{ map.latest.upvotes || 0 }}</span>
+                                                <span class="text-emerald-400">+{{ map.latest?.upvotes ?? map.upvotes ?? 0 }}</span>
                                                 <span class="text-gray-600">/</span>
-                                                <span class="text-rose-400">+{{ map.latest.downvotes || 0 }}</span>
+                                                <span class="text-rose-400">+{{ map.latest?.downvotes ?? map.downvotes ?? 0 }}</span>
                                             </div>
                                             <span class="text-xs text-gray-400 font-mono font-medium mt-1">
-                                                Total: {{ (map.latest.upvotes || 0) + (map.latest.downvotes || 0) }}
+                                                Total: {{ (map.latest?.upvotes ?? map.upvotes ?? 0) + (map.latest?.downvotes ?? map.downvotes ?? 0) }}
                                             </span>
                                         </div>
-                                        <span v-else class="text-gray-600 text-sm">-</span>
                                     </td>
 
                                     <!-- Time Range Deltas (Spaced Out Prominent Cells) -->
@@ -350,6 +585,7 @@
                     <div v-if="totalPages > 1" class="bg-[#121315] border-t border-gray-800 p-4 flex flex-wrap items-center justify-between gap-4 select-none shrink-0">
                         <div class="text-xs text-gray-400">
                             Page <span class="font-semibold text-gray-200">{{ currentPage }}</span> of <span class="font-semibold text-gray-200">{{ totalPages }}</span>
+                            <span class="text-gray-500 font-mono ml-1">({{ pageSize }} per page)</span>
                         </div>
 
                         <div class="flex items-center gap-1.5">
@@ -473,9 +709,9 @@
                         <div class="bg-[#121315] border border-gray-800 rounded-xl p-3.5 flex flex-col justify-between">
                             <span class="text-xs text-gray-400 block font-semibold">Votes & Net Score</span>
                             <div class="text-base font-bold text-gray-100 mt-1 flex items-center gap-1">
-                                <span class="text-emerald-400">+{{ modalMap.latest?.upvotes || 0 }}</span>
+                                <span class="text-emerald-400">+{{ modalUpvotes }}</span>
                                 <span class="text-gray-600">/</span>
-                                <span class="text-rose-400">+{{ modalMap.latest?.downvotes || 0 }}</span>
+                                <span class="text-rose-400">+{{ modalDownvotes }}</span>
                             </div>
                             <span class="text-xs font-mono font-medium mt-1 text-blue-400">
                                 {{ modalNetScore >= 0 ? '+' + modalNetScore : modalNetScore }} Net Score
@@ -834,8 +1070,15 @@ export default {
             selectedMapper: null,
             mappers: [],
             maps: [],
+            insights: null,
             totalCount: 0,
-            pageSize: 50,
+            pageSize: 25,
+            pageSizeOptions: [
+                { label: '10 per page', value: 10 },
+                { label: '25 per page', value: 25 },
+                { label: '50 per page', value: 50 },
+                { label: '100 per page', value: 100 },
+            ],
             currentPage: 1,
             searchQuery: '',
             currentOrdering: '-uploaded',
@@ -890,6 +1133,14 @@ export default {
         }
     },
     computed: {
+        modalUpvotes() {
+            if (!this.modalMap) return 0
+            return this.modalMap.latest?.upvotes ?? this.modalMap.upvotes ?? 0
+        },
+        modalDownvotes() {
+            if (!this.modalMap) return 0
+            return this.modalMap.latest?.downvotes ?? this.modalMap.downvotes ?? 0
+        },
         totalPages() {
             return Math.max(1, Math.ceil(this.totalCount / this.pageSize))
         },
@@ -904,17 +1155,15 @@ export default {
             return range
         },
         modalApprovalRatio() {
-            if (!this.modalMap || !this.modalMap.latest) return 0
-            const up = this.modalMap.latest.upvotes || 0
-            const down = this.modalMap.latest.downvotes || 0
+            if (!this.modalMap) return 0
+            const up = this.modalUpvotes
+            const down = this.modalDownvotes
             if (up + down === 0) return 0
             return Math.round((up / (up + down)) * 1000) / 10
         },
         modalNetScore() {
-            if (!this.modalMap || !this.modalMap.latest) return 0
-            const up = this.modalMap.latest.upvotes || 0
-            const down = this.modalMap.latest.downvotes || 0
-            return up - down
+            if (!this.modalMap) return 0
+            return this.modalUpvotes - this.modalDownvotes
         },
         sentimentLabel() {
             const r = this.modalApprovalRatio
@@ -978,7 +1227,7 @@ export default {
             return Math.round((total / 30) * 10) / 10
         },
         milestoneTarget() {
-            const up = this.modalMap?.latest?.upvotes || 0
+            const up = this.modalUpvotes
             if (up < 25) return 25
             if (up < 50) return 50
             if (up < 100) return 100
@@ -989,14 +1238,14 @@ export default {
             return (Math.floor(up / 1000) + 1) * 1000
         },
         milestonePercent() {
-            const up = this.modalMap?.latest?.upvotes || 0
+            const up = this.modalUpvotes
             const target = this.milestoneTarget
             return Math.min(100, Math.round((up / target) * 100))
         },
         chartPoints() {
             if (!this.modalMap) return []
-            const latestUp = this.modalMap.latest?.upvotes || 0
-            const latestDown = this.modalMap.latest?.downvotes || 0
+            const latestUp = this.modalUpvotes
+            const latestDown = this.modalDownvotes
             const d = this.modalDeltas
             const earliest = this.modalMap.earliest
             const now = new Date()
@@ -1036,7 +1285,6 @@ export default {
 
             for (const item of timeIntervals) {
                 const pointTime = new Date(now.getTime() - item.days * 86400 * 1000)
-                // Only include interval if it occurred AFTER the map's initial creation/tracking date
                 if (!startDate || pointTime > startDate) {
                     const delta = d[item.key]
                     if (delta && (delta.upvotes !== undefined || delta.downvotes !== undefined)) {
@@ -1163,8 +1411,8 @@ export default {
         breakdownRows() {
             const d = this.modalDeltas
             const e = this.modalMap?.earliest
-            const latestUp = this.modalMap?.latest?.upvotes || 0
-            const latestDown = this.modalMap?.latest?.downvotes || 0
+            const latestUp = this.modalUpvotes
+            const latestDown = this.modalDownvotes
 
             const calcRate = (up, down, days) => {
                 const total = up + down
@@ -1208,7 +1456,9 @@ export default {
             }
         },
         openMapModal(map) {
-            this.modalMap = map
+            if (!map) return
+            const fullMap = this.maps.find((m) => (m.key && m.key === map.key) || (m.hash && m.hash === map.hash))
+            this.modalMap = fullMap || map
             this.chartType = 'growth'
             this.hoveredPoint = null
         },
@@ -1218,6 +1468,7 @@ export default {
         readQueryParams() {
             const q = this.$route.query
             if (q.page) this.currentPage = parseInt(q.page) || 1
+            if (q.page_size) this.pageSize = parseInt(q.page_size) || 25
             if (q.search) this.searchQuery = q.search
             if (q.ordering) this.currentOrdering = q.ordering
         },
@@ -1227,6 +1478,7 @@ export default {
                 query.mapperId = this.selectedMapper.mapperId
             }
             if (this.currentPage > 1) query.page = this.currentPage
+            if (this.pageSize && this.pageSize !== 25) query.page_size = this.pageSize
             if (this.searchQuery) query.search = this.searchQuery
             if (this.currentOrdering && this.currentOrdering !== '-uploaded') {
                 query.ordering = this.currentOrdering
@@ -1250,9 +1502,21 @@ export default {
             }
 
             if (this.selectedMapper) {
-                await this.fetchMaps()
+                await this.fetchMapperData()
             } else {
                 this.loading = false
+            }
+        },
+        async fetchMapperData() {
+            await Promise.all([this.fetchMaps(), this.fetchInsights()])
+        },
+        async fetchInsights() {
+            if (!this.selectedMapper || !this.selectedMapper.mapperId) return
+            try {
+                this.insights = await this.$defaultApi.$get(`beatsaver/bsst_insights/${this.selectedMapper.mapperId}`)
+            } catch (e) {
+                console.error('Failed to fetch mapper insights:', e)
+                this.insights = null
             }
         },
         async fetchMaps() {
@@ -1261,6 +1525,7 @@ export default {
             try {
                 const params = {
                     page: this.currentPage,
+                    page_size: this.pageSize,
                 }
                 if (this.searchQuery && this.searchQuery.trim()) {
                     params.search = this.searchQuery.trim()
@@ -1293,6 +1558,11 @@ export default {
             }
         },
         onMapperChange() {
+            this.currentPage = 1
+            this.updateQueryParams()
+            this.fetchMapperData()
+        },
+        onPageSizeChange() {
             this.currentPage = 1
             this.updateQueryParams()
             this.fetchMaps()
