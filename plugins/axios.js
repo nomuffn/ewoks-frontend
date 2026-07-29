@@ -7,7 +7,7 @@ Axios.defaults.headers.common.Accept = 'application/json'
 
 Vue.$http = Axios
 Object.defineProperty(Vue.prototype, '$http', {
-    get() {
-        return Axios
-    },
+  get () {
+    return Axios
+  }
 })

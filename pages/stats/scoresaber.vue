@@ -1,200 +1,203 @@
 <template>
-    <div class="scoresaber">
-        <Dropdown
-            class="select"
-            v-if="activeList"
-            v-model="activeList"
-            :options="lists"
-            optionLabel="title"
-            placeholder="Sorted by"
-            scrollHeight="400px"
-            :loading="loading"
-        />
+  <div class="scoresaber">
+    <Dropdown
+      v-if="activeList"
+      v-model="activeList"
+      class="select"
+      :options="lists"
+      option-label="title"
+      placeholder="Sorted by"
+      scroll-height="400px"
+      :loading="loading"
+    />
 
-        <div class="sub-content">
-            <div v-if="activeList" class="list">
-                <div v-if="!loading && data.length > 0" class="cards vertical">
-                    <p>Amount: {{ data.length }}</p>
+    <div class="sub-content">
+      <div v-if="activeList" class="list">
+        <div v-if="!loading && data.length > 0" class="cards vertical">
+          <p>Amount: {{ data.length }}</p>
 
-                    <template v-if="activeList.key == 'highestScores'">
-                        <div
-                            v-for="(item, index) in getVisibleItems"
-                            :key="index"
-                            v-on:click="openUrl('https://scoresaber.com/leaderboard/' + item.leaderboard_id)"
-                            class="card highestScores"
-                        >
-                            <div>
-                                <p>
-                                    <span class="colored">#{{ index + 1 }}</span>
-                                    <span class="big">{{ item.player_name }}</span>
-                                    on
-                                </p>
-                                <p class="big" v-if="item.leaderboard">
-                                    {{
-                                        `${item.leaderboard.artist} - ${item.leaderboard.name} ${item.leaderboard.subname}`
-                                    }}
-                                </p>
-                                <p class="big" v-else>
-                                    {{ item.leaderboard_name }}
-                                </p>
-                                <p v-if="item.leaderboard">
-                                    by {{ item.leaderboard.mapper }} (<span :class="item.leaderboard.diff">{{
-                                        mapDiff(item.leaderboard.diff)
-                                    }}</span
-                                    >; {{ item.leaderboard.stars }} stars; {{ item.leaderboard.bpm }} bpm)
-                                </p>
-                            </div>
+          <template v-if="activeList.key == 'highestScores'">
+            <div
+              v-for="(item, index) in getVisibleItems"
+              :key="index"
+              class="card highestScores"
+              @click="openUrl('https://scoresaber.com/leaderboard/' + item.leaderboard_id)"
+            >
+              <div>
+                <p>
+                  <span class="colored">#{{ index + 1 }}</span>
+                  <span class="big">{{ item.player_name }}</span>
+                  on
+                </p>
+                <p v-if="item.leaderboard" class="big">
+                  {{
+                    `${item.leaderboard.artist} - ${item.leaderboard.name} ${item.leaderboard.subname}`
+                  }}
+                </p>
+                <p v-else class="big">
+                  {{ item.leaderboard_name }}
+                </p>
+                <p v-if="item.leaderboard">
+                  by {{ item.leaderboard.mapper }} (<span :class="item.leaderboard.diff">{{
+                    mapDiff(item.leaderboard.diff)
+                  }}</span>; {{ item.leaderboard.stars }} stars; {{ item.leaderboard.bpm }} bpm)
+                </p>
+              </div>
 
-                            <div class="score">
-                                <p>#{{ item.rank }}</p>
-                                <p>
-                                    <span class="pp colored">{{ item.pp }}pp</span>
-                                </p>
-                                <p class="acc">{{ item.percentage }}%</p>
-                            </div>
-                        </div>
-                    </template>
-                    <template v-else>
-                        <div
-                            v-for="(item, index) in getVisibleItems"
-                            :key="index"
-                            v-on:click="openUrl('https://scoresaber.com/leaderboards?search=' + item.name)"
-                            class="card"
-                        >
-                            <h4 class="mr-4">
-                                <span class="colored">#{{ index + 1 }}</span>
-                                {{ item.name }}: {{ item.value }}
-                            </h4>
-                            <my-button v-if="item.maps" @click="openDialog" outlined> Maps </my-button>
-                        </div>
-                    </template>
-                    <my-button v-if="visibleItems < data.length" class="showMore" @click="visibleItems += 50">
-                        Show more
-                    </my-button>
-                </div>
+              <div class="score">
+                <p>#{{ item.rank }}</p>
+                <p>
+                  <span class="pp colored">{{ item.pp }}pp</span>
+                </p>
+                <p class="acc">
+                  {{ item.percentage }}%
+                </p>
+              </div>
             </div>
+          </template>
+          <template v-else>
+            <div
+              v-for="(item, index) in getVisibleItems"
+              :key="index"
+              class="card"
+              @click="openUrl('https://scoresaber.com/leaderboards?search=' + item.name)"
+            >
+              <h4 class="mr-4">
+                <span class="colored">#{{ index + 1 }}</span>
+                {{ item.name }}: {{ item.value }}
+              </h4>
+              <my-button v-if="item.maps" outlined @click="openDialog">
+                Maps
+              </my-button>
+            </div>
+          </template>
+          <my-button v-if="visibleItems < data.length" class="showMore" @click="visibleItems += 50">
+            Show more
+          </my-button>
         </div>
-        <dialogs-maps-dialog v-model="mapsDialog" @close="mapsDialog = null" />
+      </div>
     </div>
+    <dialogs-maps-dialog v-model="mapsDialog" @close="mapsDialog = null" />
+  </div>
 </template>
 
 <script>
 import TestModal from '@/components/TestModal.vue'
 
 export default {
-    transition: 'slide-bottom',
-    data() {
-        return {
-            data: [],
-            activeList: null,
-            visibleItems: 10,
-            loading: false,
-            stats: null,
-            mapsDialog: null,
-            lists: [
-                {
-                    key: 'highestScores',
-                    title: 'Highest PP Scores',
-                    getData: async () => {
-                        return await this.$defaultApi.$get('scoresaber/highestscores')
-                    },
-                },
-                {
-                    key: 'mapsetMappers',
-                    title: 'Mapset Count By Mappers',
-                    getData: () => {
-                        return this.loadFromApi('scoresaber/mapperdist')
-                    },
-                },
-                {
-                    key: 'diffMappers',
-                    title: 'Difficulty Count By Mappers',
-                    getData: () => {
-                        return this.loadFromApi('scoresaber/mapperdiffdist')
-                    },
-                },
-                {
-                    key: 'mapsetArtists',
-                    title: 'Mapset Count By Song Artists',
-                    getData: () => {
-                        return this.loadFromApi('scoresaber/artistdist')
-                    },
-                },
-                {
-                    key: 'mapsetRQMappers',
-                    title: 'Mappers Count (Ranking Queue)',
-                    getData: async () => {
-                        return (await this.loadFromApi('scoresaber/rq/mappers')).map((mapper) => {
-                            return {
-                                ...mapper,
-                                value: mapper.value.length,
-                                maps: mapper.value,
-                            }
-                        })
-                    },
-                },
-            ],
-        }
-    },
-    computed: {
-        getVisibleItems() {
-            return this.data.slice(0, this.visibleItems)
+  transition: 'slide-bottom',
+  data () {
+    return {
+      data: [],
+      activeList: null,
+      visibleItems: 10,
+      loading: false,
+      stats: null,
+      mapsDialog: null,
+      lists: [
+        {
+          key: 'highestScores',
+          title: 'Highest PP Scores',
+          getData: async () => {
+            return await this.$defaultApi.$get('scoresaber/highestscores')
+          }
         },
-    },
-
-    async created() {
-        this.activeList = this.lists.find((i) => i.key == this.$route.query?.list) || this.lists[0]
-
-        this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
-    },
-    watch: {
-        activeList: {
-            async handler(val) {
-                console.log('activeList', val)
-                if (!val) return
-                this.loading = true
-                this.$router.push({ query: { list: this.activeList.key } })
-                this.visibleItems = 10
-                this.data = await this.activeList.getData()
-                this.loading = false
-            },
+        {
+          key: 'mapsetMappers',
+          title: 'Mapset Count By Mappers',
+          getData: () => {
+            return this.loadFromApi('scoresaber/mapperdist')
+          }
         },
-    },
-    methods: {
-        openUrl: function (url) {
-            window.open(url, '_blank')
+        {
+          key: 'diffMappers',
+          title: 'Difficulty Count By Mappers',
+          getData: () => {
+            return this.loadFromApi('scoresaber/mapperdiffdist')
+          }
         },
-        async loadFromApi(endpoint) {
-            let data = await this.$defaultApi.$get(endpoint)
-            return Object.entries(data)
-                .sort((a, b) => {
-                    return b[1] - a[1]
-                })
-                .map((item) => {
-                    return { name: item[0], value: item[1] }
-                })
+        {
+          key: 'mapsetArtists',
+          title: 'Mapset Count By Song Artists',
+          getData: () => {
+            return this.loadFromApi('scoresaber/artistdist')
+          }
         },
-        mapDiff(diff) {
-            if (diff.includes('ExpertPlus')) return 'Expert+'
-            if (diff.includes('Expert')) return 'Expert'
-            if (diff.includes('Hard')) return 'Hard'
-            if (diff.includes('Normal')) return 'Normal'
-            if (diff.includes('Easy')) return 'Easy'
-        },
-        openDialog() {
-            this.$buefy.modal.open({
-                parent: this,
-                component: TestModal,
-                hasModalCard: true,
-                trapFocus: true,
-                fullScreen: false,
-                props: {},
-                events: {
-                    close: () => {},
-                },
+        {
+          key: 'mapsetRQMappers',
+          title: 'Mappers Count (Ranking Queue)',
+          getData: async () => {
+            return (await this.loadFromApi('scoresaber/rq/mappers')).map((mapper) => {
+              return {
+                ...mapper,
+                value: mapper.value.length,
+                maps: mapper.value
+              }
             })
-        },
+          }
+        }
+      ]
+    }
+  },
+  computed: {
+    getVisibleItems () {
+      return this.data.slice(0, this.visibleItems)
+    }
+  },
+  watch: {
+    activeList: {
+      async handler (val) {
+        console.log('activeList', val)
+        if (!val) { return }
+        this.loading = true
+        this.$router.push({ query: { list: this.activeList.key } })
+        this.visibleItems = 10
+        this.data = await this.activeList.getData()
+        this.loading = false
+      }
+    }
+  },
+
+  async created () {
+    this.activeList = this.lists.find(i => i.key == this.$route.query?.list) || this.lists[0]
+
+    this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
+  },
+  methods: {
+    openUrl (url) {
+      window.open(url, '_blank')
     },
+    async loadFromApi (endpoint) {
+      const data = await this.$defaultApi.$get(endpoint)
+      return Object.entries(data)
+        .sort((a, b) => {
+          return b[1] - a[1]
+        })
+        .map((item) => {
+          return { name: item[0], value: item[1] }
+        })
+    },
+    mapDiff (diff) {
+      if (diff.includes('ExpertPlus')) { return 'Expert+' }
+      if (diff.includes('Expert')) { return 'Expert' }
+      if (diff.includes('Hard')) { return 'Hard' }
+      if (diff.includes('Normal')) { return 'Normal' }
+      if (diff.includes('Easy')) { return 'Easy' }
+    },
+    openDialog () {
+      this.$buefy.modal.open({
+        parent: this,
+        component: TestModal,
+        hasModalCard: true,
+        trapFocus: true,
+        fullScreen: false,
+        props: {},
+        events: {
+          close: () => {}
+        }
+      })
+    }
+  }
 }
 </script>
 

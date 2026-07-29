@@ -1,72 +1,72 @@
 <template>
-    <Button v-bind="attrs" @click.stop="onClick"><slot></slot></Button>
-    <!-- v-on="$listeners" -->
+  <Button v-bind="attrs" @click.stop="onClick">
+    <slot />
+  </Button>
+  <!-- v-on="$listeners" -->
 </template>
 
 <script>
 const classes = [
-    'secondary',
-    'success',
-    'info',
-    'warning',
-    'help',
-    'danger',
-    'raised',
-    'text',
-    'outlined',
-    'link',
-    'sm',
-    'lg',
+  'secondary',
+  'success',
+  'info',
+  'warning',
+  'help',
+  'danger',
+  'raised',
+  'text',
+  'outlined',
+  'link',
+  'sm',
+  'lg'
 ]
 
 export default {
-    props: ['icon', 'iconPos', 'href', 'to'],
-    mounted() {},
-    methods: {
-        onClick(event) {
-            if (this.to) {
-                this.$router.push(this.to)
-            } else if (this.href) {
-                window.open(this.href, this.$attrs.notblank == undefined ? '_blank' : '')
-            } else {
-                if (this.$listeners.click) this.$listeners.click(event)
-            }
-        },
+  props: ['icon', 'iconPos', 'href', 'to'],
+  computed: {
+    attrs () {
+      const attrs = { class: '', ...this.$attrs }
+
+      if (this.$attrs.notround == undefined) { attrs.class += ' p-button-rounded' }
+      if (this.$attrs.nomargin == undefined) { attrs.class += ' margin' }
+      if (this.$attrs.nohover == undefined) { attrs.class += ' hoveranim' }
+      if (this.$attrs.noiconmargin == undefined) { attrs.class += ' iconmargin' }
+
+      if (this.$attrs.reset != undefined) {
+        attrs.class = ''
+      }
+
+      if (this.icon) {
+        attrs.icon = this.computedIcon
+        attrs.iconPos = this.computedIconPos
+      }
+      for (const key of Object.keys(this.$attrs)) {
+        if (classes.includes(key) && this.$attrs[key] !== false) {
+          attrs.class += ` p-button-${key}`
+        }
+      }
+      return attrs
     },
-    computed: {
-        attrs() {
-            let attrs = { class: '', ...this.$attrs }
-
-            if (this.$attrs.notround == undefined) attrs.class += ' p-button-rounded'
-            if (this.$attrs.nomargin == undefined) attrs.class += ' margin'
-            if (this.$attrs.nohover == undefined) attrs.class += ' hoveranim'
-            if (this.$attrs.noiconmargin == undefined) attrs.class += ' iconmargin'
-
-            if (this.$attrs.reset != undefined) {
-                attrs.class = ''
-            }
-
-            if (this.icon) {
-                attrs.icon = this.computedIcon
-                attrs.iconPos = this.computedIconPos
-            }
-            for (const key of Object.keys(this.$attrs)) {
-                if (classes.includes(key) && this.$attrs[key] !== false) {
-                    attrs.class += ` p-button-${key}`
-                }
-            }
-            return attrs
-        },
-        computedIcon() {
-            if (this.icon) {
-                return `pi pi-${this.icon}`
-            }
-            return null
-        },
-        computedIconPos() {
-            return this.iconPos || 'right'
-        },
+    computedIcon () {
+      if (this.icon) {
+        return `pi pi-${this.icon}`
+      }
+      return null
     },
+    computedIconPos () {
+      return this.iconPos || 'right'
+    }
+  },
+  mounted () {},
+  methods: {
+    onClick (event) {
+      if (this.to) {
+        this.$router.push(this.to)
+      } else if (this.href) {
+        window.open(this.href, this.$attrs.notblank == undefined ? '_blank' : '')
+      } else if (this.$listeners.click) { this.$listeners.click(event) }
+    }
+  }
 }
 </script>
 
