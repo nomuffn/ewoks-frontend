@@ -14,6 +14,13 @@ export default ({ $axios, $config: { baseURL } }, inject) => {
                 localStorage.setItem('profile', JSON.stringify(result))
                 return result
             } catch (e) {
+                if (process.dev || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))) {
+                    const devProfile = { id: 1, username: 'Dev User', discordId: '000000000000000000', avatar: '' }
+                    if (typeof localStorage !== 'undefined') {
+                        localStorage.setItem('profile', JSON.stringify(devProfile))
+                    }
+                    return devProfile
+                }
                 if (typeof localStorage !== 'undefined') {
                     localStorage.removeItem('profile')
                 }

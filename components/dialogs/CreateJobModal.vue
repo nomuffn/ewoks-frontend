@@ -70,9 +70,12 @@
             </div>
 
             <!-- Warning Alert -->
-            <div class="bg-amber-950/30 border border-amber-800/50 rounded-xl p-3 text-amber-300 text-xs flex items-center gap-2.5">
-                <i class="bx bx-error text-amber-400 text-lg shrink-0"></i>
-                <span>Note: V3 maps, Noodle Extensions (NE), and Mapping Extensions (ME) are not supported.</span>
+            <div class="bg-red-950/60 border-2 border-red-600/70 rounded-xl p-4 text-red-200 flex items-start gap-3 shadow-lg shadow-red-900/30">
+                <i class="bx bxs-error text-red-400 text-2xl shrink-0 mt-0.5"></i>
+                <div>
+                    <p class="text-sm font-extrabold text-red-300 uppercase tracking-wide mb-1">⚠ Not Supported</p>
+                    <p class="text-sm font-semibold">V3 maps, Noodle Extensions (NE), and Mapping Extensions (ME) will <span class="text-red-400 underline decoration-wavy">fail</span> — do not submit them.</p>
+                </div>
             </div>
         </div>
 

@@ -15,44 +15,40 @@
             <!-- Logged In Content -->
             <div v-else-if="profile" class="space-y-6">
                 <!-- Controls & Filter Header Card -->
-                <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-wrap items-center justify-between gap-4">
-                    <!-- Left: Primary Action & Mapper/User Selector -->
-                    <div class="flex flex-wrap items-center gap-3">
-                        <button
-                            @click="createJob"
-                            :disabled="creatingJob"
-                            class="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 text-white font-semibold rounded-xl text-xs sm:text-sm transition-all shadow-lg shadow-blue-500/20 flex items-center gap-2 border border-blue-400/30"
-                        >
-                            <i class="bx bx-plus-circle text-lg"></i>
-                            <span>New Replay Request</span>
-                        </button>
+                <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex items-center justify-between gap-4">
+                    <!-- New Request Button -->
+                    <button
+                        @click="createJob"
+                        :disabled="creatingJob"
+                        class="px-4 py-2.5 bg-blue-600 hover:bg-blue-500 active:scale-95 disabled:opacity-50 text-white font-semibold rounded-xl text-xs sm:text-sm transition-all shadow-md flex items-center gap-2 shrink-0"
+                    >
+                        <i class="bx bx-plus-circle text-lg"></i>
+                        <span>New Replay Request</span>
+                    </button>
 
-                        <!-- User Filter Dropdown -->
-                        <div v-if="jobUsers.length > 1" class="flex items-center gap-2">
-                            <label class="text-xs font-semibold text-gray-400 hidden sm:inline whitespace-nowrap">
-                                <i class="bx bx-user text-blue-400 text-base"></i> User:
-                            </label>
-                            <Dropdown
-                                v-model="jobFilters.userid"
-                                optionLabel="name"
-                                optionValue="id"
-                                placeholder="Filter by user"
-                                :options="jobUsers"
-                                class="w-48 p-inputtext-sm"
-                                :showClear="true"
-                                scrollHeight="400px"
-                            />
-                        </div>
+                    <!-- User Filter Dropdown -->
+                    <div v-if="jobUsers.length > 1" class="shrink-0">
+                        <Dropdown
+                            v-model="jobFilters.userid"
+                            optionLabel="name"
+                            optionValue="id"
+                            placeholder="Filter by user"
+                            :options="jobUsers"
+                            class="w-44 p-inputtext-sm"
+                            :showClear="true"
+                            appendTo="body"
+                            scrollHeight="400px"
+                        />
                     </div>
 
-                    <!-- Right: Search Input -->
-                    <div class="relative flex-1 min-w-[220px] max-w-md">
+                    <!-- Search Input -->
+                    <div class="relative shrink-0">
                         <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></i>
                         <input
                             type="text"
                             v-model="jobFilters.textSearch"
                             placeholder="Search song title..."
-                            class="w-full bg-[#121315] text-gray-100 placeholder-gray-500 border border-gray-700 focus:border-blue-500 rounded-lg pl-9 pr-9 py-2 text-sm outline-none transition-all"
+                            class="bg-[#121315] text-gray-100 placeholder-gray-500 border border-gray-700 focus:border-blue-500 rounded-xl pl-9 pr-9 py-2.5 text-sm outline-none transition-all w-52"
                         />
                         <button
                             v-if="jobFilters.textSearch"
@@ -642,12 +638,39 @@ export default {
 
                 this.jobs.push(...jobs)
             } catch (e) {
-                this.$toast.add({
-                    severity: 'error',
-                    summary: `${e.response?.statusText || 'Error'} ${e.response?.status || ''}`,
-                    life: 3000,
-                })
-                this.error = e
+                if (process.dev || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))) {
+                    const makeDt = (daysAgo, h = 12, m = 0) => {
+                        const d = new Date()
+                        d.setDate(d.getDate() - daysAgo)
+                        d.setHours(h, m, 0, 0)
+                        return d.toISOString().slice(0, 19).replace('T', ' ')
+                    }
+                    const rawJobs = [
+                        { JobId: 1001, UserId: '100000000000000001', UserName: 'user_alpha', SongHash: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', Mode: 'Standard', Diff: 'ExpertPlus', Result: 'https://generated-replays.cdn.dzramen.com/mock/report-1001.json', CreatedDate: makeDt(0, 14, 30), SongName: 'Song Title Alpha', BeatSaverKey: '1a2b3' },
+                        { JobId: 1002, UserId: '100000000000000002', UserName: 'user_beta', SongHash: 'bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb', Mode: 'Standard', Diff: 'Expert', Result: 'https://generated-replays.cdn.dzramen.com/mock/report-1002.json', CreatedDate: makeDt(0, 10, 0), SongName: 'Song Title Beta', BeatSaverKey: '2c3d4' },
+                        { JobId: 1003, UserId: '100000000000000001', UserName: 'user_alpha', SongHash: 'cccccccccccccccccccccccccccccccccccccccc', Mode: 'Standard', Diff: 'ExpertPlus', Result: null, CreatedDate: makeDt(0, 9, 15), SongName: 'Song Title Gamma (Queued)', BeatSaverKey: '3e4f5' },
+                        { JobId: 1004, UserId: '100000000000000003', UserName: 'user_gamma', SongHash: 'dddddddddddddddddddddddddddddddddddddddd', Mode: 'Standard', Diff: 'Hard', Result: 'Error: Could not process map', CreatedDate: makeDt(1, 20, 0), SongName: 'Song Title Delta', BeatSaverKey: '' },
+                        { JobId: 1005, UserId: '100000000000000002', UserName: 'user_beta', SongHash: 'eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee', Mode: 'Standard', Diff: 'ExpertPlus', Result: 'https://generated-replays.cdn.dzramen.com/mock/report-1005.json', CreatedDate: makeDt(1, 18, 45), SongName: 'Song Title Epsilon', BeatSaverKey: '5g6h7' },
+                        { JobId: 1006, UserId: '100000000000000004', UserName: 'user_delta', SongHash: 'ffffffffffffffffffffffffffffffffffffffff', Mode: 'OneSaber', Diff: 'Expert', Result: 'https://generated-replays.cdn.dzramen.com/mock/report-1006.json', CreatedDate: makeDt(2, 8, 0), SongName: 'Song Title Zeta (One Saber)', BeatSaverKey: '6h7i8' },
+                        { JobId: 1007, UserId: '100000000000000003', UserName: 'user_gamma', SongHash: '1111111111111111111111111111111111111111', Mode: 'Standard', Diff: 'ExpertPlus', Result: 'https://generated-replays.cdn.dzramen.com/mock/report-1007.json', CreatedDate: makeDt(3, 16, 20), SongName: 'Song Title Eta', BeatSaverKey: '7i8j9' },
+                        { JobId: 1008, UserId: '100000000000000001', UserName: 'user_alpha', SongHash: '2222222222222222222222222222222222222222', Mode: 'Standard', Diff: 'Normal', Result: null, CreatedDate: makeDt(4, 11, 10), SongName: 'Song Title Theta (Queued)', BeatSaverKey: '8j9k0' },
+                        { JobId: 1009, UserId: '100000000000000005', UserName: 'user_epsilon', SongHash: '3333333333333333333333333333333333333333', Mode: 'Standard', Diff: 'ExpertPlus', Result: 'https://generated-replays.cdn.dzramen.com/mock/report-1009.json', CreatedDate: makeDt(5, 22, 5), SongName: 'Song Title Iota', BeatSaverKey: '9k0l1' },
+                        { JobId: 1010, UserId: '100000000000000005', UserName: 'user_epsilon', SongHash: '4444444444444444444444444444444444444444', Mode: 'Standard', Diff: 'Expert', Result: 'https://generated-replays.cdn.dzramen.com/mock/report-1010.json', CreatedDate: makeDt(6, 15, 30), SongName: 'Song Title Kappa', BeatSaverKey: '0l1m2' },
+                    ]
+                    this.jobs = rawJobs.map((job) => ({
+                        ...job,
+                        filters: { showBadcuts: true, showMisses: false, showBombs: false },
+                        done: job.Result?.includes('https://') ? 1 : job.Result == null ? 0 : -1,
+                    }))
+                    this.error = null
+                } else {
+                    this.$toast.add({
+                        severity: 'error',
+                        summary: `${e.response?.statusText || 'Error'} ${e.response?.status || ''}`,
+                        life: 3000,
+                    })
+                    this.error = e
+                }
             } finally {
                 this.loading = false
             }
@@ -687,7 +710,43 @@ export default {
             this.loadingJob = true
 
             try {
-                let results = (await this.$http.get(job.Result)).data
+                let results
+
+                const isDev = process.dev || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
+
+                if (isDev && job.Result?.includes('/mock/')) {
+                    // Generate fake replay data for dev mode
+                    const mkReplay = (seed) => {
+                        const rng = (min, max) => Math.round((min + ((seed * 9301 + 49297) % 233280) / 233280 * (max - min)) * 100) / 100
+                        const acc = Math.min(99.9, 70 + rng(seed, 29))
+                        const numMistakes = Math.floor(rng(seed + 1, 15))
+                        const mistakes = Array.from({ length: numMistakes }, (_, i) => ({
+                            time: parseFloat((i * 3.14 + seed * 0.7).toFixed(3)),
+                            type: ['bad', 'miss', 'bomb'][i % 3],
+                            noteId: i + seed * 10,
+                        }))
+                        return {
+                            ReplayParams: {
+                                acc: parseFloat(acc.toFixed(2)),
+                                fcAcc: parseFloat((acc + rng(seed + 2, 3)).toFixed(2)),
+                                fps: [60, 90, 120][seed % 3],
+                                mistakes: numMistakes,
+                                headsetYposition: parseFloat((1.5 + rng(seed, 0.4)).toFixed(3)),
+                                height: parseFloat((170 + rng(seed, 20)).toFixed(1)),
+                                jd: parseFloat((15 + rng(seed, 10)).toFixed(1)),
+                                postSwingAngle: parseFloat((50 + rng(seed, 30)).toFixed(1)),
+                                preSwingAngle: parseFloat((60 + rng(seed, 20)).toFixed(1)),
+                                timeDeviation: parseFloat((0.01 + rng(seed, 0.1)).toFixed(4)),
+                                requestedAcc: parseFloat((acc - 5).toFixed(2)),
+                                replayUrl: `https://cdn.dzramen.com/mock/replay-${seed}.bsor`,
+                            },
+                            ReplayMistakes: mistakes,
+                        }
+                    }
+                    results = Array.from({ length: 5 + (job.JobId % 8) }, (_, i) => mkReplay(job.JobId + i))
+                } else {
+                    results = (await this.$http.get(job.Result)).data
+                }
 
                 job.sortedReplays = {}
                 job.specifics = {

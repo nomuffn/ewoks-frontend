@@ -79,3 +79,10 @@
     background-color: transparent !important;
     border: none !important;
 }
+
+// PrimeVue Dropdown/Overlay panel above modal backdrop
+.p-dropdown-panel,
+.p-overlaypanel,
+.p-overlay {
+    z-index: 99999 !important;
+}
