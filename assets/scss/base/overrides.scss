@@ -47,3 +47,35 @@
     color: #fff;
     justify-content: left;
 }
+
+// Buefy & Bulma Modal Backdrop Overrides
+.modal {
+    z-index: 9999 !important;
+    background-color: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(4px);
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-background {
+    display: none !important;
+}
+
+.modal-content,
+.modal-card {
+    background-color: transparent !important;
+    overflow: visible !important;
+    max-width: 550px !important;
+    width: 90% !important;
+    box-shadow: none !important;
+    margin: 0 auto !important;
+    z-index: 10000 !important;
+}
+
+.modal-card-head,
+.modal-card-body,
+.modal-card-foot {
+    background-color: transparent !important;
+    border: none !important;
+}

@@ -14,16 +14,22 @@ export default ({ $axios, $config: { baseURL } }, inject) => {
                 localStorage.setItem('profile', JSON.stringify(result))
                 return result
             } catch (e) {
-                localStorage.removeItem('profile')
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.removeItem('profile')
+                }
                 return false
             }
         },
         login: async () => {
-            localStorage.removeItem('profile')
+            if (typeof localStorage !== 'undefined') {
+                localStorage.removeItem('profile')
+            }
             window.location.href = discordLogin
         },
         logout: async () => {
-            localStorage.removeItem('profile')
+            if (typeof localStorage !== 'undefined') {
+                localStorage.removeItem('profile')
+            }
             window.location.href = discordLogout
         },
     }

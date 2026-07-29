@@ -1,17 +1,35 @@
 <template>
-    <div class="rankingstats">
-        <sub-header title="Statistics stuff">
+    <div class="rankingstats pb-12">
+        <sub-header title="Statistics & Leaderboard Analytics">
             <p>
-                <!-- pp distribution: fix backend calc -->
-                Scoresaber stuff refreshes every hour
+                ScoreSaber metrics refresh hourly.
                 <br />
-                Beatsaver & RC Discord stuff every 24 hours
+                BeatSaver & Ranking Community Discord stats refresh every 24 hours.
             </p>
         </sub-header>
 
-        <TabMenu :model="items" />
+        <div class="w-full max-w-6xl px-4 sm:px-8 mx-auto mt-6 space-y-6">
+            <!-- Navigation Tab Bar -->
+            <div class="bg-[#18191c] border border-gray-800 rounded-xl p-2 shadow-lg flex items-center justify-center gap-2">
+                <NuxtLink
+                    v-for="item in items"
+                    :key="item.to"
+                    :to="item.to"
+                    class="px-5 py-2.5 rounded-lg font-semibold text-sm transition-all flex items-center gap-2 select-none"
+                    :class="[
+                        $route.path === item.to || ($route.path === '/stats' && item.to === '/stats/beatsaver')
+                            ? 'bg-blue-600 text-white shadow-md'
+                            : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                    ]"
+                >
+                    <i :class="item.icon"></i>
+                    <span>{{ item.label }}</span>
+                </NuxtLink>
+            </div>
 
-        <NuxtChild class="content sub-page" keep-alive />
+            <!-- Page Content -->
+            <NuxtChild class="content sub-page" keep-alive />
+        </div>
     </div>
 </template>
 
@@ -21,45 +39,23 @@ export default {
     data() {
         return {
             items: [
-                { label: 'Beatsaver', to: '/stats/beatsaver' },
-                { label: 'Scoresaber', to: '/stats/scoresaber' },
-                { label: 'RC Discord', to: '/stats/discord' },
+                { label: 'BeatSaver Filter', to: '/stats/beatsaver', icon: 'bx bx-slider-alt' },
+                { label: 'ScoreSaber Leaderboards', to: '/stats/scoresaber', icon: 'bx bx-trophy' },
+                { label: 'RC Discord Reactions', to: '/stats/discord', icon: 'bx bxl-discord' },
             ],
         }
     },
     beforeRouteEnter(to, from, next) {
         next((vm) => {
-            if (to.path == '/stats') return next('/stats/beatsaver')
+            if (to.path === '/stats') return next('/stats/beatsaver')
             next()
         })
-    },
-    async created() {
-        // this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
     },
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .rankingstats {
-    justify-content: center;
-
-    .p-tabmenu ul {
-        justify-content: center;
-    }
-
-    .p-tabmenu,
-    .p-tabmenu .p-tabmenu-nav .p-tabmenuitem .p-menuitem-link {
-        background: rgb(30, 32, 35);
-    }
-
-    .vs-navbar-content {
-        position: relative;
-
-        button {
-            white-space: pre-line;
-            padding-top: 0px;
-            padding: 0px 10px 15px 10px;
-        }
-    }
+    min-height: 100vh;
 }
 </style>

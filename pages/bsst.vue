@@ -90,25 +90,15 @@
             <div v-if="insights" class="space-y-6 mb-8">
                 <!-- Mapper Spotlight Banner -->
                 <div class="bg-[#18191c] border border-gray-800 rounded-2xl p-5 shadow-xl flex flex-wrap items-center justify-between gap-4">
-                    <div class="flex items-center gap-4">
-                        <div class="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-600/30 to-purple-600/30 border border-blue-500/40 flex items-center justify-center text-blue-400 text-3xl font-mono font-bold shrink-0">
-                            {{ insights.mapperName ? insights.mapperName.charAt(0).toUpperCase() : 'M' }}
-                        </div>
-                        <div>
-                            <div class="flex items-center gap-2">
-                                <h2 class="text-xl font-bold text-gray-100">{{ insights.mapperName }}</h2>
-                                <span class="px-2.5 py-0.5 bg-blue-950/60 text-blue-300 border border-blue-800/60 font-mono text-xs rounded-full font-semibold">
-                                    BeatSaver Mapper
-                                </span>
-                            </div>
-                            <p class="text-xs text-gray-400 mt-1 flex flex-wrap items-center gap-3">
-                                <span><i class="bx bx-calendar text-blue-400"></i> Active since <strong class="text-gray-200">{{ formatDate(insights.firstUpload) }}</strong></span>
-                                <span class="text-gray-600">•</span>
-                                <span><i class="bx bx-tachometer text-amber-400"></i> Output: <strong class="text-gray-200">{{ insights.mapsPerMonth }} maps/month</strong></span>
-                                <span class="text-gray-600">•</span>
-                                <span><i class="bx bx-music text-purple-400"></i> Total Mapped Music: <strong class="text-gray-200">{{ insights.totalDurationStr }}</strong></span>
-                            </p>
-                        </div>
+                    <div>
+                        <h2 class="text-xl font-bold text-gray-100">{{ insights.mapperName }}</h2>
+                        <p class="text-xs text-gray-400 mt-1 flex flex-wrap items-center gap-3">
+                            <span><i class="bx bx-calendar text-blue-400"></i> Active since <strong class="text-gray-200">{{ formatDate(insights.firstUpload) }}</strong></span>
+                            <span class="text-gray-600">•</span>
+                            <span><i class="bx bx-tachometer text-amber-400"></i> Output: <strong class="text-gray-200">{{ insights.mapsPerMonth }} maps/month</strong></span>
+                            <span class="text-gray-600">•</span>
+                            <span><i class="bx bx-music text-purple-400"></i> Total Mapped Music: <strong class="text-gray-200">{{ insights.totalDurationStr }}</strong></span>
+                        </p>
                     </div>
 
                     <div class="flex items-center gap-3 font-mono">
@@ -1483,7 +1473,10 @@ export default {
             if (this.currentOrdering && this.currentOrdering !== '-uploaded') {
                 query.ordering = this.currentOrdering
             }
-            this.$router.replace({ query }).catch(() => {})
+            const res = this.$router.replace({ query })
+            if (res && typeof res.catch === 'function') {
+                res.catch(() => {})
+            }
         },
         async fetchMappers() {
             this.loading = true

@@ -1,310 +1,493 @@
 <template>
-    <div class="cyberramen">
+    <div class="cyberramen pb-12">
         <sub-header title="CyberRamen Request Tool">
             <p v-html="description"></p>
         </sub-header>
 
-        <div v-if="error">
-            <p>{{ error }}</p>
-        </div>
+        <div class="w-full px-4 sm:px-8 mt-6">
+            <!-- Error State -->
+            <div v-if="error" class="bg-rose-950/40 border border-rose-800/60 rounded-xl p-6 text-center text-rose-300 my-4 shadow-lg">
+                <i class="bx bx-error-circle text-4xl mb-2 text-rose-400"></i>
+                <p class="font-semibold text-base">Failed to load CyberRamen jobs</p>
+                <p class="text-xs text-rose-400/80 mt-1">{{ error.message || error }}</p>
+            </div>
 
-        <div v-else-if="profile" class="content flex flex-col items-center">
-            <my-button
-                label="Create request"
-                class="my-2"
-                @click="createJob"
-                :loading="creatingJob"
-                :disabled="creatingJob"
-            />
+            <!-- Logged In Content -->
+            <div v-else-if="profile" class="space-y-6">
+                <!-- Controls & Filter Header Card -->
+                <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-wrap items-center justify-between gap-4">
+                    <!-- Left: Primary Action & Mapper/User Selector -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        <button
+                            @click="createJob"
+                            :disabled="creatingJob"
+                            class="px-4 py-2.5 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 active:scale-95 text-white font-semibold rounded-xl text-xs sm:text-sm transition-all shadow-lg shadow-blue-500/20 flex items-center gap-2 border border-blue-400/30"
+                        >
+                            <i class="bx bx-plus-circle text-lg"></i>
+                            <span>New Replay Request</span>
+                        </button>
 
-            <Dropdown
-                v-if="jobUsers.length > 1"
-                v-model="jobFilters.userid"
-                optionLabel="name"
-                optionValue="id"
-                placeholder="Filter by user"
-                :options="jobUsers"
-                class="my-2"
-                :showClear="true"
-                scrollHeight="400px"
-            />
+                        <!-- User Filter Dropdown -->
+                        <div v-if="jobUsers.length > 1" class="flex items-center gap-2">
+                            <label class="text-xs font-semibold text-gray-400 hidden sm:inline whitespace-nowrap">
+                                <i class="bx bx-user text-blue-400 text-base"></i> User:
+                            </label>
+                            <Dropdown
+                                v-model="jobFilters.userid"
+                                optionLabel="name"
+                                optionValue="id"
+                                placeholder="Filter by user"
+                                :options="jobUsers"
+                                class="w-48 p-inputtext-sm"
+                                :showClear="true"
+                                scrollHeight="400px"
+                            />
+                        </div>
+                    </div>
 
-            <InputText type="text" v-model="jobFilters.textSearch" placeholder="Text search" class="my-2" />
-
-            <Message v-if="filteredJobs.length" severity="info" @close="(event) => (filteredJobs = [])" :closable="true"
-                >Jobs filtered by query param: {{ this.filteredJobs.join() }}</Message
-            >
-
-            <ProgressBar
-                v-if="loading && !this.computedJobs.length"
-                class="my-4"
-                style="width: 100px"
-                mode="indeterminate"
-            />
-            <DataTable
-                v-else
-                class="w-full max-w-screen-2xl my-2"
-                :value="computedJobs"
-                :expandedRows.sync="expandedRows"
-                responsiveLayout="scroll"
-                :paginator="true"
-                :rows="50"
-                @row-expand="loadJob"
-            >
-                <Column :expander="true" :headerStyle="{ width: '3rem' }" />
-                <Column field="done" header="Status" sortable>
-                    <template #body="{ data: job }">
-                        <InlineMessage :severity="job.done == 1 ? 'success' : job.done == 0 ? 'info' : 'error'">{{
-                            job.done == 1 ? 'Done' : job.done == 0 ? 'Queued' : 'ERROR'
-                        }}</InlineMessage>
-                    </template>
-                </Column>
-                <Column field="SongName" header="SongName" sortable>
-                    <template #body="{ data: job }">
-                        <!-- p-button-text -->
-                        <my-button
-                            :label="job.SongName"
-                            :outlined="!expandedRows.some((i) => i.JobId == job.JobId)"
-                            @click="toggleRow(job)"
+                    <!-- Right: Search Input -->
+                    <div class="relative flex-1 min-w-[220px] max-w-md">
+                        <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></i>
+                        <input
+                            type="text"
+                            v-model="jobFilters.textSearch"
+                            placeholder="Search song title..."
+                            class="w-full bg-[#121315] text-gray-100 placeholder-gray-500 border border-gray-700 focus:border-blue-500 rounded-lg pl-9 pr-9 py-2 text-sm outline-none transition-all"
                         />
-                    </template>
-                </Column>
-                <Column field="Diff" header="Diff" sortable />
-                <Column field="CreatedDate" header="Created" sortable />
-                <Column field="CompletedDate" header="Finished" sortable />
-                <Column header="Actions">
-                    <template #body="{ data: job }">
-                        <div class="flex">
-                            <my-button
-                                label="Request info"
-                                class="p-button-outlined m-1 w-24"
-                                type="button"
-                                @click="openJob(job)"
-                            ></my-button>
-                            <my-button
-                                label="Beatsaver"
-                                class="p-button-outlined m-1 w-24"
-                                type="button"
-                                iconPos="right"
-                                @click="openLink(`https://beatsaver.com/maps/${job.BeatSaverKey}`)"
-                            ></my-button>
-                        </div>
-                    </template>
-                </Column>
-                <template #expansion="{ data: job, index }">
-                    <p v-if="!job.Result">Wait until its done generating :DDD</p>
-                    <p v-else-if="!job.Result?.includes('https://')">
-                        {{ job.Result }}
-                    </p>
-                    <ProgressBar v-else-if="!job.loadedResults" mode="indeterminate" />
-                    <div v-else>
-                        <div class="flex justify-center mb-2">
-                            <div v-if="job.specifics?.highestAcc" class="flex m-2">
-                                <my-button
-                                    :label="`Highest Acc ${job.specifics.highestAcc.acc}%`"
-                                    class="p-button-outlined m-1"
-                                    type="button"
-                                    iconPos="right"
-                                    icon="pi pi-external-link"
-                                    notround
-                                    nomargin
-                                    @click="openReplay(job.specifics.highestAcc)"
-                                ></my-button>
-                                <my-button reset :href="job.specifics.highestAcc.replayUrl">
-                                    <i class="bx bx-download"></i>
-                                </my-button>
-                            </div>
+                        <button
+                            v-if="jobFilters.textSearch"
+                            @click="jobFilters.textSearch = ''"
+                            class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-1 rounded-full text-base transition-colors"
+                        >
+                            <i class="bx bx-x"></i>
+                        </button>
+                    </div>
+                </div>
 
-                            <div class="flex m-2">
-                                <my-button
-                                    v-if="job.specifics?.mostMistakes"
-                                    :label="`Most mistakes ${job.specifics.mostMistakes.mistakes || 0}`"
-                                    class="p-button-outlined m-1"
-                                    type="button"
-                                    iconPos="right"
-                                    icon="pi pi-external-link"
-                                    notround
-                                    nomargin
-                                    @click="openReplay(job.specifics.mostMistakes)"
-                                ></my-button>
-                                <my-button reset :href="job.specifics.mostMistakes.replayUrl">
-                                    <i class="bx bx-download"></i>
-                                </my-button>
-                            </div>
-                        </div>
-                        <TabView :activeIndex.sync="job.selectedTab">
-                            <TabPanel :header="`Mistakes: ${job.sortedMistakes.length}`">
-                                <div class="flex justify-center">
-                                    <div class="field-checkbox m-2">
-                                        <Checkbox
-                                            :id="`showBadcuts-${job.JobId}`"
-                                            v-model="computedJobs[index].filters.showBadcuts"
-                                            :binary="true"
-                                            class="mr-2"
-                                        />
-                                        <label :for="`showBadcuts-${job.JobId}`"
-                                            >Show badcuts ({{ job.specifics['total_bad'] }})</label
-                                        >
-                                    </div>
-                                    <div class="field-checkbox m-2">
-                                        <Checkbox
-                                            :id="`showMisses-${job.JobId}`"
-                                            v-model="computedJobs[index].filters.showMisses"
-                                            :binary="true"
-                                            class="mr-2"
-                                        />
-                                        <label :for="`showMisses-${job.JobId}`"
-                                            >Show misses ({{ job.specifics['total_miss'] }})</label
-                                        >
-                                    </div>
-                                    <div class="field-checkbox m-2">
-                                        <Checkbox
-                                            :id="`showBombs-${job.JobId}`"
-                                            v-model="computedJobs[index].filters.showBombs"
-                                            :binary="true"
-                                            class="mr-2"
-                                        />
-                                        <label :for="`showBombs-${job.JobId}`"
-                                            >Show bomb hits ({{ job.specifics['total_bomb'] }})</label
-                                        >
-                                    </div>
+                <!-- Query Param Active Filter Alert -->
+                <div
+                    v-if="filteredJobs.length"
+                    class="bg-blue-950/40 border border-blue-800/60 rounded-xl p-3 px-4 flex items-center justify-between text-xs text-blue-300 shadow-md"
+                >
+                    <div class="flex items-center gap-2">
+                        <i class="bx bx-filter-alt text-base text-blue-400"></i>
+                        <span>Filtered by Job IDs: <strong class="font-mono text-gray-100">{{ filteredJobs.join(', ') }}</strong></span>
+                    </div>
+                    <button
+                        @click="filteredJobs = []"
+                        class="text-blue-400 hover:text-white transition-colors text-xs font-semibold px-2 py-0.5 rounded hover:bg-blue-900/40"
+                    >
+                        Clear Filter
+                    </button>
+                </div>
+
+                <!-- Main Data Table Container -->
+                <div class="bg-[#18191c] border border-gray-800 rounded-xl shadow-xl overflow-hidden relative min-h-[300px]">
+                    <div v-if="loading && !computedJobs.length" class="p-16 flex flex-col items-center justify-center">
+                        <ProgressSpinner style="width: 42px; height: 42px" strokeWidth="4" />
+                        <span class="text-gray-400 mt-4 text-sm font-medium animate-pulse">Loading CyberRamen jobs...</span>
+                    </div>
+                    <DataTable
+                        v-else
+                        class="w-full text-left"
+                        :value="computedJobs"
+                        :expandedRows.sync="expandedRows"
+                        responsiveLayout="scroll"
+                        :paginator="true"
+                        :rows="50"
+                        @row-expand="loadJob"
+                    >
+                        <Column :expander="true" :headerStyle="{ width: '3rem' }" />
+
+                        <!-- Status Column with Rich Badges -->
+                        <Column field="done" header="Status" sortable>
+                            <template #body="{ data: job }">
+                                <span
+                                    :class="[
+                                        'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border',
+                                        job.done === 1
+                                            ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                                            : job.done === 0
+                                            ? 'bg-blue-500/15 text-blue-300 border-blue-500/30 animate-pulse'
+                                            : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
+                                    ]"
+                                >
+                                    <span
+                                        :class="[
+                                            'w-1.5 h-1.5 rounded-full',
+                                            job.done === 1 ? 'bg-emerald-400' : job.done === 0 ? 'bg-blue-400' : 'bg-rose-400'
+                                        ]"
+                                    ></span>
+                                    {{ job.done === 1 ? 'Done' : job.done === 0 ? 'Queued' : 'Error' }}
+                                </span>
+                            </template>
+                        </Column>
+
+                        <!-- Song Name Column -->
+                        <Column field="SongName" header="Song Name" sortable>
+                            <template #body="{ data: job }">
+                                <button
+                                    @click="toggleRow(job)"
+                                    class="text-left font-semibold text-gray-100 hover:text-blue-400 transition-colors text-sm flex items-center gap-2 group"
+                                >
+                                    <span>{{ job.SongName || 'Untitled Song' }}</span>
+                                    <i
+                                        :class="[
+                                            'bx text-gray-500 group-hover:text-blue-400 transition-transform',
+                                            expandedRows.some((i) => i.JobId === job.JobId) ? 'bx-chevron-down rotate-180' : 'bx-chevron-right'
+                                        ]"
+                                    ></i>
+                                </button>
+                            </template>
+                        </Column>
+
+                        <!-- Difficulty Column -->
+                        <Column field="Diff" header="Diff" sortable>
+                            <template #body="{ data: job }">
+                                <span class="bg-gray-800/90 border border-gray-700 text-gray-200 text-xs px-2.5 py-1 rounded-md font-mono font-medium">
+                                    {{ job.Diff || 'Standard' }}
+                                </span>
+                            </template>
+                        </Column>
+
+                        <!-- Created Date -->
+                        <Column field="CreatedDate" header="Created" sortable>
+                            <template #body="{ data: job }">
+                                <span class="text-xs text-gray-300 font-mono">
+                                    {{ formatDate(job.CreatedDate) }}
+                                </span>
+                            </template>
+                        </Column>
+
+                        <!-- Finished Date -->
+                        <Column field="CompletedDate" header="Finished" sortable>
+                            <template #body="{ data: job }">
+                                <span class="text-xs text-gray-400 font-mono">
+                                    {{ formatDate(job.CompletedDate) }}
+                                </span>
+                            </template>
+                        </Column>
+
+                        <!-- Actions Column -->
+                        <Column header="Actions">
+                            <template #body="{ data: job }">
+                                <div class="flex items-center gap-2">
+                                    <button
+                                        @click="openJob(job)"
+                                        class="px-2.5 py-1.5 rounded-lg bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white text-xs font-semibold transition-colors flex items-center gap-1 border border-gray-700"
+                                        title="View job technical parameters"
+                                    >
+                                        <i class="bx bx-info-circle text-sm text-blue-400"></i> Info
+                                    </button>
+                                    <a
+                                        v-if="job.BeatSaverKey"
+                                        :href="`https://beatsaver.com/maps/${job.BeatSaverKey}`"
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        class="px-2.5 py-1.5 rounded-lg bg-blue-600/10 hover:bg-blue-600 text-blue-300 hover:text-white text-xs font-mono font-semibold transition-colors flex items-center gap-1 border border-blue-500/30"
+                                        title="View map on BeatSaver"
+                                    >
+                                        #{{ job.BeatSaverKey }} <i class="bx bx-external-link text-xs"></i>
+                                    </a>
+                                </div>
+                            </template>
+                        </Column>
+
+                        <!-- Expanded Row Sub-Content -->
+                        <template #expansion="{ data: job, index }">
+                            <div class="bg-[#121315] p-5 border-t border-b border-gray-800 space-y-4">
+                                <!-- Status Messages for Incomplete Jobs -->
+                                <div v-if="!job.Result" class="p-6 text-center text-gray-400 flex flex-col items-center">
+                                    <ProgressSpinner style="width: 32px; height: 32px" strokeWidth="4" />
+                                    <p class="mt-3 text-sm font-medium text-blue-300 animate-pulse">Generating replays and mistake analysis... Please wait :DDD</p>
                                 </div>
 
-                                <DataTable
-                                    :value="getMistakes(job)"
-                                    :expandedRows.sync="expandedRows"
-                                    responsiveLayout="scroll"
-                                    :paginator="getMistakes(job).length > 10"
-                                    :rows="10"
-                                >
-                                    <Column :expander="true" :headerStyle="{ width: '3rem' }" />
-                                    <Column field="time" header="Timestamp" sortable></Column>
-                                    <Column field="mistakes" header="Amount of replays that missed" sortable>
-                                        <template #body="{ data: mistakes }">
-                                            {{ mistakes.mistakes.length }}
-                                        </template>
-                                    </Column>
+                                <div v-else-if="!job.Result?.includes('https://')" class="p-4 bg-rose-950/30 border border-rose-800/40 rounded-xl text-rose-300 text-xs font-mono">
+                                    <i class="bx bx-error text-base mr-1 text-rose-400"></i> {{ job.Result }}
+                                </div>
 
-                                    <template #expansion="{ data: mistake }">
-                                        <DataTable
-                                            class="layer-3"
-                                            :value="mistake.mistakes"
-                                            responsiveLayout="scroll"
-                                            :paginator="mistake.mistakes.length > 10"
-                                            :rows="10"
-                                        >
-                                            <Column field="type" header="Type" sortable></Column>
-                                            <Column field="noteId" header="Note ID" sortable></Column>
-                                            <Column header="Replay">
-                                                <template #body="{ data: singleMistake }">
-                                                    <div class="flex items-center">
-                                                        <!-- <b class="mx-1 mr-auto">{{ singleMistake.replayId }}</b> -->
-                                                        <my-button
-                                                            icon="pi pi-external-link"
-                                                            class="p-button-outlined mx-1"
-                                                            type="button"
-                                                            iconPos="right"
-                                                            @click="openReplay(job, singleMistake)"
-                                                        ></my-button>
-                                                        <my-button
-                                                            icon="pi pi-info"
-                                                            class="p-button-outlined mx-1"
-                                                            type="button"
-                                                            iconPos="right"
-                                                            @click="
-                                                                (event) =>
-                                                                    $refs[
-                                                                        `panel-${singleMistake.replayId}-${singleMistake.noteId}-${singleMistake.time}`
-                                                                    ].toggle(event)
-                                                            "
-                                                        ></my-button>
-                                                        <OverlayPanel
-                                                            :ref="`panel-${singleMistake.replayId}-${singleMistake.noteId}-${singleMistake.time}`"
-                                                            appendTo="body"
-                                                        >
-                                                            <b>Replay Info</b>
-                                                            <div
-                                                                v-for="attribute of Object.entries(
-                                                                    job.sortedReplays[singleMistake.replayId],
-                                                                )"
-                                                                class="flex"
-                                                                :key="attribute[0]"
-                                                            >
-                                                                <p class="mr-auto pr-4">
-                                                                    {{ attribute[0] }}
-                                                                </p>
-                                                                <my-button
-                                                                    v-if="attribute[1].toString().includes('https://')"
-                                                                    label="Link"
-                                                                    class="p-button-link p-0"
-                                                                    @click="openReplay(job, singleMistake)"
-                                                                />
-                                                                <b v-else>
-                                                                    {{ attribute[1] }}
-                                                                </b>
-                                                            </div>
-                                                        </OverlayPanel>
-                                                    </div>
-                                                </template>
-                                            </Column>
-                                        </DataTable>
-                                    </template>
-                                </DataTable>
-                            </TabPanel>
-                            <TabPanel :header="`Replays: ${Object.keys(job.sortedReplays).length}`">
-                                <DataTable
-                                    class="layer-2"
-                                    :value="Object.values(job.sortedReplays)"
-                                    responsiveLayout="scroll"
-                                    :paginator="true"
-                                    :rows="10"
-                                    sortField="acc"
-                                    :sortOrder="-1"
-                                >
-                                    <Column field="acc" header="Acc" sortable />
-                                    <Column field="fcAcc" header="FC Acc" sortable />
-                                    <Column field="fps" header="FPS" sortable />
-                                    <Column field="mistakes" header="Mistakes" sortable />
-                                    <Column field="headsetYposition" header="HMD Y Pos" sortable />
-                                    <Column field="height" header="height" sortable />
-                                    <Column field="jd" header="jd" sortable />
-                                    <Column field="postSwingAngle" header="Post Swing Angle" sortable />
-                                    <Column field="preSwingAngle" header="Pre Swing Angle" sortable />
-                                    <Column field="timeDeviation" header="Time deviation" sortable />
-                                    <Column field="requestedAcc" header="Requested Acc" sortable />
-                                    <Column header="Replay">
-                                        <template #body="{ data: replay }">
-                                            <div class="flex">
-                                                <my-button
-                                                    icon="pi pi-external-link"
-                                                    class="p-button-outlined mx-1"
-                                                    type="button"
-                                                    iconPos="right"
-                                                    @click="openReplay(replay)"
-                                                ></my-button>
-                                                <my-button
-                                                    icon="pi pi-download"
-                                                    class="p-button-outlined mx-1"
-                                                    type="button"
-                                                    iconPos="right"
-                                                    :href="replay.replayUrl"
-                                                ></my-button>
+                                <div v-else-if="!job.loadedResults" class="p-8 text-center text-gray-400">
+                                    <ProgressSpinner style="width: 32px; height: 32px" strokeWidth="4" />
+                                    <p class="mt-2 text-xs font-medium">Fetching detailed replay analytics...</p>
+                                </div>
+
+                                <!-- Detailed Replay Results & Analysis -->
+                                <div v-else class="space-y-4">
+                                    <!-- High-Score Specifics Cards (Highest Acc & Most Mistakes) -->
+                                    <div class="flex flex-wrap items-center justify-center gap-3">
+                                        <!-- Highest Accuracy Badge Card -->
+                                        <div v-if="job.specifics?.highestAcc?.acc" class="bg-[#18191c] border border-emerald-500/30 rounded-xl p-3 flex items-center gap-3 shadow-md">
+                                            <div class="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 text-lg">
+                                                <i class="bx bx-trophy"></i>
                                             </div>
-                                        </template>
-                                    </Column>
-                                </DataTable>
-                            </TabPanel>
-                        </TabView>
-                    </div>
-                </template>
-            </DataTable>
-        </div>
-        <div v-else class="content flex flex-col items-center">
-            <p class="my-4 font-bold">Discord login needed</p>
-            <my-button @click="$auth.login()" outlined>
-                <p>Login</p>
-                <i class="bx bxl-discord"></i>
-            </my-button>
+                                            <div>
+                                                <span class="text-[11px] text-gray-400 font-semibold uppercase block">Highest Accuracy</span>
+                                                <span class="text-sm font-bold font-mono text-emerald-400">{{ job.specifics.highestAcc.acc }}%</span>
+                                            </div>
+                                            <div class="flex items-center gap-1.5 ml-2">
+                                                <button
+                                                    @click="openReplay(job.specifics.highestAcc)"
+                                                    class="px-2.5 py-1 bg-emerald-600/20 hover:bg-emerald-600 text-emerald-300 hover:text-white rounded-md text-xs font-semibold transition-colors flex items-center gap-1 border border-emerald-500/30"
+                                                >
+                                                    Replay <i class="bx bx-external-link"></i>
+                                                </button>
+                                                <a
+                                                    :href="job.specifics.highestAcc.replayUrl"
+                                                    class="p-1 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-md text-sm transition-colors"
+                                                    title="Download replay file"
+                                                >
+                                                    <i class="bx bx-download"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+
+                                        <!-- Most Mistakes Badge Card -->
+                                        <div v-if="job.specifics?.mostMistakes" class="bg-[#18191c] border border-amber-500/30 rounded-xl p-3 flex items-center gap-3 shadow-md">
+                                            <div class="w-9 h-9 rounded-lg bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400 text-lg">
+                                                <i class="bx bx-error-alt"></i>
+                                            </div>
+                                            <div>
+                                                <span class="text-[11px] text-gray-400 font-semibold uppercase block">Most Mistakes</span>
+                                                <span class="text-sm font-bold font-mono text-amber-400">{{ job.specifics.mostMistakes.mistakes || 0 }} mistakes</span>
+                                            </div>
+                                            <div class="flex items-center gap-1.5 ml-2">
+                                                <button
+                                                    @click="openReplay(job.specifics.mostMistakes)"
+                                                    class="px-2.5 py-1 bg-amber-600/20 hover:bg-amber-600 text-amber-300 hover:text-white rounded-md text-xs font-semibold transition-colors flex items-center gap-1 border border-amber-500/30"
+                                                >
+                                                    Replay <i class="bx bx-external-link"></i>
+                                                </button>
+                                                <a
+                                                    :href="job.specifics.mostMistakes.replayUrl"
+                                                    class="p-1 bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white rounded-md text-sm transition-colors"
+                                                    title="Download replay file"
+                                                >
+                                                    <i class="bx bx-download"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Tabs Container -->
+                                    <TabView :activeIndex.sync="job.selectedTab" class="custom-tabview">
+                                        <!-- Mistakes Tab -->
+                                        <TabPanel :header="`Mistakes Breakdown (${job.sortedMistakes.length})`">
+                                            <!-- Checkbox Filters -->
+                                            <div class="flex flex-wrap items-center justify-center gap-6 py-3 bg-[#18191c] border border-gray-800 rounded-xl mb-4 text-xs font-medium text-gray-300">
+                                                <label class="flex items-center gap-2 cursor-pointer select-none">
+                                                    <Checkbox
+                                                        :id="`showBadcuts-${job.JobId}`"
+                                                        v-model="computedJobs[index].filters.showBadcuts"
+                                                        :binary="true"
+                                                    />
+                                                    <span>Badcuts (<strong class="text-rose-400 font-mono">{{ job.specifics['total_bad'] }}</strong>)</span>
+                                                </label>
+
+                                                <label class="flex items-center gap-2 cursor-pointer select-none">
+                                                    <Checkbox
+                                                        :id="`showMisses-${job.JobId}`"
+                                                        v-model="computedJobs[index].filters.showMisses"
+                                                        :binary="true"
+                                                    />
+                                                    <span>Misses (<strong class="text-amber-400 font-mono">{{ job.specifics['total_miss'] }}</strong>)</span>
+                                                </label>
+
+                                                <label class="flex items-center gap-2 cursor-pointer select-none">
+                                                    <Checkbox
+                                                        :id="`showBombs-${job.JobId}`"
+                                                        v-model="computedJobs[index].filters.showBombs"
+                                                        :binary="true"
+                                                    />
+                                                    <span>Bomb Hits (<strong class="text-purple-400 font-mono">{{ job.specifics['total_bomb'] }}</strong>)</span>
+                                                </label>
+                                            </div>
+
+                                            <!-- Mistakes Sub-DataTable -->
+                                            <div class="bg-[#18191c] border border-gray-800 rounded-xl overflow-hidden shadow-inner">
+                                                <DataTable
+                                                    :value="getMistakes(job)"
+                                                    :expandedRows.sync="expandedRows"
+                                                    responsiveLayout="scroll"
+                                                    :paginator="getMistakes(job).length > 10"
+                                                    :rows="10"
+                                                >
+                                                    <Column :expander="true" :headerStyle="{ width: '3rem' }" />
+                                                    <Column field="time" header="Timestamp" sortable>
+                                                        <template #body="{ data: mistake }">
+                                                            <span class="font-mono text-xs font-bold text-blue-300 bg-blue-950/40 border border-blue-800/40 px-2 py-0.5 rounded">
+                                                                {{ mistake.time }}s
+                                                            </span>
+                                                        </template>
+                                                    </Column>
+                                                    <Column field="mistakes" header="Replays Missed" sortable>
+                                                        <template #body="{ data: mistakes }">
+                                                            <span class="text-xs font-mono font-semibold text-rose-400">
+                                                                {{ mistakes.mistakes.length }} replays
+                                                            </span>
+                                                        </template>
+                                                    </Column>
+
+                                                    <!-- Nested Single Replay Mistake Expansion -->
+                                                    <template #expansion="{ data: mistake }">
+                                                        <div class="p-3 bg-[#121315] border-t border-gray-800">
+                                                            <DataTable
+                                                                class="w-full text-left"
+                                                                :value="mistake.mistakes"
+                                                                responsiveLayout="scroll"
+                                                                :paginator="mistake.mistakes.length > 10"
+                                                                :rows="10"
+                                                            >
+                                                                <Column field="type" header="Type" sortable>
+                                                                    <template #body="{ data: m }">
+                                                                        <span
+                                                                            :class="[
+                                                                                'text-xs font-mono px-2 py-0.5 rounded uppercase font-semibold border',
+                                                                                m.type === 'bad' ? 'bg-rose-500/20 text-rose-300 border-rose-500/30' : m.type === 'miss' ? 'bg-amber-500/20 text-amber-300 border-amber-500/30' : 'bg-purple-500/20 text-purple-300 border-purple-500/30'
+                                                                            ]"
+                                                                        >
+                                                                            {{ m.type }}
+                                                                        </span>
+                                                                    </template>
+                                                                </Column>
+                                                                <Column field="noteId" header="Note ID" sortable>
+                                                                    <template #body="{ data: m }">
+                                                                        <span class="font-mono text-xs text-gray-400">#{{ m.noteId }}</span>
+                                                                    </template>
+                                                                </Column>
+                                                                <Column header="Replay Actions">
+                                                                    <template #body="{ data: singleMistake }">
+                                                                        <div class="flex items-center gap-2">
+                                                                            <button
+                                                                                @click="openReplay(job, singleMistake)"
+                                                                                class="px-2.5 py-1 rounded bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white text-xs font-semibold transition-colors flex items-center gap-1 border border-blue-500/30"
+                                                                            >
+                                                                                View Replay <i class="bx bx-external-link"></i>
+                                                                            </button>
+                                                                            <button
+                                                                                @click="(event) => $refs[`panel-${singleMistake.replayId}-${singleMistake.noteId}-${singleMistake.time}`].toggle(event)"
+                                                                                class="p-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white text-sm transition-colors"
+                                                                                title="View replay attributes"
+                                                                            >
+                                                                                <i class="bx bx-info-circle"></i>
+                                                                            </button>
+                                                                            <OverlayPanel
+                                                                                :ref="`panel-${singleMistake.replayId}-${singleMistake.noteId}-${singleMistake.time}`"
+                                                                                appendTo="body"
+                                                                                class="bg-[#18191c] border border-gray-700 text-gray-100 rounded-xl p-3 shadow-2xl max-w-sm"
+                                                                            >
+                                                                                <div class="font-bold text-xs text-blue-400 uppercase tracking-wider mb-2 border-b border-gray-700 pb-1">
+                                                                                    Replay Info
+                                                                                </div>
+                                                                                <div
+                                                                                    v-for="attribute of Object.entries(job.sortedReplays[singleMistake.replayId])"
+                                                                                    :key="attribute[0]"
+                                                                                    class="flex items-center justify-between text-xs py-1 border-b border-gray-800/40"
+                                                                                >
+                                                                                    <span class="text-gray-400 font-medium mr-4">{{ attribute[0] }}</span>
+                                                                                    <a
+                                                                                        v-if="attribute[1] && String(attribute[1]).includes('https://')"
+                                                                                        @click="openReplay(job, singleMistake)"
+                                                                                        class="text-blue-400 hover:underline cursor-pointer font-semibold"
+                                                                                    >
+                                                                                        Link
+                                                                                    </a>
+                                                                                    <span v-else class="font-mono text-gray-200 font-semibold">{{ attribute[1] != null ? attribute[1] : 'n/a' }}</span>
+                                                                                </div>
+                                                                            </OverlayPanel>
+                                                                        </div>
+                                                                    </template>
+                                                                </Column>
+                                                            </DataTable>
+                                                        </div>
+                                                    </template>
+                                                </DataTable>
+                                            </div>
+                                        </TabPanel>
+
+                                        <!-- All Replays Tab -->
+                                        <TabPanel :header="`All Replays (${Object.keys(job.sortedReplays).length})`">
+                                            <div class="bg-[#18191c] border border-gray-800 rounded-xl overflow-hidden shadow-inner">
+                                                <DataTable
+                                                    class="w-full text-left"
+                                                    :value="Object.values(job.sortedReplays)"
+                                                    responsiveLayout="scroll"
+                                                    :paginator="true"
+                                                    :rows="10"
+                                                    sortField="acc"
+                                                    :sortOrder="-1"
+                                                >
+                                                    <Column field="acc" header="Acc" sortable>
+                                                        <template #body="{ data: r }">
+                                                            <span class="font-mono font-bold text-emerald-400 text-xs">{{ r.acc }}%</span>
+                                                        </template>
+                                                    </Column>
+                                                    <Column field="fcAcc" header="FC Acc" sortable>
+                                                        <template #body="{ data: r }">
+                                                            <span class="font-mono text-gray-300 text-xs">{{ r.fcAcc }}%</span>
+                                                        </template>
+                                                    </Column>
+                                                    <Column field="fps" header="FPS" sortable>
+                                                        <template #body="{ data: r }">
+                                                            <span class="font-mono text-xs text-gray-300">{{ r.fps }}</span>
+                                                        </template>
+                                                    </Column>
+                                                    <Column field="mistakes" header="Mistakes" sortable>
+                                                        <template #body="{ data: r }">
+                                                            <span :class="['font-mono text-xs font-bold', r.mistakes > 0 ? 'text-rose-400' : 'text-emerald-400']">
+                                                                {{ r.mistakes }}
+                                                            </span>
+                                                        </template>
+                                                    </Column>
+                                                    <Column field="headsetYposition" header="HMD Y Pos" sortable />
+                                                    <Column field="height" header="Height" sortable />
+                                                    <Column field="jd" header="JD" sortable />
+                                                    <Column field="postSwingAngle" header="Post Swing" sortable />
+                                                    <Column field="preSwingAngle" header="Pre Swing" sortable />
+                                                    <Column field="timeDeviation" header="Time Dev" sortable />
+                                                    <Column field="requestedAcc" header="Requested Acc" sortable />
+                                                    <Column header="Replay Actions">
+                                                        <template #body="{ data: replay }">
+                                                            <div class="flex items-center gap-2">
+                                                                <button
+                                                                    @click="openReplay(replay)"
+                                                                    class="px-2 py-1 rounded bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white text-xs font-semibold transition-colors flex items-center gap-1 border border-blue-500/30"
+                                                                >
+                                                                    View <i class="bx bx-external-link"></i>
+                                                                </button>
+                                                                <a
+                                                                    :href="replay.replayUrl"
+                                                                    class="p-1 rounded bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white text-sm transition-colors"
+                                                                    title="Download replay"
+                                                                >
+                                                                    <i class="bx bx-download"></i>
+                                                                </a>
+                                                            </div>
+                                                        </template>
+                                                    </Column>
+                                                </DataTable>
+                                            </div>
+                                        </TabPanel>
+                                    </TabView>
+                                </div>
+                            </div>
+                        </template>
+                    </DataTable>
+                </div>
+            </div>
+
+            <!-- Logged Out State -->
+            <div v-else class="bg-[#18191c] border border-gray-800 rounded-xl p-12 text-center text-gray-300 max-w-md mx-auto shadow-xl space-y-4 my-8">
+                <i class="bx bxl-discord text-6xl text-blue-400 mb-2"></i>
+                <h3 class="text-xl font-bold text-gray-100">Discord Login Required</h3>
+                <p class="text-sm text-gray-400">Please sign in with your Discord account to view and submit CyberRamen replay requests.</p>
+                <button
+                    @click="$auth.login()"
+                    class="mt-4 px-6 py-2.5 bg-blue-600 hover:bg-blue-500 text-white font-semibold rounded-xl text-sm transition-all shadow-md inline-flex items-center gap-2"
+                >
+                    <span>Login with Discord</span>
+                    <i class="bx bxl-discord text-lg"></i>
+                </button>
+            </div>
         </div>
 
         <ConfirmDialog></ConfirmDialog>
@@ -325,7 +508,7 @@ export default {
             loadingJob: false,
             creatingJob: false,
             expandedRows: [],
-            jobFilters: { userid: null },
+            jobFilters: { userid: null, textSearch: '' },
             filteredJobs: [],
             users: [],
             jobsOffset: 0,
@@ -342,7 +525,12 @@ export default {
         },
     },
     async created() {
-        this.description = (await this.$defaultApi.$get('general/stuff/public_cyberramen')).json.html
+        try {
+            const res = await this.$defaultApi.$get('general/stuff/public_cyberramen')
+            this.description = res?.json?.html || ''
+        } catch (e) {
+            console.error('Failed to load CyberRamen description:', e)
+        }
     },
     async mounted() {
         this.profile = await this.$auth.fetch()
@@ -372,12 +560,13 @@ export default {
             if (this.filteredJobs.length > 0) {
                 jobs = jobs.filter((job) => this.filteredJobs.includes(job.JobId))
             }
-            if (this.jobFilters.userid?.length) {
+            if (this.jobFilters.userid) {
                 jobs = jobs.filter((job) => job.UserId == this.jobFilters.userid)
             }
-            if (this.jobFilters.textSearch?.length) {
+            if (this.jobFilters.textSearch && this.jobFilters.textSearch.trim()) {
+                const query = this.jobFilters.textSearch.trim().toLowerCase()
                 jobs = jobs.filter((job) =>
-                    job.SongName?.toLowerCase().includes(this.jobFilters.textSearch.toLowerCase()),
+                    job.SongName?.toLowerCase().includes(query),
                 )
             }
 
@@ -387,11 +576,11 @@ export default {
             const unique = {}
             const jobs = this.jobs
                 .flatMap((job) => {
-                    if (unique[job.UserId]) {
+                    if (!job.UserId || unique[job.UserId]) {
                         return []
                     } else {
                         unique[job.UserId] = true
-                        return { name: job.UserName, id: job.UserId }
+                        return { name: job.UserName || `User ${job.UserId}`, id: job.UserId }
                     }
                 })
                 .sort((a, b) => {
@@ -407,10 +596,18 @@ export default {
         openLink(url) {
             window.open(url, '_blank').focus()
         },
+        formatDate(dateStr) {
+            if (!dateStr) return '-'
+            try {
+                const d = new Date(dateStr)
+                return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+            } catch (e) {
+                return dateStr
+            }
+        },
         async loadJobs(force = false) {
             if (this.error) return
 
-            console.log('load jobs')
             this.loading = true
 
             try {
@@ -447,7 +644,7 @@ export default {
             } catch (e) {
                 this.$toast.add({
                     severity: 'error',
-                    summary: `${e.response.statusText} ${e.response.status}`,
+                    summary: `${e.response?.statusText || 'Error'} ${e.response?.status || ''}`,
                     life: 3000,
                 })
                 this.error = e
@@ -500,7 +697,6 @@ export default {
                     total_miss: 0,
                     total_bad: 0,
                 }
-                // miss/badcut/bomb
 
                 let mistakes = {}
                 for (let [replayIndex, replay] of results.entries()) {
@@ -549,12 +745,13 @@ export default {
 
                 this.$set(this.computedJobs, index, job)
             } catch (e) {
-                console.log(e)
-                job.Result = 'Couldnt fetch data, probably outdated'
+                console.error(e)
+                job.Result = 'Could not fetch data, replay log might be outdated'
             }
             this.loadingJob = false
         },
         getMistakes(job) {
+            if (!job.sortedMistakes) return []
             return job.sortedMistakes
                 .map((mistake) => {
                     const filteredMistakes = mistake.mistakes.filter((singleMistake) => {
@@ -585,7 +782,6 @@ export default {
                     job.sortedReplays[mistake.replayId].replayUrl
                 }&time=${time}&speed=80`
             } else {
-                // job is replay
                 url = `https://replay.beatleader.xyz/?link=${job.replayUrl}`
             }
 
@@ -623,107 +819,40 @@ export default {
 </script>
 
 <style lang="scss">
-// html {
-//     height: 100%;
-// }
-// body {
-//     background-color: var(--surface-b);
-//     min-height: 100%;
-//     color: #fff !important;
-// }
-
-// p {
-//     margin: 5px 0px;
-// }
-
-// #app {
-//     font-family: Avenir, Helvetica, Arial, sans-serif;
-//     -webkit-font-smoothing: antialiased;
-//     -moz-osx-font-smoothing: grayscale;
-//     text-align: center;
-//     padding: 50px 0px 100px;
-// }
-.p-datatable .p-datatable-thead > tr > th {
-    background-color: transparent !important;
-}
-.p-datatable .p-datatable-tbody > tr {
-    background-color: transparent !important;
+.cyberramen {
+    min-height: 100vh;
 }
 
-.modal-card-foot,
-.modal-card-head,
-.modal-card-body {
-    // background-color: var(--surface-a) !important;
-    background-color: var(--surface-a) !important;
-    color: #fff;
+.custom-tabview {
+    .p-tabview-nav {
+        background-color: transparent !important;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
 
-    .modal-card-title {
-        color: #fff;
-    }
-}
+        li {
+            .p-tabview-nav-link {
+                background-color: transparent !important;
+                border: none !important;
+                color: #9ca3af !important;
+                font-size: 0.875rem !important;
+                font-weight: 600 !important;
+                padding: 0.75rem 1.25rem !important;
+                transition: color 0.2s !important;
 
-.p-confirm-dialog-message {
-    white-space: pre-line;
-}
-.p-tabview-nav {
-    justify-content: center;
-}
-
-// jobs
-.p-datatable {
-    td {
-        vertical-align: middle;
-    }
-    .p-datatable-tbody > tr > td {
-        padding: 0.5rem 1rem;
-    }
-
-    // mistakes
-    .p-datatable {
-        .p-datatable-thead > tr > th,
-        .p-datatable-tbody > tr > td,
-        .p-paginator {
-            background-color: var(--surface-b) !important;
-        }
-
-        // single mistake
-        .p-datatable-table {
-            .p-paginator {
-                background-color: #000 !important;
-            }
-
-            .p-datatable-row-expansion > td {
-                padding: 0;
-            }
-
-            .p-datatable-table {
-                .p-datatable-thead > tr > th,
-                .p-datatable-tbody > tr > td {
-                    background-color: #000 !important;
+                &:hover {
+                    color: #ffffff !important;
                 }
             }
+
+            &.p-highlight .p-tabview-nav-link {
+                color: #60a5fa !important;
+                border-bottom: 2px solid #3b82f6 !important;
+            }
         }
     }
-}
 
-.p-tabview-nav > * > * {
-    background-color: var(--surface-b) !important;
-}
-.p-tabview-panels {
-    background-color: var(--surface-b) !important;
-}
-.layer-1 {
-    background-color: var(--surface-b) !important;
-
-    .p-tabview-panels,
-    .p-tabview-nav-link {
-        background-color: var(--surface-b) !important;
+    .p-tabview-panels {
+        background-color: transparent !important;
+        padding-top: 1rem !important;
     }
-}
-.layer-2 {
-    background-color: var(--surface-c);
-}
-.layer-3 {
-    background-color: var(--surface-d);
 }
 </style>
