@@ -5,29 +5,40 @@ on:
     branches: ['main']
   workflow_dispatch:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout code
+        uses: actions/checkout@v4
 
       - name: Install Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '16.x'
+          cache: 'npm'
 
-      - name: Cache dependencies
+      - name: Cache Nuxt Build
         uses: actions/cache@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          path: |
+            .nuxt
+            node_modules/.cache
+          key: ${{ runner.os }}-nuxt-${{ hashFiles('**/package-lock.json') }}-${{ github.sha }}
           restore-keys: |
-            ${{ runner.os }}-node-
+            ${{ runner.os }}-nuxt-${{ hashFiles('**/package-lock.json') }}-
+            ${{ runner.os }}-nuxt-
 
-      - run: npm i
+      - name: Install Dependencies
+        run: npm ci
 
-      - run: npm run build
+      - name: Build Application
+        run: npm run build
 
       - name: Deploy to Server
         uses: easingthemes/ssh-deploy@v5.1.0
@@ -38,3 +49,4 @@ jobs:
           REMOTE_USER: ${{ secrets.REMOTE_USER }}
           REMOTE_PORT: ${{ secrets.REMOTE_PORT }}
           TARGET: ${{ secrets.REMOTE_TARGET }}
+          ARGS: '-rlgoDzc --delete'
