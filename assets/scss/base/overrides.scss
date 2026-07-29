@@ -1,15 +1,26 @@
 .vs-card {
-    border-radius: 7px;
-    padding: 20px;
+    border-radius: 12px;
+    padding: 24px;
+    background-color: #1e2128;
+    box-shadow:
+        0 4px 6px -1px rgba(0, 0, 0, 0.1),
+        0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    border: 1px solid #2d313c;
 
     @media (max-width: 800px) {
         max-width: 100% !important;
         width: 100%;
+        padding: 16px;
     }
 }
 
 .vs-button {
-    border-radius: 7px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+
+    &:hover {
+        transform: translateY(-1px);
+    }
 }
 
 .scorecard .vs-card {
@@ -20,30 +31,138 @@
     cursor: auto;
 }
 .vs-input__label {
-    color: #fff;
+    color: #cbd5e1;
+    font-weight: 500;
 }
 
 .players-dialog .vs-dialog .con-content {
     overflow-y: scroll;
     position: relative;
     height: 600px;
+
+    &::-webkit-scrollbar {
+        width: 6px;
+    }
 }
 
 .vs-alert {
-    margin: 10px 0;
+    margin: 12px 0;
     height: auto !important;
-    border-radius: 0px 7px 7px 0px !important;
+    border-radius: 8px !important;
+    background-color: rgba(99, 102, 241, 0.1);
+    border: 1px solid rgba(99, 102, 241, 0.2);
 
     .vs-alert__content {
         min-height: auto !important;
+        padding: 12px 16px;
     }
 }
 
 .vs-card__text {
     padding: 0;
+    color: #e2e8f0;
 }
 
 .vs-radio-content {
-    color: #fff;
+    color: #cbd5e1;
     justify-content: left;
+}
+
+/* PrimeVue Overrides */
+.p-button {
+    border-radius: 8px;
+}
+
+.p-inputtext,
+.p-dropdown,
+.p-multiselect {
+    border-radius: 8px;
+    background-color: #1e2128 !important;
+    border-color: #2d313c !important;
+    color: #e2e8f0 !important;
+
+    &:enabled:hover {
+        border-color: #4f46e5 !important;
+    }
+
+    &:enabled:focus {
+        box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2) !important;
+        border-color: #6366f1 !important;
+    }
+}
+
+.p-dropdown-panel,
+.p-multiselect-panel {
+    background-color: #1e2128;
+    border-radius: 8px;
+    border: 1px solid #2d313c;
+
+    .p-dropdown-items,
+    .p-multiselect-items {
+        padding: 0.5rem;
+
+        .p-dropdown-item,
+        .p-multiselect-item {
+            border-radius: 6px;
+            color: #e2e8f0;
+
+            &:hover {
+                background-color: #2d313c;
+            }
+
+            &.p-highlight {
+                background-color: rgba(99, 102, 241, 0.1);
+                color: #818cf8;
+            }
+        }
+    }
+}
+
+.p-panel {
+    .p-panel-header {
+        background-color: #1e2128;
+        border-color: #2d313c;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+        color: #f8fafc;
+    }
+
+    .p-panel-content {
+        background-color: #0f1115;
+        border-color: #2d313c;
+        border-bottom-left-radius: 12px;
+        border-bottom-right-radius: 12px;
+        color: #e2e8f0;
+    }
+}
+
+.p-datatable {
+    .p-datatable-header {
+        background-color: #1e2128;
+        border-color: #2d313c;
+        color: #f8fafc;
+        border-top-left-radius: 12px;
+        border-top-right-radius: 12px;
+    }
+
+    .p-datatable-thead > tr > th {
+        background-color: #1e2128;
+        border-color: #2d313c;
+        color: #cbd5e1;
+        padding: 1rem;
+    }
+
+    .p-datatable-tbody > tr {
+        background-color: #0f1115;
+        color: #e2e8f0;
+
+        > td {
+            border-color: #2d313c;
+            padding: 1rem;
+        }
+
+        &:hover {
+            background-color: #1e2128 !important;
+        }
+    }
 }

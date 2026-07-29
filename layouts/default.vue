@@ -1,164 +1,168 @@
 <template>
-    <div>
-        <div class="navbar max-[1000px]:flex-wrap">
-            <div class="flex justify-start">
-                <my-button href="https://ko-fi.com/muffn" help>
-                    <p>Buy me a muffin irl 🧁</p>
-                </my-button>
-            </div>
-            <div class="self-center">
-                <h2 class="title">muffnlabs</h2>
-            </div>
-            <div class="flex justify-end flex-wrap socials">
-                <my-button class="mx-0 my-2" href="https://beatsaver.com/profile/4284309" warning text noiconmargin>
-                    <img class="w-6" src="https://beatsaver.com/static/favicon/favicon-32x32.png" />
-                </my-button>
-                <my-button href="https://github.com/nomuffn" noiconmargin text secondary>
-                    <i class="bx bxl-github bx-sm"></i>
-                </my-button>
-                <my-button href="https://www.twitch.tv/muffn_" noiconmargin text help>
-                    <i class="bx bxl-twitch bx-sm"></i>
-                </my-button>
+  <div>
+    <div class="navbar max-[1000px]:flex-wrap">
+      <div class="flex justify-start">
+        <my-button href="https://ko-fi.com/muffn" help>
+          <p>Buy me a muffin irl 🧁</p>
+        </my-button>
+      </div>
+      <div class="self-center">
+        <h2 class="title">
+          muffnlabs
+        </h2>
+      </div>
+      <div class="flex justify-end flex-wrap socials">
+        <my-button class="mx-0 my-2" href="https://beatsaver.com/profile/4284309" warning text noiconmargin>
+          <img class="w-6" src="https://beatsaver.com/static/favicon/favicon-32x32.png">
+        </my-button>
+        <my-button href="https://github.com/nomuffn" noiconmargin text secondary>
+          <i class="bx bxl-github bx-sm" />
+        </my-button>
+        <my-button href="https://www.twitch.tv/muffn_" noiconmargin text help>
+          <i class="bx bxl-twitch bx-sm" />
+        </my-button>
 
-                <my-button href="https://discordapp.com/users/219099186505711616/" noiconmargin text>
-                    <i class="bx bxl-discord bx-sm"></i>
-                </my-button>
-                <my-button href="https://twitter.com/nomuffn" noiconmargin text>
-                    <i class="bx bxl-twitter bx-sm"></i>
-                </my-button>
+        <my-button href="https://discordapp.com/users/219099186505711616/" noiconmargin text>
+          <i class="bx bxl-discord bx-sm" />
+        </my-button>
+        <my-button href="https://twitter.com/nomuffn" noiconmargin text>
+          <i class="bx bxl-twitter bx-sm" />
+        </my-button>
 
-                <my-button v-if="!profile" @click="$auth.login()" outlined>
-                    <p>Login</p>
-                    <i class="bx bxl-discord"></i>
-                </my-button>
-                <div v-else class="flex m-2">
-                    <my-button notround nomargin class="pointer-events-none" :label="profile.username" />
-                    <my-button reset outlined @click="$auth.logout()">
-                        <i class="bx bx-log-out"></i>
-                    </my-button>
-                </div>
-            </div>
+        <my-button v-if="!profile" outlined @click="$auth.login()">
+          <p>Login</p>
+          <i class="bx bxl-discord" />
+        </my-button>
+        <div v-else class="flex m-2">
+          <my-button notround nomargin class="pointer-events-none" :label="profile.username" />
+          <my-button reset outlined @click="$auth.logout()">
+            <i class="bx bx-log-out" />
+          </my-button>
         </div>
-        <div class="menu p-2 flex flex-wrap justify-center">
-            <my-button
-                v-for="page in pages"
-                :key="page.path"
-                :to="'/' + page.path"
-                :id="page.path"
-                :text="!isActive(page) || false"
-                :raised="isActive(page) || false"
-                :class="{ new: page.new }"
-            >
-                <p style="color: #fff; font-weight: bold">{{ page.name }}</p>
-                <i :class="`bx ${page.icon}`"></i>
-            </my-button>
-        </div>
-
-        <Nuxt class="page" keep-alive />
-        <Toast />
+      </div>
     </div>
+    <div class="menu p-2 flex flex-wrap justify-center">
+      <my-button
+        v-for="page in pages"
+        :id="page.path"
+        :key="page.path"
+        :to="'/' + page.path"
+        :text="!isActive(page) || false"
+        :raised="isActive(page) || false"
+        :class="{ new: page.new }"
+      >
+        <p style="color: #fff; font-weight: bold">
+          {{ page.name }}
+        </p>
+        <i :class="`bx ${page.icon}`" />
+      </my-button>
+    </div>
+
+    <Nuxt class="page" keep-alive />
+    <Toast />
+  </div>
 </template>
 
 <script>
 // var ColorHandler = require('@/assets/ColorHandler.js')
 export default {
-    async created() {
-        // TODO move to vuex store
-        this.profile = await this.$auth.fetch()
-    },
-    head() {
-        return {
-            link: [
-                {
-                    rel: 'icon',
-                    type: 'image/svg+xml',
-                    href: '/favicons/' + this.getRandomFavicon(),
-                },
-            ],
-        }
-    },
-    methods: {
-        isActive(page) {
-            // cringe
-            if (this.$route.path.substring(1).split('/')[0] == page.path.split('/')[0]) {
-                return true
-            }
+  data () {
+    return {
+      active: '',
+      profile: null,
+      pages: [
+        {
+          path: '',
+          icon: 'bx-home',
+          name: 'Home'
         },
-        getRandomFavicon() {
-            const icons = [
-                'easmile.ico',
-                'gael.ico',
-                'monkaogre.ico',
-                'muffn.ico',
-                'muffncool.ico',
-                'muffnw.ico',
-                'waaa.ico',
-                'wicked.ico',
-                'lohl.ico',
-                'muffnDerp.ico',
-            ]
-            return icons[Math.floor(Math.random() * icons.length)]
+        {
+          path: 'cyberramen',
+          icon: 'bx-bot',
+          name: 'CyberRamen'
+          // new: true,
         },
-    },
-    data() {
-        return {
-            active: '',
-            profile: null,
-            pages: [
-                {
-                    path: '',
-                    icon: 'bx-home',
-                    name: 'Home',
-                },
-                {
-                    path: 'cyberramen',
-                    icon: 'bx-bot',
-                    name: 'CyberRamen',
-                    // new: true,
-                },
-                {
-                    path: 'maptts',
-                    icon: 'bx-tv',
-                    name: 'MapTts',
-                },
-                {
-                    path: 'ranking-stuff',
-                    icon: 'bx-list-ul',
-                    name: 'Ranking',
-                },
-                {
-                    path: 'stats/beatsaver',
-                    icon: 'bx-stats',
-                    name: 'Stats',
-                },
-                {
-                    path: 'bsst',
-                    icon: 'bx-trending-up',
-                    name: 'Bsst',
-                },
-                {
-                    path: 'playlists',
-                    icon: 'bxs-playlist',
-                    name: 'Playlists stuff',
-                },
-                {
-                    path: 'tools',
-                    icon: 'bxs-wrench',
-                    name: 'Tools/Misc',
-                },
-                {
-                    path: 'tierlist',
-                    icon: 'bx-pyramid',
-                    name: 'Tierlists',
-                },
-                {
-                    path: 'guess',
-                    icon: 'bx-question-mark',
-                    name: 'Guess',
-                },
-            ],
+        {
+          path: 'maptts',
+          icon: 'bx-tv',
+          name: 'MapTts'
+        },
+        {
+          path: 'ranking-stuff',
+          icon: 'bx-list-ul',
+          name: 'Ranking'
+        },
+        {
+          path: 'stats/beatsaver',
+          icon: 'bx-stats',
+          name: 'Stats'
+        },
+        {
+          path: 'bsst',
+          icon: 'bx-trending-up',
+          name: 'Bsst'
+        },
+        {
+          path: 'playlists',
+          icon: 'bxs-playlist',
+          name: 'Playlists stuff'
+        },
+        {
+          path: 'tools',
+          icon: 'bxs-wrench',
+          name: 'Tools/Misc'
+        },
+        {
+          path: 'tierlist',
+          icon: 'bx-pyramid',
+          name: 'Tierlists'
+        },
+        {
+          path: 'guess',
+          icon: 'bx-question-mark',
+          name: 'Guess'
         }
+      ]
+    }
+  },
+  head () {
+    return {
+      link: [
+        {
+          rel: 'icon',
+          type: 'image/svg+xml',
+          href: '/favicons/' + this.getRandomFavicon()
+        }
+      ]
+    }
+  },
+  async created () {
+    // TODO move to vuex store
+    this.profile = await this.$auth.fetch()
+  },
+  methods: {
+    isActive (page) {
+      // cringe
+      if (this.$route.path.substring(1).split('/')[0] == page.path.split('/')[0]) {
+        return true
+      }
     },
+    getRandomFavicon () {
+      const icons = [
+        'easmile.ico',
+        'gael.ico',
+        'monkaogre.ico',
+        'muffn.ico',
+        'muffncool.ico',
+        'muffnw.ico',
+        'waaa.ico',
+        'wicked.ico',
+        'lohl.ico',
+        'muffnDerp.ico'
+      ]
+      return icons[Math.floor(Math.random() * icons.length)]
+    }
+  }
 }
 </script>
 

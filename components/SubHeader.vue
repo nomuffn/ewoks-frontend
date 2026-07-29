@@ -1,17 +1,19 @@
 <template>
-    <div class="header">
-        <div class="header-wrapper">
-            <h2 class="title">{{ title }}</h2>
-            <p class="description">
-                <slot></slot>
-            </p>
-        </div>
+  <div class="header">
+    <div class="header-wrapper">
+      <h2 class="title">
+        {{ title }}
+      </h2>
+      <p class="description">
+        <slot />
+      </p>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-    props: ['title'],
+  props: ['title']
 }
 </script>
 

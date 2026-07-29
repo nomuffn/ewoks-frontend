@@ -1,71 +1,73 @@
 <template>
-    <div class="card scorecard">
-        <div class="wrapper">
-            <div class="left">
-                <h3>
-                    <template v-if="score.player">
-                        <a target="_blank" :href="`https://scoresaber.com/u/${score.player.scoresaberId}`">{{
-                            score.player.twitchName
-                        }}</a
-                        ><span> played</span>
-                    </template>
-                    <template v-else>
-                        {{ score.playerName }}
-                    </template>
-                    <span> played</span>
-                </h3>
-                <div class="third">
-                    <img :src="`https://cdn.scoresaber.com/covers/${score.songHash}.png`" />
-                    <div class="fourth">
-                        <a target="_blank" :href="`https://scoresaber.com/leaderboard/${score.leaderboardId}`"
-                            >{{ `${score.leaderboardSongAuthor} - ${score.leaderboardName}` }} [{{
-                                getDifficulty(score.difficultyRaw)
-                            }}]</a
-                        >
-                        <p class="grey">
-                            by
-                            <b>{{ score.mapper }}</b>
-                        </p>
-                        <p v-if="score.timeSet" class="grey">~{{ getAgo(score.timeSet) }} ago</p>
-                    </div>
-                </div>
-            </div>
-            <div class="right">
-                <my-button v-if="score.twitchUrl" help :href="score.twitchUrl">
-                    VOD
-                    <i class="bx bx-window-open"></i>
-                </my-button>
-            </div>
+  <div class="card scorecard">
+    <div class="wrapper">
+      <div class="left">
+        <h3>
+          <template v-if="score.player">
+            <a target="_blank" :href="`https://scoresaber.com/u/${score.player.scoresaberId}`">{{
+              score.player.twitchName
+            }}</a><span> played</span>
+          </template>
+          <template v-else>
+            {{ score.playerName }}
+          </template>
+          <span> played</span>
+        </h3>
+        <div class="third">
+          <img :src="`https://cdn.scoresaber.com/covers/${score.songHash}.png`">
+          <div class="fourth">
+            <a
+              target="_blank"
+              :href="`https://scoresaber.com/leaderboard/${score.leaderboardId}`"
+            >{{ `${score.leaderboardSongAuthor} - ${score.leaderboardName}` }} [{{
+              getDifficulty(score.difficultyRaw)
+            }}]</a>
+            <p class="grey">
+              by
+              <b>{{ score.mapper }}</b>
+            </p>
+            <p v-if="score.timeSet" class="grey">
+              ~{{ getAgo(score.timeSet) }} ago
+            </p>
+          </div>
         </div>
+      </div>
+      <div class="right">
+        <my-button v-if="score.twitchUrl" help :href="score.twitchUrl">
+          VOD
+          <i class="bx bx-window-open" />
+        </my-button>
+      </div>
     </div>
+  </div>
 </template>
 
 <script>
 export default {
-    props: {
-        score: Object,
+  props: {
+    score: Object
+  },
+  methods: {
+    openUrl (id) {
+      window.open('https://scoresaber.com/leaderboard/' + id, '_blank')
     },
-    methods: {
-        openUrl: function (id) {
-            window.open('https://scoresaber.com/leaderboard/' + id, '_blank')
-        },
-        getAgo(timeSet) {
-            const diffTime = Math.abs(Date.now() - new Date(timeSet))
-            let timeAgo = Math.ceil(diffTime / (1000 * 60 * 60))
-            if (timeAgo > 24) {
-                timeAgo = Math.round(timeAgo / 24) + 'd'
-            } else {
-                timeAgo = timeAgo + 'h'
-            }
-            return timeAgo
-        },
-        getPosition(string, subString, index) {
-            return string.split(subString, index).join(subString).length
-        },
-        getDifficulty(difficultyRaw) {
-            return difficultyRaw.substring(1, this.getPosition(difficultyRaw, '_', 2))
-        },
+    getAgo (timeSet) {
+      const diffTime = Math.abs(Date.now() - new Date(timeSet))
+      let timeAgo = Math.ceil(diffTime / (1000 * 60 * 60))
+      if (timeAgo > 24) {
+        timeAgo = Math.round(timeAgo / 24) + 'd'
+      } else {
+        timeAgo = timeAgo + 'h'
+      }
+      return timeAgo
     },
+    getPosition (string, subString, index) {
+      return string.split(subString, index).join(subString).length
+    },
+    getDifficulty (difficultyRaw) {
+      return difficultyRaw.substring(1, this.getPosition(difficultyRaw, '_', 2))
+    }
+  }
 }
 </script>
 

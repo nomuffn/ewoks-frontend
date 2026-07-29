@@ -1,41 +1,41 @@
 <template>
-    <div class="rankingstats">
-        <sub-header title="Statistics stuff">
-            <p>
-                <!-- pp distribution: fix backend calc -->
-                Scoresaber stuff refreshes every hour
-                <br />
-                Beatsaver & RC Discord stuff every 24 hours
-            </p>
-        </sub-header>
+  <div class="rankingstats">
+    <sub-header title="Statistics stuff">
+      <p>
+        <!-- pp distribution: fix backend calc -->
+        Scoresaber stuff refreshes every hour
+        <br>
+        Beatsaver & RC Discord stuff every 24 hours
+      </p>
+    </sub-header>
 
-        <TabMenu :model="items" />
+    <TabMenu :model="items" />
 
-        <NuxtChild class="content sub-page" keep-alive />
-    </div>
+    <NuxtChild class="content sub-page" keep-alive />
+  </div>
 </template>
 
 <script>
 export default {
-    transition: 'slide-bottom',
-    data() {
-        return {
-            items: [
-                { label: 'Beatsaver', to: '/stats/beatsaver' },
-                { label: 'Scoresaber', to: '/stats/scoresaber' },
-                { label: 'RC Discord', to: '/stats/discord' },
-            ],
-        }
-    },
-    beforeRouteEnter(to, from, next) {
-        next((vm) => {
-            if (to.path == '/stats') return next('/stats/beatsaver')
-            next()
-        })
-    },
-    async created() {
-        // this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
-    },
+  beforeRouteEnter (to, from, next) {
+    next((vm) => {
+      if (to.path == '/stats') { return next('/stats/beatsaver') }
+      next()
+    })
+  },
+  transition: 'slide-bottom',
+  data () {
+    return {
+      items: [
+        { label: 'Beatsaver', to: '/stats/beatsaver' },
+        { label: 'Scoresaber', to: '/stats/scoresaber' },
+        { label: 'RC Discord', to: '/stats/discord' }
+      ]
+    }
+  },
+  async created () {
+    // this.stats = await this.$defaultApi.$get('scoresaber/ppdist')
+  }
 }
 </script>
 
