@@ -70,11 +70,28 @@
             </div>
 
             <!-- Warning Alert -->
-            <div class="bg-red-950/60 border-2 border-red-600/70 rounded-xl p-4 text-red-200 flex items-start gap-3 shadow-lg shadow-red-900/30">
-                <i class="bx bxs-error text-red-400 text-2xl shrink-0 mt-0.5"></i>
-                <div>
-                    <p class="text-sm font-extrabold text-red-300 uppercase tracking-wide mb-1">⚠ Not Supported</p>
-                    <p class="text-sm font-semibold">V3 maps, Noodle Extensions (NE), and Mapping Extensions (ME) will <span class="text-red-400 underline decoration-wavy">fail</span> — do not submit them.</p>
+            <div class="relative overflow-hidden rounded-xl border-2 border-red-500 bg-red-950 p-4 shadow-2xl shadow-red-500/40">
+                <!-- Diagonal danger tape stripes -->
+                <div class="pointer-events-none absolute inset-0 opacity-10" style="background: repeating-linear-gradient(45deg, #ff0000 0px, #ff0000 10px, transparent 10px, transparent 20px);"></div>
+                <!-- Pulsing glow ring -->
+                <div class="pointer-events-none absolute inset-0 rounded-xl animate-pulse" style="box-shadow: inset 0 0 20px rgba(239,68,68,0.4);"></div>
+
+                <div class="relative flex items-start gap-3">
+                    <div class="shrink-0 text-3xl animate-bounce">☠️</div>
+                    <div class="space-y-2">
+                        <p class="text-base font-black uppercase tracking-widest text-red-400" style="text-shadow: 0 0 12px rgba(239,68,68,0.9);">
+                            🚨 ATTENTION, BELOVED USER 🚨
+                        </p>
+                        <p class="text-sm font-bold text-red-200 leading-snug">
+                            Submitting a <span class="text-red-400 font-black line-through">cursed</span> <span class="text-red-400 font-black">V3 map</span>, <span class="text-red-400 font-black">Noodle Extensions</span>, or <span class="text-red-400 font-black">Mapping Extensions</span> will cause an immediate,
+                            catastrophic, <span class="underline decoration-wavy decoration-red-400">violent</span> failure. The server will cry. The database will weep.
+                            You may experience <strong>mild to severe death</strong>. Side effects include job errors, existential dread, and regretting your life choices.
+                        </p>
+                        <p class="text-xs font-semibold text-red-400/80 italic">
+                            † muffnlabs accepts no liability for user demise resulting from unsupported map submissions. Please update your will before proceeding.
+                        </p>
+                    </div>
+                    <div class="shrink-0 text-3xl animate-bounce" style="animation-delay: 150ms;">☠️</div>
                 </div>
             </div>
         </div>
