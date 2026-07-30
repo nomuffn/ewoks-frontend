@@ -4,7 +4,7 @@
             <p v-html="description"></p>
         </sub-header>
 
-        <div class="w-full max-w-6xl px-4 sm:px-8 mx-auto mt-6">
+        <div class="w-full max-w-7xl px-4 sm:px-8 mx-auto mt-6">
             <!-- Error State -->
             <div v-if="error" class="bg-rose-950/40 border border-rose-800/60 rounded-xl p-6 text-center text-rose-300 my-4 shadow-lg">
                 <i class="bx bx-error-circle text-4xl mb-2 text-rose-400"></i>
