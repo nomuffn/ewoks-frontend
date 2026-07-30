@@ -24,7 +24,7 @@
                         optionLabel="mapperName"
                         placeholder="Select mapper"
                         scrollHeight="400px"
-                        :disabled="tableLoading || mappersLoading"
+                        :disabled="mappersLoading"
                         class="w-56 p-inputtext-sm"
                         @change="onMapperChange"
                     />
@@ -84,7 +84,222 @@
                         @change="onPageSizeChange"
                     />
                 </div>
+
+                <!-- Compare All Mappers Button -->
+                <button
+                    @click="toggleCompare"
+                    :disabled="compareLoading"
+                    :class="[
+                        'px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shrink-0 shadow-md',
+                        showCompare
+                            ? 'bg-violet-600 hover:bg-violet-500 text-white shadow-violet-500/20'
+                            : 'bg-[#121315] border border-violet-700/50 hover:border-violet-500 text-violet-300 hover:text-white'
+                    ]"
+                >
+                    <ProgressSpinner v-if="compareLoading" style="width: 16px; height: 16px" strokeWidth="4" />
+                    <i v-else class="bx bx-git-compare text-base"></i>
+                    Compare All Mappers
+                </button>
             </div>
+
+            <!-- ================================================ -->
+            <!-- Cross-Mapper Comparison Panel -->
+            <!-- ================================================ -->
+            <transition name="slide-down">
+                <div v-if="showCompare && compareData && compareData.length" class="mb-8 space-y-6">
+
+                    <!-- Panel Header -->
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center gap-3">
+                            <div class="w-9 h-9 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-violet-400 text-lg">
+                                <i class="bx bx-git-compare"></i>
+                            </div>
+                            <div>
+                                <h2 class="text-lg font-bold text-gray-100">All-Mapper Comparison</h2>
+                                <p class="text-xs text-gray-400">Cross-comparing {{ compareData.length }} mappers across all tracked stats</p>
+                            </div>
+                        </div>
+                        <!-- Active Compare Metric Selector -->
+                        <div class="flex items-center gap-2">
+                            <label class="text-xs font-semibold text-gray-400 whitespace-nowrap">Compare by:</label>
+                            <div class="flex gap-1.5">
+                                <button
+                                    v-for="m in compareMetrics"
+                                    :key="m.key"
+                                    @click="compareMetric = m.key"
+                                    :class="[
+                                        'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all',
+                                        compareMetric === m.key
+                                            ? 'bg-violet-600 text-white shadow-sm'
+                                            : 'bg-gray-800/80 text-gray-400 hover:bg-gray-700'
+                                    ]"
+                                >{{ m.label }}</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Bar Chart: Current Metric -->
+                    <div class="bg-[#18191c] border border-gray-800 rounded-2xl p-5 shadow-xl">
+                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">
+                            {{ currentCompareMetric.label }} — ranked
+                        </p>
+                        <div class="space-y-2">
+                            <div v-for="(entry, i) in sortedCompareData" :key="entry.mapperId" class="flex items-center gap-3">
+                                <!-- Rank badge -->
+                                <span :class="[
+                                    'w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shrink-0',
+                                    i === 0 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' :
+                                    i === 1 ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30' :
+                                    i === 2 ? 'bg-orange-700/20 text-orange-400 border border-orange-700/30' :
+                                    'bg-gray-800/60 text-gray-500'
+                                ]">#{{ i + 1 }}</span>
+
+                                <!-- Mapper name -->
+                                <span
+                                    class="text-sm font-semibold text-gray-200 w-28 shrink-0 truncate cursor-pointer hover:text-violet-300 transition-colors"
+                                    :title="entry.mapperName"
+                                    @click="jumpToMapper(entry)"
+                                >{{ entry.mapperName }}</span>
+
+                                <!-- Bar -->
+                                <div class="flex-1 bg-gray-800/60 rounded-full h-5 overflow-hidden relative">
+                                    <div
+                                        class="h-full rounded-full transition-all duration-500"
+                                        :style="{
+                                            width: `${compareBarWidth(entry)}%`,
+                                            background: i === 0 ? 'linear-gradient(90deg,#7c3aed,#a855f7)' :
+                                                        i === 1 ? 'linear-gradient(90deg,#4f46e5,#818cf8)' :
+                                                        'linear-gradient(90deg,#1d4ed8,#3b82f6)'
+                                        }"
+                                    ></div>
+                                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-white font-mono mix-blend-overlay pointer-events-none">
+                                        {{ formatCompareValue(entry) }}
+                                    </span>
+                                </div>
+                                <span class="text-xs font-bold text-gray-300 font-mono w-20 text-right shrink-0">{{ formatCompareValue(entry) }}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 3-Column Stats Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+                        <!-- Col 1: Volume Leaders -->
+                        <div class="bg-[#18191c] border border-gray-800 rounded-2xl p-4 shadow-xl space-y-3">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
+                                <i class="bx bx-trending-up"></i> Catalog Volume
+                            </h3>
+                            <div v-for="entry in compareData" :key="entry.mapperId + '_vol'" class="flex items-center justify-between gap-2">
+                                <span class="text-sm font-semibold text-gray-300 truncate">{{ entry.mapperName }}</span>
+                                <div class="text-right shrink-0">
+                                    <span class="text-sm font-bold text-emerald-400 font-mono">{{ entry.totalMaps }} maps</span>
+                                    <span class="text-xs text-gray-400 block">{{ entry.totalDurationStr }} music</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Col 2: Vote Momentum -->
+                        <div class="bg-[#18191c] border border-gray-800 rounded-2xl p-4 shadow-xl space-y-3">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
+                                <i class="bx bx-pulse"></i> 30d Vote Momentum
+                            </h3>
+                            <div v-for="entry in sortedBy('growth30d')" :key="entry.mapperId + '_mom'" class="flex items-center justify-between gap-2">
+                                <span class="text-sm font-semibold text-gray-300 truncate">{{ entry.mapperName }}</span>
+                                <div class="text-right shrink-0">
+                                    <span class="text-sm font-bold text-blue-400 font-mono">+{{ entry.growth30d.toLocaleString() }}</span>
+                                    <span class="text-xs text-gray-400 block">+{{ entry.dailyGrowth30d }}/day</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Col 3: Crowd Sentiment -->
+                        <div class="bg-[#18191c] border border-gray-800 rounded-2xl p-4 shadow-xl space-y-3">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
+                                <i class="bx bx-heart"></i> Approval & Quality
+                            </h3>
+                            <div v-for="entry in sortedBy('overallRatio')" :key="entry.mapperId + '_qual'" class="flex items-center justify-between gap-2">
+                                <span class="text-sm font-semibold text-gray-300 truncate">{{ entry.mapperName }}</span>
+                                <div class="text-right shrink-0">
+                                    <span class="text-sm font-bold text-amber-400 font-mono">{{ entry.overallRatio }}%</span>
+                                    <span class="text-xs text-gray-400 block">★ {{ entry.avgStar }} avg stars</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Head-to-Head Records Table -->
+                    <div class="bg-[#18191c] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
+                        <div class="px-5 py-3 border-b border-gray-800 bg-[#121315] flex items-center justify-between">
+                            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-300">Full Head-to-Head Stats</h3>
+                            <span class="text-xs text-gray-500">All {{ compareData.length }} tracked mappers</span>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-sm text-left">
+                                <thead>
+                                    <tr class="border-b border-gray-800 text-gray-400 text-xs font-bold bg-[#121315]">
+                                        <th class="py-2.5 px-4">Mapper</th>
+                                        <th class="py-2.5 px-4 text-center">Maps</th>
+                                        <th class="py-2.5 px-4 text-center">Total Upvotes</th>
+                                        <th class="py-2.5 px-4 text-center">Approval</th>
+                                        <th class="py-2.5 px-4 text-center">Net Score</th>
+                                        <th class="py-2.5 px-4 text-center">30d Growth</th>
+                                        <th class="py-2.5 px-4 text-center">Avg BPM</th>
+                                        <th class="py-2.5 px-4 text-center">Avg ★</th>
+                                        <th class="py-2.5 px-4 text-center">Maps/mo</th>
+                                        <th class="py-2.5 px-4 text-center">Music</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-800/50">
+                                    <tr
+                                        v-for="entry in compareData"
+                                        :key="entry.mapperId"
+                                        class="hover:bg-gray-800/30 cursor-pointer transition-colors"
+                                        @click="jumpToMapper(entry)"
+                                    >
+                                        <td class="py-2.5 px-4 font-semibold text-gray-100">{{ entry.mapperName }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-gray-200">{{ entry.totalMaps }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono font-bold text-emerald-400">+{{ entry.totalUpvotes.toLocaleString() }}</td>
+                                        <td class="py-2.5 px-4 text-center">
+                                            <span :class="[
+                                                'px-2 py-0.5 rounded-md text-xs font-bold font-mono',
+                                                entry.overallRatio >= 95 ? 'bg-emerald-500/20 text-emerald-300' :
+                                                entry.overallRatio >= 85 ? 'bg-teal-500/20 text-teal-300' :
+                                                entry.overallRatio >= 70 ? 'bg-blue-500/20 text-blue-300' :
+                                                'bg-amber-500/20 text-amber-300'
+                                            ]">{{ entry.overallRatio }}%</span>
+                                        </td>
+                                        <td class="py-2.5 px-4 text-center font-mono font-bold" :class="entry.netScore >= 0 ? 'text-emerald-400' : 'text-rose-400'">
+                                            {{ entry.netScore >= 0 ? '+' : '' }}{{ entry.netScore.toLocaleString() }}
+                                        </td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-blue-300">+{{ entry.growth30d.toLocaleString() }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-amber-300">{{ entry.avgBpm }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-amber-300">{{ entry.avgStar }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-gray-300">{{ entry.mapsPerMonth }}/mo</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-purple-300">{{ entry.totalDurationStr }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Records Row: who holds each title -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                        <div
+                            v-for="rec in compareRecords"
+                            :key="rec.label"
+                            class="bg-[#18191c] border border-gray-800 rounded-xl p-3.5 shadow-lg cursor-pointer hover:border-violet-700/50 transition-colors"
+                            @click="jumpToMapper(rec.entry)"
+                        >
+                            <span :class="['text-[10px] font-bold uppercase tracking-wider block mb-1 flex items-center gap-1', rec.color]">
+                                <i :class="['bx', rec.icon, 'text-sm']"></i> {{ rec.label }}
+                            </span>
+                            <div class="text-sm font-bold text-gray-100">{{ rec.entry.mapperName }}</div>
+                            <div class="text-xs font-mono mt-0.5" :class="rec.color">{{ rec.value }}</div>
+                        </div>
+                    </div>
+
+                </div>
+            </transition>
 
             <!-- Deep Mapper Insights Analytics Dashboard -->
             <div v-if="insights" class="space-y-6 mb-8">
@@ -1062,7 +1277,7 @@ export default {
             maps: [],
             insights: null,
             totalCount: 0,
-            pageSize: 25,
+            pageSize: 10,
             pageSizeOptions: [
                 { label: '10 per page', value: 10 },
                 { label: '25 per page', value: 25 },
@@ -1074,11 +1289,27 @@ export default {
             currentOrdering: '-uploaded',
             loading: false,
             tableLoading: false,
+            _fetchController: null,
             mappersLoading: false,
             searchDebounceTimer: null,
             modalMap: null,
             chartType: 'growth',
             hoveredPoint: null,
+            // Cross-mapper comparison
+            showCompare: false,
+            compareLoading: false,
+            compareData: null,
+            compareMetric: 'totalUpvotes',
+            compareMetrics: [
+                { key: 'totalUpvotes', label: 'Upvotes' },
+                { key: 'netScore', label: 'Net Score' },
+                { key: 'overallRatio', label: 'Approval %' },
+                { key: 'growth30d', label: '30d Growth' },
+                { key: 'totalMaps', label: 'Maps' },
+                { key: 'avgStar', label: 'Avg Stars' },
+                { key: 'mapsPerMonth', label: 'Maps/mo' },
+                { key: 'totalDurationSec', label: 'Music Time' },
+            ],
             sortOptions: [
                 { label: 'Newest Uploaded', value: '-uploaded' },
                 { label: 'Oldest Uploaded', value: 'uploaded' },
@@ -1123,6 +1354,31 @@ export default {
         }
     },
     computed: {
+        currentCompareMetric() {
+            return this.compareMetrics.find((m) => m.key === this.compareMetric) || this.compareMetrics[0]
+        },
+        sortedCompareData() {
+            if (!this.compareData) return []
+            return [...this.compareData].sort((a, b) => (b[this.compareMetric] || 0) - (a[this.compareMetric] || 0))
+        },
+        compareRecords() {
+            if (!this.compareData || !this.compareData.length) return []
+            const best = (key) => [...this.compareData].sort((a, b) => (b[key] || 0) - (a[key] || 0))[0]
+            const fmt = (entry, key) => {
+                const v = entry[key]
+                if (key === 'overallRatio') return `${v}%`
+                if (key === 'mapsPerMonth') return `${v}/mo`
+                if (key === 'avgStar') return `★ ${v}`
+                if (key === 'totalDurationSec') return entry.totalDurationStr
+                return typeof v === 'number' ? v.toLocaleString() : v
+            }
+            return [
+                { label: 'Most Upvotes', icon: 'bx-up-arrow-circle', color: 'text-emerald-400', entry: best('totalUpvotes'), value: `+${best('totalUpvotes').totalUpvotes.toLocaleString()}` },
+                { label: 'Highest Approval', icon: 'bx-heart', color: 'text-amber-400', entry: best('overallRatio'), value: `${best('overallRatio').overallRatio}%` },
+                { label: 'Fastest Growing', icon: 'bx-trending-up', color: 'text-blue-400', entry: best('growth30d'), value: `+${best('growth30d').growth30d.toLocaleString()} in 30d` },
+                { label: 'Most Prolific', icon: 'bx-music', color: 'text-violet-400', entry: best('totalMaps'), value: `${best('totalMaps').totalMaps} maps` },
+            ]
+        },
         modalUpvotes() {
             if (!this.modalMap) return 0
             return this.modalMap.latest?.upvotes ?? this.modalMap.upvotes ?? 0
@@ -1458,7 +1714,7 @@ export default {
         readQueryParams() {
             const q = this.$route.query
             if (q.page) this.currentPage = parseInt(q.page) || 1
-            if (q.page_size) this.pageSize = parseInt(q.page_size) || 25
+            if (q.page_size) this.pageSize = parseInt(q.page_size) || 10
             if (q.search) this.searchQuery = q.search
             if (q.ordering) this.currentOrdering = q.ordering
         },
@@ -1468,7 +1724,7 @@ export default {
                 query.mapperId = this.selectedMapper.mapperId
             }
             if (this.currentPage > 1) query.page = this.currentPage
-            if (this.pageSize && this.pageSize !== 25) query.page_size = this.pageSize
+            if (this.pageSize && this.pageSize !== 10) query.page_size = this.pageSize
             if (this.searchQuery) query.search = this.searchQuery
             if (this.currentOrdering && this.currentOrdering !== '-uploaded') {
                 query.ordering = this.currentOrdering
@@ -1503,17 +1759,32 @@ export default {
         async fetchMapperData() {
             await Promise.all([this.fetchMaps(), this.fetchInsights()])
         },
+        _abortPendingFetch() {
+            if (this._fetchController) {
+                this._fetchController.abort()
+            }
+            this._fetchController = new AbortController()
+            return this._fetchController.signal
+        },
         async fetchInsights() {
             if (!this.selectedMapper || !this.selectedMapper.mapperId) return
             try {
-                this.insights = await this.$defaultApi.$get(`beatsaver/bsst_insights/${this.selectedMapper.mapperId}`)
+                this.insights = await this.$defaultApi.$get(
+                    `beatsaver/bsst_insights/${this.selectedMapper.mapperId}`,
+                    { signal: this._fetchController?.signal }
+                )
             } catch (e) {
+                if (e?.code === 'ERR_CANCELED' || e?.name === 'AbortError' || e?.name === 'CanceledError') return
                 console.error('Failed to fetch mapper insights:', e)
                 this.insights = null
             }
         },
         async fetchMaps() {
             if (!this.selectedMapper || !this.selectedMapper.mapperId) return
+
+            // Abort any in-flight requests and get a fresh signal
+            const signal = this._abortPendingFetch()
+
             this.tableLoading = true
             try {
                 const params = {
@@ -1527,9 +1798,10 @@ export default {
                     params.ordering = this.currentOrdering
                 }
 
-                const response = await this.$defaultApi.$get(`beatsaver/bsst/${this.selectedMapper.mapperId}`, {
-                    params,
-                })
+                const response = await this.$defaultApi.$get(
+                    `beatsaver/bsst/${this.selectedMapper.mapperId}`,
+                    { params, signal }
+                )
 
                 if (response && response.results !== undefined) {
                     this.maps = response.results
@@ -1542,12 +1814,62 @@ export default {
                     this.totalCount = 0
                 }
             } catch (e) {
+                // Silently ignore aborted requests — another fetch is already on its way
+                if (e?.code === 'ERR_CANCELED' || e?.name === 'AbortError' || e?.name === 'CanceledError') return
                 console.error('Failed to fetch maps:', e)
                 this.maps = []
                 this.totalCount = 0
             } finally {
-                this.loading = false
-                this.tableLoading = false
+                // Only clear the loading spinner if this signal wasn't aborted
+                if (!signal.aborted) {
+                    this.loading = false
+                    this.tableLoading = false
+                }
+            }
+        },
+        async toggleCompare() {
+            if (this.showCompare) {
+                this.showCompare = false
+                return
+            }
+            if (this.compareData) {
+                this.showCompare = true
+                return
+            }
+            this.compareLoading = true
+            try {
+                this.compareData = await this.$defaultApi.$get('beatsaver/bsst_compare')
+                this.showCompare = true
+            } catch (e) {
+                console.error('Failed to load compare data:', e)
+            } finally {
+                this.compareLoading = false
+            }
+        },
+        sortedBy(key) {
+            if (!this.compareData) return []
+            return [...this.compareData].sort((a, b) => (b[key] || 0) - (a[key] || 0))
+        },
+        compareBarWidth(entry) {
+            if (!this.compareData || !this.compareData.length) return 0
+            const max = Math.max(...this.compareData.map((e) => e[this.compareMetric] || 0))
+            if (max === 0) return 0
+            return Math.round(((entry[this.compareMetric] || 0) / max) * 100)
+        },
+        formatCompareValue(entry) {
+            const v = entry[this.compareMetric]
+            if (this.compareMetric === 'overallRatio') return `${v}%`
+            if (this.compareMetric === 'mapsPerMonth') return `${v}/mo`
+            if (this.compareMetric === 'avgStar') return `★ ${v}`
+            if (this.compareMetric === 'totalDurationSec') return entry.totalDurationStr
+            return typeof v === 'number' ? v.toLocaleString() : v
+        },
+        jumpToMapper(entry) {
+            const mapper = this.mappers.find((m) => m.mapperId == entry.mapperId)
+            if (mapper) {
+                this.selectedMapper = mapper
+                this.showCompare = false
+                this.onMapperChange()
             }
         },
         onMapperChange() {
