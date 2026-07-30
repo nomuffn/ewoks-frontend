@@ -298,7 +298,16 @@ export default {
                     months: this.months,
                     mapper: this.mapperName,
                 }
-                const response = await this.$defaultApi.$post('beatsaver/stats', data)
+                const csrfToken = Cookies.get('csrftoken')
+                const headers = csrfToken
+                    ? {
+                          headers: {
+                              'content-type': 'application/json',
+                              'X-CSRFToken': csrfToken,
+                          },
+                      }
+                    : {}
+                const response = await this.$defaultApi.$post('beatsaver/stats', data, headers)
                 this.results = response || []
                 this.visibleItems = 10
             } catch (e) {

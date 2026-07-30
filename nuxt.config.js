@@ -112,6 +112,12 @@ export default {
         ['nuxt-buefy', { css: false, materialDesignIcons: false }],
     ],
 
+    axios: {
+        credentials: true,
+        xsrfCookieName: 'csrftoken',
+        xsrfHeaderName: 'X-CSRFToken',
+    },
+
     router: {
         trailingSlash: false,
         middleware: 'trailingSlashRedirect',

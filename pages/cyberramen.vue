@@ -4,7 +4,7 @@
             <p v-html="description"></p>
         </sub-header>
 
-        <div class="w-full px-4 sm:px-8 mt-6">
+        <div class="w-full max-w-6xl px-4 sm:px-8 mx-auto mt-6">
             <!-- Error State -->
             <div v-if="error" class="bg-rose-950/40 border border-rose-800/60 rounded-xl p-6 text-center text-rose-300 my-4 shadow-lg">
                 <i class="bx bx-error-circle text-4xl mb-2 text-rose-400"></i>
@@ -102,7 +102,9 @@
                                     :class="[
                                         'inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold border',
                                         job.done === 1
-                                            ? 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30'
+                                            ? (job.loadedResults && (!job.loadedResults.length || !Object.keys(job.sortedReplays || {}).length)
+                                                ? 'bg-amber-500/15 text-amber-300 border-amber-500/30'
+                                                : 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30')
                                             : job.done === 0
                                             ? 'bg-blue-500/15 text-blue-300 border-blue-500/30 animate-pulse'
                                             : 'bg-rose-500/15 text-rose-300 border-rose-500/30'
@@ -111,10 +113,24 @@
                                     <span
                                         :class="[
                                             'w-1.5 h-1.5 rounded-full',
-                                            job.done === 1 ? 'bg-emerald-400' : job.done === 0 ? 'bg-blue-400' : 'bg-rose-400'
+                                            job.done === 1
+                                                ? (job.loadedResults && (!job.loadedResults.length || !Object.keys(job.sortedReplays || {}).length)
+                                                    ? 'bg-amber-400'
+                                                    : 'bg-emerald-400')
+                                                : job.done === 0
+                                                ? 'bg-blue-400'
+                                                : 'bg-rose-400'
                                         ]"
                                     ></span>
-                                    {{ job.done === 1 ? 'Done' : job.done === 0 ? 'Queued' : 'Error' }}
+                                    {{
+                                        job.done === 1
+                                            ? (job.loadedResults && (!job.loadedResults.length || !Object.keys(job.sortedReplays || {}).length)
+                                                ? 'No Replays'
+                                                : 'Done')
+                                            : job.done === 0
+                                            ? 'Queued'
+                                            : 'Error'
+                                    }}
                                 </span>
                             </template>
                         </Column>
@@ -205,6 +221,17 @@
                                 <div v-else-if="!job.loadedResults" class="p-8 text-center text-gray-400">
                                     <ProgressSpinner style="width: 32px; height: 32px" strokeWidth="4" />
                                     <p class="mt-2 text-xs font-medium">Fetching detailed replay analytics...</p>
+                                </div>
+
+                                <!-- Warning for Jobs completed with 0 replays -->
+                                <div v-else-if="!job.loadedResults.length || !Object.keys(job.sortedReplays || {}).length" class="p-5 bg-amber-950/30 border border-amber-800/50 rounded-xl text-amber-300 text-xs sm:text-sm flex items-start gap-3 shadow-md">
+                                    <i class="bx bx-error text-2xl text-amber-400 shrink-0 mt-0.5"></i>
+                                    <div class="space-y-1">
+                                        <p class="font-semibold text-amber-200 text-sm">No replays generated for this job</p>
+                                        <p class="text-amber-300/80 leading-relaxed">
+                                            This job completed, but no replays were found. This might be because the map uses <strong class="text-amber-200">V3 map format</strong>, <strong class="text-amber-200">Noodle Extensions</strong>, or <strong class="text-amber-200">Mapping Extensions</strong> (as mentioned in the replay request modal).
+                                        </p>
+                                    </div>
                                 </div>
 
                                 <!-- Detailed Replay Results & Analysis -->
@@ -656,6 +683,7 @@ export default {
                         { JobId: 1008, UserId: '100000000000000001', UserName: 'user_alpha', SongHash: '2222222222222222222222222222222222222222', Mode: 'Standard', Diff: 'Normal', Result: null, CreatedDate: makeDt(4, 11, 10), SongName: 'Song Title Theta (Queued)', BeatSaverKey: '8j9k0' },
                         { JobId: 1009, UserId: '100000000000000005', UserName: 'user_epsilon', SongHash: '3333333333333333333333333333333333333333', Mode: 'Standard', Diff: 'ExpertPlus', Result: 'https://generated-replays.cdn.dzramen.com/mock/report-1009.json', CreatedDate: makeDt(5, 22, 5), SongName: 'Song Title Iota', BeatSaverKey: '9k0l1' },
                         { JobId: 1010, UserId: '100000000000000005', UserName: 'user_epsilon', SongHash: '4444444444444444444444444444444444444444', Mode: 'Standard', Diff: 'Expert', Result: 'https://generated-replays.cdn.dzramen.com/mock/report-1010.json', CreatedDate: makeDt(6, 15, 30), SongName: 'Song Title Kappa', BeatSaverKey: '0l1m2' },
+                        { JobId: 1011, UserId: '100000000000000001', UserName: 'user_alpha', SongHash: '5555555555555555555555555555555555555555', Mode: 'Standard', Diff: 'ExpertPlus', Result: 'https://generated-replays.cdn.dzramen.com/mock/report-empty.json', CreatedDate: makeDt(0, 8, 0), SongName: 'V3 Map Test (No Replays)', BeatSaverKey: '0l1m3' },
                     ]
                     this.jobs = rawJobs.map((job) => ({
                         ...job,
@@ -715,35 +743,39 @@ export default {
                 const isDev = process.dev || (typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'))
 
                 if (isDev && job.Result?.includes('/mock/')) {
-                    // Generate fake replay data for dev mode
-                    const mkReplay = (seed) => {
-                        const rng = (min, max) => Math.round((min + ((seed * 9301 + 49297) % 233280) / 233280 * (max - min)) * 100) / 100
-                        const acc = Math.min(99.9, 70 + rng(seed, 29))
-                        const numMistakes = Math.floor(rng(seed + 1, 15))
-                        const mistakes = Array.from({ length: numMistakes }, (_, i) => ({
-                            time: parseFloat((i * 3.14 + seed * 0.7).toFixed(3)),
-                            type: ['bad', 'miss', 'bomb'][i % 3],
-                            noteId: i + seed * 10,
-                        }))
-                        return {
-                            ReplayParams: {
-                                acc: parseFloat(acc.toFixed(2)),
-                                fcAcc: parseFloat((acc + rng(seed + 2, 3)).toFixed(2)),
-                                fps: [60, 90, 120][seed % 3],
-                                mistakes: numMistakes,
-                                headsetYposition: parseFloat((1.5 + rng(seed, 0.4)).toFixed(3)),
-                                height: parseFloat((170 + rng(seed, 20)).toFixed(1)),
-                                jd: parseFloat((15 + rng(seed, 10)).toFixed(1)),
-                                postSwingAngle: parseFloat((50 + rng(seed, 30)).toFixed(1)),
-                                preSwingAngle: parseFloat((60 + rng(seed, 20)).toFixed(1)),
-                                timeDeviation: parseFloat((0.01 + rng(seed, 0.1)).toFixed(4)),
-                                requestedAcc: parseFloat((acc - 5).toFixed(2)),
-                                replayUrl: `https://cdn.dzramen.com/mock/replay-${seed}.bsor`,
-                            },
-                            ReplayMistakes: mistakes,
+                    if (job.Result?.includes('report-empty')) {
+                        results = []
+                    } else {
+                        // Generate fake replay data for dev mode
+                        const mkReplay = (seed) => {
+                            const rng = (min, max) => Math.round((min + ((seed * 9301 + 49297) % 233280) / 233280 * (max - min)) * 100) / 100
+                            const acc = Math.min(99.9, 70 + rng(seed, 29))
+                            const numMistakes = Math.floor(rng(seed + 1, 15))
+                            const mistakes = Array.from({ length: numMistakes }, (_, i) => ({
+                                time: parseFloat((i * 3.14 + seed * 0.7).toFixed(3)),
+                                type: ['bad', 'miss', 'bomb'][i % 3],
+                                noteId: i + seed * 10,
+                            }))
+                            return {
+                                ReplayParams: {
+                                    acc: parseFloat(acc.toFixed(2)),
+                                    fcAcc: parseFloat((acc + rng(seed + 2, 3)).toFixed(2)),
+                                    fps: [60, 90, 120][seed % 3],
+                                    mistakes: numMistakes,
+                                    headsetYposition: parseFloat((1.5 + rng(seed, 0.4)).toFixed(3)),
+                                    height: parseFloat((170 + rng(seed, 20)).toFixed(1)),
+                                    jd: parseFloat((15 + rng(seed, 10)).toFixed(1)),
+                                    postSwingAngle: parseFloat((50 + rng(seed, 30)).toFixed(1)),
+                                    preSwingAngle: parseFloat((60 + rng(seed, 20)).toFixed(1)),
+                                    timeDeviation: parseFloat((0.01 + rng(seed, 0.1)).toFixed(4)),
+                                    requestedAcc: parseFloat((acc - 5).toFixed(2)),
+                                    replayUrl: `https://cdn.dzramen.com/mock/replay-${seed}.bsor`,
+                                },
+                                ReplayMistakes: mistakes,
+                            }
                         }
+                        results = Array.from({ length: 5 + (job.JobId % 8) }, (_, i) => mkReplay(job.JobId + i))
                     }
-                    results = Array.from({ length: 5 + (job.JobId % 8) }, (_, i) => mkReplay(job.JobId + i))
                 } else {
                     results = (await this.$http.get(job.Result)).data
                 }
