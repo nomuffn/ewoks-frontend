@@ -177,7 +177,7 @@ export default {
                     },
                 }
 
-                await this.$crrApi.post('create_job', this.job, headers)
+                await this.$crrApi.post('job', this.job, headers)
                 this.$toast.add({
                     severity: 'success',
                     summary: `CyberRamen job created!`,
