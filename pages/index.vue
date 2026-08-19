@@ -41,19 +41,6 @@
                     /></a>
                 </div>
                 <div class="flex flex-col">
-                    <div class="flex flex-row flex-wrap">
-                        <img v-for="emote in emotes" :key="emote" :src="emote" class="mx-2" />
-                    </div>
-                    <p class="mt-2 mb-4">
-                        Made by
-                        <a
-                            class="colored"
-                            href="https://discordapp.com/users/261522369200390147/"
-                            target="_blank"
-                            style="color: white"
-                            >Skadii (commissions open)</a
-                        >
-                    </p>
                     <img class="w-80 self-center" src="muffnsuic.gif" />
                     <p class="mt-2 mb-4">
                         Made by
@@ -74,17 +61,7 @@
 </template>
 
 <script>
-export default {
-    data() {
-        return {
-            emotes: [],
-        }
-    },
-    async mounted() {
-        this.emotes = (await this.$defaultApi.$get('general/stuff/public_home_emotes')).json
-        console.log(this.emotes)
-    },
-}
+export default {}
 </script>
 
 <style lang="scss">
