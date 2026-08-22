@@ -220,7 +220,14 @@ export default {
                 const searchParam = this.currentSearchString
                     ? encodeURIComponent(this.currentSearchString)
                     : ''
-                this.scores = await this.$mapttsApi.$get(`scores/${this.page}/${searchParam}`)
+                const res = await this.$mapttsApi.$get(`scores/${this.page}/${searchParam}`)
+                if (Array.isArray(res)) {
+                    this.scores = res
+                } else if (res && Array.isArray(res.results)) {
+                    this.scores = res.results
+                } else {
+                    this.scores = []
+                }
             } catch (e) {
                 console.error('Failed to load maptts scores:', e)
                 this.scores = []
