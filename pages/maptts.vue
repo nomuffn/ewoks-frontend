@@ -109,7 +109,7 @@
             </div>
 
             <!-- Scores List Container -->
-            <div class="space-y-3">
+            <div>
                 <div v-if="loading" class="bg-[#18191c] border border-gray-800 rounded-xl p-16 flex flex-col items-center justify-center shadow-xl">
                     <ProgressSpinner style="width: 42px; height: 42px" strokeWidth="4" />
                     <span class="text-gray-400 mt-4 text-sm font-medium animate-pulse">Loading Twitch timestamps...</span>
@@ -121,9 +121,9 @@
                     <p class="text-sm text-gray-500 mt-1">Try searching for a different name or changing filter.</p>
                 </div>
 
-                <template v-else>
-                    <score v-for="score of scores" :key="score.id" :score="score" />
-                </template>
+                <div v-else class="space-y-3">
+                    <score v-for="(score, index) of scores" :key="score.scoreId || index" :score="score" />
+                </div>
             </div>
 
             <!-- Bottom Pagination -->

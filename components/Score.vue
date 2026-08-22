@@ -6,8 +6,7 @@
                     <template v-if="score.player">
                         <a target="_blank" :href="`https://scoresaber.com/u/${score.player.scoresaberId}`">{{
                             score.player.twitchName
-                        }}</a
-                        ><span> played</span>
+                        }}</a>
                     </template>
                     <template v-else>
                         {{ score.playerName }}
@@ -71,7 +70,7 @@ export default {
 
 <style lang="scss" scoped>
 .scorecard {
-    margin-bottom: 20px;
+    margin-bottom: 0;
 
     h3 {
         margin: 0 0 10px;
