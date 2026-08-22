@@ -19,31 +19,58 @@
 
             <!-- Controls Header Card (Search & Pagination) -->
             <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-wrap items-center justify-between gap-4">
-                <!-- Search Input -->
-                <div class="relative flex-1 min-w-[220px] max-w-md">
-                    <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></i>
-                    <input
-                        type="text"
-                        v-model="search"
-                        @keyup.enter="startSearch"
-                        placeholder="Search song, artist, or player..."
-                        class="w-full bg-[#121315] text-gray-100 placeholder-gray-500 border border-gray-700 focus:border-blue-500 rounded-lg pl-9 pr-20 py-2 text-sm outline-none transition-all"
-                    />
-                    <div class="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                <!-- Search Box with Filter Toggle -->
+                <div class="flex flex-wrap items-center gap-2 flex-1 min-w-[260px] max-w-xl">
+                    <!-- Scope Filter Buttons (All / Mapper / Player) -->
+                    <div class="flex bg-[#121315] p-1 rounded-lg border border-gray-800 text-xs shrink-0">
                         <button
-                            v-if="search"
-                            @click="search = ''; startSearch()"
-                            class="text-gray-400 hover:text-white p-1 text-base transition-colors"
-                            title="Clear search"
+                            @click="setScope('all')"
+                            :class="scope === 'all' ? 'bg-gray-700 text-white font-semibold' : 'text-gray-400 hover:text-gray-200'"
+                            class="px-2.5 py-1 rounded transition-colors"
                         >
-                            <i class="bx bx-x"></i>
+                            All
                         </button>
                         <button
-                            @click="startSearch"
-                            class="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-md transition-colors"
+                            @click="setScope('mapper')"
+                            :class="scope === 'mapper' ? 'bg-blue-600 text-white font-semibold' : 'text-gray-400 hover:text-gray-200'"
+                            class="px-2.5 py-1 rounded transition-colors"
                         >
-                            Search
+                            Mapper
                         </button>
+                        <button
+                            @click="setScope('player')"
+                            :class="scope === 'player' ? 'bg-purple-600 text-white font-semibold' : 'text-gray-400 hover:text-gray-200'"
+                            class="px-2.5 py-1 rounded transition-colors"
+                        >
+                            Player
+                        </button>
+                    </div>
+
+                    <!-- Search Input -->
+                    <div class="relative flex-1 min-w-[180px]">
+                        <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></i>
+                        <input
+                            type="text"
+                            v-model="query"
+                            @keyup.enter="startSearch"
+                            class="w-full bg-[#121315] text-gray-100 border border-gray-700 focus:border-blue-500 rounded-lg pl-9 pr-20 py-2 text-sm outline-none transition-all"
+                        />
+                        <div class="absolute right-1 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                            <button
+                                v-if="query"
+                                @click="query = ''; startSearch()"
+                                class="text-gray-400 hover:text-white p-1 text-base transition-colors"
+                                title="Clear search"
+                            >
+                                <i class="bx bx-x"></i>
+                            </button>
+                            <button
+                                @click="startSearch"
+                                class="px-2.5 py-1 bg-blue-600 hover:bg-blue-500 text-white font-semibold text-xs rounded-md transition-colors"
+                            >
+                                Search
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -71,7 +98,7 @@
                 </div>
             </div>
 
-            <!-- Header Title & Active Filters -->
+            <!-- Header Title -->
             <div class="flex items-center justify-between px-1">
                 <h3 class="text-base font-bold text-gray-200 flex items-center gap-2">
                     <i class="bx bxl-twitch text-purple-400 text-xl"></i> Latest Streamer Scores
@@ -91,7 +118,7 @@
                 <div v-else-if="!scores || scores.length === 0" class="bg-[#18191c] border border-gray-800 rounded-xl p-16 text-center text-gray-400 flex flex-col items-center justify-center shadow-xl">
                     <i class="bx bxl-twitch text-5xl mb-3 text-purple-400/50"></i>
                     <p class="text-lg font-medium text-gray-300">No Twitch scores found</p>
-                    <p class="text-sm text-gray-500 mt-1">Try searching for a different song or player name.</p>
+                    <p class="text-sm text-gray-500 mt-1">Try searching for a different name or changing filter.</p>
                 </div>
 
                 <template v-else>
@@ -130,7 +157,7 @@ export default {
     transition: 'slide-bottom',
     async created() {
         if (this.$route.query.search) {
-            this.search = this.$route.query.search
+            this.initFromSearch(this.$route.query.search)
             this.startSearch()
         }
     },
@@ -142,11 +169,24 @@ export default {
     data() {
         return {
             scores: [],
-            search: '',
+            query: '',
+            scope: 'all', // 'all' | 'mapper' | 'player'
             page: 0,
             loading: true,
             paginatorOffset: 0,
         }
+    },
+    computed: {
+        currentSearchString() {
+            const trimmed = this.query.trim()
+            if (!trimmed) return ''
+            if (this.scope === 'mapper') {
+                return trimmed.startsWith('mapper:') ? trimmed : `mapper:${trimmed}`
+            } else if (this.scope === 'player') {
+                return trimmed.startsWith('player:') ? trimmed : `player:${trimmed}`
+            }
+            return trimmed
+        },
     },
     async fetch() {
         this.loadScores()
@@ -155,10 +195,32 @@ export default {
         openUrl(id) {
             window.open('https://scoresaber.com/leaderboard/' + id, '_blank')
         },
+        initFromSearch(rawSearch) {
+            if (!rawSearch) return
+            const s = rawSearch.trim()
+            if (s.startsWith('mapper:')) {
+                this.scope = 'mapper'
+                this.query = s.substring('mapper:'.length).trim()
+            } else if (s.startsWith('player:')) {
+                this.scope = 'player'
+                this.query = s.substring('player:'.length).trim()
+            } else {
+                this.scope = 'all'
+                this.query = s
+            }
+        },
+        setScope(newScope) {
+            this.scope = newScope
+            this.page = 0
+            this.startSearch()
+        },
         async loadScores() {
             this.loading = true
             try {
-                this.scores = await this.$mapttsApi.$get(`scores/${this.page}/${this.search}`)
+                const searchParam = this.currentSearchString
+                    ? encodeURIComponent(this.currentSearchString)
+                    : ''
+                this.scores = await this.$mapttsApi.$get(`scores/${this.page}/${searchParam}`)
             } catch (e) {
                 console.error('Failed to load maptts scores:', e)
                 this.scores = []
@@ -167,7 +229,10 @@ export default {
             }
         },
         startSearch() {
-            const res = this.$router.push({ query: { search: this.search } })
+            const fullSearch = this.currentSearchString
+            const res = this.$router.push({
+                query: fullSearch ? { search: fullSearch } : {},
+            })
             if (res && typeof res.catch === 'function') {
                 res.catch(() => {})
             }
