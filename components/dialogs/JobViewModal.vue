@@ -2,7 +2,7 @@
     <div class="jobViewModal bg-[#1e2023] border border-white/[0.08] rounded-lg p-5 shadow-xl w-full max-w-xl mx-auto space-y-4 text-gray-100">
         <!-- Header -->
         <div class="flex items-center justify-between border-b border-white/[0.07] pb-3">
-            <h3 class="text-base font-semibold text-gray-100">Job Details</h3>
+            <h3 class="text-base font-semibold text-gray-100">{{ title || 'Job Details' }}</h3>
             <button @click="$emit('close')" class="text-gray-400 hover:text-white p-1 rounded-md hover:bg-white/5 transition-colors">
                 <i class="bx bx-x text-xl"></i>
             </button>
@@ -38,7 +38,7 @@
 
 <script>
 export default {
-    props: ['job'],
+    props: ['job', 'title'],
     data() {
         return {}
     },

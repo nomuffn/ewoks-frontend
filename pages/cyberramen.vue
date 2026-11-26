@@ -4,90 +4,30 @@
             <p v-html="description"></p>
         </sub-header>
 
-        <div class="w-full max-w-7xl px-4 sm:px-8 mx-auto mt-6">
+        <div class="w-full max-w-6xl px-4 sm:px-8 mx-auto mt-6">
             <!-- Error State -->
             <div v-if="error" class="bg-[#1e2023] border border-rose-500/30 rounded-lg p-6 text-center text-rose-300 my-4">
-                <p class="font-semibold text-sm">Failed to load CyberRamen jobs</p>
+                <p class="font-medium text-sm">Failed to load CyberRamen jobs</p>
                 <p class="text-xs text-rose-400/80 mt-1">{{ error.message || error }}</p>
             </div>
 
             <!-- Logged In Content -->
-            <div v-else-if="profile" class="space-y-5">
-                <!-- Admin Stats -->
-                <div v-if="isAdmin" class="bg-[#1e2023] border border-white/[0.06] rounded-lg p-4 space-y-4">
-                    <div class="flex items-center justify-between border-b border-white/[0.06] pb-3">
-                        <h3 class="text-sm font-semibold text-gray-100">Admin Stats</h3>
-                        <button
-                            @click="fetchAdminStats"
-                            class="px-2.5 py-1 bg-[#25282c] hover:bg-[#2e3238] text-gray-300 hover:text-white rounded-md text-xs font-medium transition-colors flex items-center gap-1 border border-white/[0.07]"
-                            title="Refresh Admin Stats"
-                        >
-                            <i :class="['bx bx-refresh text-sm', loadingAdminStats ? 'animate-spin' : '']"></i> Refresh
-                        </button>
-                    </div>
-
-                    <div v-if="adminStats" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3">
-                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg px-3 py-2.5">
-                            <span class="text-[11px] text-gray-400 block">Total Requests</span>
-                            <span class="text-base font-semibold font-mono text-gray-100">{{ adminStats.totalJobs }}</span>
-                        </div>
-                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg px-3 py-2.5">
-                            <span class="text-[11px] text-gray-400 block">Success Rate</span>
-                            <span class="text-base font-semibold font-mono text-emerald-400">{{ adminStats.successRate }}%</span>
-                        </div>
-                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg px-3 py-2.5">
-                            <span class="text-[11px] text-gray-400 block">Completed</span>
-                            <span class="text-base font-semibold font-mono text-gray-100">{{ adminStats.completedJobs }}</span>
-                        </div>
-                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg px-3 py-2.5">
-                            <span class="text-[11px] text-gray-400 block">Queued</span>
-                            <span class="text-base font-semibold font-mono text-blue-400">{{ adminStats.queuedJobs }}</span>
-                        </div>
-                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg px-3 py-2.5">
-                            <span class="text-[11px] text-gray-400 block">Failed</span>
-                            <span class="text-base font-semibold font-mono text-rose-400">{{ adminStats.failedJobs }}</span>
-                        </div>
-                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg px-3 py-2.5">
-                            <span class="text-[11px] text-gray-400 block">Requesters</span>
-                            <span class="text-base font-semibold font-mono text-gray-100">{{ adminStats.uniqueUsersCount }}</span>
-                        </div>
-                    </div>
-
-                    <!-- Top Requesters -->
-                    <div v-if="adminStats?.topUsers?.length" class="flex flex-wrap items-center gap-2 pt-1">
-                        <span class="text-xs text-gray-400 mr-1">Top requesters:</span>
-                        <button
-                            v-for="u in adminStats.topUsers"
-                            :key="u.userId || u.userName"
-                            @click="jobFilters.userid = (jobFilters.userid === u.userId ? null : u.userId)"
-                            :class="[
-                                'px-2.5 py-1 rounded-md text-xs transition-colors flex items-center gap-1.5 border',
-                                jobFilters.userid && jobFilters.userid === u.userId
-                                    ? 'bg-blue-600/20 border-blue-500/40 text-blue-200'
-                                    : 'bg-[#141417] hover:bg-[#25282c] border-white/[0.07] text-gray-300',
-                            ]"
-                            :title="`Filter by ${u.userName}`"
-                        >
-                            <span>{{ u.userName }}</span>
-                            <span class="text-gray-500 font-mono text-[11px]">{{ u.count }}</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Controls Bar -->
-                <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg p-3.5 flex flex-wrap items-center gap-3">
-                    <div class="relative shrink-0">
+            <div v-else-if="profile" class="space-y-4">
+                <!-- Top Toolbar -->
+                <div class="flex flex-wrap items-center gap-2.5">
+                    <div class="relative flex-1 min-w-[200px] max-w-xs">
                         <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-base pointer-events-none"></i>
                         <input
                             type="text"
                             v-model="jobFilters.textSearch"
-                            placeholder="Search song title..."
-                            class="bg-[#141417] text-gray-100 placeholder-gray-500 border border-white/[0.08] focus:border-blue-500 rounded-lg pl-9 pr-8 py-2 text-sm outline-none transition-colors w-56"
+                            placeholder="Search song..."
+                            class="w-full bg-[#141417] text-gray-100 placeholder-gray-500 border border-white/[0.08] focus:border-blue-500 rounded-lg pl-9 pr-8 py-2 text-sm outline-none transition-colors"
                         />
                         <button
                             v-if="jobFilters.textSearch"
                             @click="jobFilters.textSearch = ''"
                             class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-1 text-base transition-colors"
+                            title="Clear search"
                         >
                             <i class="bx bx-x"></i>
                         </button>
@@ -98,7 +38,7 @@
                             v-model="jobFilters.userid"
                             optionLabel="name"
                             optionValue="id"
-                            placeholder="Filter by user"
+                            placeholder="All users"
                             :options="jobUsers"
                             class="w-44 p-inputtext-sm"
                             :showClear="true"
@@ -107,448 +47,550 @@
                         />
                     </div>
 
+                    <div v-if="filteredJobs.length" class="flex items-center gap-2 px-3 py-1.5 bg-[#1e2023] border border-blue-500/30 rounded-lg text-xs text-gray-300">
+                        <span>Jobs: <span class="font-mono text-gray-100">{{ filteredJobs.join(', ') }}</span></span>
+                        <button @click="filteredJobs = []" class="text-gray-400 hover:text-white transition-colors" title="Clear job ID filter">
+                            <i class="bx bx-x text-sm"></i>
+                        </button>
+                    </div>
+
                     <button
                         @click="createJob"
                         :disabled="creatingJob"
                         class="px-3.5 py-2 bg-blue-600 hover:bg-blue-500 disabled:opacity-50 text-white font-medium rounded-lg text-xs sm:text-sm transition-colors flex items-center gap-1.5 shrink-0 ml-auto"
                     >
                         <i class="bx bx-plus text-base"></i>
-                        <span>New Replay Request</span>
+                        <span>New Request</span>
                     </button>
                 </div>
 
-                <!-- Active Job ID Filter -->
-                <div
-                    v-if="filteredJobs.length"
-                    class="bg-[#1e2023] border border-blue-500/30 rounded-lg px-4 py-2.5 flex items-center justify-between text-xs text-gray-300"
-                >
-                    <span>Filtered by Job IDs: <strong class="font-mono text-gray-100">{{ filteredJobs.join(', ') }}</strong></span>
-                    <button
-                        @click="filteredJobs = []"
-                        class="text-blue-400 hover:text-blue-300 transition-colors text-xs font-medium"
-                    >
-                        Clear filter
-                    </button>
+                <!-- Slim Admin Summary Bar -->
+                <div v-if="isAdmin && adminStats" class="bg-[#1e2023] border border-white/[0.06] rounded-lg px-4 py-2.5 text-xs">
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div class="flex flex-wrap items-center gap-x-5 gap-y-1 text-gray-400">
+                            <span><strong class="font-mono text-gray-100">{{ adminStats.totalJobs }}</strong> requests</span>
+                            <span><strong class="font-mono text-emerald-400">{{ adminStats.successRate }}%</strong> success</span>
+                            <span><strong class="font-mono text-gray-200">{{ adminStats.completedJobs }}</strong> done</span>
+                            <span><strong class="font-mono text-blue-400">{{ adminStats.queuedJobs }}</strong> queued</span>
+                            <span><strong class="font-mono text-rose-400">{{ adminStats.failedJobs }}</strong> failed</span>
+                            <span><strong class="font-mono text-gray-200">{{ adminStats.uniqueUsersCount }}</strong> users</span>
+                        </div>
+
+                        <div class="flex items-center gap-3 shrink-0">
+                            <button
+                                v-if="adminStats.topUsers?.length"
+                                @click="showTopUsers = !showTopUsers"
+                                class="text-gray-400 hover:text-gray-200 transition-colors flex items-center gap-1"
+                            >
+                                <span>Top users</span>
+                                <i :class="['bx text-sm transition-transform', showTopUsers ? 'bx-chevron-up' : 'bx-chevron-down']"></i>
+                            </button>
+                            <button
+                                @click="fetchAdminStats"
+                                class="text-gray-400 hover:text-gray-200 transition-colors p-0.5"
+                                title="Refresh admin stats"
+                            >
+                                <i :class="['bx bx-refresh text-base', loadingAdminStats ? 'animate-spin' : '']"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div v-if="showTopUsers && adminStats.topUsers?.length" class="flex flex-wrap items-center gap-1.5 pt-2.5 mt-2.5 border-t border-white/[0.06]">
+                        <button
+                            v-for="u in adminStats.topUsers"
+                            :key="u.userId || u.userName"
+                            @click="toggleUserFilter(u.userId)"
+                            :class="[
+                                'px-2.5 py-1 rounded-md text-xs transition-colors flex items-center gap-1.5 border',
+                                jobFilters.userid && jobFilters.userid == u.userId
+                                    ? 'bg-blue-600/20 border-blue-500/40 text-blue-200'
+                                    : 'bg-[#141417] hover:bg-[#25282c] border-white/[0.06] text-gray-300',
+                            ]"
+                        >
+                            <span>{{ u.userName }}</span>
+                            <span class="font-mono text-[11px] text-gray-500">{{ u.count }}</span>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Main Data Table -->
-                <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg overflow-hidden relative min-h-[300px]">
-                    <div v-if="loading && !computedJobs.length" class="p-12 flex flex-col items-center justify-center">
-                        <ProgressSpinner style="width: 36px; height: 36px" strokeWidth="4" />
+                <!-- Jobs Table -->
+                <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg overflow-hidden">
+                    <div v-if="loading && !computedJobs.length" class="p-14 flex flex-col items-center justify-center">
+                        <ProgressSpinner style="width: 32px; height: 32px" strokeWidth="4" />
                         <span class="text-gray-400 mt-3 text-sm">Loading jobs...</span>
                     </div>
-                    <DataTable
-                        v-else
-                        class="w-full text-left"
-                        :value="computedJobs"
-                        :expandedRows.sync="expandedRows"
-                        responsiveLayout="scroll"
-                        :paginator="true"
-                        :rows="50"
-                        @row-expand="loadJob"
-                    >
-                        <Column :expander="true" :headerStyle="{ width: '3rem' }" />
 
-                        <!-- Status -->
-                        <Column field="done" header="Status" sortable>
-                            <template #body="{ data: job }">
-                                <span
-                                    :class="[
-                                        'inline-flex items-center gap-1.5 text-xs font-medium',
-                                        job.done === 1
-                                            ? (job.loadedResults && (!job.loadedResults.length || !Object.keys(job.sortedReplays || {}).length)
-                                                ? 'text-amber-400'
-                                                : 'text-emerald-400')
-                                            : job.done === 0
-                                            ? 'text-blue-400'
-                                            : 'text-rose-400',
-                                    ]"
-                                >
-                                    <span
-                                        :class="[
-                                            'w-1.5 h-1.5 rounded-full',
-                                            job.done === 1
-                                                ? (job.loadedResults && (!job.loadedResults.length || !Object.keys(job.sortedReplays || {}).length)
-                                                    ? 'bg-amber-400'
-                                                    : 'bg-emerald-400')
-                                                : job.done === 0
-                                                ? 'bg-blue-400'
-                                                : 'bg-rose-400',
-                                        ]"
-                                    ></span>
-                                    {{
-                                        job.done === 1
-                                            ? (job.loadedResults && (!job.loadedResults.length || !Object.keys(job.sortedReplays || {}).length)
-                                                ? 'No Replays'
-                                                : 'Done')
-                                            : job.done === 0
-                                            ? 'Queued'
-                                            : 'Error'
-                                    }}
-                                </span>
-                            </template>
-                        </Column>
+                    <div v-else-if="!computedJobs.length" class="p-14 text-center text-gray-400">
+                        <p class="text-sm font-medium text-gray-200">No jobs found</p>
+                        <p class="text-xs text-gray-500 mt-1">Create a new replay request or adjust your filters.</p>
+                    </div>
 
-                        <!-- Song Name -->
-                        <Column field="SongName" header="Song Name" sortable>
-                            <template #body="{ data: job }">
-                                <button
-                                    @click="toggleRow(job)"
-                                    class="text-left font-medium text-gray-100 hover:text-blue-400 transition-colors text-sm"
-                                >
-                                    {{ job.SongName || 'Untitled Song' }}
-                                </button>
-                            </template>
-                        </Column>
+                    <template v-else>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left border-collapse">
+                                <thead>
+                                    <tr class="bg-[#141417] border-b border-white/[0.06] text-xs font-medium text-gray-400 select-none">
+                                        <th @click="toggleSort('done')" class="py-3 pl-4 pr-3 cursor-pointer hover:text-gray-200 transition-colors whitespace-nowrap w-28">
+                                            Status <i :class="getSortIcon('done')"></i>
+                                        </th>
+                                        <th @click="toggleSort('SongName')" class="py-3 px-3 cursor-pointer hover:text-gray-200 transition-colors">
+                                            Song <i :class="getSortIcon('SongName')"></i>
+                                        </th>
+                                        <th v-if="isAdmin" @click="toggleSort('UserName')" class="py-3 px-3 cursor-pointer hover:text-gray-200 transition-colors whitespace-nowrap">
+                                            User <i :class="getSortIcon('UserName')"></i>
+                                        </th>
+                                        <th @click="toggleSort('Diff')" class="py-3 px-3 cursor-pointer hover:text-gray-200 transition-colors whitespace-nowrap">
+                                            Diff <i :class="getSortIcon('Diff')"></i>
+                                        </th>
+                                        <th @click="toggleSort('CreatedDate')" class="py-3 px-3 cursor-pointer hover:text-gray-200 transition-colors whitespace-nowrap">
+                                            Created <i :class="getSortIcon('CreatedDate')"></i>
+                                        </th>
+                                        <th @click="toggleSort('CompletedDate')" class="py-3 px-3 cursor-pointer hover:text-gray-200 transition-colors whitespace-nowrap hidden md:table-cell">
+                                            Finished <i :class="getSortIcon('CompletedDate')"></i>
+                                        </th>
+                                        <th class="py-3 pl-3 pr-4 text-right whitespace-nowrap w-24"></th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-white/[0.05] text-sm">
+                                    <template v-for="job in paginatedJobs">
+                                        <!-- Main Job Row -->
+                                        <tr
+                                            :key="job.JobId"
+                                            @click="toggleRow(job)"
+                                            :class="[
+                                                'cursor-pointer transition-colors',
+                                                isExpanded(job) ? 'bg-white/[0.03]' : 'hover:bg-white/[0.025]',
+                                            ]"
+                                        >
+                                            <!-- Chevron + Status -->
+                                            <td class="py-3 pl-4 pr-3 whitespace-nowrap">
+                                                <div class="flex items-center gap-2.5">
+                                                    <i
+                                                        :class="[
+                                                            'bx bx-chevron-right text-gray-500 text-base transition-transform',
+                                                            isExpanded(job) ? 'rotate-90 text-gray-300' : '',
+                                                        ]"
+                                                    ></i>
+                                                    <span :class="['inline-flex items-center gap-1.5 text-xs font-medium', getStatusMeta(job).textClass]">
+                                                        <span :class="['w-1.5 h-1.5 rounded-full', getStatusMeta(job).dotClass]"></span>
+                                                        {{ getStatusMeta(job).label }}
+                                                    </span>
+                                                </div>
+                                            </td>
 
-                        <!-- Requested By (Admin) -->
-                        <Column v-if="isAdmin" field="UserName" header="Requested By" sortable>
-                            <template #body="{ data: job }">
-                                <div class="flex flex-col min-w-0">
-                                    <span
-                                        @click="jobFilters.userid = job.UserId"
-                                        class="text-xs font-medium text-gray-200 hover:text-blue-400 transition-colors cursor-pointer truncate"
-                                        :title="`Click to filter by ${job.UserName}`"
-                                    >
-                                        {{ job.UserName || 'Unknown' }}
-                                    </span>
-                                    <span v-if="job.UserId" class="text-[11px] text-gray-500 font-mono truncate">
-                                        {{ job.UserId }}
-                                    </span>
-                                </div>
-                            </template>
-                        </Column>
+                                            <!-- Song Name -->
+                                            <td class="py-3 px-3 max-w-xs sm:max-w-sm">
+                                                <div class="font-medium text-gray-100 truncate" :title="job.SongName || 'Untitled Song'">
+                                                    {{ job.SongName || 'Untitled Song' }}
+                                                </div>
+                                            </td>
 
-                        <!-- Difficulty -->
-                        <Column field="Diff" header="Diff" sortable>
-                            <template #body="{ data: job }">
-                                <span class="text-xs text-gray-300 font-mono">
-                                    {{ job.Diff || 'Standard' }}
-                                </span>
-                            </template>
-                        </Column>
-
-                        <!-- Created Date -->
-                        <Column field="CreatedDate" header="Created" sortable>
-                            <template #body="{ data: job }">
-                                <span class="text-xs text-gray-300 font-mono">
-                                    {{ formatDate(job.CreatedDate) }}
-                                </span>
-                            </template>
-                        </Column>
-
-                        <!-- Finished Date -->
-                        <Column field="CompletedDate" header="Finished" sortable>
-                            <template #body="{ data: job }">
-                                <span class="text-xs text-gray-400 font-mono">
-                                    {{ formatDate(job.CompletedDate) }}
-                                </span>
-                            </template>
-                        </Column>
-
-                        <!-- Actions -->
-                        <Column header="Actions">
-                            <template #body="{ data: job }">
-                                <div class="flex items-center gap-1.5">
-                                    <button
-                                        @click="openJob(job)"
-                                        class="px-2.5 py-1 rounded-md bg-[#25282c] hover:bg-[#2e3238] text-gray-300 hover:text-white text-xs font-medium transition-colors border border-white/[0.07]"
-                                        title="View job details"
-                                    >
-                                        Info
-                                    </button>
-                                    <a
-                                        v-if="job.BeatSaverKey"
-                                        :href="`https://beatsaver.com/maps/${job.BeatSaverKey}`"
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        class="nope px-2.5 py-1 rounded-md bg-[#25282c] hover:bg-blue-600 text-gray-300 hover:text-white text-xs font-mono transition-colors flex items-center gap-1 border border-white/[0.07]"
-                                        title="View map on BeatSaver"
-                                    >
-                                        #{{ job.BeatSaverKey }} <i class="bx bx-link-external text-xs"></i>
-                                    </a>
-                                </div>
-                            </template>
-                        </Column>
-
-                        <!-- Expanded Row -->
-                        <template #expansion="{ data: job, index }">
-                            <div class="bg-[#141417] p-4 border-t border-white/[0.06] space-y-4">
-                                <div v-if="!job.Result" class="p-6 text-center text-gray-400 flex flex-col items-center">
-                                    <ProgressSpinner style="width: 28px; height: 28px" strokeWidth="4" />
-                                    <p class="mt-3 text-sm text-gray-300">Generating replays and mistake analysis... Please wait :DDD</p>
-                                </div>
-
-                                <div v-else-if="!job.Result?.includes('https://')" class="p-3.5 bg-rose-950/30 border border-rose-500/30 rounded-lg text-rose-300 text-xs font-mono">
-                                    {{ job.Result }}
-                                </div>
-
-                                <div v-else-if="!job.loadedResults" class="p-6 text-center text-gray-400">
-                                    <ProgressSpinner style="width: 28px; height: 28px" strokeWidth="4" />
-                                    <p class="mt-2 text-xs">Loading replay results...</p>
-                                </div>
-
-                                <div v-else-if="!job.loadedResults.length || !Object.keys(job.sortedReplays || {}).length" class="p-4 bg-amber-950/20 border border-amber-500/30 rounded-lg text-amber-200 text-xs sm:text-sm flex items-start gap-3">
-                                    <i class="bx bx-error text-xl text-amber-400 shrink-0 mt-0.5"></i>
-                                    <div class="space-y-1">
-                                        <p class="font-semibold">No replays generated for this job</p>
-                                        <p class="text-amber-200/80">
-                                            This job completed, but no replays were found. This might be because the map uses <strong>V3 map format</strong>, <strong>Noodle Extensions</strong>, or <strong>Mapping Extensions</strong>.
-                                        </p>
-                                    </div>
-                                </div>
-
-                                <div v-else class="space-y-4">
-                                    <!-- Summary Strip (Highest Acc & Most Mistakes) -->
-                                    <div class="flex flex-wrap items-center gap-3">
-                                        <div v-if="job.specifics?.highestAcc?.acc" class="bg-[#1e2023] border border-white/[0.07] rounded-lg px-4 py-2.5 flex items-center gap-4">
-                                            <div>
-                                                <span class="text-[11px] text-gray-400 block">Highest Accuracy</span>
-                                                <span class="text-sm font-semibold font-mono text-emerald-400">{{ job.specifics.highestAcc.acc }}%</span>
-                                            </div>
-                                            <div class="flex items-center gap-1.5">
+                                            <!-- User (Admin) -->
+                                            <td v-if="isAdmin" class="py-3 px-3 whitespace-nowrap" @click.stop>
                                                 <button
-                                                    @click="openReplay(job.specifics.highestAcc)"
-                                                    class="px-2.5 py-1 bg-[#25282c] hover:bg-blue-600 text-gray-200 hover:text-white rounded-md text-xs font-medium transition-colors flex items-center gap-1"
+                                                    @click="toggleUserFilter(job.UserId)"
+                                                    class="text-xs text-gray-300 hover:text-blue-400 transition-colors truncate max-w-[130px] block"
+                                                    :title="job.UserId ? `${job.UserName || 'Unknown'} (${job.UserId})` : job.UserName"
                                                 >
-                                                    Replay <i class="bx bx-link-external"></i>
+                                                    {{ job.UserName || 'Unknown' }}
                                                 </button>
-                                                <a
-                                                    :href="job.specifics.highestAcc.replayUrl"
-                                                    class="nope p-1.5 bg-[#25282c] hover:bg-[#2e3238] text-gray-300 hover:text-white rounded-md text-sm transition-colors"
-                                                    title="Download replay file"
-                                                >
-                                                    <i class="bx bx-download"></i>
-                                                </a>
-                                            </div>
-                                        </div>
+                                            </td>
 
-                                        <div v-if="job.specifics?.mostMistakes" class="bg-[#1e2023] border border-white/[0.07] rounded-lg px-4 py-2.5 flex items-center gap-4">
-                                            <div>
-                                                <span class="text-[11px] text-gray-400 block">Most Mistakes</span>
-                                                <span class="text-sm font-semibold font-mono text-amber-400">{{ job.specifics.mostMistakes.mistakes || 0 }} mistakes</span>
-                                            </div>
-                                            <div class="flex items-center gap-1.5">
-                                                <button
-                                                    @click="openReplay(job.specifics.mostMistakes)"
-                                                    class="px-2.5 py-1 bg-[#25282c] hover:bg-blue-600 text-gray-200 hover:text-white rounded-md text-xs font-medium transition-colors flex items-center gap-1"
-                                                >
-                                                    Replay <i class="bx bx-link-external"></i>
-                                                </button>
-                                                <a
-                                                    :href="job.specifics.mostMistakes.replayUrl"
-                                                    class="nope p-1.5 bg-[#25282c] hover:bg-[#2e3238] text-gray-300 hover:text-white rounded-md text-sm transition-colors"
-                                                    title="Download replay file"
-                                                >
-                                                    <i class="bx bx-download"></i>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </div>
+                                            <!-- Difficulty -->
+                                            <td class="py-3 px-3 whitespace-nowrap">
+                                                <span class="text-xs font-mono text-gray-400">{{ formatDiff(job.Diff) }}</span>
+                                            </td>
 
-                                    <!-- Tabs -->
-                                    <TabView :activeIndex.sync="job.selectedTab" class="custom-tabview">
-                                        <!-- Mistakes Tab -->
-                                        <TabPanel :header="`Mistakes (${job.sortedMistakes.length})`">
-                                            <div class="flex flex-wrap items-center gap-6 py-2.5 px-4 bg-[#1e2023] border border-white/[0.06] rounded-lg mb-3 text-xs text-gray-300">
-                                                <label class="flex items-center gap-2 cursor-pointer select-none">
-                                                    <Checkbox
-                                                        :id="`showBadcuts-${job.JobId}`"
-                                                        v-model="computedJobs[index].filters.showBadcuts"
-                                                        :binary="true"
-                                                    />
-                                                    <span>Badcuts (<span class="font-mono text-gray-100">{{ job.specifics['total_bad'] }}</span>)</span>
-                                                </label>
+                                            <!-- Created -->
+                                            <td class="py-3 px-3 whitespace-nowrap">
+                                                <span class="text-xs font-mono text-gray-400" :title="formatFullDate(job.CreatedDate)">
+                                                    {{ formatShortDate(job.CreatedDate) }}
+                                                </span>
+                                            </td>
 
-                                                <label class="flex items-center gap-2 cursor-pointer select-none">
-                                                    <Checkbox
-                                                        :id="`showMisses-${job.JobId}`"
-                                                        v-model="computedJobs[index].filters.showMisses"
-                                                        :binary="true"
-                                                    />
-                                                    <span>Misses (<span class="font-mono text-gray-100">{{ job.specifics['total_miss'] }}</span>)</span>
-                                                </label>
+                                            <!-- Finished -->
+                                            <td class="py-3 px-3 whitespace-nowrap hidden md:table-cell">
+                                                <span class="text-xs font-mono text-gray-500" :title="formatFullDate(job.CompletedDate)">
+                                                    {{ formatShortDate(job.CompletedDate) }}
+                                                </span>
+                                            </td>
 
-                                                <label class="flex items-center gap-2 cursor-pointer select-none">
-                                                    <Checkbox
-                                                        :id="`showBombs-${job.JobId}`"
-                                                        v-model="computedJobs[index].filters.showBombs"
-                                                        :binary="true"
-                                                    />
-                                                    <span>Bombs (<span class="font-mono text-gray-100">{{ job.specifics['total_bomb'] }}</span>)</span>
-                                                </label>
-                                            </div>
+                                            <!-- Actions -->
+                                            <td class="py-3 pl-3 pr-4 whitespace-nowrap text-right" @click.stop>
+                                                <div class="inline-flex items-center justify-end gap-1">
+                                                    <a
+                                                        v-if="job.BeatSaverKey"
+                                                        :href="`https://beatsaver.com/maps/${job.BeatSaverKey}`"
+                                                        target="_blank"
+                                                        rel="noopener noreferrer"
+                                                        class="nope px-2 py-1 rounded text-xs font-mono text-gray-400 hover:text-blue-400 hover:bg-white/[0.04] transition-colors"
+                                                        title="Open on BeatSaver"
+                                                    >
+                                                        #{{ job.BeatSaverKey }}
+                                                    </a>
+                                                    <button
+                                                        @click="openJob(job)"
+                                                        class="p-1.5 rounded text-gray-500 hover:text-gray-200 hover:bg-white/[0.05] transition-colors"
+                                                        title="Job details"
+                                                    >
+                                                        <i class="bx bx-info-circle text-base"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
 
-                                            <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg overflow-hidden">
-                                                <DataTable
-                                                    :value="getMistakes(job)"
-                                                    :expandedRows.sync="expandedRows"
-                                                    responsiveLayout="scroll"
-                                                    :paginator="getMistakes(job).length > 10"
-                                                    :rows="10"
-                                                >
-                                                    <Column :expander="true" :headerStyle="{ width: '3rem' }" />
-                                                    <Column field="time" header="Timestamp" sortable>
-                                                        <template #body="{ data: mistake }">
-                                                            <span class="font-mono text-xs text-gray-200">{{ mistake.time }}s</span>
-                                                        </template>
-                                                    </Column>
-                                                    <Column field="mistakes" header="Replays Missed" sortable>
-                                                        <template #body="{ data: mistakes }">
-                                                            <span class="text-xs font-mono text-rose-400">
-                                                                {{ mistakes.mistakes.length }} replays
-                                                            </span>
-                                                        </template>
-                                                    </Column>
+                                        <!-- Expanded Drawer Row -->
+                                        <tr v-if="isExpanded(job)" :key="`${job.JobId}-exp`" class="bg-[#16171a]">
+                                            <td :colspan="isAdmin ? 7 : 6" class="p-0">
+                                                <div class="border-l-2 border-blue-500/40 px-4 sm:px-6 py-4 space-y-4">
+                                                    <!-- Incomplete / Loading / Error / Empty States -->
+                                                    <div v-if="!job.Result" class="py-6 text-center text-gray-400 flex flex-col items-center">
+                                                        <ProgressSpinner style="width: 24px; height: 24px" strokeWidth="4" />
+                                                        <p class="mt-2.5 text-xs text-gray-300">Generating replays and mistake analysis... Please wait :DDD</p>
+                                                    </div>
 
-                                                    <template #expansion="{ data: mistake }">
-                                                        <div class="p-3 bg-[#141417] border-t border-white/[0.06]">
-                                                            <DataTable
-                                                                class="w-full text-left"
-                                                                :value="mistake.mistakes"
-                                                                responsiveLayout="scroll"
-                                                                :paginator="mistake.mistakes.length > 10"
-                                                                :rows="10"
-                                                            >
-                                                                <Column field="type" header="Type" sortable>
-                                                                    <template #body="{ data: m }">
-                                                                        <span
-                                                                            :class="[
-                                                                                'text-xs font-mono uppercase font-medium',
-                                                                                m.type === 'bad'
-                                                                                    ? 'text-rose-400'
-                                                                                    : m.type === 'miss'
-                                                                                    ? 'text-amber-400'
-                                                                                    : 'text-gray-300',
-                                                                            ]"
-                                                                        >
-                                                                            {{ m.type }}
-                                                                        </span>
-                                                                    </template>
-                                                                </Column>
-                                                                <Column field="noteId" header="Note ID" sortable>
-                                                                    <template #body="{ data: m }">
-                                                                        <span class="font-mono text-xs text-gray-400">#{{ m.noteId }}</span>
-                                                                    </template>
-                                                                </Column>
-                                                                <Column header="Actions">
-                                                                    <template #body="{ data: singleMistake }">
-                                                                        <div class="flex items-center gap-1.5">
-                                                                            <button
-                                                                                @click="openReplay(job, singleMistake)"
-                                                                                class="px-2.5 py-1 rounded-md bg-[#25282c] hover:bg-blue-600 text-gray-200 hover:text-white text-xs font-medium transition-colors flex items-center gap-1"
-                                                                            >
-                                                                                Replay <i class="bx bx-link-external"></i>
-                                                                            </button>
-                                                                            <button
-                                                                                @click="(event) => $refs[`panel-${singleMistake.replayId}-${singleMistake.noteId}-${singleMistake.time}`].toggle(event)"
-                                                                                class="p-1.5 rounded-md bg-[#25282c] hover:bg-[#2e3238] text-gray-300 hover:text-white text-sm transition-colors"
-                                                                                title="View replay attributes"
-                                                                            >
-                                                                                <i class="bx bx-info-circle"></i>
-                                                                            </button>
-                                                                            <OverlayPanel
-                                                                                :ref="`panel-${singleMistake.replayId}-${singleMistake.noteId}-${singleMistake.time}`"
-                                                                                appendTo="body"
-                                                                                class="bg-[#1e2023] border border-white/10 text-gray-100 rounded-lg p-3 shadow-xl max-w-sm"
-                                                                            >
-                                                                                <div class="font-semibold text-xs text-gray-200 mb-2 border-b border-white/10 pb-1.5">
-                                                                                    Replay Info
-                                                                                </div>
-                                                                                <div
-                                                                                    v-for="attribute of Object.entries(job.sortedReplays[singleMistake.replayId])"
-                                                                                    :key="attribute[0]"
-                                                                                    class="flex items-center justify-between text-xs py-1 border-b border-white/[0.05]"
-                                                                                >
-                                                                                    <span class="text-gray-400 mr-4">{{ attribute[0] }}</span>
-                                                                                    <a
-                                                                                        v-if="attribute[1] && String(attribute[1]).includes('https://')"
-                                                                                        @click="openReplay(job, singleMistake)"
-                                                                                        class="text-blue-400 hover:underline cursor-pointer"
-                                                                                    >
-                                                                                        Link
-                                                                                    </a>
-                                                                                    <span v-else class="font-mono text-gray-200">{{ attribute[1] != null ? attribute[1] : 'n/a' }}</span>
-                                                                                </div>
-                                                                            </OverlayPanel>
+                                                    <div v-else-if="!job.Result?.includes('https://')" class="px-3.5 py-2.5 bg-rose-950/25 border border-rose-500/25 rounded-md text-rose-300 text-xs font-mono">
+                                                        {{ job.Result }}
+                                                    </div>
+
+                                                    <div v-else-if="!job.loadedResults" class="py-6 text-center text-gray-400 flex flex-col items-center">
+                                                        <ProgressSpinner style="width: 24px; height: 24px" strokeWidth="4" />
+                                                        <p class="mt-2 text-xs">Loading replay results...</p>
+                                                    </div>
+
+                                                    <div v-else-if="!job.loadedResults.length || !Object.keys(job.sortedReplays || {}).length" class="px-4 py-3 bg-amber-950/20 border border-amber-500/25 rounded-md text-amber-200/90 text-xs flex items-start gap-2.5">
+                                                        <i class="bx bx-error text-base text-amber-400 shrink-0 mt-0.5"></i>
+                                                        <div>
+                                                            <span class="font-medium text-amber-200">No replays generated.</span>
+                                                            This usually happens if the map uses V3 format, Noodle Extensions, or Mapping Extensions.
+                                                        </div>
+                                                    </div>
+
+                                                    <!-- Loaded Replay Results -->
+                                                    <template v-else>
+                                                        <!-- Sub-header: Tabs + Inline Highlights -->
+                                                        <div class="flex flex-wrap items-center justify-between gap-3 border-b border-white/[0.06] pb-2.5">
+                                                            <div class="flex items-center gap-1">
+                                                                <button
+                                                                    @click="setJobTab(job.JobId, 'mistakes')"
+                                                                    :class="[
+                                                                        'px-3 py-1.5 rounded-md text-xs font-medium transition-colors',
+                                                                        getJobTab(job.JobId) === 'mistakes'
+                                                                            ? 'bg-[#25282c] text-white'
+                                                                            : 'text-gray-400 hover:text-gray-200',
+                                                                    ]"
+                                                                >
+                                                                    Mistakes <span class="text-gray-500 font-mono ml-1">{{ job.sortedMistakes.length }}</span>
+                                                                </button>
+                                                                <button
+                                                                    @click="setJobTab(job.JobId, 'replays')"
+                                                                    :class="[
+                                                                        'px-3 py-1.5 rounded-md text-xs font-medium transition-colors',
+                                                                        getJobTab(job.JobId) === 'replays'
+                                                                            ? 'bg-[#25282c] text-white'
+                                                                            : 'text-gray-400 hover:text-gray-200',
+                                                                    ]"
+                                                                >
+                                                                    All Replays <span class="text-gray-500 font-mono ml-1">{{ Object.keys(job.sortedReplays).length }}</span>
+                                                                </button>
+                                                            </div>
+
+                                                            <div class="flex flex-wrap items-center gap-4 text-xs">
+                                                                <div v-if="job.specifics?.highestAcc?.acc" class="flex items-center gap-2">
+                                                                    <span class="text-gray-500">Best Acc:</span>
+                                                                    <span class="font-mono font-semibold text-emerald-400">{{ job.specifics.highestAcc.acc }}%</span>
+                                                                    <button
+                                                                        @click="openReplay(job.specifics.highestAcc)"
+                                                                        class="text-gray-400 hover:text-blue-400 transition-colors"
+                                                                        title="Watch highest acc replay"
+                                                                    >
+                                                                        <i class="bx bx-play-circle text-base"></i>
+                                                                    </button>
+                                                                    <a
+                                                                        :href="job.specifics.highestAcc.replayUrl"
+                                                                        class="nope text-gray-400 hover:text-gray-200 transition-colors"
+                                                                        title="Download replay"
+                                                                    >
+                                                                        <i class="bx bx-download text-sm"></i>
+                                                                    </a>
+                                                                </div>
+
+                                                                <div v-if="job.specifics?.mostMistakes" class="flex items-center gap-2">
+                                                                    <span class="text-gray-500">Most Mistakes:</span>
+                                                                    <span class="font-mono font-semibold text-amber-400">{{ job.specifics.mostMistakes.mistakes || 0 }}</span>
+                                                                    <button
+                                                                        @click="openReplay(job.specifics.mostMistakes)"
+                                                                        class="text-gray-400 hover:text-blue-400 transition-colors"
+                                                                        title="Watch replay with most mistakes"
+                                                                    >
+                                                                        <i class="bx bx-play-circle text-base"></i>
+                                                                    </button>
+                                                                    <a
+                                                                        :href="job.specifics.mostMistakes.replayUrl"
+                                                                        class="nope text-gray-400 hover:text-gray-200 transition-colors"
+                                                                        title="Download replay"
+                                                                    >
+                                                                        <i class="bx bx-download text-sm"></i>
+                                                                    </a>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- Mistakes Tab -->
+                                                        <div v-if="getJobTab(job.JobId) === 'mistakes'" class="space-y-3">
+                                                            <!-- Filter & Sort Row -->
+                                                            <div class="flex flex-wrap items-center justify-between gap-3 text-xs">
+                                                                <div class="flex flex-wrap items-center gap-4 text-gray-300">
+                                                                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                                                                        <Checkbox
+                                                                            :id="`showBadcuts-${job.JobId}`"
+                                                                            v-model="job.filters.showBadcuts"
+                                                                            :binary="true"
+                                                                        />
+                                                                        <span>Badcuts <span class="text-gray-500 font-mono">({{ job.specifics['total_bad'] }})</span></span>
+                                                                    </label>
+
+                                                                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                                                                        <Checkbox
+                                                                            :id="`showMisses-${job.JobId}`"
+                                                                            v-model="job.filters.showMisses"
+                                                                            :binary="true"
+                                                                        />
+                                                                        <span>Misses <span class="text-gray-500 font-mono">({{ job.specifics['total_miss'] }})</span></span>
+                                                                    </label>
+
+                                                                    <label class="flex items-center gap-2 cursor-pointer select-none">
+                                                                        <Checkbox
+                                                                            :id="`showBombs-${job.JobId}`"
+                                                                            v-model="job.filters.showBombs"
+                                                                            :binary="true"
+                                                                        />
+                                                                        <span>Bombs <span class="text-gray-500 font-mono">({{ job.specifics['total_bomb'] }})</span></span>
+                                                                    </label>
+                                                                </div>
+
+                                                                <div class="flex items-center gap-1.5 text-gray-400">
+                                                                    <span>Sort:</span>
+                                                                    <button
+                                                                        @click="setMistakesSort(job.JobId, 'time')"
+                                                                        :class="getMistakesSort(job.JobId) === 'time' ? 'text-white font-medium' : 'hover:text-gray-200'"
+                                                                        class="px-1.5 py-0.5 rounded transition-colors"
+                                                                    >
+                                                                        Time
+                                                                    </button>
+                                                                    <span class="text-gray-600">·</span>
+                                                                    <button
+                                                                        @click="setMistakesSort(job.JobId, 'count')"
+                                                                        :class="getMistakesSort(job.JobId) === 'count' ? 'text-white font-medium' : 'hover:text-gray-200'"
+                                                                        class="px-1.5 py-0.5 rounded transition-colors"
+                                                                    >
+                                                                        Most missed
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+
+                                                            <div v-if="!getMistakes(job).length" class="py-6 text-center text-xs text-gray-500">
+                                                                No mistakes match the selected filters.
+                                                            </div>
+
+                                                            <div v-else class="divide-y divide-white/[0.05] border border-white/[0.06] rounded-md bg-[#1a1c20] overflow-hidden">
+                                                                <div v-for="mistake in getPaginatedMistakes(job)" :key="mistake.time">
+                                                                    <div
+                                                                        @click="toggleMistake(job.JobId, mistake.time)"
+                                                                        class="px-3.5 py-2.5 flex items-center justify-between gap-3 cursor-pointer hover:bg-white/[0.025] transition-colors text-xs"
+                                                                    >
+                                                                        <div class="flex items-center gap-2.5">
+                                                                            <i
+                                                                                :class="[
+                                                                                    'bx bx-chevron-right text-gray-500 text-sm transition-transform',
+                                                                                    isMistakeExpanded(job.JobId, mistake.time) ? 'rotate-90 text-gray-300' : '',
+                                                                                ]"
+                                                                            ></i>
+                                                                            <span class="font-mono font-medium text-gray-200">{{ mistake.time }}s</span>
+                                                                            <span class="text-gray-500">·</span>
+                                                                            <span class="text-gray-400">{{ summarizeMistakeTypes(mistake.mistakes) }}</span>
                                                                         </div>
-                                                                    </template>
-                                                                </Column>
-                                                            </DataTable>
+                                                                        <span class="font-mono text-rose-400">
+                                                                            {{ mistake.mistakes.length }} {{ mistake.mistakes.length === 1 ? 'replay' : 'replays' }}
+                                                                        </span>
+                                                                    </div>
+
+                                                                    <!-- Expanded Timestamp Mistakes -->
+                                                                    <div v-if="isMistakeExpanded(job.JobId, mistake.time)" class="bg-[#141417] border-t border-white/[0.05] divide-y divide-white/[0.04]">
+                                                                        <div
+                                                                            v-for="(singleMistake, mIdx) in mistake.mistakes"
+                                                                            :key="`${singleMistake.replayId}-${singleMistake.noteId}-${mIdx}`"
+                                                                            class="pl-9 pr-3.5 py-2 flex flex-wrap items-center justify-between gap-3 text-xs"
+                                                                        >
+                                                                            <div class="flex items-center gap-4">
+                                                                                <span
+                                                                                    :class="[
+                                                                                        'font-mono uppercase font-medium w-10',
+                                                                                        singleMistake.type === 'bad'
+                                                                                            ? 'text-rose-400'
+                                                                                            : singleMistake.type === 'miss'
+                                                                                            ? 'text-amber-400'
+                                                                                            : 'text-gray-300',
+                                                                                    ]"
+                                                                                >
+                                                                                    {{ singleMistake.type }}
+                                                                                </span>
+                                                                                <span class="font-mono text-gray-400">Note #{{ singleMistake.noteId }}</span>
+                                                                                <span
+                                                                                    v-if="job.sortedReplays[singleMistake.replayId]"
+                                                                                    class="font-mono text-gray-500"
+                                                                                >
+                                                                                    {{ job.sortedReplays[singleMistake.replayId].acc }}% acc
+                                                                                </span>
+                                                                            </div>
+
+                                                                            <div class="flex items-center gap-1.5">
+                                                                                <button
+                                                                                    @click="openReplay(job, singleMistake)"
+                                                                                    class="px-2.5 py-1 rounded bg-[#25282c] hover:bg-blue-600 text-gray-200 hover:text-white transition-colors flex items-center gap-1"
+                                                                                >
+                                                                                    Watch <i class="bx bx-link-external text-[11px]"></i>
+                                                                                </button>
+                                                                                <button
+                                                                                    @click="openReplayInfo(job.sortedReplays[singleMistake.replayId])"
+                                                                                    class="p-1 rounded text-gray-400 hover:text-white hover:bg-white/[0.05] transition-colors"
+                                                                                    title="Replay parameters"
+                                                                                >
+                                                                                    <i class="bx bx-info-circle text-sm"></i>
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <!-- Mistakes Pagination -->
+                                                            <div v-if="getMistakesTotalPages(job) > 1" class="flex items-center justify-end gap-2 text-xs text-gray-400">
+                                                                <button
+                                                                    @click="setMistakesPage(job.JobId, getMistakesPage(job.JobId) - 1)"
+                                                                    :disabled="getMistakesPage(job.JobId) <= 1"
+                                                                    class="px-2 py-1 rounded bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 transition-colors"
+                                                                >
+                                                                    Prev
+                                                                </button>
+                                                                <span class="font-mono">{{ getMistakesPage(job.JobId) }} / {{ getMistakesTotalPages(job) }}</span>
+                                                                <button
+                                                                    @click="setMistakesPage(job.JobId, getMistakesPage(job.JobId) + 1)"
+                                                                    :disabled="getMistakesPage(job.JobId) >= getMistakesTotalPages(job)"
+                                                                    class="px-2 py-1 rounded bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 transition-colors"
+                                                                >
+                                                                    Next
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+                                                        <!-- All Replays Tab -->
+                                                        <div v-else class="space-y-3">
+                                                            <div class="overflow-x-auto border border-white/[0.06] rounded-md bg-[#1a1c20]">
+                                                                <table class="w-full text-left border-collapse text-xs">
+                                                                    <thead>
+                                                                        <tr class="bg-[#141417] border-b border-white/[0.06] text-gray-400 font-medium select-none">
+                                                                            <th
+                                                                                v-for="col in replayColumns"
+                                                                                :key="col.field"
+                                                                                @click="toggleReplaySort(job.JobId, col.field)"
+                                                                                class="py-2.5 px-3 cursor-pointer hover:text-gray-200 transition-colors whitespace-nowrap"
+                                                                            >
+                                                                                {{ col.label }} <i :class="getReplaySortIcon(job.JobId, col.field)"></i>
+                                                                            </th>
+                                                                            <th class="py-2.5 px-3 text-right whitespace-nowrap"></th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody class="divide-y divide-white/[0.04] font-mono">
+                                                                        <tr
+                                                                            v-for="(r, rIdx) in getPaginatedReplays(job)"
+                                                                            :key="rIdx"
+                                                                            class="hover:bg-white/[0.025] transition-colors"
+                                                                        >
+                                                                            <td class="py-2 px-3 font-semibold text-emerald-400">{{ r.acc }}%</td>
+                                                                            <td class="py-2 px-3 text-gray-300">{{ r.fcAcc }}%</td>
+                                                                            <td class="py-2 px-3" :class="r.mistakes > 0 ? 'text-rose-400' : 'text-emerald-400'">{{ r.mistakes }}</td>
+                                                                            <td class="py-2 px-3 text-gray-300">{{ r.fps }}</td>
+                                                                            <td class="py-2 px-3 text-gray-400">{{ r.jd }}</td>
+                                                                            <td class="py-2 px-3 text-gray-400">{{ r.height }}</td>
+                                                                            <td class="py-2 px-3 text-gray-400">{{ r.headsetYposition }}</td>
+                                                                            <td class="py-2 px-3 text-gray-400">{{ r.preSwingAngle }}</td>
+                                                                            <td class="py-2 px-3 text-gray-400">{{ r.postSwingAngle }}</td>
+                                                                            <td class="py-2 px-3 text-gray-400">{{ r.timeDeviation }}</td>
+                                                                            <td class="py-2 px-3 text-gray-400">{{ r.requestedAcc }}</td>
+                                                                            <td class="py-2 px-3 text-right whitespace-nowrap font-sans">
+                                                                                <div class="inline-flex items-center gap-1">
+                                                                                    <button
+                                                                                        @click="openReplay(r)"
+                                                                                        class="px-2 py-1 rounded bg-[#25282c] hover:bg-blue-600 text-gray-200 hover:text-white transition-colors"
+                                                                                        title="Watch replay"
+                                                                                    >
+                                                                                        Watch
+                                                                                    </button>
+                                                                                    <a
+                                                                                        :href="r.replayUrl"
+                                                                                        class="nope p-1 rounded text-gray-400 hover:text-white hover:bg-white/[0.05] transition-colors"
+                                                                                        title="Download replay"
+                                                                                    >
+                                                                                        <i class="bx bx-download text-sm"></i>
+                                                                                    </a>
+                                                                                </div>
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+
+                                                            <div v-if="getReplaysTotalPages(job) > 1" class="flex items-center justify-end gap-2 text-xs text-gray-400">
+                                                                <button
+                                                                    @click="setReplaysPage(job.JobId, getReplaysPage(job.JobId) - 1)"
+                                                                    :disabled="getReplaysPage(job.JobId) <= 1"
+                                                                    class="px-2 py-1 rounded bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 transition-colors"
+                                                                >
+                                                                    Prev
+                                                                </button>
+                                                                <span class="font-mono">{{ getReplaysPage(job.JobId) }} / {{ getReplaysTotalPages(job) }}</span>
+                                                                <button
+                                                                    @click="setReplaysPage(job.JobId, getReplaysPage(job.JobId) + 1)"
+                                                                    :disabled="getReplaysPage(job.JobId) >= getReplaysTotalPages(job)"
+                                                                    class="px-2 py-1 rounded bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 transition-colors"
+                                                                >
+                                                                    Next
+                                                                </button>
+                                                            </div>
                                                         </div>
                                                     </template>
-                                                </DataTable>
-                                            </div>
-                                        </TabPanel>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </template>
+                                </tbody>
+                            </table>
+                        </div>
 
-                                        <!-- All Replays Tab -->
-                                        <TabPanel :header="`All Replays (${Object.keys(job.sortedReplays).length})`">
-                                            <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg overflow-hidden">
-                                                <DataTable
-                                                    class="w-full text-left"
-                                                    :value="Object.values(job.sortedReplays)"
-                                                    responsiveLayout="scroll"
-                                                    :paginator="true"
-                                                    :rows="10"
-                                                    sortField="acc"
-                                                    :sortOrder="-1"
-                                                >
-                                                    <Column field="acc" header="Acc" sortable>
-                                                        <template #body="{ data: r }">
-                                                            <span class="font-mono font-semibold text-emerald-400 text-xs">{{ r.acc }}%</span>
-                                                        </template>
-                                                    </Column>
-                                                    <Column field="fcAcc" header="FC Acc" sortable>
-                                                        <template #body="{ data: r }">
-                                                            <span class="font-mono text-gray-300 text-xs">{{ r.fcAcc }}%</span>
-                                                        </template>
-                                                    </Column>
-                                                    <Column field="fps" header="FPS" sortable>
-                                                        <template #body="{ data: r }">
-                                                            <span class="font-mono text-xs text-gray-300">{{ r.fps }}</span>
-                                                        </template>
-                                                    </Column>
-                                                    <Column field="mistakes" header="Mistakes" sortable>
-                                                        <template #body="{ data: r }">
-                                                            <span :class="['font-mono text-xs font-semibold', r.mistakes > 0 ? 'text-rose-400' : 'text-emerald-400']">
-                                                                {{ r.mistakes }}
-                                                            </span>
-                                                        </template>
-                                                    </Column>
-                                                    <Column field="headsetYposition" header="HMD Y Pos" sortable />
-                                                    <Column field="height" header="Height" sortable />
-                                                    <Column field="jd" header="JD" sortable />
-                                                    <Column field="postSwingAngle" header="Post Swing" sortable />
-                                                    <Column field="preSwingAngle" header="Pre Swing" sortable />
-                                                    <Column field="timeDeviation" header="Time Dev" sortable />
-                                                    <Column field="requestedAcc" header="Requested Acc" sortable />
-                                                    <Column header="Actions">
-                                                        <template #body="{ data: replay }">
-                                                            <div class="flex items-center gap-1.5">
-                                                                <button
-                                                                    @click="openReplay(replay)"
-                                                                    class="px-2.5 py-1 rounded-md bg-[#25282c] hover:bg-blue-600 text-gray-200 hover:text-white text-xs font-medium transition-colors flex items-center gap-1"
-                                                                >
-                                                                    View <i class="bx bx-link-external"></i>
-                                                                </button>
-                                                                <a
-                                                                    :href="replay.replayUrl"
-                                                                    class="nope p-1.5 rounded-md bg-[#25282c] hover:bg-[#2e3238] text-gray-300 hover:text-white text-sm transition-colors"
-                                                                    title="Download replay"
-                                                                >
-                                                                    <i class="bx bx-download"></i>
-                                                                </a>
-                                                            </div>
-                                                        </template>
-                                                    </Column>
-                                                </DataTable>
-                                            </div>
-                                        </TabPanel>
-                                    </TabView>
-                                </div>
+                        <!-- Table Footer / Pagination -->
+                        <div class="bg-[#141417] border-t border-white/[0.06] px-4 py-2.5 flex items-center justify-between text-xs text-gray-500">
+                            <span class="font-mono">{{ computedJobs.length }} {{ computedJobs.length === 1 ? 'job' : 'jobs' }}</span>
+
+                            <div v-if="totalPages > 1" class="flex items-center gap-1.5">
+                                <button
+                                    @click="currentPage--"
+                                    :disabled="currentPage <= 1"
+                                    class="px-2.5 py-1 rounded bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 transition-colors"
+                                >
+                                    Prev
+                                </button>
+                                <span class="px-2 font-mono text-gray-300">{{ currentPage }} / {{ totalPages }}</span>
+                                <button
+                                    @click="currentPage++"
+                                    :disabled="currentPage >= totalPages"
+                                    class="px-2.5 py-1 rounded bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 transition-colors"
+                                >
+                                    Next
+                                </button>
                             </div>
-                        </template>
-                    </DataTable>
+                        </div>
+                    </template>
                 </div>
             </div>
 
@@ -586,16 +628,38 @@ export default {
             loadingJobs: false,
             loadingJob: false,
             creatingJob: false,
-            expandedRows: [],
+            expandedJobIds: {},
+            expandedMistakeKeys: {},
+            jobTabs: {},
+            mistakesPage: {},
+            mistakesSort: {},
+            replaysPage: {},
+            replaysSort: {},
             jobFilters: { userid: null, textSearch: '' },
             filteredJobs: [],
             users: [],
-            jobsOffset: 0,
+            currentPage: 1,
             rowsCount: 50,
+            sortField: 'CreatedDate',
+            sortOrder: -1,
             loading: false,
             description: '',
             adminStats: null,
             loadingAdminStats: false,
+            showTopUsers: false,
+            replayColumns: [
+                { field: 'acc', label: 'Acc' },
+                { field: 'fcAcc', label: 'FC Acc' },
+                { field: 'mistakes', label: 'Mistakes' },
+                { field: 'fps', label: 'FPS' },
+                { field: 'jd', label: 'JD' },
+                { field: 'height', label: 'Height' },
+                { field: 'headsetYposition', label: 'HMD Y' },
+                { field: 'preSwingAngle', label: 'Pre' },
+                { field: 'postSwingAngle', label: 'Post' },
+                { field: 'timeDeviation', label: 'Time Dev' },
+                { field: 'requestedAcc', label: 'Req Acc' },
+            ],
         }
     },
     timers: {
@@ -627,7 +691,8 @@ export default {
         }
     },
     watch: {
-        filteredJobs(newval, oldval) {
+        filteredJobs(newval) {
+            this.currentPage = 1
             const url = new URL(window.location)
             if (newval.length > 0) {
                 url.searchParams.set('jobs', newval.join())
@@ -635,6 +700,12 @@ export default {
                 url.searchParams.delete('jobs')
             }
             window.history.pushState(null, '', url.toString())
+        },
+        'jobFilters.textSearch'() {
+            this.currentPage = 1
+        },
+        'jobFilters.userid'() {
+            this.currentPage = 1
         },
     },
     computed: {
@@ -648,7 +719,7 @@ export default {
             )
         },
         computedJobs() {
-            let jobs = this.jobs
+            let jobs = [...this.jobs]
 
             if (this.filteredJobs.length > 0) {
                 jobs = jobs.filter((job) => this.filteredJobs.includes(job.JobId))
@@ -658,16 +729,35 @@ export default {
             }
             if (this.jobFilters.textSearch && this.jobFilters.textSearch.trim()) {
                 const query = this.jobFilters.textSearch.trim().toLowerCase()
-                jobs = jobs.filter((job) =>
-                    job.SongName?.toLowerCase().includes(query),
-                )
+                jobs = jobs.filter((job) => job.SongName?.toLowerCase().includes(query))
             }
 
-            return jobs.sort((a, b) => Date.parse(b.CreatedDate) - Date.parse(a.CreatedDate))
+            const field = this.sortField
+            const order = this.sortOrder
+            return jobs.sort((a, b) => {
+                if (field === 'CreatedDate' || field === 'CompletedDate') {
+                    const da = a[field] ? Date.parse(a[field]) : 0
+                    const db = b[field] ? Date.parse(b[field]) : 0
+                    return (da - db) * order
+                }
+                if (field === 'done') {
+                    return ((a.done ?? 0) - (b.done ?? 0)) * order
+                }
+                const va = String(a[field] || '').toLowerCase()
+                const vb = String(b[field] || '').toLowerCase()
+                return va.localeCompare(vb) * order
+            })
+        },
+        totalPages() {
+            return Math.max(1, Math.ceil(this.computedJobs.length / this.rowsCount))
+        },
+        paginatedJobs() {
+            const start = (this.currentPage - 1) * this.rowsCount
+            return this.computedJobs.slice(start, start + this.rowsCount)
         },
         jobUsers() {
             const unique = {}
-            const jobs = this.jobs
+            return this.jobs
                 .flatMap((job) => {
                     if (!job.UserId || unique[job.UserId]) {
                         return []
@@ -676,15 +766,157 @@ export default {
                         return { name: job.UserName || `User ${job.UserId}`, id: job.UserId }
                     }
                 })
-                .sort((a, b) => {
-                    if (a.name < b.name) return -1
-                    if (a.name > b.name) return 1
-                    return 0
-                })
-            return jobs
+                .sort((a, b) => a.name.localeCompare(b.name))
         },
     },
     methods: {
+        toggleSort(field) {
+            if (this.sortField === field) {
+                this.sortOrder = -this.sortOrder
+            } else {
+                this.sortField = field
+                this.sortOrder = field === 'CreatedDate' || field === 'CompletedDate' ? -1 : 1
+            }
+        },
+        getSortIcon(field) {
+            if (this.sortField !== field) return 'bx bx-sort-alt-2 opacity-30 ml-0.5'
+            return this.sortOrder === -1 ? 'bx bx-sort-down text-blue-400 ml-0.5' : 'bx bx-sort-up text-blue-400 ml-0.5'
+        },
+        toggleUserFilter(userId) {
+            if (!userId) return
+            this.jobFilters.userid = this.jobFilters.userid == userId ? null : userId
+        },
+        isExpanded(job) {
+            return !!this.expandedJobIds[job.JobId]
+        },
+        toggleRow(job) {
+            const next = !this.expandedJobIds[job.JobId]
+            this.$set(this.expandedJobIds, job.JobId, next)
+            if (next) {
+                this.loadJob(job)
+            }
+        },
+        getStatusMeta(job) {
+            if (job.done === 1) {
+                if (job.loadedResults && (!job.loadedResults.length || !Object.keys(job.sortedReplays || {}).length)) {
+                    return { label: 'Empty', dotClass: 'bg-amber-400', textClass: 'text-amber-400' }
+                }
+                return { label: 'Done', dotClass: 'bg-emerald-400', textClass: 'text-emerald-400' }
+            }
+            if (job.done === 0) {
+                return { label: 'Queued', dotClass: 'bg-blue-400', textClass: 'text-blue-400' }
+            }
+            return { label: 'Error', dotClass: 'bg-rose-400', textClass: 'text-rose-400' }
+        },
+        formatDiff(diff) {
+            if (!diff) return 'Standard'
+            return diff === 'ExpertPlus' ? 'Expert+' : diff
+        },
+        formatShortDate(dateStr) {
+            if (!dateStr) return '-'
+            try {
+                const d = new Date(dateStr)
+                return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) +
+                    ', ' +
+                    d.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false })
+            } catch (e) {
+                return dateStr
+            }
+        },
+        formatFullDate(dateStr) {
+            if (!dateStr) return ''
+            try {
+                const d = new Date(dateStr)
+                return d.toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
+            } catch (e) {
+                return dateStr
+            }
+        },
+        getJobTab(jobId) {
+            return this.jobTabs[jobId] || 'mistakes'
+        },
+        setJobTab(jobId, tab) {
+            this.$set(this.jobTabs, jobId, tab)
+        },
+        toggleMistake(jobId, time) {
+            const key = `${jobId}-${time}`
+            this.$set(this.expandedMistakeKeys, key, !this.expandedMistakeKeys[key])
+        },
+        isMistakeExpanded(jobId, time) {
+            return !!this.expandedMistakeKeys[`${jobId}-${time}`]
+        },
+        summarizeMistakeTypes(list) {
+            const counts = { bad: 0, miss: 0, bomb: 0 }
+            for (const m of list) {
+                if (counts[m.type] !== undefined) counts[m.type]++
+            }
+            const parts = []
+            if (counts.bad) parts.push(`${counts.bad} bad`)
+            if (counts.miss) parts.push(`${counts.miss} miss`)
+            if (counts.bomb) parts.push(`${counts.bomb} bomb`)
+            return parts.join(', ')
+        },
+        getMistakesSort(jobId) {
+            return this.mistakesSort[jobId] || 'time'
+        },
+        setMistakesSort(jobId, sort) {
+            this.$set(this.mistakesSort, jobId, sort)
+            this.$set(this.mistakesPage, jobId, 1)
+        },
+        getMistakesPage(jobId) {
+            return this.mistakesPage[jobId] || 1
+        },
+        setMistakesPage(jobId, page) {
+            this.$set(this.mistakesPage, jobId, Math.max(1, page))
+        },
+        getMistakesTotalPages(job) {
+            return Math.max(1, Math.ceil(this.getMistakes(job).length / 10))
+        },
+        getPaginatedMistakes(job) {
+            const list = this.getMistakes(job)
+            const totalPages = Math.max(1, Math.ceil(list.length / 10))
+            const page = Math.min(this.getMistakesPage(job.JobId), totalPages)
+            const start = (page - 1) * 10
+            return list.slice(start, start + 10)
+        },
+        getReplaysSort(jobId) {
+            return this.replaysSort[jobId] || { field: 'acc', order: -1 }
+        },
+        toggleReplaySort(jobId, field) {
+            const current = this.getReplaysSort(jobId)
+            if (current.field === field) {
+                this.$set(this.replaysSort, jobId, { field, order: -current.order })
+            } else {
+                this.$set(this.replaysSort, jobId, { field, order: -1 })
+            }
+            this.$set(this.replaysPage, jobId, 1)
+        },
+        getReplaySortIcon(jobId, field) {
+            const current = this.getReplaysSort(jobId)
+            if (current.field !== field) return 'bx bx-sort-alt-2 opacity-30 ml-0.5'
+            return current.order === -1 ? 'bx bx-sort-down text-blue-400 ml-0.5' : 'bx bx-sort-up text-blue-400 ml-0.5'
+        },
+        getReplaysPage(jobId) {
+            return this.replaysPage[jobId] || 1
+        },
+        setReplaysPage(jobId, page) {
+            this.$set(this.replaysPage, jobId, Math.max(1, page))
+        },
+        getReplaysTotalPages(job) {
+            const count = Object.keys(job.sortedReplays || {}).length
+            return Math.max(1, Math.ceil(count / 10))
+        },
+        getPaginatedReplays(job) {
+            const { field, order } = this.getReplaysSort(job.JobId)
+            const list = Object.values(job.sortedReplays || {}).sort((a, b) => {
+                const va = Number(a[field] ?? 0)
+                const vb = Number(b[field] ?? 0)
+                return (va - vb) * order
+            })
+            const page = this.getReplaysPage(job.JobId)
+            const start = (page - 1) * 10
+            return list.slice(start, start + 10)
+        },
         async fetchAdminStats() {
             if (!this.isAdmin) return
             this.loadingAdminStats = true
@@ -698,29 +930,29 @@ export default {
                     const completed = this.jobs.filter((j) => j.done === 1).length || 8
                     const queued = this.jobs.filter((j) => j.done === 0).length || 2
                     const failed = total - completed - queued
-                    const userCounts = {}
+                    const userMap = {}
                     this.jobs.forEach((j) => {
                         if (j.UserId) {
-                            const name = j.UserName || `User ${j.UserId}`
-                            userCounts[name] = (userCounts[name] || 0) + 1
+                            if (!userMap[j.UserId]) {
+                                userMap[j.UserId] = { userId: j.UserId, userName: j.UserName || `User ${j.UserId}`, count: 0 }
+                            }
+                            userMap[j.UserId].count++
                         }
                     })
-                    const topUsers = Object.entries(userCounts)
-                        .map(([userName, count]) => ({ userName, count }))
-                        .sort((a, b) => b.count - a.count)
+                    const topUsers = Object.values(userMap).sort((a, b) => b.count - a.count)
                     this.adminStats = {
                         totalJobs: total,
                         completedJobs: completed,
                         queuedJobs: queued,
                         failedJobs: failed,
                         successRate: Math.round((completed / total) * 100 * 10) / 10,
-                        uniqueUsersCount: Object.keys(userCounts).length || 5,
+                        uniqueUsersCount: topUsers.length || 5,
                         topUsers: topUsers.length
                             ? topUsers
                             : [
-                                  { userName: 'user_alpha', count: 4 },
-                                  { userName: 'user_beta', count: 2 },
-                                  { userName: 'user_gamma', count: 2 },
+                                  { userId: '100000000000000001', userName: 'user_alpha', count: 4 },
+                                  { userId: '100000000000000002', userName: 'user_beta', count: 2 },
+                                  { userId: '100000000000000003', userName: 'user_gamma', count: 2 },
                               ],
                     }
                 }
@@ -731,15 +963,6 @@ export default {
         converToBookmarks() {},
         openLink(url) {
             window.open(url, '_blank').focus()
-        },
-        formatDate(dateStr) {
-            if (!dateStr) return '-'
-            try {
-                const d = new Date(dateStr)
-                return d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' })
-            } catch (e) {
-                return dateStr
-            }
         },
         async loadJobs(force = false) {
             if (this.error) return
@@ -823,7 +1046,19 @@ export default {
                 hasModalCard: true,
                 trapFocus: true,
                 fullScreen: false,
-                props: { job: this.getJobData(job) },
+                props: { job: this.getJobData(job), title: 'Job Details' },
+                events: {},
+            })
+        },
+        openReplayInfo(replay) {
+            if (!replay) return
+            this.$buefy.modal.open({
+                parent: this,
+                component: JobViewModal,
+                hasModalCard: true,
+                trapFocus: true,
+                fullScreen: false,
+                props: { job: Object.entries(replay), title: 'Replay Parameters' },
                 events: {},
             })
         },
@@ -844,9 +1079,7 @@ export default {
         },
         async loadJob(job) {
             job = job.data || job
-            const index = this.computedJobs.findIndex((item) => item.JobId == job.JobId)
-
-            if (!job || index == null || !job.Result || job.loadedResults || !job.Result?.includes('https://')) return
+            if (!job || !job.Result || job.loadedResults || !job.Result?.includes('https://')) return
 
             this.loadingJob = true
 
@@ -859,7 +1092,6 @@ export default {
                     if (job.Result?.includes('report-empty')) {
                         results = []
                     } else {
-                        // Generate fake replay data for dev mode
                         const mkReplay = (seed) => {
                             const rng = (min, max) => Math.round((min + ((seed * 9301 + 49297) % 233280) / 233280 * (max - min)) * 100) / 100
                             const acc = Math.min(99.9, 70 + rng(seed, 29))
@@ -893,8 +1125,8 @@ export default {
                     results = (await this.$http.get(job.Result)).data
                 }
 
-                job.sortedReplays = {}
-                job.specifics = {
+                const sortedReplays = {}
+                const specifics = {
                     highestAcc: {},
                     mostMistakes: {},
                     total_bomb: 0,
@@ -909,7 +1141,7 @@ export default {
 
                         if (!mistakes[time]) mistakes[time] = []
 
-                        job.specifics[`total_${mistake.type}`]++
+                        specifics[`total_${mistake.type}`]++
 
                         mistakes[time].push({
                             ...mistake,
@@ -923,50 +1155,47 @@ export default {
                         MapUrl: job.MapUrl,
                     }
 
-                    job.sortedReplays[replayIndex] = newReplay
+                    sortedReplays[replayIndex] = newReplay
 
-                    if ((job.specifics.highestAcc?.acc || 0) < newReplay.acc) {
-                        job.specifics.highestAcc = newReplay
+                    if ((specifics.highestAcc?.acc || 0) < newReplay.acc) {
+                        specifics.highestAcc = newReplay
                     }
-                    if ((job.specifics.mostMistakes.mistakes || 0) < newReplay.mistakes) {
-                        job.specifics.mostMistakes = newReplay
+                    if ((specifics.mostMistakes.mistakes || 0) < newReplay.mistakes) {
+                        specifics.mostMistakes = newReplay
                     }
                 }
 
                 mistakes = Object.entries(mistakes)
-                    .sort((a, b) => a[0] - b[0])
+                    .sort((a, b) => Number(a[0]) - Number(b[0]))
                     .map((item) => {
                         return {
                             time: item[0],
                             mistakes: item[1].sort((a, b) => {
-                                return job.sortedReplays[a.replayId].acc - job.sortedReplays[b.replayId].acc
+                                return sortedReplays[a.replayId].acc - sortedReplays[b.replayId].acc
                             }),
                         }
                     })
 
-                job.sortedMistakes = mistakes
-                job.loadedResults = results
-
-                this.$set(this.computedJobs, index, job)
+                this.$set(job, 'sortedReplays', sortedReplays)
+                this.$set(job, 'specifics', specifics)
+                this.$set(job, 'sortedMistakes', mistakes)
+                this.$set(job, 'loadedResults', results)
             } catch (e) {
                 console.error(e)
-                job.Result = 'Could not fetch data, replay log might be outdated'
+                this.$set(job, 'Result', 'Could not fetch data, replay log might be outdated')
             }
             this.loadingJob = false
         },
         getMistakes(job) {
             if (!job.sortedMistakes) return []
-            return job.sortedMistakes
+            const filtered = job.sortedMistakes
                 .map((mistake) => {
                     const filteredMistakes = mistake.mistakes.filter((singleMistake) => {
-                        if (
+                        return (
                             (job.filters.showBadcuts && singleMistake.type == 'bad') ||
                             (job.filters.showMisses && singleMistake.type == 'miss') ||
                             (job.filters.showBombs && singleMistake.type == 'bomb')
-                        ) {
-                            return true
-                        }
-                        return false
+                        )
                     })
 
                     return {
@@ -974,9 +1203,12 @@ export default {
                         mistakes: filteredMistakes,
                     }
                 })
-                .filter((mistake) => {
-                    return mistake.mistakes.length > 0
-                })
+                .filter((mistake) => mistake.mistakes.length > 0)
+
+            if (this.getMistakesSort(job.JobId) === 'count') {
+                return [...filtered].sort((a, b) => b.mistakes.length - a.mistakes.length)
+            }
+            return filtered
         },
         openReplay(job, mistake) {
             let url
@@ -1008,55 +1240,12 @@ export default {
 
             return Object.entries(job).reverse()
         },
-        toggleRow(job) {
-            const index = this.expandedRows.find((x) => x.JobId === job.JobId)
-
-            if (index === undefined) {
-                this.expandedRows = [...this.computedJobs.filter((x) => x.JobId === job.JobId), ...this.expandedRows]
-                this.loadJob(job)
-            } else {
-                this.expandedRows = this.expandedRows.filter((x) => x.JobId !== job.JobId)
-            }
-        },
     },
 }
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .cyberramen {
     min-height: 100vh;
-}
-
-.custom-tabview {
-    .p-tabview-nav {
-        background-color: transparent !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
-
-        li {
-            .p-tabview-nav-link {
-                background-color: transparent !important;
-                border: none !important;
-                color: #9ca3af !important;
-                font-size: 0.875rem !important;
-                font-weight: 600 !important;
-                padding: 0.75rem 1.25rem !important;
-                transition: color 0.2s !important;
-
-                &:hover {
-                    color: #ffffff !important;
-                }
-            }
-
-            &.p-highlight .p-tabview-nav-link {
-                color: #60a5fa !important;
-                border-bottom: 2px solid #3b82f6 !important;
-            }
-        }
-    }
-
-    .p-tabview-panels {
-        background-color: transparent !important;
-        padding-top: 1rem !important;
-    }
 }
 </style>
