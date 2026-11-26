@@ -148,7 +148,7 @@
                                         <th @click="toggleSort('CompletedDate')" class="py-3 px-3 cursor-pointer hover:text-gray-200 transition-colors whitespace-nowrap hidden md:table-cell">
                                             Finished <i :class="getSortIcon('CompletedDate')"></i>
                                         </th>
-                                        <th class="py-3 pl-3 pr-4 text-right whitespace-nowrap w-24"></th>
+                                        <th class="py-3 pl-3 pr-4 text-right whitespace-nowrap"></th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-white/[0.05] text-sm">
@@ -217,7 +217,18 @@
 
                                             <!-- Actions -->
                                             <td class="py-3 pl-3 pr-4 whitespace-nowrap text-right" @click.stop>
-                                                <div class="inline-flex items-center justify-end gap-1">
+                                                <div class="inline-flex items-center justify-end gap-1.5">
+                                                    <button
+                                                        v-if="job.done === 1 && !(job.loadedResults && (!job.loadedResults.length || !Object.keys(job.sortedReplays || {}).length))"
+                                                        @click="quickWatchBestReplay(job)"
+                                                        :disabled="quickLoadingJobId === job.JobId"
+                                                        class="px-2.5 py-1 rounded-md bg-blue-600 hover:bg-blue-500 disabled:opacity-60 text-white text-xs font-medium transition-colors inline-flex items-center gap-1"
+                                                        :title="job.specifics?.highestAcc?.acc ? `Watch best acc replay (${job.specifics.highestAcc.acc}%)` : 'Watch best acc replay'"
+                                                    >
+                                                        <i v-if="quickLoadingJobId === job.JobId" class="bx bx-loader-alt animate-spin text-sm"></i>
+                                                        <i v-else class="bx bx-play text-sm"></i>
+                                                        <span>Replay</span>
+                                                    </button>
                                                     <a
                                                         v-if="job.BeatSaverKey"
                                                         :href="`https://beatsaver.com/maps/${job.BeatSaverKey}`"
@@ -295,39 +306,39 @@
                                                                 </button>
                                                             </div>
 
-                                                            <div class="flex flex-wrap items-center gap-4 text-xs">
-                                                                <div v-if="job.specifics?.highestAcc?.acc" class="flex items-center gap-2">
-                                                                    <span class="text-gray-500">Best Acc:</span>
-                                                                    <span class="font-mono font-semibold text-emerald-400">{{ job.specifics.highestAcc.acc }}%</span>
+                                                            <div class="flex flex-wrap items-center gap-3 text-xs">
+                                                                <div v-if="job.specifics?.highestAcc?.acc" class="flex items-center gap-1.5">
                                                                     <button
                                                                         @click="openReplay(job.specifics.highestAcc)"
-                                                                        class="text-gray-400 hover:text-blue-400 transition-colors"
+                                                                        class="px-2.5 py-1 rounded-md bg-blue-600 hover:bg-blue-500 text-white font-medium transition-colors inline-flex items-center gap-1"
                                                                         title="Watch highest acc replay"
                                                                     >
-                                                                        <i class="bx bx-play-circle text-base"></i>
+                                                                        <i class="bx bx-play text-sm"></i>
+                                                                        <span>Best Acc</span>
+                                                                        <span class="font-mono opacity-90">{{ job.specifics.highestAcc.acc }}%</span>
                                                                     </button>
                                                                     <a
                                                                         :href="job.specifics.highestAcc.replayUrl"
-                                                                        class="nope text-gray-400 hover:text-gray-200 transition-colors"
+                                                                        class="nope p-1.5 rounded-md bg-[#25282c] hover:bg-[#2e3238] text-gray-300 hover:text-white transition-colors"
                                                                         title="Download replay"
                                                                     >
                                                                         <i class="bx bx-download text-sm"></i>
                                                                     </a>
                                                                 </div>
 
-                                                                <div v-if="job.specifics?.mostMistakes" class="flex items-center gap-2">
-                                                                    <span class="text-gray-500">Most Mistakes:</span>
-                                                                    <span class="font-mono font-semibold text-amber-400">{{ job.specifics.mostMistakes.mistakes || 0 }}</span>
+                                                                <div v-if="job.specifics?.mostMistakes" class="flex items-center gap-1.5">
                                                                     <button
                                                                         @click="openReplay(job.specifics.mostMistakes)"
-                                                                        class="text-gray-400 hover:text-blue-400 transition-colors"
+                                                                        class="px-2.5 py-1 rounded-md bg-[#25282c] hover:bg-blue-600 text-gray-200 hover:text-white border border-white/[0.08] font-medium transition-colors inline-flex items-center gap-1"
                                                                         title="Watch replay with most mistakes"
                                                                     >
-                                                                        <i class="bx bx-play-circle text-base"></i>
+                                                                        <i class="bx bx-play text-sm"></i>
+                                                                        <span>Most Mistakes</span>
+                                                                        <span class="font-mono text-amber-400">{{ job.specifics.mostMistakes.mistakes || 0 }}</span>
                                                                     </button>
                                                                     <a
                                                                         :href="job.specifics.mostMistakes.replayUrl"
-                                                                        class="nope text-gray-400 hover:text-gray-200 transition-colors"
+                                                                        class="nope p-1.5 rounded-md bg-[#25282c] hover:bg-[#2e3238] text-gray-300 hover:text-white transition-colors"
                                                                         title="Download replay"
                                                                     >
                                                                         <i class="bx bx-download text-sm"></i>
@@ -447,9 +458,9 @@
                                                                             <div class="flex items-center gap-1.5">
                                                                                 <button
                                                                                     @click="openReplay(job, singleMistake)"
-                                                                                    class="px-2.5 py-1 rounded bg-[#25282c] hover:bg-blue-600 text-gray-200 hover:text-white transition-colors flex items-center gap-1"
+                                                                                    class="px-2.5 py-1 rounded-md bg-blue-600 hover:bg-blue-500 text-white font-medium transition-colors inline-flex items-center gap-1"
                                                                                 >
-                                                                                    Watch <i class="bx bx-link-external text-[11px]"></i>
+                                                                                    <i class="bx bx-play text-sm"></i> Watch
                                                                                 </button>
                                                                                 <button
                                                                                     @click="openReplayInfo(job.sortedReplays[singleMistake.replayId])"
@@ -519,13 +530,13 @@
                                                                             <td class="py-2 px-3 text-gray-400">{{ r.timeDeviation }}</td>
                                                                             <td class="py-2 px-3 text-gray-400">{{ r.requestedAcc }}</td>
                                                                             <td class="py-2 px-3 text-right whitespace-nowrap font-sans">
-                                                                                <div class="inline-flex items-center gap-1">
+                                                                                <div class="inline-flex items-center gap-1.5">
                                                                                     <button
                                                                                         @click="openReplay(r)"
-                                                                                        class="px-2 py-1 rounded bg-[#25282c] hover:bg-blue-600 text-gray-200 hover:text-white transition-colors"
+                                                                                        class="px-2.5 py-1 rounded-md bg-blue-600 hover:bg-blue-500 text-white font-medium transition-colors inline-flex items-center gap-1"
                                                                                         title="Watch replay"
                                                                                     >
-                                                                                        Watch
+                                                                                        <i class="bx bx-play text-sm"></i> Watch
                                                                                     </button>
                                                                                     <a
                                                                                         :href="r.replayUrl"
@@ -627,6 +638,7 @@ export default {
             jobs: [],
             loadingJobs: false,
             loadingJob: false,
+            quickLoadingJobId: null,
             creatingJob: false,
             expandedJobIds: {},
             expandedMistakeKeys: {},
@@ -1210,7 +1222,7 @@ export default {
             }
             return filtered
         },
-        openReplay(job, mistake) {
+        getReplayUrl(job, mistake) {
             let url
             if (mistake) {
                 const time = (mistake.time - 3) * 1000
@@ -1222,8 +1234,55 @@ export default {
             }
 
             if (job.MapUrl) url = `${url}&mapLink=${job.MapUrl.replace('http://', 'https://')}`
-
+            return url
+        },
+        openReplay(job, mistake) {
+            const url = this.getReplayUrl(job, mistake)
             window.open(url, '_blank').focus()
+        },
+        async quickWatchBestReplay(job) {
+            if (this.quickLoadingJobId === job.JobId) return
+
+            if (job.loadedResults) {
+                if (job.specifics?.highestAcc?.replayUrl) {
+                    this.openReplay(job.specifics.highestAcc)
+                } else {
+                    this.$toast.add({
+                        severity: 'warn',
+                        summary: 'No replays available for this job',
+                        life: 3000,
+                    })
+                }
+                return
+            }
+
+            const win = window.open('', '_blank')
+            this.quickLoadingJobId = job.JobId
+            try {
+                await this.loadJob(job)
+                if (job.specifics?.highestAcc?.replayUrl) {
+                    const url = this.getReplayUrl(job.specifics.highestAcc)
+                    if (win) {
+                        win.location.href = url
+                        win.focus()
+                    } else {
+                        window.open(url, '_blank')
+                    }
+                } else {
+                    if (win) win.close()
+                    this.$toast.add({
+                        severity: 'warn',
+                        summary: 'No replays available for this job',
+                        life: 3000,
+                    })
+                }
+            } catch (e) {
+                if (win) win.close()
+            } finally {
+                if (this.quickLoadingJobId === job.JobId) {
+                    this.quickLoadingJobId = null
+                }
+            }
         },
         getJobData(job) {
             job = structuredClone(job)
