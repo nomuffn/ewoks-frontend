@@ -4,19 +4,16 @@
             <p>
                 Tracks upvote and downvote changes for maps over time since earliest recorded database stats.
                 <br />
-                Click on any map row to view complete historical growth charts and timeframe breakdowns.
+                Click any map row to view historical charts and timeframe breakdowns.
             </p>
         </sub-header>
 
-        <!-- Full Width Container -->
         <div class="w-full px-4 sm:px-8 mt-6">
-            <!-- Controls Header Card -->
-            <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg mb-6 flex flex-wrap items-center justify-between gap-4">
+            <!-- Controls Bar -->
+            <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg p-3.5 mb-5 flex flex-wrap items-center justify-between gap-3">
                 <!-- Mapper Selector -->
-                <div class="flex items-center gap-3">
-                    <label class="text-sm font-semibold text-gray-300 flex items-center gap-1.5 whitespace-nowrap">
-                        <i class="bx bx-user text-blue-400 text-lg"></i> Mapper:
-                    </label>
+                <div class="flex items-center gap-2">
+                    <label class="text-xs font-medium text-gray-400 whitespace-nowrap">Mapper</label>
                     <Dropdown
                         v-if="mappers && mappers.length"
                         v-model="selectedMapper"
@@ -25,37 +22,35 @@
                         placeholder="Select mapper"
                         scrollHeight="400px"
                         :disabled="mappersLoading"
-                        class="w-56 p-inputtext-sm"
+                        class="w-52 p-inputtext-sm"
                         @change="onMapperChange"
                     />
-                    <ProgressSpinner v-if="mappersLoading" style="width: 24px; height: 24px" />
+                    <ProgressSpinner v-if="mappersLoading" style="width: 22px; height: 22px" />
                 </div>
 
                 <!-- Search Input -->
                 <div class="relative flex-1 min-w-[200px] max-w-md">
-                    <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-lg pointer-events-none"></i>
+                    <i class="bx bx-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 text-base pointer-events-none"></i>
                     <input
                         type="text"
                         v-model="searchQuery"
                         @input="onSearchInput"
                         placeholder="Search song, artist, or mapper..."
-                        class="w-full bg-[#121315] text-gray-100 placeholder-gray-500 border border-gray-700 focus:border-blue-500 rounded-lg pl-9 pr-9 py-2 text-sm outline-none transition-all"
+                        class="w-full bg-[#141417] text-gray-100 placeholder-gray-500 border border-white/[0.08] focus:border-blue-500 rounded-lg pl-9 pr-8 py-2 text-sm outline-none transition-colors"
                     />
                     <button
                         v-if="searchQuery"
                         @click="clearSearch"
-                        class="absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-1 rounded-full text-base transition-colors"
+                        class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-white p-1 text-base transition-colors"
                         title="Clear search"
                     >
                         <i class="bx bx-x"></i>
                     </button>
                 </div>
 
-                <!-- Quick Ordering Selector -->
+                <!-- Sort Selector -->
                 <div class="flex items-center gap-2">
-                    <label class="text-sm font-semibold text-gray-300 flex items-center gap-1.5 whitespace-nowrap">
-                        <i class="bx bx-sort-alt-2 text-blue-400 text-lg"></i> Sort by:
-                    </label>
+                    <label class="text-xs font-medium text-gray-400 whitespace-nowrap">Sort</label>
                     <Dropdown
                         v-model="currentOrdering"
                         :options="sortOptions"
@@ -68,11 +63,9 @@
                     />
                 </div>
 
-                <!-- Items Per Page Selector -->
+                <!-- Per Page Selector -->
                 <div class="flex items-center gap-2">
-                    <label class="text-sm font-semibold text-gray-300 flex items-center gap-1.5 whitespace-nowrap">
-                        <i class="bx bx-list-ol text-blue-400 text-lg"></i> Per page:
-                    </label>
+                    <label class="text-xs font-medium text-gray-400 whitespace-nowrap">Show</label>
                     <Dropdown
                         v-model="pageSize"
                         :options="pageSizeOptions"
@@ -90,153 +83,130 @@
                     @click="toggleCompare"
                     :disabled="compareLoading"
                     :class="[
-                        'px-4 py-2 rounded-xl text-xs font-bold flex items-center gap-2 transition-all shrink-0 shadow-md',
+                        'px-3.5 py-2 rounded-lg text-xs font-medium flex items-center gap-1.5 transition-colors shrink-0 border',
                         showCompare
-                            ? 'bg-violet-600 hover:bg-violet-500 text-white shadow-violet-500/20'
-                            : 'bg-[#121315] border border-violet-700/50 hover:border-violet-500 text-violet-300 hover:text-white'
+                            ? 'bg-blue-600 hover:bg-blue-500 text-white border-blue-500'
+                            : 'bg-[#25282c] hover:bg-[#2e3238] border-white/[0.08] text-gray-200',
                     ]"
                 >
-                    <ProgressSpinner v-if="compareLoading" style="width: 16px; height: 16px" strokeWidth="4" />
-                    <i v-else class="bx bx-git-compare text-base"></i>
-                    Compare All Mappers
+                    <ProgressSpinner v-if="compareLoading" style="width: 14px; height: 14px" strokeWidth="4" />
+                    <i v-else class="bx bx-git-compare text-sm"></i>
+                    Compare Mappers
                 </button>
             </div>
 
-            <!-- ================================================ -->
             <!-- Cross-Mapper Comparison Panel -->
-            <!-- ================================================ -->
             <transition name="slide-down">
-                <div v-if="showCompare && compareData && compareData.length" class="mb-8 space-y-6">
-
+                <div v-if="showCompare && compareData && compareData.length" class="mb-6 space-y-5">
                     <!-- Panel Header -->
-                    <div class="flex items-center justify-between">
-                        <div class="flex items-center gap-3">
-                            <div class="w-9 h-9 rounded-xl bg-violet-600/20 border border-violet-500/30 flex items-center justify-center text-violet-400 text-lg">
-                                <i class="bx bx-git-compare"></i>
-                            </div>
-                            <div>
-                                <h2 class="text-lg font-bold text-gray-100">All-Mapper Comparison</h2>
-                                <p class="text-xs text-gray-400">Cross-comparing {{ compareData.length }} mappers across all tracked stats</p>
-                            </div>
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <div>
+                            <h2 class="text-base font-semibold text-gray-100">All-Mapper Comparison</h2>
+                            <p class="text-xs text-gray-400">{{ compareData.length }} tracked mappers</p>
                         </div>
-                        <!-- Active Compare Metric Selector -->
-                        <div class="flex items-center gap-2">
-                            <label class="text-xs font-semibold text-gray-400 whitespace-nowrap">Compare by:</label>
-                            <div class="flex gap-1.5">
-                                <button
-                                    v-for="m in compareMetrics"
-                                    :key="m.key"
-                                    @click="compareMetric = m.key"
-                                    :class="[
-                                        'px-3 py-1.5 text-xs font-semibold rounded-lg transition-all',
-                                        compareMetric === m.key
-                                            ? 'bg-violet-600 text-white shadow-sm'
-                                            : 'bg-gray-800/80 text-gray-400 hover:bg-gray-700'
-                                    ]"
-                                >{{ m.label }}</button>
-                            </div>
+                        <div class="flex flex-wrap items-center gap-1.5">
+                            <button
+                                v-for="m in compareMetrics"
+                                :key="m.key"
+                                @click="compareMetric = m.key"
+                                :class="[
+                                    'px-2.5 py-1 text-xs font-medium rounded-md transition-colors',
+                                    compareMetric === m.key
+                                        ? 'bg-blue-600 text-white'
+                                        : 'bg-[#1e2023] text-gray-400 hover:text-gray-200 border border-white/[0.06]',
+                                ]"
+                            >
+                                {{ m.label }}
+                            </button>
                         </div>
                     </div>
 
-                    <!-- Bar Chart: Current Metric -->
-                    <div class="bg-[#18191c] border border-gray-800 rounded-2xl p-5 shadow-xl">
-                        <p class="text-xs font-bold uppercase tracking-wider text-gray-400 mb-4">
-                            {{ currentCompareMetric.label }} — ranked
+                    <!-- Bar Chart -->
+                    <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg p-5">
+                        <p class="text-xs font-medium text-gray-400 mb-3.5">
+                            {{ currentCompareMetric.label }}
                         </p>
                         <div class="space-y-2">
                             <div v-for="(entry, i) in sortedCompareData" :key="entry.mapperId" class="flex items-center gap-3">
-                                <!-- Rank badge -->
-                                <span :class="[
-                                    'w-6 h-6 rounded-full flex items-center justify-center text-xs font-black shrink-0',
-                                    i === 0 ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40' :
-                                    i === 1 ? 'bg-gray-500/20 text-gray-300 border border-gray-500/30' :
-                                    i === 2 ? 'bg-orange-700/20 text-orange-400 border border-orange-700/30' :
-                                    'bg-gray-800/60 text-gray-500'
-                                ]">#{{ i + 1 }}</span>
-
-                                <!-- Mapper name -->
                                 <span
-                                    class="text-sm font-semibold text-gray-200 w-28 shrink-0 truncate cursor-pointer hover:text-violet-300 transition-colors"
+                                    :class="[
+                                        'w-6 text-xs font-mono text-center shrink-0',
+                                        i === 0 ? 'text-amber-400 font-semibold' : 'text-gray-500',
+                                    ]"
+                                >
+                                    #{{ i + 1 }}
+                                </span>
+
+                                <span
+                                    class="text-sm text-gray-200 w-28 shrink-0 truncate cursor-pointer hover:text-blue-400 transition-colors"
                                     :title="entry.mapperName"
                                     @click="jumpToMapper(entry)"
-                                >{{ entry.mapperName }}</span>
+                                >
+                                    {{ entry.mapperName }}
+                                </span>
 
-                                <!-- Bar -->
-                                <div class="flex-1 bg-gray-800/60 rounded-full h-5 overflow-hidden relative">
+                                <div class="flex-1 bg-[#141417] rounded h-4 overflow-hidden">
                                     <div
-                                        class="h-full rounded-full transition-all duration-500"
+                                        class="h-full rounded transition-all duration-300"
                                         :style="{
                                             width: `${compareBarWidth(entry)}%`,
-                                            background: i === 0 ? 'linear-gradient(90deg,#7c3aed,#a855f7)' :
-                                                        i === 1 ? 'linear-gradient(90deg,#4f46e5,#818cf8)' :
-                                                        'linear-gradient(90deg,#1d4ed8,#3b82f6)'
+                                            backgroundColor: i === 0 ? '#3b82f6' : i === 1 ? '#2563eb' : '#1d4ed8',
                                         }"
                                     ></div>
-                                    <span class="absolute right-2 top-1/2 -translate-y-1/2 text-xs font-bold text-white font-mono mix-blend-overlay pointer-events-none">
-                                        {{ formatCompareValue(entry) }}
-                                    </span>
                                 </div>
-                                <span class="text-xs font-bold text-gray-300 font-mono w-20 text-right shrink-0">{{ formatCompareValue(entry) }}</span>
+                                <span class="text-xs font-mono text-gray-200 w-20 text-right shrink-0">
+                                    {{ formatCompareValue(entry) }}
+                                </span>
                             </div>
                         </div>
                     </div>
 
                     <!-- 3-Column Stats Grid -->
-                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-                        <!-- Col 1: Volume Leaders -->
-                        <div class="bg-[#18191c] border border-gray-800 rounded-2xl p-4 shadow-xl space-y-3">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-emerald-400 flex items-center gap-1.5">
-                                <i class="bx bx-trending-up"></i> Catalog Volume
-                            </h3>
-                            <div v-for="entry in compareData" :key="entry.mapperId + '_vol'" class="flex items-center justify-between gap-2">
-                                <span class="text-sm font-semibold text-gray-300 truncate">{{ entry.mapperName }}</span>
-                                <div class="text-right shrink-0">
-                                    <span class="text-sm font-bold text-emerald-400 font-mono">{{ entry.totalMaps }} maps</span>
-                                    <span class="text-xs text-gray-400 block">{{ entry.totalDurationStr }} music</span>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg p-4 space-y-2.5">
+                            <h3 class="text-xs font-semibold text-gray-400">Catalog Volume</h3>
+                            <div v-for="entry in compareData" :key="entry.mapperId + '_vol'" class="flex items-center justify-between gap-2 text-sm">
+                                <span class="text-gray-300 truncate">{{ entry.mapperName }}</span>
+                                <div class="text-right shrink-0 font-mono text-xs">
+                                    <span class="font-semibold text-gray-100">{{ entry.totalMaps }} maps</span>
+                                    <span class="text-gray-500 block">{{ entry.totalDurationStr }}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Col 2: Vote Momentum -->
-                        <div class="bg-[#18191c] border border-gray-800 rounded-2xl p-4 shadow-xl space-y-3">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-blue-400 flex items-center gap-1.5">
-                                <i class="bx bx-pulse"></i> 30d Vote Momentum
-                            </h3>
-                            <div v-for="entry in sortedBy('growth30d')" :key="entry.mapperId + '_mom'" class="flex items-center justify-between gap-2">
-                                <span class="text-sm font-semibold text-gray-300 truncate">{{ entry.mapperName }}</span>
-                                <div class="text-right shrink-0">
-                                    <span class="text-sm font-bold text-blue-400 font-mono">+{{ entry.growth30d.toLocaleString() }}</span>
-                                    <span class="text-xs text-gray-400 block">+{{ entry.dailyGrowth30d }}/day</span>
+                        <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg p-4 space-y-2.5">
+                            <h3 class="text-xs font-semibold text-gray-400">30d Vote Momentum</h3>
+                            <div v-for="entry in sortedBy('growth30d')" :key="entry.mapperId + '_mom'" class="flex items-center justify-between gap-2 text-sm">
+                                <span class="text-gray-300 truncate">{{ entry.mapperName }}</span>
+                                <div class="text-right shrink-0 font-mono text-xs">
+                                    <span class="font-semibold text-emerald-400">+{{ entry.growth30d.toLocaleString() }}</span>
+                                    <span class="text-gray-500 block">+{{ entry.dailyGrowth30d }}/day</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Col 3: Crowd Sentiment -->
-                        <div class="bg-[#18191c] border border-gray-800 rounded-2xl p-4 shadow-xl space-y-3">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-amber-400 flex items-center gap-1.5">
-                                <i class="bx bx-heart"></i> Approval & Quality
-                            </h3>
-                            <div v-for="entry in sortedBy('overallRatio')" :key="entry.mapperId + '_qual'" class="flex items-center justify-between gap-2">
-                                <span class="text-sm font-semibold text-gray-300 truncate">{{ entry.mapperName }}</span>
-                                <div class="text-right shrink-0">
-                                    <span class="text-sm font-bold text-amber-400 font-mono">{{ entry.overallRatio }}%</span>
-                                    <span class="text-xs text-gray-400 block">★ {{ entry.avgStar }} avg stars</span>
+                        <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg p-4 space-y-2.5">
+                            <h3 class="text-xs font-semibold text-gray-400">Approval &amp; Quality</h3>
+                            <div v-for="entry in sortedBy('overallRatio')" :key="entry.mapperId + '_qual'" class="flex items-center justify-between gap-2 text-sm">
+                                <span class="text-gray-300 truncate">{{ entry.mapperName }}</span>
+                                <div class="text-right shrink-0 font-mono text-xs">
+                                    <span class="font-semibold text-gray-100">{{ entry.overallRatio }}%</span>
+                                    <span class="text-gray-500 block">★ {{ entry.avgStar }}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Head-to-Head Records Table -->
-                    <div class="bg-[#18191c] border border-gray-800 rounded-2xl overflow-hidden shadow-xl">
-                        <div class="px-5 py-3 border-b border-gray-800 bg-[#121315] flex items-center justify-between">
-                            <h3 class="text-xs font-bold uppercase tracking-wider text-gray-300">Full Head-to-Head Stats</h3>
-                            <span class="text-xs text-gray-500">All {{ compareData.length }} tracked mappers</span>
+                    <!-- Head-to-Head Table -->
+                    <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg overflow-hidden">
+                        <div class="px-4 py-3 border-b border-white/[0.06] bg-[#141417] flex items-center justify-between">
+                            <h3 class="text-xs font-semibold text-gray-300">Head-to-Head Stats</h3>
+                            <span class="text-xs text-gray-500">{{ compareData.length }} mappers</span>
                         </div>
                         <div class="overflow-x-auto">
                             <table class="w-full text-sm text-left">
                                 <thead>
-                                    <tr class="border-b border-gray-800 text-gray-400 text-xs font-bold bg-[#121315]">
+                                    <tr class="border-b border-white/[0.06] text-gray-400 text-xs font-medium bg-[#141417]">
                                         <th class="py-2.5 px-4">Mapper</th>
                                         <th class="py-2.5 px-4 text-center">Maps</th>
                                         <th class="py-2.5 px-4 text-center">Total Upvotes</th>
@@ -249,331 +219,262 @@
                                         <th class="py-2.5 px-4 text-center">Music</th>
                                     </tr>
                                 </thead>
-                                <tbody class="divide-y divide-gray-800/50">
+                                <tbody class="divide-y divide-white/[0.05]">
                                     <tr
                                         v-for="entry in compareData"
                                         :key="entry.mapperId"
-                                        class="hover:bg-gray-800/30 cursor-pointer transition-colors"
+                                        class="hover:bg-white/[0.03] cursor-pointer transition-colors"
                                         @click="jumpToMapper(entry)"
                                     >
-                                        <td class="py-2.5 px-4 font-semibold text-gray-100">{{ entry.mapperName }}</td>
-                                        <td class="py-2.5 px-4 text-center font-mono text-gray-200">{{ entry.totalMaps }}</td>
-                                        <td class="py-2.5 px-4 text-center font-mono font-bold text-emerald-400">+{{ entry.totalUpvotes.toLocaleString() }}</td>
-                                        <td class="py-2.5 px-4 text-center">
-                                            <span :class="[
-                                                'px-2 py-0.5 rounded-md text-xs font-bold font-mono',
-                                                entry.overallRatio >= 95 ? 'bg-emerald-500/20 text-emerald-300' :
-                                                entry.overallRatio >= 85 ? 'bg-teal-500/20 text-teal-300' :
-                                                entry.overallRatio >= 70 ? 'bg-blue-500/20 text-blue-300' :
-                                                'bg-amber-500/20 text-amber-300'
-                                            ]">{{ entry.overallRatio }}%</span>
-                                        </td>
-                                        <td class="py-2.5 px-4 text-center font-mono font-bold" :class="entry.netScore >= 0 ? 'text-emerald-400' : 'text-rose-400'">
+                                        <td class="py-2.5 px-4 font-medium text-gray-100">{{ entry.mapperName }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-gray-300">{{ entry.totalMaps }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-emerald-400">+{{ entry.totalUpvotes.toLocaleString() }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-gray-200">{{ entry.overallRatio }}%</td>
+                                        <td class="py-2.5 px-4 text-center font-mono" :class="entry.netScore >= 0 ? 'text-emerald-400' : 'text-rose-400'">
                                             {{ entry.netScore >= 0 ? '+' : '' }}{{ entry.netScore.toLocaleString() }}
                                         </td>
-                                        <td class="py-2.5 px-4 text-center font-mono text-blue-300">+{{ entry.growth30d.toLocaleString() }}</td>
-                                        <td class="py-2.5 px-4 text-center font-mono text-amber-300">{{ entry.avgBpm }}</td>
-                                        <td class="py-2.5 px-4 text-center font-mono text-amber-300">{{ entry.avgStar }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-gray-200">+{{ entry.growth30d.toLocaleString() }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-gray-300">{{ entry.avgBpm }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-amber-400">{{ entry.avgStar }}</td>
                                         <td class="py-2.5 px-4 text-center font-mono text-gray-300">{{ entry.mapsPerMonth }}/mo</td>
-                                        <td class="py-2.5 px-4 text-center font-mono text-purple-300">{{ entry.totalDurationStr }}</td>
+                                        <td class="py-2.5 px-4 text-center font-mono text-gray-300">{{ entry.totalDurationStr }}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
                     </div>
 
-                    <!-- Records Row: who holds each title -->
+                    <!-- Records Row -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
                         <div
                             v-for="rec in compareRecords"
                             :key="rec.label"
-                            class="bg-[#18191c] border border-gray-800 rounded-xl p-3.5 shadow-lg cursor-pointer hover:border-violet-700/50 transition-colors"
+                            class="bg-[#1e2023] border border-white/[0.06] hover:border-white/15 rounded-lg p-3.5 cursor-pointer transition-colors"
                             @click="jumpToMapper(rec.entry)"
                         >
-                            <span :class="['text-[10px] font-bold uppercase tracking-wider block mb-1 flex items-center gap-1', rec.color]">
-                                <i :class="['bx', rec.icon, 'text-sm']"></i> {{ rec.label }}
-                            </span>
-                            <div class="text-sm font-bold text-gray-100">{{ rec.entry.mapperName }}</div>
-                            <div class="text-xs font-mono mt-0.5" :class="rec.color">{{ rec.value }}</div>
+                            <span class="text-xs text-gray-400 block">{{ rec.label }}</span>
+                            <div class="text-sm font-semibold text-gray-100 mt-1">{{ rec.entry.mapperName }}</div>
+                            <div class="text-xs font-mono text-gray-400 mt-0.5">{{ rec.value }}</div>
                         </div>
                     </div>
-
                 </div>
             </transition>
 
-            <!-- Deep Mapper Insights Analytics Dashboard -->
-            <div v-if="insights" class="space-y-6 mb-8">
-                <!-- Mapper Spotlight Banner -->
-                <div class="bg-[#18191c] border border-gray-800 rounded-2xl p-5 shadow-xl flex flex-wrap items-center justify-between gap-4">
-                    <div>
-                        <h2 class="text-xl font-bold text-gray-100">{{ insights.mapperName }}</h2>
-                        <p class="text-xs text-gray-400 mt-1 flex flex-wrap items-center gap-3">
-                            <span><i class="bx bx-calendar text-blue-400"></i> Active since <strong class="text-gray-200">{{ formatDate(insights.firstUpload) }}</strong></span>
-                            <span class="text-gray-600">•</span>
-                            <span><i class="bx bx-tachometer text-amber-400"></i> Output: <strong class="text-gray-200">{{ insights.mapsPerMonth }} maps/month</strong></span>
-                            <span class="text-gray-600">•</span>
-                            <span><i class="bx bx-music text-purple-400"></i> Total Mapped Music: <strong class="text-gray-200">{{ insights.totalDurationStr }}</strong></span>
-                        </p>
+            <!-- Mapper Insights Section -->
+            <div v-if="insights" class="space-y-4 mb-6">
+                <!-- Mapper Overview & Metrics Strip -->
+                <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg overflow-hidden">
+                    <div class="px-5 py-4 flex flex-wrap items-center justify-between gap-4 border-b border-white/[0.06]">
+                        <div>
+                            <h2 class="text-lg font-semibold text-gray-100">{{ insights.mapperName }}</h2>
+                            <p class="text-xs text-gray-400 mt-0.5 flex flex-wrap items-center gap-2">
+                                <span>Active since {{ formatDate(insights.firstUpload) }}</span>
+                                <span class="text-gray-600">·</span>
+                                <span>{{ insights.mapsPerMonth }} maps/month</span>
+                                <span class="text-gray-600">·</span>
+                                <span>{{ insights.totalDurationStr }} mapped</span>
+                            </p>
+                        </div>
+
+                        <div class="flex items-center gap-6 font-mono">
+                            <div class="text-right">
+                                <span class="text-[11px] text-gray-400 block font-sans">Overall Approval</span>
+                                <span class="text-base font-semibold text-emerald-400">{{ insights.overallRatio }}%</span>
+                            </div>
+                            <div class="text-right">
+                                <span class="text-[11px] text-gray-400 block font-sans">Net Score</span>
+                                <span class="text-base font-semibold text-gray-100">+{{ insights.netScore.toLocaleString() }}</span>
+                            </div>
+                        </div>
                     </div>
 
-                    <div class="flex items-center gap-3 font-mono">
-                        <div class="bg-[#121315] border border-gray-800 px-4 py-2 rounded-xl text-right">
-                            <span class="text-[11px] text-gray-400 block uppercase">Overall Approval</span>
-                            <span class="text-lg font-bold text-emerald-400">{{ insights.overallRatio }}%</span>
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 divide-y sm:divide-y-0 sm:divide-x divide-white/[0.06]">
+                        <div class="px-4 py-3.5">
+                            <span class="text-xs text-gray-400 block">Total Upvotes</span>
+                            <div class="text-lg font-semibold font-mono text-emerald-400 mt-0.5">
+                                +{{ insights.totalUpvotes.toLocaleString() }}
+                            </div>
+                            <span class="text-[11px] text-gray-500">{{ insights.totalDownvotes.toLocaleString() }} downvotes</span>
                         </div>
-                        <div class="bg-[#121315] border border-gray-800 px-4 py-2 rounded-xl text-right">
-                            <span class="text-[11px] text-gray-400 block uppercase">Catalog Net Score</span>
-                            <span class="text-lg font-bold text-blue-400">+{{ insights.netScore.toLocaleString() }}</span>
-                        </div>
-                    </div>
-                </div>
 
-                <!-- 6 Metric Highlight Cards Grid -->
-                <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                    <!-- 1. Total Upvotes -->
-                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">Total Upvotes</span>
-                        <div class="text-2xl font-bold font-mono text-emerald-400 mt-1">
-                            +{{ insights.totalUpvotes.toLocaleString() }}
+                        <div class="px-4 py-3.5">
+                            <span class="text-xs text-gray-400 block">30d Growth</span>
+                            <div class="text-lg font-semibold font-mono text-gray-100 mt-0.5">
+                                +{{ insights.growth30d.toLocaleString() }}
+                            </div>
+                            <span class="text-[11px] text-gray-500">+{{ insights.dailyGrowth30d }}/day</span>
                         </div>
-                        <span class="text-[11px] text-gray-400 mt-1">
-                            {{ insights.totalDownvotes.toLocaleString() }} downvotes
-                        </span>
-                    </div>
 
-                    <!-- 2. 30-Day Vote Growth -->
-                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">30d Vote Growth</span>
-                        <div class="text-2xl font-bold font-mono text-blue-400 mt-1">
-                            +{{ insights.growth30d.toLocaleString() }}
+                        <div class="px-4 py-3.5">
+                            <span class="text-xs text-gray-400 block">Mapped Music</span>
+                            <div class="text-lg font-semibold font-mono text-gray-100 mt-0.5">
+                                {{ insights.totalDurationStr }}
+                            </div>
+                            <span class="text-[11px] text-gray-500">{{ insights.totalMaps }} maps</span>
                         </div>
-                        <span class="text-[11px] text-gray-400 mt-1">
-                            +{{ insights.dailyGrowth30d }} votes/day
-                        </span>
-                    </div>
 
-                    <!-- 3. Total Audio Time -->
-                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">Mapped Music</span>
-                        <div class="text-xl font-bold font-mono text-purple-300 mt-1">
-                            {{ insights.totalDurationStr }}
+                        <div class="px-4 py-3.5">
+                            <span class="text-xs text-gray-400 block">Average BPM</span>
+                            <div class="text-lg font-semibold font-mono text-gray-100 mt-0.5">
+                                {{ insights.avgBpm }}
+                            </div>
+                            <span class="text-[11px] text-gray-500">Max {{ insights.maxBpmMap?.bpm ? Math.round(insights.maxBpmMap.bpm) : '-' }}</span>
                         </div>
-                        <span class="text-[11px] text-gray-400 mt-1">
-                            Across {{ insights.totalMaps }} maps
-                        </span>
-                    </div>
 
-                    <!-- 4. Average BPM -->
-                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">Average BPM</span>
-                        <div class="text-2xl font-bold font-mono text-amber-400 mt-1">
-                            {{ insights.avgBpm }} <span class="text-xs font-normal text-gray-400">BPM</span>
+                        <div class="px-4 py-3.5">
+                            <span class="text-xs text-gray-400 block">Starred Maps</span>
+                            <div class="text-lg font-semibold font-mono text-amber-400 mt-0.5">
+                                {{ insights.starredCount }}
+                            </div>
+                            <span class="text-[11px] text-gray-500">Avg ★ {{ insights.avgStar }}</span>
                         </div>
-                        <span class="text-[11px] text-gray-400 mt-1">
-                            Max: {{ insights.maxBpmMap?.bpm ? Math.round(insights.maxBpmMap.bpm) : '-' }} BPM
-                        </span>
-                    </div>
 
-                    <!-- 5. Starred Maps -->
-                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">Starred Maps</span>
-                        <div class="text-2xl font-bold font-mono text-amber-300 mt-1">
-                            {{ insights.starredCount }} <span class="text-xs font-normal text-gray-400">maps</span>
+                        <div class="px-4 py-3.5">
+                            <span class="text-xs text-gray-400 block">7d Velocity</span>
+                            <div class="text-lg font-semibold font-mono text-gray-100 mt-0.5">
+                                +{{ insights.growth7d.toLocaleString() }}
+                            </div>
+                            <span class="text-[11px] text-gray-500">+{{ insights.dailyGrowth7d }}/day</span>
                         </div>
-                        <span class="text-[11px] text-gray-400 mt-1">
-                            Avg: ★ {{ insights.avgStar }} Stars
-                        </span>
-                    </div>
-
-                    <!-- 6. 7-Day Velocity -->
-                    <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-col justify-between">
-                        <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider block">7d Velocity</span>
-                        <div class="text-2xl font-bold font-mono text-teal-400 mt-1">
-                            +{{ insights.growth7d.toLocaleString() }}
-                        </div>
-                        <span class="text-[11px] text-gray-400 mt-1">
-                            +{{ insights.dailyGrowth7d }} votes/day
-                        </span>
                     </div>
                 </div>
 
-                <!-- Standout Maps Portfolio Showcase Cards (4 Cards) -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                    <!-- 1. Crown Jewel Map (Highest Approval Ratio) -->
+                <!-- Standout Maps (4 Cards) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                     <div
                         v-if="insights.highestRatioMap"
                         @click="openMapModal(insights.highestRatioMap)"
-                        class="bg-[#18191c] border border-gray-800 hover:border-emerald-500/50 rounded-xl p-4 shadow-lg cursor-pointer transition-all flex items-center justify-between gap-3 group"
+                        class="bg-[#1e2023] border border-white/[0.06] hover:border-white/15 rounded-lg p-3.5 cursor-pointer transition-colors flex items-center justify-between gap-3"
                     >
                         <div class="min-w-0">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-emerald-400 block mb-1 flex items-center gap-1">
-                                <i class="bx bx-crown text-sm"></i> Crown Jewel Map
-                            </span>
-                            <div class="font-bold text-gray-100 group-hover:text-emerald-300 transition-colors text-sm truncate" :title="insights.highestRatioMap.songName">
+                            <span class="text-[11px] text-gray-400 block">Highest Approval</span>
+                            <div class="font-semibold text-gray-100 text-sm truncate mt-0.5" :title="insights.highestRatioMap.songName">
                                 {{ insights.highestRatioMap.songName }}
                             </div>
-                            <div class="text-xs text-gray-400 truncate mt-0.5">
-                                {{ insights.highestRatioMap.songAuthorName }}
-                            </div>
+                            <div class="text-xs text-gray-500 truncate">{{ insights.highestRatioMap.songAuthorName }}</div>
                         </div>
                         <div class="text-right font-mono shrink-0">
-                            <span class="px-2.5 py-1 bg-emerald-500/15 border border-emerald-500/30 text-emerald-300 font-bold text-xs rounded-lg block">
-                                {{ insights.highestRatioMap.ratio }}%
-                            </span>
-                            <span class="text-[10px] text-gray-400 mt-1 block">
-                                +{{ insights.highestRatioMap.upvotes }} up
-                            </span>
+                            <span class="text-sm font-semibold text-emerald-400 block">{{ insights.highestRatioMap.ratio }}%</span>
+                            <span class="text-[11px] text-gray-500">+{{ insights.highestRatioMap.upvotes }}</span>
                         </div>
                     </div>
 
-                    <!-- 2. Most Upvoted Map -->
                     <div
                         v-if="insights.mostUpvotedMap"
                         @click="openMapModal(insights.mostUpvotedMap)"
-                        class="bg-[#18191c] border border-gray-800 hover:border-amber-500/50 rounded-xl p-4 shadow-lg cursor-pointer transition-all flex items-center justify-between gap-3 group"
+                        class="bg-[#1e2023] border border-white/[0.06] hover:border-white/15 rounded-lg p-3.5 cursor-pointer transition-colors flex items-center justify-between gap-3"
                     >
                         <div class="min-w-0">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-amber-400 block mb-1 flex items-center gap-1">
-                                <i class="bx bx-trophy text-sm"></i> Most Upvoted Map
-                            </span>
-                            <div class="font-bold text-gray-100 group-hover:text-amber-300 transition-colors text-sm truncate" :title="insights.mostUpvotedMap.songName">
+                            <span class="text-[11px] text-gray-400 block">Most Upvoted</span>
+                            <div class="font-semibold text-gray-100 text-sm truncate mt-0.5" :title="insights.mostUpvotedMap.songName">
                                 {{ insights.mostUpvotedMap.songName }}
                             </div>
-                            <div class="text-xs text-gray-400 truncate mt-0.5">
-                                {{ insights.mostUpvotedMap.songAuthorName }}
-                            </div>
+                            <div class="text-xs text-gray-500 truncate">{{ insights.mostUpvotedMap.songAuthorName }}</div>
                         </div>
                         <div class="text-right font-mono shrink-0">
-                            <span class="px-2.5 py-1 bg-amber-500/15 border border-amber-500/30 text-amber-300 font-bold text-xs rounded-lg block">
-                                +{{ insights.mostUpvotedMap.upvotes.toLocaleString() }}
-                            </span>
-                            <span class="text-[10px] text-gray-400 mt-1 block">
-                                Total Upvotes
-                            </span>
+                            <span class="text-sm font-semibold text-emerald-400 block">+{{ insights.mostUpvotedMap.upvotes.toLocaleString() }}</span>
+                            <span class="text-[11px] text-gray-500">upvotes</span>
                         </div>
                     </div>
 
-                    <!-- 3. Highest Star Rating Map -->
                     <div
                         v-if="insights.highestStarMap"
                         @click="openMapModal(insights.highestStarMap)"
-                        class="bg-[#18191c] border border-gray-800 hover:border-blue-500/50 rounded-xl p-4 shadow-lg cursor-pointer transition-all flex items-center justify-between gap-3 group"
+                        class="bg-[#1e2023] border border-white/[0.06] hover:border-white/15 rounded-lg p-3.5 cursor-pointer transition-colors flex items-center justify-between gap-3"
                     >
                         <div class="min-w-0">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-blue-400 block mb-1 flex items-center gap-1">
-                                <i class="bx bx-star text-sm"></i> Hardest Star Map
-                            </span>
-                            <div class="font-bold text-gray-100 group-hover:text-blue-300 transition-colors text-sm truncate" :title="insights.highestStarMap.songName">
+                            <span class="text-[11px] text-gray-400 block">Highest Stars</span>
+                            <div class="font-semibold text-gray-100 text-sm truncate mt-0.5" :title="insights.highestStarMap.songName">
                                 {{ insights.highestStarMap.songName }}
                             </div>
-                            <div class="text-xs text-gray-400 truncate mt-0.5">
-                                {{ insights.highestStarMap.songAuthorName }}
-                            </div>
+                            <div class="text-xs text-gray-500 truncate">{{ insights.highestStarMap.songAuthorName }}</div>
                         </div>
                         <div class="text-right font-mono shrink-0">
-                            <span class="px-2.5 py-1 bg-blue-500/15 border border-blue-500/30 text-blue-300 font-bold text-xs rounded-lg block">
-                                ★ {{ insights.highestStarMap.highestStar.toFixed(1) }}
-                            </span>
-                            <span class="text-[10px] text-gray-400 mt-1 block">
-                                Star Rating
-                            </span>
+                            <span class="text-sm font-semibold text-amber-400 block">★ {{ insights.highestStarMap.highestStar.toFixed(1) }}</span>
+                            <span class="text-[11px] text-gray-500">stars</span>
                         </div>
                     </div>
 
-                    <!-- 4. Peak Speed / BPM Map -->
                     <div
                         v-if="insights.maxBpmMap"
                         @click="openMapModal(insights.maxBpmMap)"
-                        class="bg-[#18191c] border border-gray-800 hover:border-purple-500/50 rounded-xl p-4 shadow-lg cursor-pointer transition-all flex items-center justify-between gap-3 group"
+                        class="bg-[#1e2023] border border-white/[0.06] hover:border-white/15 rounded-lg p-3.5 cursor-pointer transition-colors flex items-center justify-between gap-3"
                     >
                         <div class="min-w-0">
-                            <span class="text-[10px] font-bold uppercase tracking-wider text-purple-400 block mb-1 flex items-center gap-1">
-                                <i class="bx bx-bolt-circle text-sm"></i> Fastest BPM Map
-                            </span>
-                            <div class="font-bold text-gray-100 group-hover:text-purple-300 transition-colors text-sm truncate" :title="insights.maxBpmMap.songName">
+                            <span class="text-[11px] text-gray-400 block">Fastest BPM</span>
+                            <div class="font-semibold text-gray-100 text-sm truncate mt-0.5" :title="insights.maxBpmMap.songName">
                                 {{ insights.maxBpmMap.songName }}
                             </div>
-                            <div class="text-xs text-gray-400 truncate mt-0.5">
-                                {{ insights.maxBpmMap.songAuthorName }}
-                            </div>
+                            <div class="text-xs text-gray-500 truncate">{{ insights.maxBpmMap.songAuthorName }}</div>
                         </div>
                         <div class="text-right font-mono shrink-0">
-                            <span class="px-2.5 py-1 bg-purple-500/15 border border-purple-500/30 text-purple-300 font-bold text-xs rounded-lg block">
-                                {{ Math.round(insights.maxBpmMap.bpm) }} BPM
-                            </span>
-                            <span class="text-[10px] text-gray-400 mt-1 block">
-                                Peak Speed
-                            </span>
+                            <span class="text-sm font-semibold text-gray-100 block">{{ Math.round(insights.maxBpmMap.bpm) }}</span>
+                            <span class="text-[11px] text-gray-500">BPM</span>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Stats Bar & Active Filters -->
-            <div class="flex flex-wrap items-center justify-between gap-2 mb-4 px-1 text-sm text-gray-400">
+            <!-- Stats Bar -->
+            <div class="flex flex-wrap items-center justify-between gap-2 mb-3 text-xs text-gray-400">
                 <div class="flex items-center gap-2">
-                    <span v-if="selectedMapper" class="font-semibold text-gray-200">
+                    <span v-if="selectedMapper" class="text-sm font-semibold text-gray-100">
                         {{ selectedMapper.mapperName }}'s Maps
                     </span>
-                    <span v-if="totalCount > 0" class="bg-blue-900/40 text-blue-300 border border-blue-800/60 text-xs px-2.5 py-0.5 rounded-full font-medium">
-                        {{ totalCount }} {{ totalCount === 1 ? 'map' : 'maps' }}
-                    </span>
-                    <span class="text-xs text-gray-500 hidden sm:inline ml-2">
-                        <i class="bx bx-info-circle"></i> Click headers to sort by any column. Click rows for details.
+                    <span v-if="totalCount > 0" class="text-gray-500 font-mono">
+                        ({{ totalCount }} {{ totalCount === 1 ? 'map' : 'maps' }})
                     </span>
                 </div>
-                <div v-if="totalCount > 0" class="text-xs text-gray-400">
-                    Showing page <span class="text-gray-200 font-medium">{{ currentPage }}</span> of <span class="text-gray-200 font-medium">{{ totalPages }}</span>
-                    <span class="text-gray-500 font-mono ml-1">({{ pageSize }} per page)</span>
+                <div v-if="totalCount > 0" class="text-xs text-gray-500 font-mono">
+                    Page {{ currentPage }} / {{ totalPages }}
                 </div>
             </div>
 
-            <!-- Main Data Table Container (Fixed min-height to prevent vertical height jumps) -->
-            <div class="bg-[#18191c] border border-gray-800 rounded-xl shadow-xl relative overflow-hidden min-h-[580px] flex flex-col justify-between">
-                <!-- In-Table Loading Overlay (Table & controls stay mounted, overlay appears over data) -->
+            <!-- Main Data Table -->
+            <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg relative overflow-hidden min-h-[580px] flex flex-col justify-between">
+                <!-- In-Table Loading Overlay -->
                 <div
                     v-if="tableLoading && maps && maps.length"
-                    class="absolute inset-0 z-20 bg-black/40 backdrop-blur-[1.5px] flex flex-col items-center justify-center transition-opacity"
+                    class="absolute inset-0 z-20 bg-black/40 flex flex-col items-center justify-center"
                 >
-                    <div class="bg-[#121315]/95 border border-gray-700/80 px-6 py-3.5 rounded-xl shadow-2xl flex items-center gap-3">
-                        <ProgressSpinner style="width: 26px; height: 26px" strokeWidth="4" />
-                        <span class="text-xs font-semibold text-gray-200">Updating table...</span>
+                    <div class="bg-[#1e2023] border border-white/10 px-5 py-3 rounded-lg shadow-lg flex items-center gap-3">
+                        <ProgressSpinner style="width: 22px; height: 22px" strokeWidth="4" />
+                        <span class="text-xs text-gray-200">Updating...</span>
                     </div>
                 </div>
 
-                <!-- Initial Loading Screen (Only on first page load before maps data exists) -->
+                <!-- Initial Loading Screen -->
                 <div v-if="loading && (!maps || !maps.length)" class="p-16 flex flex-col items-center justify-center flex-1">
-                    <ProgressSpinner style="width: 48px; height: 48px" strokeWidth="4" />
-                    <span class="text-gray-400 mt-4 text-sm font-medium animate-pulse">Loading maps...</span>
+                    <ProgressSpinner style="width: 40px; height: 40px" strokeWidth="4" />
+                    <span class="text-gray-400 mt-3 text-sm">Loading maps...</span>
                 </div>
 
                 <!-- Empty State -->
                 <div v-else-if="!loading && (!maps || maps.length === 0)" class="p-16 text-center text-gray-400 flex flex-col items-center justify-center flex-1">
-                    <i class="bx bx-folder-open text-5xl mb-3 text-gray-600"></i>
-                    <p class="text-lg font-medium text-gray-300">No maps found</p>
-                    <p class="text-sm text-gray-500 mt-1">Try adjusting your search query or selecting a different mapper.</p>
+                    <p class="text-base font-medium text-gray-200">No maps found</p>
+                    <p class="text-xs text-gray-500 mt-1">Try adjusting your search query or selecting a different mapper.</p>
                     <button
                         v-if="searchQuery"
                         @click="clearSearch"
-                        class="mt-4 px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-sm transition-colors"
+                        class="mt-4 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-medium transition-colors"
                     >
                         Clear Search
                     </button>
                 </div>
 
-                <!-- Table Contents (Always Remains Mounted) -->
+                <!-- Table Contents -->
                 <template v-else>
                     <!-- Top Pagination Bar -->
-                    <div v-if="totalPages > 1" class="bg-[#121315] border-b border-gray-800 p-4 flex flex-wrap items-center justify-between gap-4 select-none shrink-0">
-                        <div class="text-xs text-gray-400">
-                            Page <span class="font-semibold text-gray-200">{{ currentPage }}</span> of <span class="font-semibold text-gray-200">{{ totalPages }}</span>
+                    <div v-if="totalPages > 1" class="bg-[#141417] border-b border-white/[0.06] px-4 py-3 flex flex-wrap items-center justify-between gap-4 select-none shrink-0">
+                        <div class="text-xs text-gray-400 font-mono">
+                            Page {{ currentPage }} of {{ totalPages }}
                         </div>
 
-                        <div class="flex items-center gap-1.5">
+                        <div class="flex items-center gap-1">
                             <button
                                 @click="goToPage(1)"
                                 :disabled="currentPage === 1 || tableLoading"
-                                class="px-2.5 py-1.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 text-gray-200 rounded-md text-xs font-medium transition-colors"
+                                class="px-2 py-1.5 bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 rounded-md text-xs transition-colors"
                                 title="First page"
                             >
                                 <i class="bx bx-first-page text-base"></i>
@@ -581,7 +482,7 @@
                             <button
                                 @click="goToPage(currentPage - 1)"
                                 :disabled="currentPage === 1 || tableLoading"
-                                class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 text-gray-200 rounded-md text-xs font-medium transition-colors flex items-center gap-1"
+                                class="px-2.5 py-1.5 bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 rounded-md text-xs font-medium transition-colors flex items-center gap-1"
                             >
                                 <i class="bx bx-chevron-left text-base"></i> Prev
                             </button>
@@ -593,10 +494,10 @@
                                     @click="goToPage(p)"
                                     :disabled="tableLoading"
                                     :class="[
-                                        'px-3 py-1.5 rounded-md text-xs font-medium transition-colors',
+                                        'px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors',
                                         p === currentPage
-                                            ? 'bg-blue-600 text-white font-semibold shadow-sm'
-                                            : 'bg-gray-800/80 hover:bg-gray-700 text-gray-300'
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-[#25282c] hover:bg-[#2e3238] text-gray-300',
                                     ]"
                                 >
                                     {{ p }}
@@ -606,14 +507,14 @@
                             <button
                                 @click="goToPage(currentPage + 1)"
                                 :disabled="currentPage >= totalPages || tableLoading"
-                                class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 text-gray-200 rounded-md text-xs font-medium transition-colors flex items-center gap-1"
+                                class="px-2.5 py-1.5 bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 rounded-md text-xs font-medium transition-colors flex items-center gap-1"
                             >
                                 Next <i class="bx bx-chevron-right text-base"></i>
                             </button>
                             <button
                                 @click="goToPage(totalPages)"
                                 :disabled="currentPage >= totalPages || tableLoading"
-                                class="px-2.5 py-1.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 text-gray-200 rounded-md text-xs font-medium transition-colors"
+                                class="px-2 py-1.5 bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 rounded-md text-xs transition-colors"
                                 title="Last page"
                             >
                                 <i class="bx bx-last-page text-base"></i>
@@ -621,58 +522,58 @@
                         </div>
                     </div>
 
-                    <!-- Scrollable Table with Compact Map Info Cell & Spaced Out Columns -->
+                    <!-- Scrollable Table -->
                     <div class="overflow-x-auto w-full flex-1 min-h-[440px]">
                         <table class="w-full text-left border-collapse">
                             <thead>
-                                <tr class="bg-[#121315] border-b border-gray-800 text-xs font-bold text-gray-300 uppercase tracking-wider select-none">
-                                    <th class="py-4 px-4 min-w-[210px] max-w-[230px]">Map Info</th>
+                                <tr class="bg-[#141417] border-b border-white/[0.06] text-xs font-medium text-gray-400 select-none">
+                                    <th class="py-3 px-4 min-w-[210px] max-w-[230px]">Map</th>
                                     <th
                                         @click="toggleSort('uploaded')"
-                                        class="py-4 px-4 cursor-pointer hover:text-white transition-colors text-center whitespace-nowrap"
+                                        class="py-3 px-4 cursor-pointer hover:text-white transition-colors text-center whitespace-nowrap"
                                     >
                                         Uploaded <i :class="getSortIcon('uploaded')"></i>
                                     </th>
                                     <th
                                         @click="toggleSort('highestStar')"
-                                        class="py-4 px-4 cursor-pointer hover:text-white transition-colors text-center whitespace-nowrap"
+                                        class="py-3 px-4 cursor-pointer hover:text-white transition-colors text-center whitespace-nowrap"
                                     >
                                         Stars <i :class="getSortIcon('highestStar')"></i>
                                     </th>
                                     <th
                                         @click="toggleSort('bpm')"
-                                        class="py-4 px-4 cursor-pointer hover:text-white transition-colors text-center whitespace-nowrap"
+                                        class="py-3 px-4 cursor-pointer hover:text-white transition-colors text-center whitespace-nowrap"
                                     >
                                         BPM <i :class="getSortIcon('bpm')"></i>
                                     </th>
                                     <th
                                         @click="toggleSort('upvotes')"
-                                        class="py-4 px-5 cursor-pointer hover:text-white transition-colors text-center whitespace-nowrap"
+                                        class="py-3 px-4 cursor-pointer hover:text-white transition-colors text-center whitespace-nowrap"
                                     >
-                                        Total Votes <i :class="getSortIcon('upvotes')"></i>
+                                        Votes <i :class="getSortIcon('upvotes')"></i>
                                     </th>
                                     <th
                                         v-for="range in timeRanges"
                                         :key="range.key"
                                         @click="toggleSort(range.key)"
-                                        class="py-4 px-4 text-center whitespace-nowrap cursor-pointer hover:text-white transition-colors min-w-[90px]"
+                                        class="py-3 px-3.5 text-center whitespace-nowrap cursor-pointer hover:text-white transition-colors min-w-[85px]"
                                     >
                                         {{ range.label }} <i :class="getSortIcon(range.key)"></i>
                                     </th>
-                                    <th class="py-4 px-5 text-center whitespace-nowrap">Stats</th>
+                                    <th class="py-3 px-4 text-center whitespace-nowrap">Stats</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-800/60 text-sm">
+                            <tbody class="divide-y divide-white/[0.05] text-sm">
                                 <tr
                                     v-for="map in maps"
                                     :key="map.key || map.hash"
                                     @click="openMapModal(map)"
-                                    class="hover:bg-gray-800/60 cursor-pointer transition-colors group"
+                                    class="hover:bg-white/[0.03] cursor-pointer transition-colors"
                                 >
-                                    <!-- Map Info Cell (Compact) -->
-                                    <td class="py-4 px-4 min-w-[210px] max-w-[230px]">
+                                    <!-- Map Info Cell -->
+                                    <td class="py-3 px-4 min-w-[210px] max-w-[230px]">
                                         <div class="flex items-center gap-2.5">
-                                            <div class="relative w-10 h-10 rounded-lg overflow-hidden bg-gray-900 border border-gray-800 shrink-0">
+                                            <div class="relative w-10 h-10 rounded-md overflow-hidden bg-[#141417] shrink-0">
                                                 <img
                                                     :src="map.hash ? `https://cdn.scoresaber.com/covers/${map.hash.toUpperCase()}.png` : '/favicon.ico'"
                                                     @error="onImageError"
@@ -682,25 +583,25 @@
                                                 />
                                             </div>
                                             <div class="min-w-0 max-w-[170px]">
-                                                <div class="font-semibold text-gray-100 truncate group-hover:text-blue-400 transition-colors text-sm" :title="map.songName">
+                                                <div class="font-medium text-gray-100 truncate text-sm" :title="map.songName">
                                                     {{ map.songName }}
                                                 </div>
-                                                <div class="text-xs text-gray-400 truncate mt-0.5" :title="map.songAuthorName">
+                                                <div class="text-xs text-gray-400 truncate" :title="map.songAuthorName">
                                                     {{ map.songAuthorName }}
                                                 </div>
-                                                <div class="flex items-center gap-1.5 mt-1" @click.stop>
+                                                <div class="flex items-center gap-1.5 mt-0.5" @click.stop>
                                                     <a
                                                         v-if="map.key"
                                                         :href="`https://beatsaver.com/maps/${map.key}`"
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        class="inline-flex items-center gap-1 text-[11px] font-mono bg-gray-800 hover:bg-blue-600 text-gray-300 hover:text-white px-1.5 py-0.5 rounded transition-colors"
+                                                        class="nope text-[11px] font-mono text-gray-400 hover:text-blue-400 transition-colors"
                                                         title="View on BeatSaver"
                                                     >
                                                         #{{ map.key }}
                                                     </a>
                                                     <span v-if="map.levelAuthorName" class="text-[11px] text-gray-500 truncate" :title="map.levelAuthorName">
-                                                        by {{ map.levelAuthorName }}
+                                                        · {{ map.levelAuthorName }}
                                                     </span>
                                                 </div>
                                             </div>
@@ -708,77 +609,66 @@
                                     </td>
 
                                     <!-- Uploaded Date -->
-                                    <td class="py-4 px-4 text-center text-sm font-medium text-gray-300 whitespace-nowrap">
+                                    <td class="py-3 px-4 text-center text-xs text-gray-300 whitespace-nowrap font-mono">
                                         {{ formatDate(map.uploaded) }}
                                     </td>
 
                                     <!-- Stars -->
-                                    <td class="py-4 px-4 text-center whitespace-nowrap">
-                                        <span
-                                            v-if="map.highestStar && map.highestStar > 0"
-                                            class="inline-flex items-center gap-1 font-bold text-amber-400 bg-amber-400/10 border border-amber-400/20 px-2.5 py-0.5 rounded text-sm"
-                                        >
+                                    <td class="py-3 px-4 text-center whitespace-nowrap font-mono text-xs">
+                                        <span v-if="map.highestStar && map.highestStar > 0" class="text-amber-400 font-semibold">
                                             ★ {{ map.highestStar.toFixed(1) }}
                                         </span>
-                                        <span v-else class="text-gray-600 text-sm">-</span>
+                                        <span v-else class="text-gray-600">-</span>
                                     </td>
 
                                     <!-- BPM -->
-                                    <td class="py-4 px-4 text-center text-sm font-medium text-gray-300 whitespace-nowrap">
+                                    <td class="py-3 px-4 text-center text-xs font-mono text-gray-300 whitespace-nowrap">
                                         {{ map.bpm ? Math.round(map.bpm) : '-' }}
                                     </td>
 
-                                    <!-- Current Total Votes & Up/Down Breakdown -->
-                                    <td class="py-4 px-5 text-center whitespace-nowrap">
-                                        <div class="inline-flex flex-col items-center">
-                                            <div class="inline-flex items-center gap-1.5 bg-gray-900/90 px-3 py-1 rounded-lg border border-gray-700/80 font-bold text-sm">
+                                    <!-- Total Votes -->
+                                    <td class="py-3 px-4 text-center whitespace-nowrap">
+                                        <div class="inline-flex flex-col items-center font-mono">
+                                            <div class="text-xs font-semibold">
                                                 <span class="text-emerald-400">+{{ map.latest?.upvotes ?? map.upvotes ?? 0 }}</span>
-                                                <span class="text-gray-600">/</span>
-                                                <span class="text-rose-400">+{{ map.latest?.downvotes ?? map.downvotes ?? 0 }}</span>
+                                                <span class="text-gray-600 mx-1">/</span>
+                                                <span class="text-rose-400">-{{ map.latest?.downvotes ?? map.downvotes ?? 0 }}</span>
                                             </div>
-                                            <span class="text-xs text-gray-400 font-mono font-medium mt-1">
-                                                Total: {{ (map.latest?.upvotes ?? map.upvotes ?? 0) + (map.latest?.downvotes ?? map.downvotes ?? 0) }}
+                                            <span class="text-[11px] text-gray-500 mt-0.5">
+                                                {{ (map.latest?.upvotes ?? map.upvotes ?? 0) + (map.latest?.downvotes ?? map.downvotes ?? 0) }} total
                                             </span>
                                         </div>
                                     </td>
 
-                                    <!-- Time Range Deltas (Spaced Out Prominent Cells) -->
+                                    <!-- Time Range Deltas -->
                                     <td
                                         v-for="range in timeRanges"
                                         :key="range.key"
-                                        class="py-4 px-4 text-center whitespace-nowrap"
+                                        class="py-3 px-3.5 text-center whitespace-nowrap"
                                     >
                                         <div
                                             v-if="map[range.key]"
-                                            class="text-sm font-bold font-mono inline-flex items-center justify-center gap-1.5"
+                                            class="text-xs font-mono inline-flex items-center justify-center gap-1"
                                         >
-                                            <span
-                                                :class="[
-                                                    map[range.key].upvotes > 0 ? 'text-emerald-400' : 'text-gray-500'
-                                                ]"
-                                            >
+                                            <span :class="map[range.key].upvotes > 0 ? 'text-emerald-400 font-semibold' : 'text-gray-500'">
                                                 {{ map[range.key].upvotes > 0 ? '+' + map[range.key].upvotes : map[range.key].upvotes }}
                                             </span>
-                                            <span class="text-gray-600 font-normal">/</span>
-                                            <span
-                                                :class="[
-                                                    map[range.key].downvotes > 0 ? 'text-rose-400' : 'text-gray-500'
-                                                ]"
-                                            >
+                                            <span class="text-gray-600">/</span>
+                                            <span :class="map[range.key].downvotes > 0 ? 'text-rose-400 font-semibold' : 'text-gray-500'">
                                                 {{ map[range.key].downvotes > 0 ? '+' + map[range.key].downvotes : map[range.key].downvotes }}
                                             </span>
                                         </div>
-                                        <span v-else class="text-gray-600 text-sm opacity-40">-</span>
+                                        <span v-else class="text-gray-600 text-xs">-</span>
                                     </td>
 
-                                    <!-- Action Button Cell -->
-                                    <td class="py-4 px-5 text-center whitespace-nowrap" @click.stop>
+                                    <!-- Chart Action -->
+                                    <td class="py-3 px-4 text-center whitespace-nowrap" @click.stop>
                                         <button
                                             @click="openMapModal(map)"
-                                            class="p-2 rounded-lg bg-blue-600/10 hover:bg-blue-600 text-blue-400 hover:text-white transition-colors"
+                                            class="p-1.5 rounded-md bg-[#25282c] hover:bg-blue-600 text-gray-300 hover:text-white transition-colors"
                                             title="View map stats chart"
                                         >
-                                            <i class="bx bx-bar-chart-alt-2 text-xl"></i>
+                                            <i class="bx bx-bar-chart-alt-2 text-lg"></i>
                                         </button>
                                     </td>
                                 </tr>
@@ -787,17 +677,16 @@
                     </div>
 
                     <!-- Bottom Pagination Bar -->
-                    <div v-if="totalPages > 1" class="bg-[#121315] border-t border-gray-800 p-4 flex flex-wrap items-center justify-between gap-4 select-none shrink-0">
-                        <div class="text-xs text-gray-400">
-                            Page <span class="font-semibold text-gray-200">{{ currentPage }}</span> of <span class="font-semibold text-gray-200">{{ totalPages }}</span>
-                            <span class="text-gray-500 font-mono ml-1">({{ pageSize }} per page)</span>
+                    <div v-if="totalPages > 1" class="bg-[#141417] border-t border-white/[0.06] px-4 py-3 flex flex-wrap items-center justify-between gap-4 select-none shrink-0">
+                        <div class="text-xs text-gray-400 font-mono">
+                            Page {{ currentPage }} of {{ totalPages }} ({{ pageSize }}/page)
                         </div>
 
-                        <div class="flex items-center gap-1.5">
+                        <div class="flex items-center gap-1">
                             <button
                                 @click="goToPage(1)"
                                 :disabled="currentPage === 1 || tableLoading"
-                                class="px-2.5 py-1.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 text-gray-200 rounded-md text-xs font-medium transition-colors"
+                                class="px-2 py-1.5 bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 rounded-md text-xs transition-colors"
                                 title="First page"
                             >
                                 <i class="bx bx-first-page text-base"></i>
@@ -805,7 +694,7 @@
                             <button
                                 @click="goToPage(currentPage - 1)"
                                 :disabled="currentPage === 1 || tableLoading"
-                                class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 text-gray-200 rounded-md text-xs font-medium transition-colors flex items-center gap-1"
+                                class="px-2.5 py-1.5 bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 rounded-md text-xs font-medium transition-colors flex items-center gap-1"
                             >
                                 <i class="bx bx-chevron-left text-base"></i> Prev
                             </button>
@@ -817,10 +706,10 @@
                                     @click="goToPage(p)"
                                     :disabled="tableLoading"
                                     :class="[
-                                        'px-3 py-1.5 rounded-md text-xs font-medium transition-colors',
+                                        'px-2.5 py-1.5 rounded-md text-xs font-medium transition-colors',
                                         p === currentPage
-                                            ? 'bg-blue-600 text-white font-semibold shadow-sm'
-                                            : 'bg-gray-800/80 hover:bg-gray-700 text-gray-300'
+                                            ? 'bg-blue-600 text-white'
+                                            : 'bg-[#25282c] hover:bg-[#2e3238] text-gray-300',
                                     ]"
                                 >
                                     {{ p }}
@@ -830,14 +719,14 @@
                             <button
                                 @click="goToPage(currentPage + 1)"
                                 :disabled="currentPage >= totalPages || tableLoading"
-                                class="px-3 py-1.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 text-gray-200 rounded-md text-xs font-medium transition-colors flex items-center gap-1"
+                                class="px-2.5 py-1.5 bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 rounded-md text-xs font-medium transition-colors flex items-center gap-1"
                             >
                                 Next <i class="bx bx-chevron-right text-base"></i>
                             </button>
                             <button
                                 @click="goToPage(totalPages)"
                                 :disabled="currentPage >= totalPages || tableLoading"
-                                class="px-2.5 py-1.5 bg-gray-800 hover:bg-gray-700 disabled:opacity-40 disabled:hover:bg-gray-800 text-gray-200 rounded-md text-xs font-medium transition-colors"
+                                class="px-2 py-1.5 bg-[#25282c] hover:bg-[#2e3238] disabled:opacity-40 text-gray-200 rounded-md text-xs transition-colors"
                                 title="Last page"
                             >
                                 <i class="bx bx-last-page text-base"></i>
@@ -851,28 +740,28 @@
         <!-- Map Detailed Stats Modal -->
         <div
             v-if="modalMap"
-            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md overflow-y-auto"
+            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 overflow-y-auto"
             @click.self="closeModal"
         >
-            <div class="relative w-full max-w-5xl bg-[#18191c] border border-gray-800 rounded-2xl shadow-2xl overflow-hidden my-8">
+            <div class="relative w-full max-w-5xl bg-[#1e2023] border border-white/[0.08] rounded-lg shadow-2xl overflow-hidden my-8">
                 <!-- Modal Header -->
-                <div class="bg-[#121315] border-b border-gray-800 p-5 flex items-start justify-between gap-4">
+                <div class="bg-[#141417] border-b border-white/[0.06] p-5 flex items-start justify-between gap-4">
                     <div class="flex items-center gap-4">
                         <img
                             :src="modalMap.hash ? `https://cdn.scoresaber.com/covers/${modalMap.hash.toUpperCase()}.png` : '/favicon.ico'"
                             @error="onImageError"
                             alt="Cover"
-                            class="w-16 h-16 rounded-xl object-cover border border-gray-700 shrink-0"
+                            class="w-14 h-14 rounded-lg object-cover shrink-0"
                         />
                         <div>
-                            <h3 class="text-xl font-bold text-gray-100 flex items-center gap-2">
+                            <h3 class="text-lg font-semibold text-gray-100 flex items-center gap-2">
                                 {{ modalMap.songName }}
                                 <span v-if="modalMap.songSubName" class="text-sm font-normal text-gray-400">
                                     {{ modalMap.songSubName }}
                                 </span>
                             </h3>
-                            <p class="text-sm text-gray-400 mt-0.5">
-                                {{ modalMap.songAuthorName }} <span class="text-gray-600">•</span> Mapped by <span class="text-blue-400 font-medium">{{ modalMap.levelAuthorName || selectedMapper?.mapperName }}</span>
+                            <p class="text-xs text-gray-400 mt-0.5">
+                                {{ modalMap.songAuthorName }} · mapped by {{ modalMap.levelAuthorName || selectedMapper?.mapperName }}
                             </p>
                             <div class="flex items-center gap-2 mt-2">
                                 <a
@@ -880,18 +769,18 @@
                                     :href="`https://beatsaver.com/maps/${modalMap.key}`"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    class="inline-flex items-center gap-1.5 text-xs font-mono bg-blue-600/20 hover:bg-blue-600 text-blue-300 hover:text-white px-2.5 py-1 rounded-md border border-blue-500/30 transition-colors"
+                                    class="nope inline-flex items-center gap-1 text-xs font-mono bg-[#25282c] hover:bg-blue-600 text-gray-200 hover:text-white px-2.5 py-1 rounded-md transition-colors"
                                 >
-                                    #{{ modalMap.key }} <i class="bx bx-external-link text-xs"></i>
+                                    #{{ modalMap.key }} <i class="bx bx-link-external text-xs"></i>
                                 </a>
                                 <a
                                     v-if="modalMap.hash"
                                     :href="`https://scoresaber.com/leaderboard/${modalMap.hash}`"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    class="inline-flex items-center gap-1 text-xs bg-gray-800 hover:bg-gray-700 text-gray-300 hover:text-white px-2.5 py-1 rounded-md border border-gray-700 transition-colors"
+                                    class="nope inline-flex items-center gap-1 text-xs bg-[#25282c] hover:bg-[#2e3238] text-gray-300 hover:text-white px-2.5 py-1 rounded-md transition-colors"
                                 >
-                                    ScoreSaber <i class="bx bx-external-link text-xs"></i>
+                                    ScoreSaber <i class="bx bx-link-external text-xs"></i>
                                 </a>
                             </div>
                         </div>
@@ -899,7 +788,7 @@
 
                     <button
                         @click="closeModal"
-                        class="p-2 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors"
+                        class="p-1.5 text-gray-400 hover:text-white hover:bg-white/5 rounded-md transition-colors"
                         title="Close modal (Esc)"
                     >
                         <i class="bx bx-x text-2xl"></i>
@@ -907,104 +796,87 @@
                 </div>
 
                 <!-- Modal Content Body -->
-                <div class="p-6 space-y-6 max-h-[82vh] overflow-y-auto">
-                    <!-- Key Metric Cards Grid (6 Rich Cards) -->
-                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-                        <!-- 1. Total Votes & Net Score -->
-                        <div class="bg-[#121315] border border-gray-800 rounded-xl p-3.5 flex flex-col justify-between">
-                            <span class="text-xs text-gray-400 block font-semibold">Votes & Net Score</span>
-                            <div class="text-base font-bold text-gray-100 mt-1 flex items-center gap-1">
+                <div class="p-5 space-y-5 max-h-[82vh] overflow-y-auto">
+                    <!-- Key Metrics Grid -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5">
+                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg p-3 flex flex-col justify-between">
+                            <span class="text-[11px] text-gray-400 block">Votes &amp; Net</span>
+                            <div class="text-sm font-semibold font-mono mt-1">
                                 <span class="text-emerald-400">+{{ modalUpvotes }}</span>
-                                <span class="text-gray-600">/</span>
-                                <span class="text-rose-400">+{{ modalDownvotes }}</span>
+                                <span class="text-gray-600 mx-0.5">/</span>
+                                <span class="text-rose-400">-{{ modalDownvotes }}</span>
                             </div>
-                            <span class="text-xs font-mono font-medium mt-1 text-blue-400">
-                                {{ modalNetScore >= 0 ? '+' + modalNetScore : modalNetScore }} Net Score
+                            <span class="text-[11px] font-mono mt-1 text-gray-400">
+                                {{ modalNetScore >= 0 ? '+' + modalNetScore : modalNetScore }} net
                             </span>
                         </div>
 
-                        <!-- 2. Approval Rating & Sentiment Badge -->
-                        <div class="bg-[#121315] border border-gray-800 rounded-xl p-3.5 flex flex-col justify-between">
-                            <span class="text-xs text-gray-400 block font-semibold">Approval Rating</span>
-                            <div class="text-lg font-bold text-gray-100 mt-1">
+                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg p-3 flex flex-col justify-between">
+                            <span class="text-[11px] text-gray-400 block">Approval</span>
+                            <div class="text-base font-semibold font-mono text-gray-100 mt-1">
                                 {{ modalApprovalRatio }}%
                             </div>
-                            <span :class="['text-[11px] font-semibold px-1.5 py-0.5 rounded w-fit mt-1', sentimentBadgeClass]">
-                                {{ sentimentLabel }}
-                            </span>
+                            <span class="text-[11px] text-gray-400 mt-0.5 truncate">{{ sentimentLabel }}</span>
                         </div>
 
-                        <!-- 3. Portfolio Standings -->
-                        <div class="bg-[#121315] border border-gray-800 rounded-xl p-3.5 flex flex-col justify-between">
-                            <span class="text-xs text-gray-400 block font-semibold">Mapper Standing</span>
-                            <div class="text-base font-bold text-amber-400 mt-1">
-                                Rank #{{ mapperPortfolioRank }}
+                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg p-3 flex flex-col justify-between">
+                            <span class="text-[11px] text-gray-400 block">Standing</span>
+                            <div class="text-base font-semibold font-mono text-gray-100 mt-1">
+                                #{{ mapperPortfolioRank }}
                             </div>
-                            <span class="text-xs text-gray-400 mt-1 font-medium">
-                                of {{ totalCount }} maps by votes
-                            </span>
+                            <span class="text-[11px] text-gray-500 mt-0.5">of {{ totalCount }} maps</span>
                         </div>
 
-                        <!-- 4. Vote Velocity (Growth Rate) -->
-                        <div class="bg-[#121315] border border-gray-800 rounded-xl p-3.5 flex flex-col justify-between">
-                            <span class="text-xs text-gray-400 block font-semibold">30d Growth Rate</span>
-                            <div class="text-base font-bold text-emerald-400 mt-1">
-                                +{{ voteVelocity30d }} <span class="text-xs font-normal text-gray-400">/day</span>
+                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg p-3 flex flex-col justify-between">
+                            <span class="text-[11px] text-gray-400 block">30d Rate</span>
+                            <div class="text-base font-semibold font-mono text-emerald-400 mt-1">
+                                +{{ voteVelocity30d }}<span class="text-xs font-normal text-gray-400">/d</span>
                             </div>
-                            <span class="text-xs text-gray-400 mt-1 font-medium">
-                                7d: +{{ voteVelocity7d }}/day
-                            </span>
+                            <span class="text-[11px] text-gray-500 mt-0.5">7d: +{{ voteVelocity7d }}/d</span>
                         </div>
 
-                        <!-- 5. Rating & BPM -->
-                        <div class="bg-[#121315] border border-gray-800 rounded-xl p-3.5 flex flex-col justify-between">
-                            <span class="text-xs text-gray-400 block font-semibold">Rating & BPM</span>
-                            <div class="text-base font-bold text-amber-400 mt-1 flex items-center gap-1">
+                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg p-3 flex flex-col justify-between">
+                            <span class="text-[11px] text-gray-400 block">Stars &amp; BPM</span>
+                            <div class="text-base font-semibold font-mono text-amber-400 mt-1">
                                 ★ {{ modalMap.highestStar ? modalMap.highestStar.toFixed(1) : '-' }}
                             </div>
-                            <span class="text-xs text-gray-400 mt-1 font-medium">
-                                BPM: {{ modalMap.bpm ? Math.round(modalMap.bpm) : '-' }}
-                            </span>
+                            <span class="text-[11px] text-gray-500 mt-0.5">{{ modalMap.bpm ? Math.round(modalMap.bpm) : '-' }} BPM</span>
                         </div>
 
-                        <!-- 6. Milestone Progress -->
-                        <div class="bg-[#121315] border border-gray-800 rounded-xl p-3.5 flex flex-col justify-between">
-                            <span class="text-xs text-gray-400 block font-semibold">Next Milestone</span>
-                            <div class="text-sm font-bold text-blue-300 mt-1 truncate">
-                                {{ milestoneTarget }} Upvotes
+                        <div class="bg-[#141417] border border-white/[0.06] rounded-lg p-3 flex flex-col justify-between">
+                            <span class="text-[11px] text-gray-400 block">Next Milestone</span>
+                            <div class="text-sm font-semibold font-mono text-gray-100 mt-1 truncate">
+                                {{ milestoneTarget }} up
                             </div>
-                            <div class="w-full bg-gray-800 h-1.5 rounded-full mt-1.5 overflow-hidden">
-                                <div class="bg-blue-500 h-full transition-all duration-500" :style="{ width: `${milestonePercent}%` }"></div>
+                            <div class="w-full bg-[#25282c] h-1.5 rounded-full mt-1.5 overflow-hidden">
+                                <div class="bg-blue-500 h-full transition-all duration-300" :style="{ width: `${milestonePercent}%` }"></div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Graph Section (Tabs + SVG Charts) -->
-                    <div class="bg-[#121315] border border-gray-800 rounded-xl p-4">
+                    <!-- Graph Section -->
+                    <div class="bg-[#141417] border border-white/[0.06] rounded-lg p-4">
                         <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
-                            <div class="flex items-center gap-2">
-                                <i class="bx bx-line-chart text-blue-400 text-xl"></i>
-                                <h4 class="text-sm font-bold text-gray-200">
-                                    {{ chartType === 'growth' ? 'Dual-Line All-Time Upvotes & Downvotes Timeline' : chartType === 'deltas' ? 'Period Vote Activity Deltas' : 'Daily Vote Velocity (Votes / Day)' }}
-                                </h4>
-                            </div>
+                            <h4 class="text-sm font-semibold text-gray-200">
+                                {{ chartType === 'growth' ? 'Upvotes & Downvotes Over Time' : chartType === 'deltas' ? 'Period Vote Deltas' : 'Daily Vote Velocity' }}
+                            </h4>
 
                             <!-- Chart Mode Tabs -->
-                            <div class="flex items-center bg-[#18191c] p-1 rounded-lg border border-gray-800">
+                            <div class="flex items-center bg-[#1e2023] p-1 rounded-lg border border-white/[0.06]">
                                 <button
                                     @click="chartType = 'growth'"
                                     :class="[
-                                        'px-3 py-1 text-xs font-medium rounded-md transition-colors',
-                                        chartType === 'growth' ? 'bg-blue-600 text-white font-semibold' : 'text-gray-400 hover:text-white'
+                                        'px-2.5 py-1 text-xs font-medium rounded-md transition-colors',
+                                        chartType === 'growth' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white',
                                     ]"
                                 >
-                                    Dual Timeline
+                                    Timeline
                                 </button>
                                 <button
                                     @click="chartType = 'deltas'"
                                     :class="[
-                                        'px-3 py-1 text-xs font-medium rounded-md transition-colors',
-                                        chartType === 'deltas' ? 'bg-blue-600 text-white font-semibold' : 'text-gray-400 hover:text-white'
+                                        'px-2.5 py-1 text-xs font-medium rounded-md transition-colors',
+                                        chartType === 'deltas' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white',
                                     ]"
                                 >
                                     Period Deltas
@@ -1012,8 +884,8 @@
                                 <button
                                     @click="chartType = 'velocity'"
                                     :class="[
-                                        'px-3 py-1 text-xs font-medium rounded-md transition-colors',
-                                        chartType === 'velocity' ? 'bg-blue-600 text-white font-semibold' : 'text-gray-400 hover:text-white'
+                                        'px-2.5 py-1 text-xs font-medium rounded-md transition-colors',
+                                        chartType === 'velocity' ? 'bg-blue-600 text-white' : 'text-gray-400 hover:text-white',
                                     ]"
                                 >
                                     Growth Rate
@@ -1021,47 +893,42 @@
                             </div>
                         </div>
 
-                        <!-- 1. Dual-Line Cumulative Chart (Upvotes Green, Downvotes Rose) Filtered to Creation Date -->
+                        <!-- 1. Dual-Line Cumulative Chart -->
                         <div v-if="chartType === 'growth'" class="relative">
                             <div class="w-full relative aspect-[1000/220] max-h-[230px]">
                                 <svg class="w-full h-full" viewBox="0 0 1000 220" preserveAspectRatio="xMidYMid meet">
                                     <defs>
                                         <linearGradient id="upvoteGrad" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.3" />
+                                            <stop offset="0%" stop-color="#10b981" stop-opacity="0.22" />
                                             <stop offset="100%" stop-color="#10b981" stop-opacity="0.0" />
                                         </linearGradient>
                                     </defs>
 
-                                    <!-- Grid Lines -->
                                     <line x1="15" y1="25" x2="985" y2="25" stroke="#374151" stroke-dasharray="4 4" stroke-opacity="0.4" />
                                     <line x1="15" y1="100" x2="985" y2="100" stroke="#374151" stroke-dasharray="4 4" stroke-opacity="0.4" />
                                     <line x1="15" y1="175" x2="985" y2="175" stroke="#374151" stroke-dasharray="4 4" stroke-opacity="0.4" />
 
-                                    <!-- Area Path for Upvotes -->
                                     <polygon :points="upvoteAreaPoints" fill="url(#upvoteGrad)" />
 
-                                    <!-- Upvotes Line (Green) -->
                                     <polyline
                                         :points="upvotePolylinePoints"
                                         fill="none"
                                         stroke="#10b981"
-                                        stroke-width="3"
+                                        stroke-width="2.5"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                     />
 
-                                    <!-- Downvotes Line (Rose) -->
                                     <polyline
                                         :points="downvotePolylinePoints"
                                         fill="none"
                                         stroke="#f43f5e"
-                                        stroke-width="2.5"
+                                        stroke-width="2"
                                         stroke-linecap="round"
                                         stroke-linejoin="round"
                                         stroke-dasharray="6 3"
                                     />
 
-                                    <!-- Active Vertical Guideline -->
                                     <line
                                         v-if="hoveredPoint"
                                         :x1="hoveredPoint.x"
@@ -1073,7 +940,6 @@
                                         stroke-width="1.5"
                                     />
 
-                                    <!-- Crisp Uniform Circles & Mouse Detectors -->
                                     <g v-for="(pt, idx) in chartPoints" :key="idx">
                                         <circle
                                             v-if="hoveredPoint && hoveredPoint.label === pt.label"
@@ -1081,26 +947,12 @@
                                             :cy="pt.yUp"
                                             r="8"
                                             fill="#10b981"
-                                            fill-opacity="0.3"
+                                            fill-opacity="0.25"
                                             stroke="#10b981"
                                             stroke-width="2"
                                         />
-                                        <circle
-                                            :cx="pt.x"
-                                            :cy="pt.yUp"
-                                            r="5"
-                                            fill="#10b981"
-                                            stroke="#121315"
-                                            stroke-width="2"
-                                        />
-                                        <circle
-                                            :cx="pt.x"
-                                            :cy="pt.yDown"
-                                            r="4"
-                                            fill="#f43f5e"
-                                            stroke="#121315"
-                                            stroke-width="1.5"
-                                        />
+                                        <circle :cx="pt.x" :cy="pt.yUp" r="4.5" fill="#10b981" stroke="#141417" stroke-width="2" />
+                                        <circle :cx="pt.x" :cy="pt.yDown" r="3.5" fill="#f43f5e" stroke="#141417" stroke-width="1.5" />
                                         <rect
                                             :x="pt.x - 30"
                                             y="10"
@@ -1115,136 +967,129 @@
                                 </svg>
                             </div>
 
-                            <!-- X Axis Labels -->
-                            <div class="flex justify-between text-xs text-gray-400 mt-2 px-1 font-mono border-t border-gray-800/60 pt-2">
-                                <span v-for="pt in chartPoints" :key="pt.label" class="text-center font-medium">{{ pt.label }}</span>
+                            <div class="flex justify-between text-xs text-gray-500 mt-2 px-1 font-mono border-t border-white/[0.06] pt-2">
+                                <span v-for="pt in chartPoints" :key="pt.label" class="text-center">{{ pt.label }}</span>
                             </div>
 
-                            <!-- Legend & Floating Hover Tooltip -->
-                            <div class="flex items-center justify-between mt-3 px-2">
-                                <div class="flex items-center gap-6 text-xs text-gray-400 font-medium">
+                            <div class="flex items-center justify-between mt-3 px-1">
+                                <div class="flex items-center gap-5 text-xs text-gray-400">
                                     <span class="flex items-center gap-1.5">
-                                        <span class="w-3 h-0.5 bg-emerald-500 rounded"></span> Cumulative Upvotes
+                                        <span class="w-3 h-0.5 bg-emerald-500 rounded"></span> Upvotes
                                     </span>
                                     <span class="flex items-center gap-1.5">
-                                        <span class="w-3 h-0.5 bg-rose-500 border-dashed rounded"></span> Cumulative Downvotes
+                                        <span class="w-3 h-0.5 bg-rose-500 rounded"></span> Downvotes
                                     </span>
                                 </div>
 
                                 <div
                                     v-if="hoveredPoint"
-                                    class="bg-gray-900/95 border border-blue-500/40 text-xs px-3 py-1.5 rounded-lg shadow-xl flex items-center gap-3 font-mono"
+                                    class="bg-[#1e2023] border border-white/10 text-xs px-3 py-1 rounded-md flex items-center gap-2.5 font-mono"
                                 >
-                                    <span class="text-gray-300 font-semibold">{{ hoveredPoint.label }}:</span>
-                                    <span class="text-emerald-400 font-bold">+{{ hoveredPoint.valUp }} up</span>
+                                    <span class="text-gray-300">{{ hoveredPoint.label }}:</span>
+                                    <span class="text-emerald-400">+{{ hoveredPoint.valUp }}</span>
                                     <span class="text-gray-600">/</span>
-                                    <span class="text-rose-400 font-bold">+{{ hoveredPoint.valDown }} down</span>
+                                    <span class="text-rose-400">-{{ hoveredPoint.valDown }}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- 2. Corrected Side-by-Side Period Deltas Bar Chart -->
+                        <!-- 2. Period Deltas Bar Chart -->
                         <div v-else-if="chartType === 'deltas'" class="relative">
-                            <div class="h-56 w-full flex items-end justify-between gap-3 pt-6 pb-2 px-3 border-b border-gray-800">
+                            <div class="h-56 w-full flex items-end justify-between gap-3 pt-6 pb-2 px-3 border-b border-white/[0.06]">
                                 <div
                                     v-for="bar in barChartData"
                                     :key="bar.label"
                                     class="flex-1 flex flex-col items-center h-full justify-end group"
                                 >
-                                    <!-- Hover tooltip label -->
-                                    <div class="text-xs font-mono text-gray-300 font-semibold mb-1 opacity-80 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                        +{{ bar.upvotes }} / +{{ bar.downvotes }}
+                                    <div class="text-xs font-mono text-gray-400 group-hover:text-gray-200 mb-1 transition-colors whitespace-nowrap">
+                                        +{{ bar.upvotes }} / -{{ bar.downvotes }}
                                     </div>
-
-                                    <!-- Side by Side Bars -->
                                     <div class="w-full flex items-end justify-center gap-1 h-36">
                                         <div
-                                            class="w-1/2 bg-emerald-500 rounded-t-md transition-all duration-300 hover:bg-emerald-400 shadow-md shadow-emerald-500/10"
+                                            class="w-1/2 bg-emerald-500/85 rounded-t transition-colors hover:bg-emerald-400"
                                             :style="{ height: `${bar.upHeight}%` }"
-                                            :title="`${bar.label} Upvote Gain: +${bar.upvotes}`"
+                                            :title="`${bar.label} Upvotes: +${bar.upvotes}`"
                                         ></div>
                                         <div
-                                            class="w-1/2 bg-rose-500 rounded-t-md transition-all duration-300 hover:bg-rose-400 shadow-md shadow-rose-500/10"
+                                            class="w-1/2 bg-rose-500/85 rounded-t transition-colors hover:bg-rose-400"
                                             :style="{ height: `${bar.downHeight}%` }"
-                                            :title="`${bar.label} Downvote Gain: +${bar.downvotes}`"
+                                            :title="`${bar.label} Downvotes: +${bar.downvotes}`"
                                         ></div>
                                     </div>
-
-                                    <span class="text-xs text-gray-300 font-medium mt-2 truncate max-w-full" :title="bar.label">{{ bar.label }}</span>
+                                    <span class="text-xs text-gray-400 mt-2 truncate max-w-full" :title="bar.label">{{ bar.label }}</span>
                                 </div>
                             </div>
-                            <!-- Legend -->
-                            <div class="flex items-center justify-center gap-6 mt-3 text-xs text-gray-400">
+                            <div class="flex items-center justify-center gap-5 mt-3 text-xs text-gray-400">
                                 <span class="flex items-center gap-1.5">
-                                    <span class="w-3 h-3 rounded-sm bg-emerald-500"></span> Upvotes Gained
+                                    <span class="w-2.5 h-2.5 rounded-sm bg-emerald-500"></span> Upvotes
                                 </span>
                                 <span class="flex items-center gap-1.5">
-                                    <span class="w-3 h-3 rounded-sm bg-rose-500"></span> Downvotes Gained
+                                    <span class="w-2.5 h-2.5 rounded-sm bg-rose-500"></span> Downvotes
                                 </span>
                             </div>
                         </div>
 
-                        <!-- 3. Daily Growth Rate (Velocity Chart) -->
+                        <!-- 3. Daily Growth Rate Chart -->
                         <div v-else class="relative">
-                            <div class="h-56 w-full flex items-end justify-between gap-3 pt-6 pb-2 px-3 border-b border-gray-800">
+                            <div class="h-56 w-full flex items-end justify-between gap-3 pt-6 pb-2 px-3 border-b border-white/[0.06]">
                                 <div
                                     v-for="v in velocityChartData"
                                     :key="v.label"
                                     class="flex-1 flex flex-col items-center h-full justify-end group"
                                 >
-                                    <div class="text-xs font-mono text-blue-300 font-semibold mb-1 opacity-80 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-                                        +{{ v.rate }}/day
+                                    <div class="text-xs font-mono text-gray-300 mb-1 whitespace-nowrap">
+                                        +{{ v.rate }}/d
                                     </div>
                                     <div class="w-full flex items-end justify-center h-36">
                                         <div
-                                            class="w-3/4 bg-blue-500 rounded-t-md transition-all duration-300 hover:bg-blue-400 shadow-md shadow-blue-500/10"
+                                            class="w-3/4 bg-blue-500/85 rounded-t transition-colors hover:bg-blue-400"
                                             :style="{ height: `${v.height}%` }"
-                                            :title="`${v.label} Daily Rate: +${v.rate} votes/day`"
+                                            :title="`${v.label}: +${v.rate} votes/day`"
                                         ></div>
                                     </div>
-                                    <span class="text-xs text-gray-300 font-medium mt-2 truncate max-w-full" :title="v.label">{{ v.label }}</span>
+                                    <span class="text-xs text-gray-400 mt-2 truncate max-w-full" :title="v.label">{{ v.label }}</span>
                                 </div>
                             </div>
-                            <div class="flex items-center justify-center gap-6 mt-3 text-xs text-gray-400">
+                            <div class="flex items-center justify-center gap-5 mt-3 text-xs text-gray-400">
                                 <span class="flex items-center gap-1.5">
-                                    <span class="w-3 h-3 rounded-sm bg-blue-500"></span> Average Votes Gained Per Day
+                                    <span class="w-2.5 h-2.5 rounded-sm bg-blue-500"></span> Average votes/day
                                 </span>
                             </div>
                         </div>
                     </div>
 
-                    <!-- Breakdown Table (With Growth Velocity & Net Delta) -->
-                    <div class="bg-[#121315] border border-gray-800 rounded-xl overflow-hidden">
-                        <div class="px-4 py-3 border-b border-gray-800 bg-[#18191c] flex items-center justify-between">
-                            <h4 class="text-xs font-bold uppercase tracking-wider text-gray-300">Complete Historical Breakdown</h4>
-                            <span class="text-xs text-gray-400">Earliest DB entry & vote deltas</span>
+                    <!-- Breakdown Table -->
+                    <div class="bg-[#141417] border border-white/[0.06] rounded-lg overflow-hidden">
+                        <div class="px-4 py-2.5 border-b border-white/[0.06] flex items-center justify-between">
+                            <h4 class="text-xs font-semibold text-gray-300">Historical Breakdown</h4>
+                            <span class="text-xs text-gray-500">Earliest DB entry &amp; vote deltas</span>
                         </div>
-                        <table class="w-full text-left text-sm">
+                        <table class="w-full text-left text-xs sm:text-sm">
                             <thead>
-                                <tr class="border-b border-gray-800 text-gray-400 font-bold bg-[#121315]">
+                                <tr class="border-b border-white/[0.06] text-gray-400 text-xs font-medium">
                                     <th class="py-2.5 px-4">Timeframe</th>
                                     <th class="py-2.5 px-4 text-center">Upvotes</th>
                                     <th class="py-2.5 px-4 text-center">Downvotes</th>
-                                    <th class="py-2.5 px-4 text-center">Net Delta</th>
-                                    <th class="py-2.5 px-4 text-center">Daily Growth Rate</th>
+                                    <th class="py-2.5 px-4 text-center">Net</th>
+                                    <th class="py-2.5 px-4 text-center">Daily Rate</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-800/50 text-gray-200">
+                            <tbody class="divide-y divide-white/[0.05] text-gray-200">
                                 <tr
                                     v-for="row in breakdownRows"
                                     :key="row.label"
-                                    :class="row.isHighlight ? 'bg-blue-950/20 font-semibold' : 'hover:bg-gray-800/30'"
+                                    :class="row.isHighlight ? 'bg-white/[0.03] font-medium' : 'hover:bg-white/[0.02]'"
                                 >
                                     <td class="py-2.5 px-4 flex items-center gap-2">
-                                        <span class="text-gray-100 font-medium">{{ row.label }}</span>
-                                        <span v-if="row.tag" class="bg-blue-600/30 text-blue-300 text-xs px-2 py-0.5 rounded font-mono">{{ row.tag }}</span>
+                                        <span class="text-gray-200">{{ row.label }}</span>
+                                        <span v-if="row.tag" class="text-[11px] text-gray-500 font-mono">({{ row.tag }})</span>
                                     </td>
-                                    <td class="py-2.5 px-4 text-center text-emerald-400 font-mono font-bold">+{{ row.upvotes }}</td>
-                                    <td class="py-2.5 px-4 text-center text-rose-400 font-mono font-bold">+{{ row.downvotes }}</td>
-                                    <td class="py-2.5 px-4 text-center font-mono font-bold" :class="row.net >= 0 ? 'text-emerald-400' : 'text-rose-400'">
+                                    <td class="py-2.5 px-4 text-center text-emerald-400 font-mono">+{{ row.upvotes }}</td>
+                                    <td class="py-2.5 px-4 text-center text-rose-400 font-mono">-{{ row.downvotes }}</td>
+                                    <td class="py-2.5 px-4 text-center font-mono" :class="row.net >= 0 ? 'text-emerald-400' : 'text-rose-400'">
                                         {{ row.net >= 0 ? '+' + row.net : row.net }}
                                     </td>
-                                    <td class="py-2.5 px-4 text-center text-blue-400 font-mono font-medium">
+                                    <td class="py-2.5 px-4 text-center text-gray-300 font-mono">
                                         +{{ row.rate }}/day
                                     </td>
                                 </tr>
@@ -1254,10 +1099,10 @@
                 </div>
 
                 <!-- Modal Footer -->
-                <div class="bg-[#121315] border-t border-gray-800 p-4 flex items-center justify-end">
+                <div class="bg-[#141417] border-t border-white/[0.06] px-5 py-3.5 flex items-center justify-end">
                     <button
                         @click="closeModal"
-                        class="px-5 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 rounded-xl text-xs font-semibold transition-colors"
+                        class="px-4 py-2 bg-[#25282c] hover:bg-[#2e3238] text-gray-200 rounded-lg text-xs font-medium transition-colors"
                     >
                         Close
                     </button>

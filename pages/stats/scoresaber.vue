@@ -1,11 +1,8 @@
 <template>
-    <div class="scoresaber w-full space-y-6">
-        <!-- List Selector Card -->
-        <div class="bg-[#18191c] border border-gray-800 rounded-xl p-4 shadow-lg flex flex-wrap items-center justify-between gap-4">
-            <div class="flex items-center gap-2">
-                <i class="bx bx-trophy text-amber-400 text-xl"></i>
-                <label class="text-sm font-bold text-gray-200">ScoreSaber Ranking Breakdown:</label>
-            </div>
+    <div class="scoresaber w-full space-y-5">
+        <!-- List Selector Bar -->
+        <div class="bg-[#1e2023] border border-white/[0.06] rounded-lg px-4 py-3 flex flex-wrap items-center justify-between gap-4">
+            <label class="text-sm font-medium text-gray-200">Leaderboard List</label>
 
             <Dropdown
                 v-if="activeList"
@@ -20,36 +17,36 @@
         </div>
 
         <!-- Sub-Content List -->
-        <div class="w-full space-y-4">
-            <div v-if="loading" class="bg-[#18191c] border border-gray-800 rounded-xl p-16 flex flex-col items-center justify-center shadow-xl">
-                <ProgressSpinner style="width: 42px; height: 42px" strokeWidth="4" />
-                <span class="text-gray-400 mt-4 text-sm font-medium animate-pulse">Loading ScoreSaber stats...</span>
+        <div class="w-full space-y-3">
+            <div v-if="loading" class="bg-[#1e2023] border border-white/[0.06] rounded-lg p-12 flex flex-col items-center justify-center">
+                <ProgressSpinner style="width: 36px; height: 36px" strokeWidth="4" />
+                <span class="text-gray-400 mt-3 text-sm">Loading stats...</span>
             </div>
 
             <template v-else-if="data && data.length > 0">
-                <div class="flex items-center justify-between px-1">
-                    <h3 class="text-sm font-bold text-gray-300">
+                <div class="flex items-center justify-between">
+                    <h3 class="text-sm font-semibold text-gray-200">
                         {{ activeList?.title || 'Ranking Stats' }}
                     </h3>
-                    <span class="text-xs text-gray-400 font-mono">
-                        Total items: {{ data.length }}
+                    <span class="text-xs text-gray-500 font-mono">
+                        {{ data.length }} items
                     </span>
                 </div>
 
-                <!-- Highest PP Scores Cards Template -->
-                <div v-if="activeList.key === 'highestScores'" class="space-y-3">
+                <!-- Highest PP Scores -->
+                <div v-if="activeList.key === 'highestScores'" class="space-y-2.5">
                     <div
                         v-for="(item, index) in getVisibleItems"
                         :key="index"
                         @click="openUrl('https://scoresaber.com/leaderboard/' + item.leaderboard_id)"
-                        class="bg-[#18191c] border border-gray-800 hover:border-blue-500/50 rounded-xl p-4 shadow-lg cursor-pointer transition-all flex flex-wrap items-center justify-between gap-4 group"
+                        class="bg-[#1e2023] border border-white/[0.06] hover:border-white/15 rounded-lg px-4 py-3 cursor-pointer transition-colors flex flex-wrap items-center justify-between gap-4"
                     >
-                        <div class="flex items-center gap-3">
-                            <span class="w-8 h-8 rounded-lg bg-gray-900 border border-gray-800 flex items-center justify-center font-mono font-bold text-sm text-amber-400 shrink-0">
+                        <div class="flex items-center gap-3 min-w-0">
+                            <span class="w-8 font-mono text-xs text-gray-500 shrink-0">
                                 #{{ index + 1 }}
                             </span>
-                            <div>
-                                <div class="font-bold text-gray-100 group-hover:text-blue-400 transition-colors text-base">
+                            <div class="min-w-0">
+                                <div class="font-semibold text-gray-100 text-sm">
                                     {{ item.player_name }}
                                 </div>
                                 <div class="text-xs text-gray-300 mt-0.5" v-if="item.leaderboard">
@@ -58,51 +55,51 @@
                                 <div class="text-xs text-gray-300 mt-0.5" v-else>
                                     {{ item.leaderboard_name }}
                                 </div>
-                                <div class="text-[11px] text-gray-400 mt-1" v-if="item.leaderboard">
+                                <div class="text-xs text-gray-500 mt-0.5" v-if="item.leaderboard">
                                     by {{ item.leaderboard.mapper }}
-                                    <span class="mx-1 text-gray-600">•</span>
-                                    <span class="font-semibold text-purple-400">{{ mapDiff(item.leaderboard.diff) }}</span>
-                                    <span class="mx-1 text-gray-600">•</span>
+                                    <span class="mx-1">·</span>
+                                    {{ mapDiff(item.leaderboard.diff) }}
+                                    <span class="mx-1">·</span>
                                     ★ {{ item.leaderboard.stars }}
-                                    <span class="mx-1 text-gray-600">•</span>
+                                    <span class="mx-1">·</span>
                                     {{ item.leaderboard.bpm }} BPM
                                 </div>
                             </div>
                         </div>
 
                         <div class="text-right font-mono shrink-0">
-                            <div class="text-base font-bold text-emerald-400">
-                                {{ formatPp(item.pp) }}pp
+                            <div class="text-sm font-semibold text-gray-100">
+                                {{ formatPp(item.pp) }}<span class="text-xs text-gray-400 font-normal">pp</span>
                             </div>
-                            <div class="text-xs text-gray-400 font-semibold mt-0.5">
-                                Acc: {{ formatNum(item.percentage) }}%
+                            <div class="text-xs text-gray-400 mt-0.5">
+                                {{ formatNum(item.percentage) }}%
                             </div>
                             <div class="text-[11px] text-gray-500 mt-0.5">
-                                Leaderboard Rank #{{ item.rank }}
+                                Rank #{{ item.rank }}
                             </div>
                         </div>
                     </div>
                 </div>
 
                 <!-- Generic List Items (Mappers / Artists / Diff Count) -->
-                <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                <div v-else class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
                     <div
                         v-for="(item, index) in getVisibleItems"
                         :key="index"
                         @click="openUrl('https://scoresaber.com/leaderboards?search=' + item.name)"
-                        class="bg-[#18191c] border border-gray-800 hover:border-gray-700 rounded-xl p-3.5 shadow-md transition-all flex items-center justify-between gap-3 cursor-pointer group"
+                        class="bg-[#1e2023] border border-white/[0.06] hover:border-white/15 rounded-lg px-3.5 py-3 transition-colors flex items-center justify-between gap-3 cursor-pointer"
                     >
                         <div class="flex items-center gap-2.5 min-w-0">
-                            <span class="w-6 h-6 rounded bg-gray-900 border border-gray-800 flex items-center justify-center font-mono font-bold text-xs text-amber-400 shrink-0">
+                            <span class="font-mono text-xs text-gray-500 shrink-0 w-7">
                                 #{{ index + 1 }}
                             </span>
-                            <span class="text-sm font-semibold text-gray-200 group-hover:text-blue-400 transition-colors truncate" :title="item.name">
+                            <span class="text-sm font-medium text-gray-200 truncate" :title="item.name">
                                 {{ item.name }}
                             </span>
                         </div>
 
                         <div class="flex items-center gap-2 shrink-0">
-                            <span class="px-2.5 py-1 bg-blue-950/40 border border-blue-800/40 text-blue-300 font-mono text-xs font-bold rounded-lg">
+                            <span class="font-mono text-xs font-semibold text-gray-300">
                                 {{ item.value }}
                             </span>
                             <my-button v-if="item.maps" @click.stop="openDialog" outlined class="text-xs px-2 py-0.5">
@@ -113,20 +110,19 @@
                 </div>
 
                 <!-- Show More Button -->
-                <div v-if="visibleItems < data.length" class="flex justify-center pt-4">
+                <div v-if="visibleItems < data.length" class="flex justify-center pt-3">
                     <button
                         @click="visibleItems += 50"
-                        class="px-6 py-2.5 bg-gray-800 hover:bg-gray-700 text-gray-200 hover:text-white font-semibold text-xs rounded-xl border border-gray-700 transition-colors shadow-md flex items-center gap-2"
+                        class="px-5 py-2 bg-[#1e2023] hover:bg-[#25282c] text-gray-200 font-medium text-xs rounded-lg border border-white/[0.08] transition-colors flex items-center gap-1.5"
                     >
-                        <span>Show More</span>
-                        <i class="bx bx-chevron-down text-lg"></i>
+                        <span>Show more</span>
+                        <i class="bx bx-chevron-down text-base"></i>
                     </button>
                 </div>
             </template>
 
-            <div v-else class="bg-[#18191c] border border-gray-800 rounded-xl p-16 text-center text-gray-400 flex flex-col items-center justify-center shadow-xl">
-                <i class="bx bx-folder-open text-5xl mb-3 text-gray-600"></i>
-                <p class="text-lg font-medium text-gray-300">No data found</p>
+            <div v-else class="bg-[#1e2023] border border-white/[0.06] rounded-lg p-12 text-center text-gray-400">
+                <p class="text-base font-medium text-gray-300">No data found</p>
             </div>
         </div>
 

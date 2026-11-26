@@ -1,7 +1,7 @@
 <template>
     <div class="votesFeed space-y-4">
         <div v-if="loading" class="p-8 flex justify-center">
-            <ProgressSpinner style="width: 36px; height: 36px" strokeWidth="4" />
+            <ProgressSpinner style="width: 32px; height: 32px" strokeWidth="4" />
         </div>
 
         <template v-else-if="getVotes && getVotes.length">
@@ -10,41 +10,32 @@
                     v-for="(vote, index) of getVotes"
                     :key="index"
                     @click="openUrl(vote.requestId)"
-                    class="bg-[#18191c] border border-gray-800 hover:border-purple-500/40 rounded-xl p-4 shadow-md cursor-pointer transition-all space-y-2.5 flex flex-col justify-between group"
+                    class="bg-[#18191c] border border-white/[0.06] hover:border-white/15 rounded-lg p-3.5 cursor-pointer transition-colors space-y-2.5 flex flex-col justify-between"
                 >
                     <div class="flex items-start justify-between gap-3">
-                        <div>
-                            <h4 class="font-bold text-gray-100 group-hover:text-purple-300 transition-colors text-sm line-clamp-1" :title="vote.name">
+                        <div class="min-w-0">
+                            <h4 class="font-semibold text-gray-100 text-sm line-clamp-1" :title="vote.name">
                                 {{ vote.name }}
                             </h4>
-                            <p class="text-xs text-gray-400 mt-0.5">
-                                by <span class="text-blue-300 font-medium">{{ vote.mapper }}</span>
-                            </p>
+                            <p class="text-xs text-gray-400 mt-0.5">by {{ vote.mapper }}</p>
                         </div>
-                        <span class="px-2 py-0.5 bg-gray-800 text-gray-400 font-mono text-[11px] rounded shrink-0">
+                        <span class="text-gray-500 font-mono text-xs shrink-0">
                             {{ vote.hoursago }}
                         </span>
                     </div>
 
-                    <div class="pt-2 border-t border-gray-800/60 flex flex-wrap items-center gap-2 text-xs font-mono">
+                    <div class="pt-2 border-t border-white/[0.06] flex flex-wrap items-center gap-x-4 gap-y-1 text-xs font-mono">
                         <span
                             v-for="(item, idx) of vote.strings"
                             :key="idx"
-                            class="px-2.5 py-1 bg-[#121315] border border-gray-800 rounded-lg text-gray-300 font-medium flex items-center gap-1 text-xs"
+                            class="text-gray-300 flex items-center gap-1"
                         >
-                            <strong
-                                :class="[
-                                    'uppercase text-[10px] font-mono font-bold mr-0.5',
-                                    item.group.toLowerCase() === 'rt' ? 'text-emerald-400' : 'text-rose-400'
-                                ]"
-                            >
-                                {{ item.group }}
-                            </strong>
-                            <span>{{ item.label }}: </span>
+                            <span class="uppercase text-gray-500 font-semibold">{{ item.group }}</span>
+                            <span class="text-gray-400">{{ item.label }}:</span>
                             <span
                                 :class="[
-                                    'font-bold ml-0.5',
-                                    item.val > 0 ? 'text-emerald-400' : item.val < 0 ? 'text-rose-400' : 'text-gray-400'
+                                    'font-semibold',
+                                    item.val > 0 ? 'text-emerald-400' : item.val < 0 ? 'text-rose-400' : 'text-gray-400',
                                 ]"
                             >
                                 {{ item.val > 0 ? '+' + item.val : item.val }}
@@ -54,12 +45,12 @@
                 </div>
             </div>
 
-            <div v-if="visibleItems < 25" class="flex justify-center pt-2">
+            <div v-if="visibleItems < 25" class="flex justify-center pt-1">
                 <button
                     @click="visibleItems += 10"
-                    class="px-5 py-2 bg-gray-800 hover:bg-gray-700 text-gray-200 text-xs font-semibold rounded-xl border border-gray-700 transition-colors shadow-sm flex items-center gap-1.5"
+                    class="px-4 py-2 bg-[#25282c] hover:bg-[#2e3238] text-gray-200 text-xs font-medium rounded-lg border border-white/[0.08] transition-colors flex items-center gap-1"
                 >
-                    <span>Show More Votes</span>
+                    <span>Show more</span>
                     <i class="bx bx-chevron-down text-base"></i>
                 </button>
             </div>

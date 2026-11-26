@@ -1,34 +1,35 @@
 <template>
     <div class="rankingstats pb-12">
-        <sub-header title="Statistics & Leaderboard Analytics">
+        <sub-header title="Statistics stuff">
             <p>
-                ScoreSaber metrics refresh hourly.
+                ScoreSaber stats refresh every hour.
                 <br />
-                BeatSaver & Ranking Community Discord stats refresh every 24 hours.
+                BeatSaver &amp; RC Discord stats refresh every 24 hours.
             </p>
         </sub-header>
 
-        <div class="w-full max-w-6xl px-4 sm:px-8 mx-auto mt-6 space-y-6">
-            <!-- Navigation Tab Bar -->
-            <div class="bg-[#18191c] border border-gray-800 rounded-xl p-2 shadow-lg flex items-center justify-center gap-2">
+        <!-- Sub-Navigation Tab Bar -->
+        <div class="bg-[#1e2023] border-b border-white/[0.06]">
+            <div class="w-full max-w-6xl px-4 sm:px-8 mx-auto flex items-center justify-center gap-1">
                 <NuxtLink
                     v-for="item in items"
                     :key="item.to"
                     :to="item.to"
-                    class="px-5 py-2.5 rounded-lg font-semibold text-sm transition-all flex items-center gap-2 select-none"
+                    class="nope px-4 py-3 text-sm font-medium transition-colors flex items-center gap-2 border-b-2 select-none"
                     :class="[
                         $route.path === item.to || ($route.path === '/stats' && item.to === '/stats/beatsaver')
-                            ? 'bg-blue-600 text-white shadow-md'
-                            : 'text-gray-400 hover:text-white hover:bg-gray-800'
+                            ? 'border-blue-400 text-white'
+                            : 'border-transparent text-gray-400 hover:text-gray-200',
                     ]"
                 >
                     <i :class="item.icon"></i>
                     <span>{{ item.label }}</span>
                 </NuxtLink>
             </div>
+        </div>
 
-            <!-- Page Content -->
-            <NuxtChild class="content sub-page" keep-alive />
+        <div class="w-full max-w-6xl px-4 sm:px-8 mx-auto mt-6">
+            <NuxtChild class="sub-page" keep-alive />
         </div>
     </div>
 </template>
@@ -39,9 +40,9 @@ export default {
     data() {
         return {
             items: [
-                { label: 'BeatSaver Filter', to: '/stats/beatsaver', icon: 'bx bx-slider-alt' },
-                { label: 'ScoreSaber Leaderboards', to: '/stats/scoresaber', icon: 'bx bx-trophy' },
-                { label: 'RC Discord Reactions', to: '/stats/discord', icon: 'bx bxl-discord' },
+                { label: 'BeatSaver', to: '/stats/beatsaver', icon: 'bx bx-slider-alt' },
+                { label: 'ScoreSaber', to: '/stats/scoresaber', icon: 'bx bx-trophy' },
+                { label: 'RC Discord', to: '/stats/discord', icon: 'bx bxl-discord' },
             ],
         }
     },
